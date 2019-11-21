@@ -35,6 +35,15 @@ output_dir: "docs"
 
 The `latex:` path above ***must*** have `'ch_appendix.Rmd'` as its last entry. This ensures that the appendix is properly formatted for the solutions to the problems.
 
+You must have the following lines at the start of your `index.Rmd` file:
+
+````
+
+```{r, child = "_setup.Rmd", include = F, purl = F, cache = F}
+```
+
+````
+
 There are a couple of useful special blocks. A `task` block, and a `solution` block. These can be used as e.g.
 
 ````
