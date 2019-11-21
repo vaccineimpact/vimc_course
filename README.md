@@ -143,3 +143,37 @@ Two options:
 ````
 
 The `titles` option can be set as before.
+
+## To publish using `gh-pages`
+
+One way to publish this online is to use the `gh-pages` branch on GitHub. **The following assumes that your source code is in the `master` branch, and that no uncommitted changes exist in the repo. You have been warned!**
+
+Firstly, build your document, which should place all files in a `docs` folder. Then, copy the file `.nojekyll` into `docs/` (this is required to make sure figures render correctly when deployed).
+
+Then, on the command line run:
+
+```
+git checkout master
+git checkout -b tempBranch
+git add -f docs
+git commit -m "Added docs to repo"
+git subtree split --prefix docs -b gh-pages
+git push origin gh-pages --force
+```
+
+At this point the page has been deployed, and can be found at `https://USERNAME.github.io/REPONAME/`, where `USERNAME` and `REPONAME` should be replaced appropriately.
+
+Next, you might want to store a copy of the `docs` folder, since the next set of `git` commands will remove it. On the command line this can be done as:
+
+```
+rm docs.zip
+zip -r docs.zip docs/
+```
+
+Finally, clean up your repo:
+
+```
+git checkout master
+git branch -D gh-pages tempBranch
+```
+
