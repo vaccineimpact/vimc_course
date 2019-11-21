@@ -1,4 +1,4 @@
-# skeleton_Rmd
+# RtutorialSkeleton
 
 This provides a template for R practicals written using the `bookdown` package. The template provides some customised "Task" and "Solution" boxes. To see some examples on how to use this template, download or clone the repository and then compile the project. This can be done on any platform by loading the "skeleton.Rproj" file in RStudio. The "Build Book" button in the "Build" pane can be used to compile the practical. 
 
