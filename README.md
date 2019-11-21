@@ -150,7 +150,7 @@ One way to publish this online is to use the `gh-pages` branch on GitHub. **The 
 
 Firstly, build your document, which should place all files in a `docs` folder. Then, copy the file `.nojekyll` into `docs/` (this is required to make sure figures render correctly when deployed).
 
-Then, on the command line run:
+**Assuming that the branch `tempBranch` does not exist**, then on the command line run:
 
 ```
 git checkout master
