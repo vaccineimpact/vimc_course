@@ -150,8 +150,6 @@ Add 2 and 2 together
 
 ```
 
-To compile, run the `_build.sh` script which will compile into multiple formats. 
-
 ## Additional extensions
 
 ### Different task and solution titles
