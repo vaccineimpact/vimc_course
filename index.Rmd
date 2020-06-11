@@ -178,6 +178,32 @@ What is the meaning of life, the universe and everything?
 Why 42 of course!
 ```
 
+### Turning tasks and solutions on and off
+
+Sometimes you might want to hide task and/or solution boxes. This can be done with the `renderTask` and `renderSols` chunk options, which can be set globally or locally. For example:
+
+````
+
+```{task, title = "Question"}`r ''`
+Can I set a task and not show the answer?
+```
+
+```{solution, title = "Answer", renderSols = FALSE}`r ''`
+Indeed, though you won't see this answer unless `renderSols = TRUE`...
+```
+
+````
+
+typesets as:
+
+```{task, title = "Question"}
+Can I set a task and not show the answer?
+```
+
+```{solution, title = "Answer", renderSols = FALSE}
+Indeed, though you won't see this answer unless `renderSols = TRUE`...
+```
+
 ### Tabbed boxed environments
 
 Originally developed to put base R and `tidyverse` solutions side-by-side, using a `multCode = T` option to the solution box. Here the two tabs are separated by four consecutive hashes: `####`, and the `titles` option gives the tab titles (these can be set globally if preferred) e.g.
