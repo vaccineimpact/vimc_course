@@ -2,7 +2,7 @@
 library(knitr)
 
 ## set knitr options
-opts_chunk$set(cache = F, tidy.opts = list(width.cutoff = 55), tidy = F, fig.align = "center", fig.width = 5, fig.height = 5, multCode = F, renderTask = T, renderSols = T)
+opts_chunk$set(cache = F, tidy.opts = list(width.cutoff = 55), tidy = F, fig.align = "center", fig.width = 5, fig.height = 5, multCode = F, renderTask = T, renderSol = T)
 
 ## variables to help save latex answers for appendix
 taskCtr <- 0
@@ -34,7 +34,7 @@ knit_engines$set(task = function(options) {
 
 ## custom engine for solutions
 knit_engines$set(solution = function(options) {
-    if(options$renderSols) {
+    if(options$renderSol) {
         if(!options$multCode) {
             out <- gsub("``", "```", options$code)
             out <- knit_child(text = out)

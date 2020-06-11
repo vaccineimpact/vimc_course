@@ -180,7 +180,7 @@ Why 42 of course!
 
 ### Turning tasks and solutions on and off
 
-Sometimes you might want to hide task and/or solution boxes. This can be done with the `renderTask` and `renderSols` chunk options, which can be set globally or locally. For example:
+Sometimes you might want to hide task and/or solution boxes. This can be done with the `renderTask` and `renderSol` chunk options, which can be set globally or locally. For example:
 
 ````
 
@@ -188,8 +188,8 @@ Sometimes you might want to hide task and/or solution boxes. This can be done wi
 Can I set a task and not show the answer?
 ```
 
-```{solution, title = "Answer", renderSols = FALSE}`r ''`
-Indeed, though you won't see this answer unless `renderSols = TRUE`...
+```{solution, title = "Answer", renderSol = FALSE}`r ''`
+Indeed, though you won't see this answer unless `renderSol = TRUE`...
 ```
 
 ````
@@ -200,8 +200,8 @@ typesets as:
 Can I set a task and not show the answer?
 ```
 
-```{solution, title = "Answer", renderSols = FALSE}
-Indeed, though you won't see this answer unless `renderSols = TRUE`...
+```{solution, title = "Answer", renderSol = FALSE}
+Indeed, though you won't see this answer unless `renderSol = TRUE`...
 ```
 
 ### Tabbed boxed environments
