@@ -12,6 +12,20 @@ button {
     border-radius: 3px;
 }
 
+infobutton {
+    background-color: #404040;
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
 .panel-default > .panel-heading {
     background-image: none;
     background-color: #404040;

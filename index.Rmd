@@ -204,6 +204,42 @@ Can I set a task and not show the answer?
 Indeed, though you won't see this answer unless `renderSol = TRUE`...
 ```
 
+### Generic information environments
+
+You can also set generic boxed environments containing arbitrary information. 
+
+````
+
+```{info, title = "Some interesting titbit"}`r ''`
+This box contains invaluable information!
+```
+
+````
+
+typesets as:
+
+```{info, title = "Some interesting titbit"}
+This box contains invaluable information!
+```
+
+Note that it is useful to set the `title` option here, else it defaults to `info`. You can also use this environment to simply display an alert box with information, by setting the `collapsible` argument to `FALSE` in the chunk options e.g.
+
+````
+
+```{info, title = "Some interesting aside", collapsible = FALSE}`r ''`
+Yet more valuable information - this time displayed directly!
+```
+
+````
+
+typesets as:
+
+```{info, title = "Some interesting aside", collapsible = FALSE}
+Yet more valuable information - this time displayed directly!
+```
+
+In the PDF output, setting `collapsible = TRUE` will place the information boxes in a separate Appendix, with links in the main document. You can again hide the `info` boxes by setting `renderInfo = FALSE` in the chunk options.
+
 ### Tabbed boxed environments
 
 Originally developed to put base R and `tidyverse` solutions side-by-side, using a `multCode = T` option to the solution box. Here the two tabs are separated by four consecutive hashes: `####`, and the `titles` option gives the tab titles (these can be set globally if preferred) e.g.
