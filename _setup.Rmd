@@ -173,4 +173,17 @@ knit_engines$set(multCode = function(options) {
     }
     return(out)
 })
+
+## custom engine for hypertarget
+knit_engines$set(hypertarget = function(options) {
+    if(!is.character(options$label)) {
+        stop("Need 'label' in 'hypertarget'")
+    }
+    if(opts_knit$get("rmarkdown.pandoc.to") != "latex") {
+        out <- paste0("<a id=\"", options$label, "\"></a>\n")
+    } else {
+        out <- paste0("\\hypertarget{", options$label, "}{}\n")
+    }
+    return(out)
+})
 ```
