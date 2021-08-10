@@ -88,10 +88,10 @@ if(length(infoLabels) > 0) {
             infoCtr <- infoLabels[[i]][1]
             refLabel <- infoLabels[[i]][2]
             headerName <- infoLabels[[i]][3]
-            cat(paste0("\\hypertarget{info", infoCtr,"}{}\n\\bblockT[", headerName, "]{\\phantomsection\\label{info", infoCtr, "}}\n"))
+            cat(paste0("\\hypertarget{info", infoCtr,"}{}\n\\bblockI[", headerName, "]{\\phantomsection\\label{info", infoCtr, "}}\n"))
             cat(refLabel)
             cat(paste0("\n\n\\vspace{\\baselineskip}\\hyperlink{infoRet", infoCtr, "}{\\buttonT{Return to P\\colpageref{infoRet", infoCtr, "}}}"))
-            cat("\n\\eblockS\n")
+            cat("\n\\eblockI\n")
         }
     }
 }

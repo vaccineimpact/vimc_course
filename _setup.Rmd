@@ -128,7 +128,7 @@ knit_engines$set(info = function(options) {
                 out <- paste0("\\hypertarget{infoRet", infoCtr, "}{}\n\\hyperlink{info", infoCtr, "}{\\buttonS{Show: ", headerName, " on P\\colpageref{info", infoCtr, "}}}")
                 out <- paste0(out, "\n\\phantomsection\\label{infoRet", infoCtr, "}")
             } else {
-                out <- paste0("\\bblockT[", headerName, "]\n", out, "\n\\eblockT\n")
+                out <- paste0("\\bblockI[", headerName, "]\n", out, "\n\\eblockI\n")
             }
         }
     } else {
