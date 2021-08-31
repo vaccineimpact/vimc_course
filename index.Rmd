@@ -35,12 +35,24 @@ output_dir: "docs"
 
 The `latex:` path above ***must*** have `'ch_appendix.Rmd'` as its last entry. This ensures that the appendix is properly formatted for the solutions to the problems.
 
-You must have the following lines at the **start** of your `index.Rmd` file (please do not change the chunk options for this chunk):
+You must have the following lines at the **start** of your `index.Rmd` file (please do not change the chunk options for this chunk, and place it as the **first** chunk in the document):
 
 ````
 ```{r, child = "_setup.Rmd", include = FALSE, purl = FALSE, cache = FALSE}`r ''`
 ```
 ````
+
+> **Note**: the special blocks below cannot be cached, else compiling the document will cause an error. Hence if you want to set a global cache e.g.
+> 
+> ````
+> 
+> ```{r}`r ''`
+> knitr::opts_chunk$set(cache = TRUE)
+> ```
+> 
+> ````
+> 
+> then you will have to explicitly set `cache = FALSE` in each of the special blocks (e.g. `task`/`solution`) below.
 
 There are a couple of useful special blocks. A `task` block, and a `solution` block. These can be used as e.g.
 
