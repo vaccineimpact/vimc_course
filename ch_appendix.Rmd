@@ -1,4 +1,4 @@
-```{r, results = "asis", echo = F}
+```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- "\\begin{comment}"
 if(opts_knit$get("rmarkdown.pandoc.to") == "latex") {
     if(length(solLabels) != 0) {
@@ -19,7 +19,7 @@ cat(x)
 
 # (APPENDIX) Appendix {-}
 
-```{r, results = "asis", echo = F}
+```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- ""
 if(opts_knit$get("rmarkdown.pandoc.to") == "latex"){
     if(length(solLabels) != 0) {
@@ -35,7 +35,7 @@ cat(x)
 
 # Answers
 
-```{r, echo = F, results = "asis"}
+```{r, echo = FALSE, results = "asis", cache = FALSE}
 if(length(solLabels) > 0) {
     for(i in 1:length(solLabels)) {
         if(!is.na(solLabels[[i]][2][1])) {
@@ -51,7 +51,7 @@ if(length(solLabels) > 0) {
 }
 ```
 
-```{r, results = "asis", echo = F}
+```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- ""
 if(opts_knit$get("rmarkdown.pandoc.to") == "latex"){
     if(length(solLabels) != 0) {
@@ -65,7 +65,7 @@ if(opts_knit$get("rmarkdown.pandoc.to") == "latex"){
 cat(x)
 ```
 
-```{r, results = "asis", echo = F}
+```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- ""
 if(opts_knit$get("rmarkdown.pandoc.to") == "latex"){
     if(length(infoLabels) != 0) {
@@ -81,7 +81,7 @@ cat(x)
 
 # Additional information
 
-```{r, echo = F, results = "asis"}
+```{r, echo = FALSE, results = "asis", cache = FALSE}
 if(length(infoLabels) > 0) {
     for(i in 1:length(infoLabels)) {
         if(!is.na(infoLabels[[i]][2][1])) {
@@ -97,7 +97,7 @@ if(length(infoLabels) > 0) {
 }
 ```
 
-```{r, results = "asis", echo = F}
+```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- ""
 if(opts_knit$get("rmarkdown.pandoc.to") == "latex"){
     if(length(infoLabels) != 0) {
@@ -111,7 +111,7 @@ if(opts_knit$get("rmarkdown.pandoc.to") == "latex"){
 cat(x)
 ```
 
-```{r, results = "asis", echo = F}
+```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- "\\end{comment}"
 if(opts_knit$get("rmarkdown.pandoc.to") == "latex") {
     if(length(solLabels) != 0) {
