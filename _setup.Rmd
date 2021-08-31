@@ -10,6 +10,16 @@ infoCtr <- 0
 solLabels <- list()
 infoLabels <- list()
 
+## custom hook to always turn caching off for task/solution type boxes
+## (required in order to produce correct PDF counters)
+opts_hooks$set(cache = function(options) {
+    nocache <- c("task", "solution", "info")
+    if (isTRUE(options$cache) & options$engine %in% nocache) {
+        options$cache <- FALSE
+    }
+    options
+})
+
 ## custom engine for tasks
 knit_engines$set(task = function(options) {
     if(options$renderTask) {
