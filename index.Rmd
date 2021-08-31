@@ -42,17 +42,7 @@ You must have the following lines at the **start** of your `index.Rmd` file (ple
 ```
 ````
 
-> **Note**: the special blocks below cannot be cached, else compiling the document will cause an error. Hence if you want to set a global cache e.g.
-> 
-> ````
-> 
-> ```{r}`r ''`
-> knitr::opts_chunk$set(cache = TRUE)
-> ```
-> 
-> ````
-> 
-> then you will have to explicitly set `cache = FALSE` in each of the special blocks (e.g. `task`/`solution`) below.
+> **Note**: the `task` / `solution` and `info` blocks detailed below cannot be cached. Code chunks within these blocks can be cached as usual. The caching is automatically disabled in order to make sure the PDF outputs are correctly cross-referenced.
 
 There are a couple of useful special blocks. A `task` block, and a `solution` block. These can be used as e.g.
 
