@@ -127,7 +127,7 @@ knit_engines$set(info = function(options) {
                 out <- paste0("<infobutton id=\"displayText", options$label, "\" onclick=\"javascript:toggle('", options$label, "');\">Show: ", headerName, "</infobutton>\n\n<div id=\"toggleText", options$label, "\" style=\"display: none\"><div class=\"panel panel-default\"><div class=\"panel-body\">", out, "</div></div></div>\n")
             } else {
                 ## set up standard boxed environment
-                out <- paste("<div class=\"panel panel-default\"><div class=\"panel-heading\">", headerName, "</div><div class=\"panel-body\">", out, "</div></div>")
+                out <- paste("<div class=\"panel panel-default\"><div class=\"panel-heading2\">", headerName, "</div><div class=\"panel-body\">", out, "</div></div>")
             }
         } else {
             if(options$collapsible) {
@@ -135,7 +135,7 @@ knit_engines$set(info = function(options) {
                 infoLabels[[infoCtr]][2] <- out
                 infoLabels[[infoCtr]][3] <- headerName
                 assign("infoLabels", infoLabels, pos = 1)
-                out <- paste0("\\hypertarget{infoRet", infoCtr, "}{}\n\\hyperlink{info", infoCtr, "}{\\buttonS{Show: ", headerName, " on P\\colpageref{info", infoCtr, "}}}")
+                out <- paste0("\\hypertarget{infoRet", infoCtr, "}{}\n\\hyperlink{info", infoCtr, "}{\\buttonI{Show: ", headerName, " on P\\colpageref{info", infoCtr, "}}}")
                 out <- paste0(out, "\n\\phantomsection\\label{infoRet", infoCtr, "}")
             } else {
                 out <- paste0("\\bblockI[", headerName, "]\n", out, "\n\\eblockI\n")
