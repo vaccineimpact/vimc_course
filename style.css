@@ -57,7 +57,7 @@ infobutton {
 
 /* Style the buttons inside the tab */
 .tab button {
-    background-color: var(--taksCol2);
+    background-color: var(--taskCol2);
 }
 
 /* Change background color of buttons on hover */
