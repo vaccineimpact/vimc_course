@@ -127,7 +127,7 @@ knit_engines$set(info = function(options) {
                 out <- paste0("<infobutton id=\"displayText", options$label, "\" onclick=\"javascript:toggle('", options$label, "');\">Show: ", headerName, "</infobutton>\n\n<div id=\"toggleText", options$label, "\" style=\"display: none\"><div class=\"panel panel-default\"><div class=\"panel-body\">", out, "</div></div></div>\n")
             } else {
                 ## set up standard boxed environment
-                out <- paste("<div class=\"panel panel-default\"><div class=\"panel-heading2\">", headerName, "</div><div class=\"panel-body\">", out, "</div></div>")
+                out <- paste("<div class=\"panel panel-default\"><div class=\"panel-heading panel-heading2\">", headerName, "</div><div class=\"panel-body\">", out, "</div></div>")
             }
         } else {
             if(options$collapsible) {
