@@ -10,14 +10,14 @@ After the build is complete, all necessary files will be included in the `docs` 
 
 ## To publish using `gh-pages`
 
-One way to publish this online is to use the `gh-pages` branch on GitHub. **The following assumes that your source code is in the `master` branch, and that no uncommitted changes exist in the repo. You have been warned!**
+One way to publish this online is to use the `gh-pages` branch on GitHub. **The following assumes that your source code is in the `main` branch, and that no uncommitted changes exist in the repo. You have been warned!**
 
 Firstly, build your document, which should place all files in a `docs` folder. Then, copy the file `.nojekyll` into `docs/` (this is required to make sure figures render correctly when deployed).
 
 **Assuming that the branch `tempBranch` does not exist**, then on the command line run:
 
 ```
-git checkout master
+git checkout main
 git checkout -b tempBranch
 git add -f docs
 git commit -m "Added docs to repo"
@@ -39,7 +39,7 @@ zip -r docs.zip docs/
 Finally, clean up your repo:
 
 ```
-git checkout master
+git checkout main
 git branch -D gh-pages tempBranch
 ```
 
