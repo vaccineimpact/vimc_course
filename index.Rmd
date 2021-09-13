@@ -341,3 +341,23 @@ Two options:
 ```
 
 The `titles` option can be set as before.
+
+### Resize code chunks
+
+Code chunks can be resized using a `size`, `htmlsize` or `latexsize` chunk option. These take either HTML or \LaTeX sizes and convert accordingly. For example,
+
+````
+
+```{r, size = "scriptsize"}`r ''`
+rnorm(10, 0, 1)
+```
+
+````
+
+typesets as:
+
+```{r, size = "scriptsize"}
+rnorm(10, 0, 1)
+```
+
+Setting `htmlsize` or `latexsize` overwrites the `size` argument and allows for sizes to be different for HTML or \LaTeX output respectively. This is most useful for `multCode` chunks that might need shrinking in a \LaTeX environment in order to fit nicely on a page side-by-side.
