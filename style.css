@@ -4,6 +4,7 @@
     --taskCol1: #808080;
     --taskCol2: #b2b2b2;
     --infoCol: #1C668F;
+    --fsize: medium;
 }
 
 button {
@@ -79,4 +80,7 @@ blockquote{
 
 pre {
   font-size: 1em;
+}
+div.resize > * {
+  font-size: var(--fsize);
 }
