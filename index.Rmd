@@ -242,6 +242,20 @@ Yet more valuable information - this time displayed directly!
 
 In the PDF output, setting `collapsible = TRUE` will place the information boxes in a separate Appendix, with links in the main document. You can again hide the `info` boxes by setting `renderInfo = FALSE` in the chunk options.
 
+You can also put boxes around text without any titles by setting `title = NA` and `collapsible = FALSE` e.g.
+
+````
+
+```{info, title = NA, collapsible = FALSE}`r ''`
+Just some stuff but no titles!
+```
+
+````
+
+```{info, title = NA, collapsible = FALSE}
+Just some stuff but no titles!
+```
+
 ### Tabbed boxed environments
 
 Originally developed to put base R and `tidyverse` solutions side-by-side, using a `multCode = T` option to the solution box. Here the two tabs are separated by four consecutive hashes: `####`, and the `titles` option gives the tab titles (these can be set globally if preferred) e.g.
