@@ -1,4 +1,4 @@
 rmd_files:
     html: ['index.Rmd', '02-catalytic.Rmd']
-    latex: ['index.Rmd', 'ch_appendix.Rmd']
+    latex: ['index.Rmd', '02-catalytic.Rmd', 'ch_appendix.Rmd']
 output_dir: "docs"
