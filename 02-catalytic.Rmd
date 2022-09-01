@@ -10,7 +10,7 @@ Objectives:
 We approach these two objectives using two alternative methods:
  
 * In section 1 we take the traditional two stage approach of estimating the force-of-infection first and then calculating the next generation matrix from an assumed Who-Aquires-Infection-from-Whom (WAIFW) matrix.  
-* In section 2, we take the more elegant approach of estimating the next generation matrix directly using social contact (PolyMod) data. 
+* In section 2, we take the more elegant approach of estimating the next generation matrix directly using social contact (POLYMOD) data. 
  	 
 ## Estimating the force-of-infection and $R_0$ of rubella 
  
@@ -145,6 +145,7 @@ Dynamic age-structured epidemic models typically assume that the force-of-infect
         e^{-\lambda_1 a} & \mbox{for}~a_0 < a < a_1\\
         P_s\left(a_i\right) e^{-\lambda_{i + 1} \left(a - a_i\right)} & \mbox{for}~a_i < a < a_{i + 1},
     \end{array}\right.
+    (\#eq:p2)
 \end{equation}
 where $\lambda_i$ is the age-specific force-of-infection in group $i$.
 
@@ -494,4 +495,259 @@ plot(R0)
 summary(R0)
 ``
 
+```
+
+## Estimating the next generation matrix from rubella serology 
+ 
+For human infectious diseases at least, the POLYMOD social contact data has revolutionised how we interpret serological data. In this section we estimate the next generation matrix for Rubella using the POLYMOD mixing data. We also introduce a more modern, and convenient, method where we directly estimate the next generation matrix from age-stratified serological data.  
+ 
+For a given next generation matrix K we can calculate the resulting force-of-infection using:
+\begin{equation}
+    \lambda_i = \sum_{j} k_{ij}\left[P_s\left(a_{i + 1}\right) - P_s\left(a_i\right)\right]
+    (\#eq:lami)
+\end{equation}
+Although we cannot write down a closed form solution for $K_{ij}$, for any given next generation matrix $\mathbf{K}$, we can iteratively solve equations \@ref(eq:p2) and \@ref(eq:lami) to obtain the susceptibility curve $P_s(a)$ and force-of-infection $\lambda_i$ that correspond to particular values of $\mathbf{K}$. By exploring different values (and forms) of $\mathbf{K}$ we can then estimate what next generation matrix is most consistent with a given susceptibility curve.  
+ 
+This procedure is straightforward, but a bit fiddly, so once again we have provided you with helper functions below to do this, adapted from the book by Hens et al. 
+ 
+`NextGen_foi(K)` returns the age-stratified force-of-infection corresponding to a specified next generation matrix `K` (Equation \@ref(eq:lami) above). The number of age groups is taken from the dimensions (number of rows/columns) of `K`. 
+ 
+`NextGen_loglik(x, matrixfunction, sero_data)` is analogous to `FOI_loglik()` and returns the likelihood of observing a given number of positive/negative samples for each age-group and a specified next generation matrix with parameters `x` and structure defined by a user specified function `matrixfunction()`.  
+ 
+Note that instead of estimating the scaling parameter $y = e^x$ directly, we estimate $x = e^y$. This parameter transformation doesn't change our basic assumption that transmission is directly proportional to the reported POLYMOD contacts, but improves the numerical accuracy of our estimation. Such tricks often improve the convergence of numerical procedures, especially MCMC methods, but the appropriate choice can be somewhat of a black art.
+ 
+By writing `NextGen_loglik()` to depend on a function as well as a set of parameters we can easily fit alternative models that assume different patterns of mixing in the population. For example we can specify a homogeneous mixing model by the following function: 
+ 
+```{r}
+## function that returns a homogeneous mixing next 
+## generation matrix with all elements equal to x
+HomogeneousMatrix <- function(x) { 
+    mat <- matrix(x, 86, 86) 
+    return(mat)
+}
+```
+where we assume there are 86 age cohorts in the population (for consistency with POLYMOD matrix).
+
+The helper functions are defined below:
+
+```{r}
+## calculate force of infection for a given next generation matrix K
+##
+## annual age cohorts are assumed with maximum assumed age given by
+## dimensions of K
+##
+## Arguments:
+## K - Next Generation Matrix
+NextGen_foi <- function(K) {
+    ## set up age-class widths
+    widths <- rep(1, nrow(K))
+    ## number of age classes
+    num_class <- nrow(K)
+    ## piecewise FOI by age-class
+    lambda <- numeric(num_class)
+    ## susceptible fraction at END of age class
+    s <- rev(sort(runif(num_class)))
+    oldlambda <- lambda
+    tolerance <- 1
+    iterations <- 1
+    while ((tolerance > 1e-10) & (iterations < 2000)) {
+        oldlambda <- lambda
+        for(i in 1:num_class) {
+            lambda[i] <- (K[i, 1] * (1 - s[1]) + 
+                sum(K[i, 2:num_class] * 
+                (s[1:(num_class - 1)] - s[2:num_class])))
+        }
+        s[1] <- exp(-lambda[1] * widths[1])
+        for(i in 2:(num_class)) {
+            s[i] <- s[i - 1] * exp(-lambda[i] * widths[i])
+        }
+        tolerance <- sum((lambda - oldlambda)^2)
+        iterations <- iterations + 1
+    }
+    return(lambda)
+}
+```
+
+```{r}
+## calculate (Binomial) likelihood of observing given number of
+## positive/negative samples 
+## (provided in table sero_data) for each age group and specified 
+## next generation matrix K = matrixfunction(x) 
+## 
+## Arguments:
+## x: vector of unique force of infection values
+## foi_key: pattern vector of length equal to the maximum assumed age
+##    in population (or data set) that specifies which unique value of ##    x corresponds to each annual cohort in population.
+## sero_data: data frame with columns
+## sero_data$Pos: positive samples
+## sero_data$Neg: negative samples
+NextGen_loglik <- function(x, matrixfunction, sero_data) {
+    
+    ## set up auxiiary vectors
+    x <- exp(x)
+    K <- matrixfunction(x)
+    breaks <- 0:nrow(K)
+    widths <- rep(1, nrow(K))
+    
+    if(any(x <= 0)) {
+        ## if any rates < 0 then 
+        ## return log-likelihood = -Inf
+        return(-Inf)
+    } else {
+        ## calculate fois
+        lambda <- NextGen_foi(K)
+        
+        ## calculate log-likelihoods
+        loglik <- 0.0
+        for(i in 1:nrow(sero_data)) {
+            ## which age class does observation lie in 
+            age_class <- max(which(sero_data$Age[i] > breaks))
+            ## proportion of susceptibles at beginning of age class
+            sg <- piecewise_s(breaks[age_class], lambda)
+            loglik <- loglik + dbinom(
+                sero_data$Pos[i],
+                sero_data$Pos[i] + sero_data$Neg[i],
+                prob = 1 - sg * exp(-lambda[age_class] * (sero_data$Age[i] - breaks[age_class])),
+                log = TRUE
+            )
+        }
+        ## return log-likelihood
+        return(loglik)
+    }
+}
+```
+ 
+We can now obtain the maximum-likelihood estimate for the homogeneous mixing matrix by optimising the value of `NextGen_loglik()`: 
+
+```{r}
+homogeneous_mle <- optimise(
+    NextGen_loglik,
+    log(c(0.01, 1)),
+    maximum = TRUE,
+    matrixfunction = HomogeneousMatrix,
+    sero_data = rubella
+)
+homogeneous_mle
+```
+
+Then to calculate the force-of-infection corresponding to our maximum likelihood fit: 
+
+```{r} 
+homogeneous_foi <- NextGen_foi(
+    HomogeneousMatrix(exp(homogeneous_mle$maximum))
+)
+```
+ 
+You can check the fit of the model by using the `piecewise_s()` function to predict the proportion positive for each age group and plot against the original data: 
+ 
+```{r}
+plot(rubella$Age, rubella$p_s, pch = 19, cex = size^0.75)
+lines(
+    seq(0.5, 75, 1), 
+    piecewise_s(
+        seq(0.5, 75, 1), 
+        homogeneous_foi
+    ),
+    lwd = 2
+)
+```
+ 
+The overall fit is actually pretty good. However if we look closely the model does systematically overestimate the proportion infected in 10--20 year olds and underestimates in the 20--44 age groups, as we would expect from our analysis in the earlier section.  
+ 
+We could generalise our mixing matrix to include additional parameters to describe this heterogeneity as before. Or we can test whether social contact patterns provide a better description of the observed force-of-infection. Here we assume that infectious contacts are distributed proportionally to a POLYMOD mixing matrix. 
+ 
+Copy the provided POLYMOD data from the shared folder to your working directory and load into R: 
+ 
+```{r, eval = FALSE}
+## load (smoothed symmetrical) POLYMOD matrix 
+POLYMOD <- as.matrix(read.csv("POLYMOD.csv", header = FALSE))
+```
+ 
+```{r, echo = FALSE}
+## load (smoothed symmetrical) POLYMOD matrix 
+POLYMOD <- as.matrix(read.csv("data/POLYMOD.csv", header = FALSE))
+```
+ 
+Now we write a function called `POLYMODMatrix()` that takes a single parameter `x` and returns a scaled version of the POLYMOD matrix ($M_{ij}$): 
+
+```{r}
+## generates a scaled POLYMODMatrix with transmission 
+## parameter defined by x 
+POLYMODMatrix <- function(x) { 
+    return(x * POLYMOD)
+}
+```
+ 
+```{task}
+Follow the same steps as before to find the maximum likelihood estimate of the next generation matrix for the POLYMOD assumption and create a plot comparing the estimated force-of-infection and model fit for both models.
+```
+
+```{solution}
+
+``{r}
+POLYMOD_mle <- optimise(
+    NextGen_loglik,
+    c(1, 15),
+    matrixfunction = POLYMODMatrix,
+    maximum = TRUE, 
+    sero_data = rubella
+)
+POLYMOD_foi = NextGen_foi(POLYMODMatrix(exp(POLYMOD_mle$maximum)))
+par(mfrow = c(2, 1))
+plot(
+    seq(0.5, 86, 1), 
+    POLYMOD_foi, 
+    type = 'b', 
+    xlab = 'Age', 
+    ylab = 'FOI', 
+    col = 'red'
+)
+lines(seq(0.5, 86, 1), homogeneous_foi, type = 'b', col = 'blue')
+plot(
+    rubella$Age,
+    rubella$p_s,
+    pch = 19,
+    xlab = 'Age',
+    ylab = 'Probability Positive'
+)
+lines(
+    seq(0.5, 86, 1), 
+    piecewise_s(seq(0.5, 86, 1), homogeneous_foi), 
+    lwd = 2, 
+    col = 'blue'
+)
+lines(
+    seq(0.5, 86, 1),
+    piecewise_s(seq(0.5, 86, 1), POLYMOD_foi),
+    lwd = 2,
+    col = 'red'
+)
+par(mfrow = c(1, 1))
+``
+
+```
+ 
+Finally, calculate the value of $R_0$ for the two mixing assumptions: 
+
+```{r} 
+max(Re(eigen(HomogeneousMatrix(exp(homogeneous_mle$maximum)))$values))   
+max(Re(eigen(POLYMODMatrix(exp(POLYMOD_mle$maximum)))$values)) 
+```
+
+```{task, title = "Question"}
+Does the POLYMOD mixing provide a better fit to the Rubella serological data?
+```
+    
+```{solution, title = "Answer"}
+The homogeneous mixing model has a maximum (log) likelihood value of `r round(homogeneous_mle$objective, 0)`, compared to `r round(POLYMOD_mle$objective, 0)` for the POLYMOD model. On this basis, and from visual inspection of the fit, the POLYMOD mixing model is better supported by the data, although we might want to produce measures such as AIC that penalise for model complexity before drawing firm conclusions.
+```
+
+```{task, title = "Question"}
+How do the predictions of the POLYMOD mixing model differ from homogeneous mixing? 
+```
+
+```{solution, title = "Answers"}
+The POLYMOD mixing assumption estimates a lower basic reproductive ratio than homogeneous mixing, implying that a lower level of vaccination coverage would be necessary to eliminate disease than might be expected under homogeneous mixing.
+
+However, more importantly the POLYMOD model predicts a very different pattern of transmission within the population. The POLYMOD mixing matrix generates two equal peaks in the force of infection that are both higher than the homogeneous mixing estimate. The second peak in young adults is of particular concern for Rubella where the disease itself is of less concern than so-called congenital rubella syndrome (CRS)---where infection of pregnant women leads to severe problems for unborn children. Pre-vaccination, with a mean age of infection of ~10 years this second group was relatively unimportant as few susceptible individuals ‘survived’ to that age. But it may become more important after the introduction of vaccination which is likely to increases the mean age of infection into this second core-group. This is the motivation for supplemental vaccination campaigns in teenage girls---i.e. not to reduce the rate of transmission in the community but to directly protect against CRS. The magnitude of this, so-called perverse effect of vaccination, would be greatly underestimated by a (incorrect) assumption of homogeneous mixing.
 ```
