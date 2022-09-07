@@ -31,6 +31,10 @@ This document contains practicals relating to the course. The first is using max
 **Please note that there is a PDF version of these notes available by clicking on the icon in the top-left corner of the page.**
 ```
 
+```{info, title = "Lecture Notes", collapsible = FALSE}
+Lecture notes are available [here](https://tjmckinley.github.io/VIMCCoursePracticals/lecturenotes.pdf).
+```
+
 ## Software
 
 I am heavily indebted to [Stefan Widgren](http://www.it.uu.se/katalog/stewi333) for his fantastic [SimInf](https://cran.r-project.org/web/packages/SimInf/index.html) package, and indeed (with permission) I shamelessly borrow some of his ideas in `SimBIID` (such as the `mparse()` function).

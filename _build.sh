@@ -6,3 +6,4 @@ Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
 ## copy nojekyll file and data
 cp .nojekyll docs
 cp -r data docs
+cp ../lectures/lecturenotes.pdf docs
