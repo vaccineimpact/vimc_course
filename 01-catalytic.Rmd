@@ -16,9 +16,7 @@ We approach these two objectives using two alternative methods:
  
 In this practical we will estimate the force-of-infection of rubella using serological survey data from the UK provided in the book ["Modelling Infectious Disease Parameters Based on Serological and Social Contact Data"](https://link.springer.com/book/10.1007/978-1-4614-4072-7) by @hensetal:2012
 
-You will need to copy two files from the shared drive that contain the rubella data itself ([`Rubella-UK.dat`](https://tjmckinley.github.io/VIMCCoursePracticals/data/Rubella-UK.dat)) and another that defines various helper functions we will use in the practical (`CatalyticModel.R`).
- 
-We will begin by loading and checking the contents of the rubella data table: 
+You will need a copy of the data ([`Rubella-UK.dat`](https://tjmckinley.github.io/VIMCCoursePracticals/Rubella-UK.dat)), which you can download via the link. We will begin by loading and checking the contents of the rubella data table: 
 
 ```{r, eval = FALSE}
 rubella <- read.csv("Rubella-UK.csv", header = TRUE) 
