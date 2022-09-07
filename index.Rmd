@@ -1,6 +1,6 @@
 --- 
-title: "Skeleton Tutorial Template"
-author: "TJ McKinley"
+title: "Inference in infectious disease systems practicals"
+author: "[TJ McKinley](mailto:t.mckinley@exeter.ac.uk)"
 site: bookdown::bookdown_site
 output:
     bookdown::pdf_book:
@@ -16,362 +16,80 @@ output:
 linkcolor: blue
 documentclass: book
 link-citations: yes
-description: "Skeleton Tutorial Template"
+description: "Inference in infectious disease systems practicals"
+bibliography: /home/tj/Documents/ref.bib
 ---
-
-# Opening page
 
 ```{r, child = "_setup.Rmd", include = FALSE, purl = FALSE, cache = FALSE}
 ```
 
-Basically a standard Bookdown template with a few tweaks. New chapters need to be in separate '.Rmd' files, where each file starts with a chapter heading as seen [here](https://bookdown.org/yihui/bookdown/usage.html). In order to use the task and solution blocks in \LaTeX, you must input the order of the files into the `_bookdown.yml` file, and the first file must be called `index.Rmd` e.g.
+# Introduction
 
-```
-rmd_files:
-    html: ['index.Rmd', 'ch1.Rmd']
-    latex: ['index.Rmd', 'ch1.Rmd', 'ch_appendix.Rmd']
-output_dir: "docs"
-```
+This document contains practicals relating to the course. The first is using maximum likelihood and Bayesian methods to fit catalytic models to serology data to generate estimates of $R_0$ under different assumptions about mixing. The second is to use the (current) [`SimBIID`](https://github.com/tjmckinley/SimBIID) package (Simulation-Based Inference for Infectious Disease models)---which is a package designed mostly for teaching purposes---to fit a compartmental epidemic model to partially observed data using particle MCMC methods.
 
-The `latex:` path above ***must*** have `'ch_appendix.Rmd'` as its last entry. This ensures that the appendix is properly formatted for the solutions to the problems.
-
-You must have the following lines at the **start** of your `index.Rmd` file (please do not change the chunk options for this chunk, and place it as the **first** chunk in the document):
-
-````
-```{r, child = "_setup.Rmd", include = FALSE, purl = FALSE, cache = FALSE}`r ''`
-```
-````
-
-> **Note**: the `task` / `solution` and `info` blocks detailed below cannot be cached. Code chunks within these blocks can be cached as usual. The caching is automatically disabled in order to make sure the PDF outputs are correctly cross-referenced.
-
-There are a couple of useful special blocks. A `task` block, and a `solution` block. These can be used as e.g.
-
-````
-```{task}`r ''`
-Here is a task written in **markdown**.
-```
-````
-
-which renders as:
-
-```{task}
-Here is a task written in **markdown**.
+```{info, title = "Note", collapsible = FALSE}
+**Please note that there is a PDF version of these notes available by clicking on the icon in the top-left corner of the page.**
 ```
 
-You can include chunks within the `task` chunk, but you need to use double backticks *within* the chunk, and leave carriage returns around the internal chunk e.g.
+## Software
 
-````
+I am heavily indebted to [Stefan Widgren](http://www.it.uu.se/katalog/stewi333) for his fantastic [SimInf](https://cran.r-project.org/web/packages/SimInf/index.html) package, and indeed (with permission) I shamelessly borrow some of his ideas in `SimBIID` (such as the `mparse()` function).
 
-```{task}`r ''`
+For the time being I have developed `SimBIID` mostly as a tool to help you learn how PMCMC (and various other routines) work, and to allow you to get your hands dirty with some real models/data, but without the complexities of having to code these routines up yourselves. More extensive documentation is given [here](https://tjmckinley.github.io/SimBIID_tutorial/), but I have extracted the relevant parts that relate to this course into the current document.
 
-``{r}
-x <- 2 + 2
-x
-``
+There are various general-purpose software packages for performing Bayesian inference for general classes of models. For example, 
 
-```
+* [WinBUGS](https://www.mrc-bsu.cam.ac.uk/software/bugs/the-bugs-project-winbugs/)
+* [`jags`](https://mcmc-jags.sourceforge.io/)
+* [OpenBUGS](https://openbugs.net/w/FrontPage)
+* [`MCMCpack`](https://cran.r-project.org/web/packages/MCMCpack/index.html)
 
-````
+* [`nimble`](https://r-nimble.org/)
+* [Stan](https://mc-stan.org/) / [`rstan`](https://mc-stan.org/users/interfaces/rstan)
 
-which renders as:
+And various wrapper packages to make fitting simple (e.g. regression models much easier) e.g. the [R](https://www.r-project.org/) packages [`brms`](https://cran.r-project.org/web/packages/brms/index.html) and [`rstanarm`](https://mc-stan.org/rstanarm/).
 
-```{task}
+For general-purpose Bayesian modelling, with tractable likelihood functions, then I would recommend any of these packages, although I mostly use Stan or `nimble`. However, the problem from the infectious disease modelling perspective is that it is challenging to implement the kinds of models that we use in this course, particularly when we have missing or incomplete data, and non-standard likelihoods. An R package that is designed for modelling the kinds of system we focus on in this course is [`pomp`](https://kingaa.github.io/pomp/) (standing for Partially Observed Markov Processes). This a powerful package that can be used to implement various "plug-and-play" inference algorithms, notably the maximum likelihood via iterated filtering (MIF) approach of @ionidesetal:2006, and a particle Markov chain Monte Carlo algorithm [@andrieuetal:2010] based on the bootstrap particle filter [@gordonetal:1993]. It also includes some simple Approximate Bayesian Computation rejection algorithms, but not the more powerful ABC-SMC approach of @tonietal:2009. `pomp` also provides functions to efficiently simulate from state-space models. The interface is more complex than `SimInf` and `SimBIID` (it involves you knowing some small amount of C), and so for the purposes of this course the `SimBIID` package will serve as an entry point into these algorithms. 
 
-``{r}
-x <- 2 + 2
-x
-``
+The `pomp` website: [https://kingaa.github.io/pomp/](https://kingaa.github.io/pomp/)---on [Aaron King's](https://lsa.umich.edu/eeb/people/faculty/kingaa.html) GitHub page---contains lots of tutorials for those of you who wish to pursue any of these ideas further. The influenza in a boarding school data [@anonymous:1978] that we will use as a case study can be found in the [`outbreaks`](http://www.repidemicsconsortium.org/outbreaks/index.html) R package, attributed to @devriesetal:2006, although variations of the data can be found in other literature [e.g. @murray:2003] and is also used in some of the `pomp` tutorials. The Abakaliki smallpox data can also be found in the `outbreaks` package, as well as in other places in the literature [e.g. @oneill_roberts:1999; @mckinleyetal:2014]. `nimble` can also be used to fit state-space models, although I have not done this personally, but point you to the documentation [here](https://r-nimble.org/). We do not use `nimble` here because we do not have enough time to teach the syntax, so opt for `SimBIID` instead, which should be more familiar if you are used to `SimInf`.
 
-```
+The workhorse of `SimBIID` is the function `mparseRcpp()`, which apes the syntax of `mparse()`, but allows for different compilation and output options. It does not have the full power of `SimInf`, so currently only works on single node simulations (no networks), with some limited additional structures. It also implements a simple Gillespie algorithm, rather than the more sophisticated approaches used in `SimInf` and `pomp`, but it's fast enough for the examples here.
 
-Be careful to have suitable carriage returns around e.g. `enumerate` or `itemize` environments inside the chunk also. For example:
+## Installation of `SimBIID`
 
-````
+The package depends on the `Rcpp` and `RcppArmadillo` packages, which require the installation of the correct C++ compilers. The guidance below is taken from Sections 2.1.1, 2.1.2 or 2.1.3 [here](https://teuder.github.io/rcpp4everyone_en/020_install.html).
 
-```{task}`r ''`
-Here is a list:
-1. item 1
-2. item 2
-```
+### Windows
 
-```` 
+Install [Rtools](https://cran.r-project.org/bin/windows/Rtools/index.html).
 
-will not render nicely. But
+(Make sure you tick the option to add Rtools to the PATH whilst installing.)
 
-````
+### Mac
 
-```{task}`r ''`
-Here is a list:
+Install Xcode command line tools. Execute the command `xcode-select --install` in a Terminal.
 
-1. item 1
-2. item 2
+You might also need to install the gfortran libraries from:
 
-```
+[https://cran.r-project.org/bin/macosx/tools/gfortran-6.1.pkg](https://cran.r-project.org/bin/macosx/tools/gfortran-6.1.pkg)
 
-```` 
+### Linux
 
-will:
+Install gcc and related packages (you might also need `gcc-fortran` for some of the dependencies).
 
-```{task}
-Here is a list:
+In Ubuntu Linux, execute the command `sudo apt-get install r-base-dev` in a Terminal.
 
-1. item 1
-2. item 2
+### Install package
+
+Once the compilers have been installed, then the CRAN version can be installed in the usual way, e.g.
 
 ```
-
-The `solution` chunk works in the same way, and the numbers will follow the previous `task` chunk (so you can set tasks without solutions) e.g.
-
-````
-
-```{task}`r ''`
-Add 2 and 2 together
+install.packages("SimBIID")
 ```
 
-```{solution}`r ''`
-
-``{r}
-2 + 2
-``
+Alternatively, the *development* version can be installed from source using the `remotes` package in R. That is, install the `remotes` package and then run:
 
 ```
-
-````
-
-gives:
-
-```{task}
-Add 2 and 2 together
+library(remotes)
+install_github("tjmckinley/SimBIID")
 ```
-
-```{solution}
-
-``{r}
-2 + 2
-``
-
-```
-
-## Additional extensions
-
-### Different task and solution titles
-
-Task and solution boxes can also be given different names using the `title` option e.g.
-
-````
-
-```{task, title = "Question"}`r ''`
-What is the meaning of life, the universe and everything?
-```
-
-```{solution, title = "Answer"}`r ''`
-Why 42 of course!
-```
-
-````
-
-gives:
-
-```{task, title = "Question"}
-What is the meaning of life, the universe and everything?
-```
-
-```{solution, title = "Answer"}
-Why 42 of course!
-```
-
-### Turning tasks and solutions on and off
-
-Sometimes you might want to hide task and/or solution boxes. This can be done with the `renderTask` and `renderSol` chunk options, which can be set globally or locally. For example:
-
-````
-
-```{task, title = "Question"}`r ''`
-Can I set a task and not show the answer?
-```
-
-```{solution, title = "Answer", renderSol = FALSE}`r ''`
-Indeed, though you won't see this answer unless `renderSol = TRUE`...
-```
-
-````
-
-typesets as:
-
-```{task, title = "Question"}
-Can I set a task and not show the answer?
-```
-
-```{solution, title = "Answer", renderSol = FALSE}
-Indeed, though you won't see this answer unless `renderSol = TRUE`...
-```
-
-### Generic information environments
-
-You can also set generic boxed environments containing arbitrary information. 
-
-````
-
-```{info, title = "Some interesting titbit"}`r ''`
-This box contains invaluable information!
-```
-
-````
-
-typesets as:
-
-```{info, title = "Some interesting titbit"}
-This box contains invaluable information!
-```
-
-Note that it is useful to set the `title` option here, else it defaults to `info`. You can also use this environment to simply display an alert box with information, by setting the `collapsible` argument to `FALSE` in the chunk options e.g.
-
-````
-
-```{info, title = "Some interesting aside", collapsible = FALSE}`r ''`
-Yet more valuable information - this time displayed directly!
-```
-
-````
-
-typesets as:
-
-```{info, title = "Some interesting aside", collapsible = FALSE}
-Yet more valuable information - this time displayed directly!
-```
-
-In the PDF output, setting `collapsible = TRUE` will place the information boxes in a separate Appendix, with links in the main document. You can again hide the `info` boxes by setting `renderInfo = FALSE` in the chunk options.
-
-You can also put boxes around text without any titles by setting `title = NA` and `collapsible = FALSE` e.g.
-
-````
-
-```{info, title = NA, collapsible = FALSE}`r ''`
-Just some stuff but no titles!
-```
-
-````
-
-```{info, title = NA, collapsible = FALSE}
-Just some stuff but no titles!
-```
-
-### Tabbed boxed environments
-
-Originally developed to put base R and `tidyverse` solutions side-by-side, using a `multCode = T` option to the solution box. Here the two tabs are separated by four consecutive hashes: `####`, and the `titles` option gives the tab titles (these can be set globally if preferred) e.g.
-
-```{r, include = FALSE}
-library(tidyverse)
-```
-
-````
-
-```{task}`r ''`
-Filter the `iris` data by `Species == "setosa"` and find the mean `Petal.Length`.
-```
-
-```{solution, multCode = TRUE, titles = c("Base R", "tidyverse")}`r ''`
-
-``{r}
-## base R solution
-mean(iris$Petal.Length[
-    iris$Species == "setosa"])
-``
-
-####
-
-``{r}
-## tidyverse solution
-iris %>% 
-    filter(Species == "setosa") %>%
-    select(Petal.Length) %>%
-    summarise(mean = mean(Petal.Length))
-``
-    
-```
-
-````
-
-will typeset to:
-
-```{task}
-Filter the `iris` data by `Species == "setosa"` and find the mean `Petal.Length`.
-```
-
-```{solution, multCode = TRUE, titles = c("Base R", "tidyverse")}
-
-``{r}
-## base R solution
-mean(iris$Petal.Length[
-    iris$Species == "setosa"])
-``
-
-####
-
-``{r}
-## tidyverse solution
-iris %>% 
-    filter(Species == "setosa") %>%
-    select(Petal.Length) %>%
-    summarise(mean = mean(Petal.Length))
-``
-    
-```
-
-Note that there is also a `multCode` chunk that does not link to task and solution boxes e.g.
-
-````
-
-```{multCode}`r ''`
-
-Two options: 
-
-* Option 1
-
-####
-
-Two options:
-    
-* Option 2
-
-```
-
-````
-
-will typeset to:
-
-```{multCode}
-
-Two options: 
-
-* Option 1
-
-####
-
-Two options:
-    
-* Option 2
-
-```
-
-The `titles` option can be set as before.
-
-### Resize code chunks
-
-Code chunks can be resized using a `size`, `htmlsize` or `latexsize` chunk option. These take either HTML or \LaTeX sizes and convert accordingly. For example,
-
-````
-
-```{r, size = "scriptsize"}`r ''`
-rnorm(10, 0, 1)
-```
-
-````
-
-typesets as:
-
-```{r, size = "scriptsize"}
-rnorm(10, 0, 1)
-```
-
-Setting `htmlsize` or `latexsize` overwrites the `size` argument and allows for sizes to be different for HTML or \LaTeX output respectively. This is most useful for `multCode` chunks that might need shrinking in a \LaTeX environment in order to fit nicely on a page side-by-side.

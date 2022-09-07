@@ -1,22 +1,22 @@
 # Estimating $R_0$ using catalytic models
  
-The aim of this practical is to estimate the age-stratified force-of-infection and basic reproductive ratio from age-stratified serological data.
+The aim of this practical is to estimate the age-stratified force-of-infection and basic reproductive ratio from age-stratified serological data for an endemic disease.
  
 Objectives:
 
-1. Estimate the age-stratified force-of-infection of Rubella from serological data.
-2. Calculate the next generation matrix and $R_0$ for Rubella.
+1. Estimate the age-stratified force-of-infection of rubella from serological data.
+2. Calculate the next generation matrix and $R_0$ for rubella.
 
 We approach these two objectives using two alternative methods:
  
-* In section 1 we take the traditional two stage approach of estimating the force-of-infection first and then calculating the next generation matrix from an assumed Who-Aquires-Infection-from-Whom (WAIFW) matrix.  
-* In section 2, we take the more elegant approach of estimating the next generation matrix directly using social contact (POLYMOD) data. 
+* In Section \@ref(foi) we take the traditional two stage approach of estimating the force-of-infection first and then calculating the next generation matrix from an assumed Who-Aquires-Infection-from-Whom (WAIFW) matrix.  
+* In Section \@ref(ngm), we take the more elegant approach of estimating the next generation matrix directly using social contact (POLYMOD) data. 
  	 
-## Estimating the force-of-infection and $R_0$ of rubella 
+## Estimating the force-of-infection and $R_0$ of rubella {#foi}
  
-In this practical we will estimate the force-of-infection of rubella using serological survey data from the UK provided in the book "Modelling Infectious Disease Parameters Based on Serological and Social Contact Data" by Hens *et al.* 
+In this practical we will estimate the force-of-infection of rubella using serological survey data from the UK provided in the book ["Modelling Infectious Disease Parameters Based on Serological and Social Contact Data"](https://link.springer.com/book/10.1007/978-1-4614-4072-7) by @hensetal:2012
 
-You will need to copy two files from the shared drive that contain the rubella data itself ([`Rubella-UK.dat`](data/Rubella-UK.dat)) and another that defines various helper functions we will use in the practical (`CatalyticModel.R`).
+You will need to copy two files from the shared drive that contain the rubella data itself ([`Rubella-UK.dat`](./data/Rubella-UK.dat)) and another that defines various helper functions we will use in the practical (`CatalyticModel.R`).
  
 We will begin by loading and checking the contents of the rubella data table: 
 
@@ -30,10 +30,10 @@ rubella <- read.csv("data/Rubella-UK.csv", header = TRUE)
 head(rubella)
 ```
 
-`rubella` should be a table with `r nrow(rubella)` rows and `r ncol(rubella)` columns. `Rubella$Age` is the midpoint of the age group (annual) from which `rubella$Pos + rubella$Neg` samples were taken, of which `rubella$Pos` were positive for Rubella antibodies and `rubella$Neg` were negative. 
+`rubella` should be a table with `r nrow(rubella)` rows and `r ncol(rubella)` columns. `rubella$Age` is the endpoint of the age group (annual) from which `rubella$Pos + rubella$Neg` samples were taken, of which `rubella$Pos` were positive for rubella antibodies and `rubella$Neg` were negative. 
  
 ```{task}
-Calculate the probability of being susceptible ($p_s$) within each age category and add this as an extra column to the rubella data frame.
+Estimate the probability of being susceptible ($p_s$) within each age category and add this as an extra column to the rubella data frame.
 ```
 
 ```{solution}
@@ -75,8 +75,12 @@ Remember your log rules, e.g. $\log(xy) = \log(x) + \log(y)$, $\log\left(\frac{1
     &\phantom{\Rightarrow} \log\left(p_1\right) = \log\left(p_0e^{-\lambda \Delta a}\right)\\
     &\Rightarrow \log\left(p_1\right) = \log\left(p_0\right) - \lambda \Delta a\\
     &\Rightarrow \lambda \Delta a = \log\left(p_0\right) - \log\left(p_1\right)\\
-    &\Rightarrow \lambda = \frac{1}{\Delta a}\left[\log\left(p_0\right) - \log\left(p_1\right)\right].
+    &\Rightarrow \lambda = \frac{1}{\Delta a}\left[\log\left(p_0\right) - \log\left(p_1\right)\right],
 \end{align*}
+which can also be written as:
+$$
+    \lambda = \frac{1}{\Delta a}\log\left(\frac{p_0}{p_1}\right).
+$$
 ```
     
 ```{task}
@@ -86,7 +90,7 @@ Use the equation derived above to estimate the force-of-infection $\lambda$ with
 
 * Assume that all individuals are susceptible at birth ($p_0 = 1$ for first age cohort).  
 * Think carefully about what the estimated force-of-infection for the final age cohort should be. 
-* You may wish to write a loop, or consider using vectors (e.g. `1:nrow(rubella)`) and `2:(nrow(rubella) - 1)`) to access the different elements of `rubella$p_s`.
+* You may wish to write a loop, or consider using vectors (e.g. `1:(nrow(rubella) - 1)`) to access the different elements of `rubella$p_s`.
 ``
 
 ```
@@ -99,8 +103,7 @@ $$
 for $i = 1, \dots, N_A$ where $p_0 = 1$. This can be implemented in R using e.g.
 
 ``{r}
-rubella$lambda <- NA
-rubella$lambda[1:(nrow(rubella) - 1)] <- log(c(1, rubella$p_s[1:(nrow(rubella) - 1)])) - 
+rubella$lambda <- log(c(1, rubella$p_s[1:(nrow(rubella) - 1)])) - 
     log(rubella$p_s)
 ``
 
@@ -127,7 +130,7 @@ size <- (rubella$Pos + rubella$Neg) / max(rubella$Pos + rubella$Neg)
 plot(rubella$Age, rubella$p_s, pch = 19, cex = size^0.75)
 ```
  
-```{r, echo = FALSE, fig.cap = "First estimate of force-of-infection of Rubella"}
+```{r, echo = FALSE, fig.cap = "First estimate of force-of-infection of rubella"}
 plot(rubella$Age, rubella$lambda, pch = 19, cex = size^0.75)
 ```
  
@@ -205,8 +208,8 @@ We can code this in R using the following function:
 
 ```{r}
 ## Calculate (Binomial) likelihood of observing given number of positive/negative samples 
-## (provided in table sero_data) for each age group and specified by a piecewise continuous 
-## force of infection model defined by foi_key
+## (provided in table sero_data) for each age group and specified by a piecewise 
+## continuous force of infection model defined by foi_key
 ## 
 ## Arguments:
 ## x: vector of unique force-of-infection values
@@ -260,13 +263,26 @@ two_groups <- (1:max(rubella$Age) >= 15) + 1
 two_groups
 ```
 
-As we did before in Stats Practical 2 we can obtain the maximum-likelihood estimate for this model by optimizing the value of `FOI_loglik()` using the built-in function `optim()`.
+We can obtain the maximum-likelihood estimate for this model by optimising the value of `FOI_loglik()` using the built-in function `optim()`.
+
+```{info, title = "The optim() function"}
+`optim()` is an in-build optimisation function in R. It is used when you want to optimise a function with respect to *multiple* parameters. If you want to optimise a function with respect to a *single* parameter, then use `optimise()` (which we will use later on).
+
+Arguments for `optim()` can be found from the help file in the usual way e.g. `?optim`. The key ones here are:
+
+* `par`: a vector of initial values (for $\lambda_1$ and $\lambda_2$ here).
+* `fn`: a function to be minimised (or maximised), with first argument the vector of parameters over which optimisation is to take place. It should return a scalar result. Here we pass it the `FOI_loglik()` function we defined above.
+* `...`: additional arguments required for `FOI_loglik()` can be passed to `optim()`; here we pass `foi_key` and `sero_data` arguments.
+* `control`: a list of control parameters. Here we set `fnscale = -1` to ensure **maximisation** (else it defaults to minimisation).
+
+Please see the help file for more details.
+```
 
 ```{r}
 ## calculate MLE
 twogroup_mle <- optim(
     c(0.07, 0.07),                ## set initial values for lambda1 and lambda2
-    FOI_loglik,                      ## log-likelihood function
+    FOI_loglik,                   ## log-likelihood function
     foi_key = two_groups,         ## foi_key 
     sero_data = rubella,          ## data
     control = list(fnscale = -1)  ## maximise (rather than minimise) function
@@ -274,7 +290,7 @@ twogroup_mle <- optim(
 twogroup_mle
 ```
 
-We can check the fit of the model by plotting the predicted values against the data: 
+The `convergence = 0` part suggests that the optimisation has converged (in practcie one might want to run `optim()` multiple times from different initial conditions to check that it's not converged to a local mode). We can check the fit of the model by plotting the predicted values against the data: 
 
 ```{r, propsus, fig.cap = "Predicted susceptible profile of two-group FOI model against data"}
 ages <- seq(0, 44, by = 0.1) 
@@ -321,16 +337,30 @@ Can you suggest, and estimate, a model to improve the fit to the data? How can y
 ```
 
 ```{solution}
-There is a suggestion from Figure \@ref(fig:propsus) that infants, as well as adults, have a lower rate of infection than school age children. Such a "core-group" model will provide a closer fit to the serological age-profile. The log-Likelihood of `r round(threegroup_mle$value, 0)` compared to `r round(twogroup_mle$value, 0)` for the two group model, provides evidence that the three-group model better explains the data even allowing for any penalties we might chose to impose due to the additional parameter (e.g. AIC).
+There is a suggestion from Figure \@ref(fig:propsus) that infants, as well as adults, have a lower rate of infection than school age children. Such a "core-group" model will provide a closer fit to the serological age-profile. 
 
 ``{r, ref.label = "threegroup"}
 ``
 
+The log-likelihood of `r round(threegroup_mle$value, 0)` compared to `r round(twogroup_mle$value, 0)` for the two group model, provides evidence that the three-group model better explains the data even allowing for any penalties we might chose to impose due to the additional parameter (e.g. AIC).
 ```
 
-## Bayesian estimation
+### Bayesian estimation
 
-We can also estimate the posterior distributions for the two force-of-infections within a Bayesian framework using MCMC. Here we introduce and use one of the standard MCMC libraries in R (`MCMCpack`) that implements a generic MCMC method similar to that used in Stats Practical 2. 
+We can also estimate the posterior distributions for the two force-of-infections within a Bayesian framework using MCMC. Here we introduce and use one of the standard MCMC libraries in R (`MCMCpack`) that implements a generic MCMC method.
+
+```{info, title = "A note on priors"}
+The function `MCMCmetrop1R()` provided in the `MCMCpack` library takes a function that returns the un-normalised log-posterior density, that is:
+\begin{equation}
+    \log\left[f\left(\mathbf{y} \mid \boldsymbol{\theta}\right)\right] + \log\left[f\left(\boldsymbol{\theta}\right)\right].
+    (\#eq:unnormll)
+\end{equation}
+We implement this using the `FOI_loglik()` function defined earlier. If we only export the log-likelihood from this function, then this is equivalent to putting completely flat (so-called improper) priors on the parameters. A subtlety here is that `FOI_loglik()` actually returns `NA` if any of the parameters are **negative**, meaning that in fact we are putting flat priors on $\lambda_1$ and $\lambda_2$ that are constrained in the region $(0, \infty)$. This is important since we know that rates can't be negative.
+
+If we want to use more structured prior distributions, then we would have to amend `FOI_loglik()` to return \@ref(eq:unnormll) with the correct prior densities built-in. 
+
+**Important**: you *must* know what priors you are using, since they are an integral part of a Bayesian analysis.
+```
  
 ```{r, results = "hide", message = FALSE}
 ## load library
@@ -348,9 +378,15 @@ twogroup_post <- MCMCmetrop1R(
     foi_key = two_groups,           ## foi key
     sero_data = rubella             ## data
 )
-``` 
+```
+
 ```{task}
-Check the convergence of the MCMC and comment on the weight of evidence that the force-of-infection for Rubella is different in the two age groups.
+Check the convergence of the MCMC and comment on the weight of evidence that the force-of-infection for rubella is different in the two age groups.
+
+``{info, title = "Hint"}
+Plotting the fitted model object will give the trace plots, and summarising the model object gives useful summary measures.
+``
+
 ```
 
 ```{solution}
@@ -361,21 +397,21 @@ plot(twogroup_post)
 summary(twogroup_post)
 ``
 
-Here the chains look well mixed and the algorithm seems to have converged (ideally we would want to run multiple chains). The posterior distributions for the two force of infection parameters are non-overlapping with a risk of infection for school age-children almost twice that of adults.
+Here the chains look well mixed and the algorithm seems to have converged (ideally we would want to run multiple chains). The 95% credible intervals for the two force of infection parameters are non-overlapping with a risk of infection for school age-children almost twice that of adults.
 ```
  
-## Next-generation matrix approaches
+## Next-generation matrix approaches {#ngm}
 
 If the force-of-infection was independent of age we could estimate $R_0$ straightforwardly as the ratio of the force-of-infection and life expectancy. However, when the force-of-infection varies with age we need to first use the force-of-infection to calculate the transmission parameters within and between each age-group. Here we work through through the traditional method for achieving this where social contact data is not available and assumptions must be made about Who Acquires Infection from Whom (WAIFW). 
  
-We can derive an equation that links the force-of-infection and the elements of the next generation matrix $k_{ij}$. (The details of the derivation are a little messy and will be omitted here, see Anderson & May, Hens et al. for details). 
+We can derive an equation that links the force-of-infection and the elements of the next generation matrix $k_{ij}$. (The details of the derivation are a little messy and will be omitted here, see @anderson_may:1991; @hensetal:2012 for details.)
  
 \begin{equation}
     \begin{pmatrix} \beta_{11} & \beta_{12}\\ \beta_{21} & \beta_{22} \end{pmatrix} \begin{pmatrix} \psi_1 \\ \psi_2 \end{pmatrix} = \begin{pmatrix} \lambda_1 \\ \lambda_2 \end{pmatrix}
     (\#eq:ngm)
 \end{equation}
 
-$\mathbf{\psi}$ is a function derived from the force-of-infection that, loosely, corresponds to the average proportion of individuals infectious within each age group at any time. The function `Psi(x, age_widths, TI, u)` defined below returns the vector $\mathbf{\psi}$ for a specified force-of-infection `lambda`, for coarse age groups of widths `age_widths`, and infectious period of length `TI`, and the mortality rate for each age group `u`.
+$\mathbf{\psi}$ is a function derived from the force-of-infection that, loosely, corresponds to the average proportion of individuals infectious within each age group at any time. The function `Psi(lambda, age_widths, TI, u)` defined below returns the vector $\mathbf{\psi}$ for a specified force-of-infection `lambda`, for coarse age groups of widths `age_widths`, and infectious period of length `TI`, and the mortality rate for each age group `u`.
 
 ```{r}
 Psi <- function(lambda, age_widths, u, TI) {
@@ -399,11 +435,11 @@ Psi <- function(lambda, age_widths, u, TI) {
 
 Equation \@ref(eq:ngm) defines two simultaneous equations for two known values: $\left(\lambda_1, \lambda_2\right)$.  
  
-We can only proceed to solve these equations by restricting the values of $k_{ij}$ to the number of estimated forces-of-infection. Different assumptions about the structure of this matrix correspond to very different estimates of $R_0$. Greenhalgh and Dietz (1994) demonstrated that the feasible lower bound on $R_0$ for these data corresponds to the situation where infants are responsible for all transmission within the population:
+We can only proceed to solve these equations by restricting the values of $k_{ij}$ to the number of estimated forces-of-infection. Different assumptions about the structure of this matrix correspond to very different estimates of $R_0$. @greenhalgh_dietz:1994 demonstrated that the feasible **lower bound** on $R_0$ for these data corresponds to the situation where infants are responsible for all transmission within the population:
 \begin{equation}
     \mbox{infant} = \begin{pmatrix} k_1 & 0\\ k_2 & 0 \end{pmatrix}.
 \end{equation}
-The upper bound corresponds to the diagonal matrix where mixing occurs purely within your own age group:
+The **upper bound** corresponds to the diagonal matrix where mixing occurs purely within your own age group:
 \begin{equation}
     \mbox{diagonal} = \begin{pmatrix} k_1 & 0\\ 0 & k_2 \end{pmatrix}.
 \end{equation}
@@ -424,10 +460,10 @@ $$
 ```
 
 ```{task}
-Use your new expressions to calculate the values of $k$ for the infant mixing and assortative mixing assumptions, and the corresponding values of $R_0$. Use the maximum likelihood estimates of $\lambda_1$ and $\lambda_2$. Assume that the mortality rate $u = 20 / 1000$ and that $T_I = 5 / 365$. Assume the total population size is $n = 1$.
+Use your new expressions to calculate the values of $k$ for the infant mixing and assortative mixing assumptions, and the corresponding lower and upper bounds for $R_0$. Use the maximum likelihood estimates of $\lambda_1$ and $\lambda_2$. Assume that the mortality rate $u = 20 / 1000$ and that $T_I = 5 / 365$. Assume the total population size is $n = 1$.
 
 ``{info, title = "Hint"}
-You will need to use the `max()`, `eigen()` and `matrix()` functions. 
+You will need to use the `max()`, `eigen()` and `matrix()` functions. Remember that here the NGM is $T_I \boldsymbol{\beta}\mathbf{n}$, where $\mathbf{n}$ is the proportion of the population in each age-class, and $T_I$ is the average length of the infectious period.
 ``
 ```
 
@@ -459,7 +495,7 @@ max(TI * eigen(matrix(c(k1, 0, 0, k2), 2, 2) * n)$values)
 ```
 
 ```{task}
-Calculate the posterior distributions for $R_0$ for the two-group model under the same conditions as the previous task. PLot the posterior densities.
+Calculate the posterior distributions for $R_0$ for the two-group model under the same conditions as the previous task. Plot the posterior densities.
 
 ``{info, title = "Hint"}
 Convert the `twogroups_post` into a matrix using `as.matrix()`, and then either loop over the samples, or use `apply()` to generate posterior samples for $\psi_1$ and $\psi_2$. These can then be converted into posterior samples for $k_1$ and $k_2$ and correspondingly into posterior samples for $R_0$. `as.mcmc()` can be used to turn `matrix` objects into `mcmc` objects for ease of plotting and summarisation (or just work with the matrix objects directly).
@@ -499,7 +535,7 @@ summary(R0)
 
 ## Estimating the next generation matrix from rubella serology 
  
-For human infectious diseases at least, the POLYMOD social contact data has revolutionised how we interpret serological data. In this section we estimate the next generation matrix for Rubella using the POLYMOD mixing data. We also introduce a more modern, and convenient, method where we directly estimate the next generation matrix from age-stratified serological data.  
+For human infectious diseases at least, the POLYMOD social contact data has revolutionised how we interpret serological data. In this section we estimate the next generation matrix for rubella using the POLYMOD mixing data. We also introduce a more modern, and convenient, method where we directly estimate the next generation matrix from age-stratified serological data.  
  
 For a given next generation matrix K we can calculate the resulting force-of-infection using:
 \begin{equation}
@@ -508,7 +544,7 @@ For a given next generation matrix K we can calculate the resulting force-of-inf
 \end{equation}
 Although we cannot write down a closed form solution for $K_{ij}$, for any given next generation matrix $\mathbf{K}$, we can iteratively solve equations \@ref(eq:p2) and \@ref(eq:lami) to obtain the susceptibility curve $P_s(a)$ and force-of-infection $\lambda_i$ that correspond to particular values of $\mathbf{K}$. By exploring different values (and forms) of $\mathbf{K}$ we can then estimate what next generation matrix is most consistent with a given susceptibility curve.  
  
-This procedure is straightforward, but a bit fiddly, so once again we have provided you with helper functions below to do this, adapted from the book by Hens et al. 
+This procedure is straightforward, but a bit fiddly, so once again we have provided you with helper functions below to do this, adapted from the book by @hensetal:2012. 
  
 `NextGen_foi(K)` returns the age-stratified force-of-infection corresponding to a specified next generation matrix `K` (Equation \@ref(eq:lami) above). The number of age groups is taken from the dimensions (number of rows/columns) of `K`. 
  
@@ -577,7 +613,8 @@ NextGen_foi <- function(K) {
 ## Arguments:
 ## x: vector of unique force of infection values
 ## foi_key: pattern vector of length equal to the maximum assumed age
-##    in population (or data set) that specifies which unique value of ##    x corresponds to each annual cohort in population.
+##    in population (or data set) that specifies which unique value of 
+##    x corresponds to each annual cohort in population.
 ## sero_data: data frame with columns
 ## sero_data$Pos: positive samples
 ## sero_data$Neg: negative samples
@@ -607,7 +644,8 @@ NextGen_loglik <- function(x, matrixfunction, sero_data) {
             loglik <- loglik + dbinom(
                 sero_data$Pos[i],
                 sero_data$Pos[i] + sero_data$Neg[i],
-                prob = 1 - sg * exp(-lambda[age_class] * (sero_data$Age[i] - breaks[age_class])),
+                prob = 1 - sg * exp(-lambda[age_class] * 
+                    (sero_data$Age[i] - breaks[age_class])),
                 log = TRUE
             )
         }
@@ -735,7 +773,7 @@ max(Re(eigen(POLYMODMatrix(exp(POLYMOD_mle$maximum)))$values))
 ```
 
 ```{task, title = "Question"}
-Does the POLYMOD mixing provide a better fit to the Rubella serological data?
+Does the POLYMOD mixing provide a better fit to the rubella serological data?
 ```
     
 ```{solution, title = "Answer"}
@@ -749,5 +787,5 @@ How do the predictions of the POLYMOD mixing model differ from homogeneous mixin
 ```{solution, title = "Answers"}
 The POLYMOD mixing assumption estimates a lower basic reproductive ratio than homogeneous mixing, implying that a lower level of vaccination coverage would be necessary to eliminate disease than might be expected under homogeneous mixing.
 
-However, more importantly the POLYMOD model predicts a very different pattern of transmission within the population. The POLYMOD mixing matrix generates two equal peaks in the force of infection that are both higher than the homogeneous mixing estimate. The second peak in young adults is of particular concern for Rubella where the disease itself is of less concern than so-called congenital rubella syndrome (CRS)---where infection of pregnant women leads to severe problems for unborn children. Pre-vaccination, with a mean age of infection of ~10 years this second group was relatively unimportant as few susceptible individuals ‘survived’ to that age. But it may become more important after the introduction of vaccination which is likely to increases the mean age of infection into this second core-group. This is the motivation for supplemental vaccination campaigns in teenage girls---i.e. not to reduce the rate of transmission in the community but to directly protect against CRS. The magnitude of this, so-called perverse effect of vaccination, would be greatly underestimated by a (incorrect) assumption of homogeneous mixing.
+However, more importantly the POLYMOD model predicts a very different pattern of transmission within the population. The POLYMOD mixing matrix generates two equal peaks in the force of infection that are both higher than the homogeneous mixing estimate. The second peak in young adults is of particular concern for rubella where the disease itself is of less concern than so-called congenital rubella syndrome (CRS)---where infection of pregnant women leads to severe problems for unborn children. Pre-vaccination, with a mean age of infection of ~10 years this second group was relatively unimportant as few susceptible individuals ‘survived’ to that age. But it may become more important after the introduction of vaccination which is likely to increases the mean age of infection into this second core-group. This is the motivation for supplemental vaccination campaigns in teenage girls---i.e. not to reduce the rate of transmission in the community but to directly protect against CRS. The magnitude of this, so-called perverse effect of vaccination, would be greatly underestimated by a (incorrect) assumption of homogeneous mixing.
 ```
