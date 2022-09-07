@@ -2,7 +2,7 @@
 library(knitr)
 
 ## set knitr options
-opts_chunk$set(cache = FALSE, tidy.opts = list(width.cutoff = 55), tidy = FALSE, fig.align = "center", fig.width = 5, fig.height = 5, multCode = FALSE, renderTask = TRUE, renderSol = TRUE, renderInfo = TRUE, collapsible = TRUE)
+opts_chunk$set(cache = TRUE, tidy.opts = list(width.cutoff = 55), tidy = FALSE, fig.align = "center", fig.width = 5, fig.height = 5, multCode = FALSE, renderTask = TRUE, renderSol = TRUE, renderInfo = TRUE, collapsible = TRUE)
 
 ## variables to help save latex answers for appendix
 taskCtr <- 0

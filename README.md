@@ -1,12 +1,24 @@
-# RtutorialSkeleton
+# Lecture notes
 
-This provides a template for R practicals written using the `bookdown` package. The template provides some customised "Task" and "Solution" boxes amongst other things. To see some examples on how to use this template, see here:
+These lecture notes use the [RtutorialSkeleton/](https://tjmckinley.github.io/RtutorialSkeleton/) templates, but still with some LaTeX specific pieces of code (so won't compile into HTML slides currently). These are mostly around font sizing and the use of `only<>`.
 
-[https://tjmckinley.github.io/RtutorialSkeleton/](https://tjmckinley.github.io/RtutorialSkeleton/)
+Will aim to amend in a future revision of the skeleton template.
 
-You can download or clone the repository and then compile the project. This can be done on any platform by loading the "skeleton.Rproj" file in RStudio. The "Build Book" button in the "Build" pane can be used to compile the practical. 
+In each `lecture*` folder there is an `R` directory containing R scripts that need to be run in order to create the plots for the slides. Then, e.g.
 
-After the build is complete, all necessary files will be included in the `docs` folder which is made as part of the build. If you want to link the PDF document within the HTML gitbook document, then you need to compile the PDF first. After compilation, the file `index.html` contains examples on how to use the template.
+```
+./compile.sh -p lecture1/ -f L1_IntroToStats -b 1
+```
+
+will compile beamer slides. The `-c 0` argument can also be used in order to keep the log files in case of errors. The `-h 1` argument creates handout.
+
+Finally, 
+
+```
+./compileall.sh
+```
+
+will create one uber-set of handouts.
 
 ## To publish using `gh-pages`
 

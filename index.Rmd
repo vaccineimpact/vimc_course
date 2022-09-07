@@ -37,7 +37,8 @@ I am heavily indebted to [Stefan Widgren](http://www.it.uu.se/katalog/stewi333) 
 
 For the time being I have developed `SimBIID` mostly as a tool to help you learn how PMCMC (and various other routines) work, and to allow you to get your hands dirty with some real models/data, but without the complexities of having to code these routines up yourselves. More extensive documentation is given [here](https://tjmckinley.github.io/SimBIID_tutorial/), but I have extracted the relevant parts that relate to this course into the current document.
 
-There are various general-purpose software packages for performing Bayesian inference for general classes of models. For example, 
+There are various general-purpose software packages for performing Bayesian inference for general classes of models. For example: 
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
 
 * [WinBUGS](https://www.mrc-bsu.cam.ac.uk/software/bugs/the-bugs-project-winbugs/)
 * [`jags`](https://mcmc-jags.sourceforge.io/)

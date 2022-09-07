@@ -60,6 +60,8 @@ The proportion susceptible at the end of an age group, $p_1$, will then be given
     (\#eq:p1)
 \end{equation}
 where $\Delta a$ is the width of the age group. 
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
  
 ```{task}
 Take logs of both sides of \@ref(eq:p1) and solve for $\lambda$ to get a first estimator for the force of the infection in a discrete age group as a function of the proportion susceptible at the beginning and end of the age group.
@@ -206,16 +208,19 @@ As individuals can only take two possible values, positive or negative, the like
 
 We can code this in R using the following function:
 
-```{r}
-## Calculate (Binomial) likelihood of observing given number of positive/negative samples 
-## (provided in table sero_data) for each age group and specified by a piecewise 
-## continuous force of infection model defined by foi_key
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+```{r, latexsize = "footnotesize"}
+## Calculate (Binomial) likelihood of observing given number of 
+## positive/negative samples (provided in table sero_data) for each 
+## age group and specified by a piecewise continuous force of 
+## infection model defined by foi_key
 ## 
 ## Arguments:
 ## x: vector of unique force-of-infection values
-## foi_key: pattern vector of length equal to the maximum assumed age in population (or 
-## data set) that specifies which unique value of x corresponds to each annual cohort in 
-## population.
+## foi_key: pattern vector of length equal to the maximum assumed age
+## in population (or data set) that specifies which unique value of x
+## corresponds to each annual cohort in population.
 ## sero_data: data frame with columns
 ##     sero_data$Pos: positive samples
 ##     sero_data$Neg: negative samples
@@ -566,7 +571,9 @@ where we assume there are 86 age cohorts in the population (for consistency with
 
 The helper functions are defined below:
 
-```{r}
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+```{r, latexsize = "footnotesize"}
 ## calculate force of infection for a given next generation matrix K
 ##
 ## annual age cohorts are assumed with maximum assumed age given by
@@ -604,7 +611,9 @@ NextGen_foi <- function(K) {
 }
 ```
 
-```{r}
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+```{r, latexsize = "footnotesize"}
 ## calculate (Binomial) likelihood of observing given number of
 ## positive/negative samples 
 ## (provided in table sero_data) for each age group and specified 
@@ -654,6 +663,8 @@ NextGen_loglik <- function(x, matrixfunction, sero_data) {
     }
 }
 ```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
  
 We can now obtain the maximum-likelihood estimate for the homogeneous mixing matrix by optimising the value of `NextGen_loglik()`: 
 
