@@ -274,12 +274,16 @@ post <- PMCMC(
 
 (Again I have suppressed the output here for brevity...)
 
-`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
-
 ```{r, boot-fullsum}
 ## plot and summarise MCMC output
 plot(post, "trace")
 ```
+
+```{info, title = "Note", collapsible = FALSE}
+We need to run for longer in practice and run multiple chains, but for the sake of time we will proceed with what we have.
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
 
 ## Visualising and summarising the posterior distributions
 
