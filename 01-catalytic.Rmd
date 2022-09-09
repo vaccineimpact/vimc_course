@@ -663,16 +663,29 @@ NextGen_loglik <- function(x, matrixfunction, sero_data) {
 ```
 
 `r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+```{info, title = "The optimise() function"}
+We used `optim()` earlier to optimise a function with respect to *multiple* parameters. If you want to optimise a function with respect to a *single* parameter, then we use `optimise()` instead. This works in a similar way, but has slightly different arguments. Most notably, rather than giving initial values for the parameter, we instead define an upper and lower bound over which to search for a maximum or minimum.
+
+Arguments for `optimise()` can be found from the help file in the usual way e.g. `?optimise`. The key ones here are:
+
+* `f`: a function to be minimised (or maximised), with first argument the vector of parameters over which optimisation is to take place. It should return a scalar result. Here we pass it the `NextGen_loglik()` function we defined above.
+* `interval`: a vector containing the end-points of the interval to be searched for the minimum (or maximum).
+* `...`: additional arguments required for `NextGen_loglik()` can be passed to `optimise()`; here we pass `matrixfunction` and `sero_data` arguments.
+* `maximum`: a logical defining whether we **maximise** (`TRUE`) or **minimise** (`FALSE`).
+
+Please see the help file for more details.
+```
  
 We can now obtain the maximum-likelihood estimate for the homogeneous mixing matrix by optimising the value of `NextGen_loglik()`: 
 
 ```{r}
 homogeneous_mle <- optimise(
-    NextGen_loglik,
-    log(c(0.01, 1)),
-    maximum = TRUE,
-    matrixfunction = HomogeneousMatrix,
-    sero_data = rubella
+    NextGen_loglik,                       ## function to optimise
+    log(c(0.01, 1)),                      ## upper and lower bound
+    matrixfunction = HomogeneousMatrix,   ## pass matrixfunction to NextGen_loglik
+    sero_data = rubella,                  ## pass sero_data to NextGen_loglik
+    maximum = TRUE                        ## maximise the function
 )
 homogeneous_mle
 ```
@@ -736,8 +749,8 @@ POLYMOD_mle <- optimise(
     NextGen_loglik,
     c(1, 15),
     matrixfunction = POLYMODMatrix,
-    maximum = TRUE, 
-    sero_data = rubella
+    sero_data = rubella,
+    maximum = TRUE 
 )
 POLYMOD_foi = NextGen_foi(POLYMODMatrix(exp(POLYMOD_mle$maximum)))
 par(mfrow = c(2, 1))
@@ -796,5 +809,5 @@ How do the predictions of the POLYMOD mixing model differ from homogeneous mixin
 ```{solution, title = "Answers"}
 The POLYMOD mixing assumption estimates a lower basic reproductive ratio than homogeneous mixing, implying that a lower level of vaccination coverage would be necessary to eliminate disease than might be expected under homogeneous mixing.
 
-However, more importantly the POLYMOD model predicts a very different pattern of transmission within the population. The POLYMOD mixing matrix generates two equal peaks in the force of infection that are both higher than the homogeneous mixing estimate. The second peak in young adults is of particular concern for rubella where the disease itself is of less concern than so-called congenital rubella syndrome (CRS)---where infection of pregnant women leads to severe problems for unborn children. Pre-vaccination, with a mean age of infection of ~10 years this second group was relatively unimportant as few susceptible individuals ‘survived’ to that age. But it may become more important after the introduction of vaccination which is likely to increases the mean age of infection into this second core-group. This is the motivation for supplemental vaccination campaigns in teenage girls---i.e. not to reduce the rate of transmission in the community but to directly protect against CRS. The magnitude of this, so-called perverse effect of vaccination, would be greatly underestimated by a (incorrect) assumption of homogeneous mixing.
+However, more importantly the POLYMOD model predicts a very different pattern of transmission within the population. The POLYMOD mixing matrix generates two equal peaks in the force of infection that are both higher than the homogeneous mixing estimate. The second peak in young adults is of particular concern for rubella where the disease itself is of less concern than so-called congenital rubella syndrome (CRS)---where infection of pregnant women leads to severe problems for unborn children. Pre-vaccination, with a mean age of infection of ~10 years this second group was relatively unimportant as few susceptible individuals 'survived' to that age. But it may become more important after the introduction of vaccination which is likely to increases the mean age of infection into this second core-group. This is the motivation for supplemental vaccination campaigns in teenage girls---i.e. not to reduce the rate of transmission in the community but to directly protect against CRS. The magnitude of this, so-called perverse effect of vaccination, would be greatly underestimated by a (incorrect) assumption of homogeneous mixing.
 ```
