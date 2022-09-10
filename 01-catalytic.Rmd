@@ -121,7 +121,7 @@ plot(rubella$Age, rubella$p_s, pch = 19, cex = size^0.75)
 plot(rubella$Age, rubella$lambda, pch = 19, cex = size^0.75)
 ```
  
-```{r, echo = FALSE, fig.cap = "Proportion susceptible with respect to age"}
+```{r, ps, echo = FALSE, fig.cap = "Proportion susceptible with respect to age"}
 ## size is a vector to scale the size of points according to the 
 ## sample size within that age group 
 size <- (rubella$Pos + rubella$Neg) / max(rubella$Pos + rubella$Neg) 
@@ -130,12 +130,12 @@ size <- (rubella$Pos + rubella$Neg) / max(rubella$Pos + rubella$Neg)
 plot(rubella$Age, rubella$p_s, pch = 19, cex = size^0.75)
 ```
  
-```{r, echo = FALSE, fig.cap = "First estimate of force-of-infection of rubella"}
+```{r, lambda, echo = FALSE, fig.cap = "First estimate of force-of-infection of rubella"}
 plot(rubella$Age, rubella$lambda, pch = 19, cex = size^0.75)
 ```
  
 ```{task, title = "Question"}
-Are these "first" estimates of the force-of-infection biologically plausible? If not, how has this transpired and how can we improve the estimates?
+Are these "first" estimates of the force-of-infection biologically plausible (Figs \@ref(fig:ps) and \@ref(fig:lambda))? If not, how has this transpired and how can we improve the estimates?
 ```
  
 ```{solution, title = "Answer"}
@@ -201,7 +201,7 @@ The function `FOI_loglik(x, foi_key, sero_data)` defined below uses `piecewise_s
  
 As individuals can only take two possible values, positive or negative, the likelihood of a given force-of-infection (FOI) can be written in terms of a binomial trial depending on the number of positive samples in each group ($X_a$), number of samples ($N_a$) and the predicted probability of infection within that age group ($p_a(K)$). Hence the log-likelihood can be written as: 
 \begin{equation}
-    L(K) = \sum_{a} {N_a \choose X_a}p_a(K)^{X_a}\left(1 - p_a(K)\right)^{N_a - X_a}.
+    l(K) = \sum_{a} \log{N_a \choose X_a} + X_a\log\left[p_a(K)\right] + \left({N_a - X_a}\right)\log\left(1 - p_a(K)\right).
 \end{equation}
 
 We can code this in R using the following function:
