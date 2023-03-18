@@ -1,4 +1,27 @@
 rmd_files:
-    html: ['index.Rmd', '01-catalytic.Rmd', '02-bootPMCMC.Rmd', '03-references.Rmd']
-    latex: ['index.Rmd', '01-catalytic.Rmd', '02-bootPMCMC.Rmd', 'ch_appendix.Rmd']
+    html: [
+        'index.Rmd', 
+        'Materials/Programming/Programmingchp-P1.Rmd',
+        'Materials/Programming/Programmingchp-P2.Rmd',
+        'Materials/Dynamic_Models/Dynamic_models.Rmd',
+        'Materials/Epidemic_models/Epidemic_models-P1.Rmd',
+        'Materials/Epidemic_models/Epidemic_models-P2.Rmd',
+        'Materials/Epidemic_models/Epidemic_models-P3.Rmd',
+        'Materials/BYOM/Estimating_R0.Rmd',
+        'Materials/BYOM/Measles.Rmd',
+        'Materials/BYOM/Influenza.Rmd'
+    ]
+    latex: [
+        'index.Rmd', 
+        'Materials/Programming/Programmingchp-P1.Rmd',
+        'Materials/Programming/Programmingchp-P2.Rmd',
+        'Materials/Dynamic_Models/Dynamic_models.Rmd',
+        'Materials/Epidemic_models/Epidemic_models-P1.Rmd',
+        'Materials/Epidemic_models/Epidemic_models-P2.Rmd',
+        'Materials/Epidemic_models/Epidemic_models-P3.Rmd',
+        'Materials/BYOM/Estimating_R0.Rmd',
+        'Materials/BYOM/Measles.Rmd',
+        'Materials/BYOM/Influenza.Rmd'
+    ]
+    
 output_dir: "docs"

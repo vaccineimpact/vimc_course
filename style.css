@@ -1,14 +1,15 @@
 /* set main colours */
 :root {
-    --taskCol: #404040;
-    --taskCol1: #808080;
-    --taskCol2: #b2b2b2;
-    --infoCol: #1C668F;
+    --taskCol: #404040;    /* task boxes */
+    --solCol: #808080;   /* solution boxes */
+    --solColh: #808080cc;   /* solution boxes hover */
+    --infoCol: #1C668F;    /* info boxes */
+    --infoColh: #1C668Fcc;    /* info boxes hover */
     --fsize: medium;
 }
 
 button {
-    background-color: var(--taskCol1);
+    background-color: var(--solCol);
     border: none;
     color: white;
     padding: 10px 25px;
@@ -19,6 +20,11 @@ button {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 3px;
+}
+
+/* change background color of buttons on hover */
+button:hover {
+    background-color: var(--solColh);
 }
 
 infobutton {
@@ -35,6 +41,11 @@ infobutton {
     border-radius: 3px;
 }
 
+/* change background color of buttons on hover */
+infobutton:hover {
+    background-color: var(--infoColh);
+}
+
 .panel-default > .panel-heading {
     background-image: none;
     background-color: var(--taskCol);
@@ -44,9 +55,9 @@ infobutton {
 
 .panel-default > .panel-heading1 {
     background-image: none;
-    background-color: var(--taskCol1);
+    background-color: var(--solCol);
     color: white;
-    border-color: var(--taskCol1);
+    border-color: var(--solCol);
 }
 
 .panel-default > .panel-heading2 {
@@ -58,17 +69,17 @@ infobutton {
 
 /* Style the buttons inside the tab */
 .tab button {
-    background-color: var(--taskCol2);
+    background-color: var(--solCol);
 }
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-    background-color: var(--taskCol1);
+    background-color: var(--solColh);
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-    background-color: var(--taskCol1);
+    background-color: var(--taskCol);
 }
 
 blockquote{

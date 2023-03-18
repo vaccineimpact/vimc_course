@@ -1,6 +1,6 @@
 --- 
-title: "Inference in infectious disease systems practicals"
-author: "[TJ McKinley](mailto:t.mckinley@exeter.ac.uk)"
+title: "R-Practical"
+author: "Pedro Cardoso"
 site: bookdown::bookdown_site
 output:
     bookdown::pdf_book:
@@ -16,85 +16,13 @@ output:
 linkcolor: blue
 documentclass: book
 link-citations: yes
-description: "Inference in infectious disease systems practicals"
-bibliography: /home/tj/Documents/ref.bib
+description: "R-Practical"
 ---
+
+# Opening
 
 ```{r, child = "_setup.Rmd", include = FALSE, purl = FALSE, cache = FALSE}
 ```
 
-# Introduction
+This file should contain written practicals for VIMC practicals.
 
-This document contains practicals relating to the course. The first is using maximum likelihood and Bayesian methods to fit catalytic models to serology data to generate estimates of $R_0$ under different assumptions about mixing. The second is to use the (current) [`SimBIID`](https://github.com/tjmckinley/SimBIID) package (Simulation-Based Inference for Infectious Disease models)---which is a package designed mostly for teaching purposes---to fit a compartmental epidemic model to partially observed data using particle MCMC methods.
-
-```{info, title = "Note", collapsible = FALSE}
-**Please note that there is a PDF version of these notes available by clicking on the icon in the top-left corner of the page.**
-```
-
-```{info, title = "Lecture Notes", collapsible = FALSE}
-Lecture notes are available [here](https://tjmckinley.github.io/VIMCCoursePracticals/lecturenotes.pdf).
-```
-
-## Software
-
-I am heavily indebted to [Stefan Widgren](http://www.it.uu.se/katalog/stewi333) for his fantastic [SimInf](https://cran.r-project.org/web/packages/SimInf/index.html) package, and indeed (with permission) I shamelessly borrow some of his ideas in `SimBIID` (such as the `mparse()` function).
-
-For the time being I have developed `SimBIID` mostly as a tool to help you learn how PMCMC (and various other routines) work, and to allow you to get your hands dirty with some real models/data, but without the complexities of having to code these routines up yourselves. More extensive documentation is given [here](https://tjmckinley.github.io/SimBIID_tutorial/), but I have extracted the relevant parts that relate to this course into the current document.
-
-There are various general-purpose software packages for performing Bayesian inference for general classes of models. For example: 
-`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
-
-* [WinBUGS](https://www.mrc-bsu.cam.ac.uk/software/bugs/the-bugs-project-winbugs/)
-* [`jags`](https://mcmc-jags.sourceforge.io/)
-* [OpenBUGS](https://openbugs.net/w/FrontPage)
-* [`MCMCpack`](https://cran.r-project.org/web/packages/MCMCpack/index.html)
-
-* [`nimble`](https://r-nimble.org/)
-* [Stan](https://mc-stan.org/) / [`rstan`](https://mc-stan.org/users/interfaces/rstan)
-
-And various wrapper packages to make fitting simple (e.g. regression models much easier) e.g. the [R](https://www.r-project.org/) packages [`brms`](https://cran.r-project.org/web/packages/brms/index.html) and [`rstanarm`](https://mc-stan.org/rstanarm/).
-
-For general-purpose Bayesian modelling, with tractable likelihood functions, then I would recommend any of these packages, although I mostly use Stan or `nimble`. However, the problem from the infectious disease modelling perspective is that it is challenging to implement the kinds of models that we use in this course, particularly when we have missing or incomplete data, and non-standard likelihoods. An R package that is designed for modelling the kinds of system we focus on in this course is [`pomp`](https://kingaa.github.io/pomp/) (standing for Partially Observed Markov Processes). This a powerful package that can be used to implement various "plug-and-play" inference algorithms, notably the maximum likelihood via iterated filtering (MIF) approach of @ionidesetal:2006, and a particle Markov chain Monte Carlo algorithm [@andrieuetal:2010] based on the bootstrap particle filter [@gordonetal:1993]. It also includes some simple Approximate Bayesian Computation rejection algorithms, but not the more powerful ABC-SMC approach of @tonietal:2009. `pomp` also provides functions to efficiently simulate from state-space models. The interface is more complex than `SimInf` and `SimBIID` (it involves you knowing some small amount of C), and so for the purposes of this course the `SimBIID` package will serve as an entry point into these algorithms. 
-
-The `pomp` website: [https://kingaa.github.io/pomp/](https://kingaa.github.io/pomp/)---on [Aaron King's](https://lsa.umich.edu/eeb/people/faculty/kingaa.html) GitHub page---contains lots of tutorials for those of you who wish to pursue any of these ideas further. The influenza in a boarding school data [@anonymous:1978] that we will use as a case study can be found in the [`outbreaks`](http://www.repidemicsconsortium.org/outbreaks/index.html) R package, attributed to @devriesetal:2006, although variations of the data can be found in other literature [e.g. @murray:2003] and is also used in some of the `pomp` tutorials. The Abakaliki smallpox data can also be found in the `outbreaks` package, as well as in other places in the literature [e.g. @oneill_roberts:1999; @mckinleyetal:2014]. `nimble` can also be used to fit state-space models, although I have not done this personally, but point you to the documentation [here](https://r-nimble.org/). We do not use `nimble` here because we do not have enough time to teach the syntax, so opt for `SimBIID` instead, which should be more familiar if you are used to `SimInf`.
-
-The workhorse of `SimBIID` is the function `mparseRcpp()`, which apes the syntax of `mparse()`, but allows for different compilation and output options. It does not have the full power of `SimInf`, so currently only works on single node simulations (no networks), with some limited additional structures. It also implements a simple Gillespie algorithm, rather than the more sophisticated approaches used in `SimInf` and `pomp`, but it's fast enough for the examples here.
-
-## Installation of `SimBIID`
-
-The package depends on the `Rcpp` and `RcppArmadillo` packages, which require the installation of the correct C++ compilers. The guidance below is taken from Sections 2.1.1, 2.1.2 or 2.1.3 [here](https://teuder.github.io/rcpp4everyone_en/020_install.html).
-
-### Windows
-
-Install [Rtools](https://cran.r-project.org/bin/windows/Rtools/index.html).
-
-(Make sure you tick the option to add Rtools to the PATH whilst installing.)
-
-### Mac
-
-Install Xcode command line tools. Execute the command `xcode-select --install` in a Terminal.
-
-You might also need to install the gfortran libraries from:
-
-[https://cran.r-project.org/bin/macosx/tools/gfortran-6.1.pkg](https://cran.r-project.org/bin/macosx/tools/gfortran-6.1.pkg)
-
-### Linux
-
-Install gcc and related packages (you might also need `gcc-fortran` for some of the dependencies).
-
-In Ubuntu Linux, execute the command `sudo apt-get install r-base-dev` in a Terminal.
-
-### Install package
-
-Once the compilers have been installed, then the CRAN version can be installed in the usual way, e.g.
-
-```
-install.packages("SimBIID")
-```
-
-Alternatively, the *development* version can be installed from source using the `remotes` package in R. That is, install the `remotes` package and then run:
-
-```
-library(remotes)
-install_github("tjmckinley/SimBIID")
-```

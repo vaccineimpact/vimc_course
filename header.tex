@@ -4,7 +4,7 @@
 \tcbuselibrary{breakable}
 
 \definecolor{taskCol}{HTML}{404040}
-\definecolor{taskCol1}{HTML}{808080}
+\definecolor{solCol}{HTML}{808080}
 \definecolor{infoCol}{HTML}{1C668F}
 
 \tcbset{colback=white,colframe=taskCol,arc=0mm}
@@ -12,7 +12,7 @@
 %trick to fool markdown into compiling
 \newcommand{\bblockT}[2][Task]{\begin{tcolorbox}[title = #1 #2, parbox = false]}
 \newcommand{\eblockT}{\end{tcolorbox}}
-\newcommand{\bblockS}[2][Solution]{\begin{tcolorbox}[title = #1 #2, colframe=taskCol1, breakable, parbox = false]}
+\newcommand{\bblockS}[2][Solution]{\begin{tcolorbox}[title = #1 #2, colframe=solCol, breakable, parbox = false]}
 \newcommand{\eblockS}{\end{tcolorbox}}
 \newcommand{\bblockI}[1][Info]{\begin{tcolorbox}[title = #1, colframe=infoCol, parbox = false, breakable]}
 \newcommand{\eblockI}{\end{tcolorbox}}
@@ -22,7 +22,7 @@
 %add tabbed solutions environment
 \newcommand{\bmp}{\begin{tcbraster}[raster columns = 2, raster valign = top]}
 \newcommand{\emp}{\end{tcbraster}}
-\newcommand{\bblockST}[1]{\begin{tcolorbox}[title = #1, colframe=taskCol1, breakable, parbox = false]}
+\newcommand{\bblockST}[1]{\begin{tcolorbox}[title = #1, colframe=solCol, breakable, parbox = false]}
 \newcommand{\eblockST}{\end{tcolorbox}}
 
 %hypertarget
@@ -47,8 +47,8 @@
     \begin{tikzpicture}
     \node[
         inner sep=5pt,
-        draw=taskCol1,
-        fill=taskCol1,
+        draw=solCol,
+        fill=solCol,
         rounded corners=2pt,
         text=white
     ] (c1) {#1};
@@ -68,7 +68,3 @@
 }
 
 \newcommand{\colpageref}[1]{\hypersetup{linkcolor=white}\pageref{#1}}
-
-
-
-

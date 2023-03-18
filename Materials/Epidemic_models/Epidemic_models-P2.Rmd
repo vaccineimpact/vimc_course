@@ -1,0 +1,123 @@
+# Epidemic models - P2
+
+## Calculating $R_{0}$
+
+We wish to calculate $R_{0}$ which is defined as the expected number of secondary infections per generation given one infected individuals is introduced to an entirely susceptible population.
+
+Mathematically, we examine our system equations for the **infectious compartments only* at **disease free equilibrium** and see how they *change** as each infectious variable changes.
+
+We divide this into two situations:
+
+- Transmission events where a new infectious variable is created eg. a susceptible person be-comes infected
+
+- Transition events where an infectious variable is lost eg. an infected person recovers.
+
+SIR example:
+
+$$ \frac{dS}{dt} = \mu H - \beta SI - \mu S$$
+$$ \frac{dI}{dt} = \beta SI - \mu I - \gamma I$$
+$$ \frac{dR}{dt} = \gamma I - \mu R$$
+
+We only have one infectious variable: $I$.
+
+So our system of infectious compartments is only the equation for the change in the infected population over time.
+
+$$ \frac{dI}{dt} = \beta SI - \mu I-\gamma I$$
+
+Next we wish to know how this equation varies as the infectious variable, $I$, varies.
+
+To do this we _____________________ with respect to $I$ to get:
+
+```{task}
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+```
+
+
+We are interested in our system at disease free equilibrium, so wherever we see a variable, we replace it with its **equilibrium value**.
+
+At disease free equilibrium: $S^{*}=H$, $I^{*}=0$, $R^{*}=0$.
+
+```{task}
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+```
+
+
+Now we can divide our equation into **transmission** events and **transition** events.
+
+**Transmission terms:**
+
+```{task}
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+```
+
+
+**Transition terms:**
+
+```{task}
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+```
+
+
+Finally, $R_{0}$ is calculated by dividing the **Transmission** terms by (- **Transition** terms).
+
+The intuition is that **$1/\text{Transition}$** is equal to the **generation time**.
+
+Thus, we arrive at the **transmission events** per **generation**.
+
+
+```{task}
+
+$R_{0} =$
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+```
+
+
+
+
+
+
+
+
+
+
+
