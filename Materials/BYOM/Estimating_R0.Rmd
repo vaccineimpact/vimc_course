@@ -39,63 +39,57 @@ biggles <- read.table('biggles_cases.dat')
 biggles$x = as.Date(biggles$x)
 ```
 
+```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+require(chron)
+require(incidence)
+# Load line lists of cases for simulated outbreaks
+outfluenza1 <- read.table('Materials/BYOM/Data/Outfluenza1_cases.dat')
+outfluenza1$x = as.Date(outfluenza1$x)
+
+outfluenza2 <- read.table('Materials/BYOM/Data/Outfluenza2_cases.dat')
+outfluenza2$x = as.Date(outfluenza2$x)
+
+biggles <- read.table('Materials/BYOM/Data/biggles_cases.dat')
+biggles$x = as.Date(biggles$x)
+```
+
+
 We are going to use the ‘incidence’ package from RECON which has been written to simplify computing, visualising and modelling incidence of infectious disease from dated event data such as line lists.
 
 To illustrate the key functions and concepts we will use ‘incidence’ to construct daily incidence and cumulative incidence curves for the first outfluenza outbreak.
 
 The main workhorse function is called ‘incidence’ which converts a list of dates into an ‘incidence’ object that bins cases into a given interval:
 
-```{r, eval = FALSE}
+```{r}
 outfluenza1.i = incidence(outfluenza1$x,interval=1)
 ```
 
 We can see a summary of the incidence object by simply typing the name of the variable:
 
-```{r, eval = FALSE}
+```{r}
 outfluenza1.i
-<incidence object>
-[1183 cases from days 2019-02-24 to 2019-04-29]
-
-$counts: matrix with 65 rows and 1 columns
-$n: 1183 cases in total
-$dates: 65 dates marking the left-side of bins
-$interval: 1 day
-$timespan: 65 days
-$cumulative: FALSE
 ```
 
 So, the outfluenza1 outbreak consists of 1183 cases over the course of 65 days. We have chosen to bin cases on a daily interval (which is also the default so we could have simply left out this argument and will do so from now on).
 
 The incidence package provides custom plot functions for incidence objects:
 
-```{r, eval = FALSE}
+```{r, warning = FALSE, message = FALSE, fig.width = 7}
 plot(outfluenza1.i)
-```
-
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_1.JPG") 
 ```
 
 Which should be familiar from the lectures.
 
 You can try experimenting with different intervals to see how this affects the shape of the epidemic curve:
 
-```{r, eval = FALSE}
+```{r, warning = FALSE, message = FALSE, fig.width = 7}
 plot(incidence(outfluenza1$x,interval=7))
-```
-
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_2.JPG") 
 ```
 
 incidence also allows you to subset curves between start and end dates:
 
-```{r, eval = FALSE}
+```{r, warning = FALSE, message = FALSE, fig.width = 7}
 plot(subset(outfluenza1.i,from=outfluenza1$x[1],to=outfluenza1$x[100]))
-```
-
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_3.JPG") 
 ```
 
 ```{task}
@@ -108,27 +102,15 @@ We have limited the graph to only plot the first 100 cases. We achieved this by 
 
 The `cumulate()` function returns a the cumulative incidence curve:
 
-```{r, eval = FALSE}
+```{r, warning = FALSE, message = FALSE, fig.width = 7}
 plot(cumulate(outfluenza1.i))
-```
-
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_4.JPG") 
 ```
 
 Finally, you can convert an incidence object to a data frame by using the cast function `data.frame()`:
 
-```{r, eval = FALSE}
+```{r}
 outfluenza1.df = data.frame(outfluenza1.i)
 head(outfluenza1.df)
-
-       dates counts
-1 2019-02-24      1
-2 2019-02-25      0
-3 2019-02-26      0
-4 2019-02-27      0
-5 2019-02-28      1
-6 2019-03-01      2
 ```
 
 
@@ -177,7 +159,7 @@ R_{0} + \frac{ln(1-z_{f})}{z_{f}} = 0
 
 We can find the final size ($z_{f}$) corresponding to a given value of $R_{0}$, by solving for the value(s) of $z_{f}$ for which \@ref(eq:2) is equal to zero. Finding the roots of a function is a common problem, so it should not surprise you that there is a R function to do the job. `uniroot` uses an numerical procedure to estimate the roots of an arbitrary function `f` within a fixed `interval=c(lower,upper)`. We can use `uniroot` to write a function that returns the predicted final size for a given value of $R_{0}$:
 
-```{r, eval = FALSE}
+```{r}
 FinalSize <- function(R0) {
     return(uniroot(function(zf)
         {R0+log(1-zf)/zf},
@@ -187,13 +169,10 @@ FinalSize <- function(R0) {
 
 Check this function works by trying these test values on the R terminal:
 
-```{r, eval = FALSE}
-> FinalSize(1.2)
-[1] 0.3136976
-> FinalSize(1.0)
-[1] 6.126547e-05
-> FinalSize(0.9)
-[1] -6.103516e-05
+```{r}
+FinalSize(1.2)
+FinalSize(1.0)
+FinalSize(0.9)
 ```
 
 The exact values may differ slightly between versions of R on different machines.
@@ -213,13 +192,10 @@ Use the auxiliary functions of the incidence package and these new functions you
 
 ```{solution}
 
-``{r, eval = FALSE}
-> R0final(incidence(outfluenza1$x)$n/1300)
-[1] 2.646094
-> R0final(incidence(outfluenza2$x)$n/1300)
-[1] 2.378981
-> R0final(incidence(biggles$x)$n/1300)
-[1] 2.463143
+``{r}
+R0final(incidence(outfluenza1$x)$n/1300)
+R0final(incidence(outfluenza2$x)$n/1300)
+R0final(incidence(biggles$x)$n/1300)
 ``
 
 ```
@@ -247,15 +223,14 @@ In principle, estimating $R_{0}$ using this method could be as straightforward a
 
 As the exponential approximation is only valid early in the epidemic, including data from the full epidemic curve would bias our estimate of $R_{0}$. As discussed in the lecture we will use the first 100 cases. For a given simulation we need to select all the data-points up to the 100^{th} case. We can achieve this by sub setting the incidence object as before:
 
-```{r, eval = FALSE}
+```{r}
 outflu1.sub<- data.frame(subset(outfluenza1.i,from=outfluenza1$x[1],to=outfluenza1$x[100]))
 ```
 
 We fit a linear model (best straight line fit) to find the slope of the log cumulative cases as described in the lectures:
 
-```{r, eval = FALSE}
-# Fit straight line to plot of
-# biggles$t (time) and log of the cumulative cases (C)
+```{r}
+# Fit straight line to plot of biggles$t (time) and log of the cumulative cases (C)
 
 outflu1.fit = lm(log(1+counts) ~ dates, data=outflu1.sub)
 ```
@@ -268,27 +243,8 @@ We add 1 to counts to handle any zero cases (this should not affect the estimate
 
 We can see the result of the regression by using the `summary` function:
 
-```{r, eval = FALSE}
-> summary(outflu1.fit)
-
-Call:
-lm(formula = log(1 + counts) ~ dates, data = outflu1.sub)
-
-Residuals:
-    Min      1Q  Median     3Q    Max
--0.7081 -0.3553 -0.1211 0.3675 0.9870
-
-Coefficients:
-              Estimate Std. Error t value Pr(>|t|)
-(Intercept) -5.996e+03  7.855e+02  -7.633 1.77e-05 ***
-dates        3.340e-01  4.374e-02   7.635 1.77e-05 ***
----
-Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1
-‘ ’ 1
-
-Residual standard error: 0.5231 on 10 degrees of freedom
-Multiple R-squared: 0.8536, Adjusted R-squared: 0.8389
-F-statistic: 58.3 on 1 and 10 DF, p-value: 1.768e-05
+```{r}
+summary(outflu1.fit)
 ```
 
 ```{task}
@@ -299,17 +255,14 @@ The `summary()` function provides a lot of detailed information on the statistic
 
 ```{solution}
 
-$$R_{0} = 1 + 0.335*5 = 2.67$$
+$R_{0} = 1 + 0.335*5 = 2.67$
 
 ```
 
 We can estimate the uncertainty in our estimate of $R_{0}$ from the uncertainty in our estimate of the slope from the linear regression. The R function `confint()` will calculate 95% confidence intervals for our regression model:
 
-```{r, eval = FALSE}
-> confint(outflu1.fit)
-                    2.5 %        97.5 %
-(Intercept) -7745.8850733 -4245.5519457
-dates           0.2365213     0.4314554
+```{r}
+confint(outflu1.fit)
 ```
 
 ```{task}
@@ -326,33 +279,10 @@ $R_{0} = 2.67$ (95% CI, 2.1 - 3.1)
 
 The incidence package has built in functions that simplify estimating the exponential growth rate. The base function is `fit` returns an `incidence_fit` object which returns details of the fit including the estimated exponential growth rate r and the confidence interval:
 
-```{r, eval = FALSE}
+```{r, warning = FALSE, message = FALSE}
 outflu1.fit2 <- fit(outfluenza1.i)
-Warning message:
-In fit(outfluenza1.i) : 8 dates with incidence of 0
-ignored for fitting
-> outflu1.fit2
-<incidence_fit object>
-    
-$model: regression of log-incidence over time
 
-$info: list containing the following items:
-    $r (daily growth rate):
-[1] -0.0504102
-
-    $r.conf (confidence interval):
-           2.5 %      97.5 %
-[1,] -0.06954703 -0.03127338
-
-    $halving (halving time in days):
-[1] 13.75014
-
-    $halving.conf (confidence interval):
-        2.5 %   97.5 %
-[1,] 9.966597 22.16413
-
-    $pred: data.frame of incidence predictions (57 rows, 5
-columns)
+outflu1.fit2
 ```
 
 ```{task}
@@ -369,26 +299,18 @@ We are fitting a log-linear relationship and $log(0)$ is undefined.
 
 The estimated $r$ is much lower than we obtained by our manual estimate. To see what has happened we can add the obtained fit to a plot of the incidence:
 
-```{r, eval = FALSE}
+```{r, warning = FALSE, message = FALSE, fig.width = 7}
 plot(outfluenza1.i, fit= outflu1.fit2)
-```
-
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_5.JPG") 
 ```
 
 We can use the `subset` function to limit our fit to the first 100 cases as before:
 
-```{r, eval = FALSE}
+```{r, warning = FALSE, message = FALSE, fig.width = 7}
 outflu1.sub = subset(outfluenza1.i,from=outfluenza1$x[1],to=outfluenza1$x[100])
 
 outflu1.fit3 = fit(outflu1.sub)
 
 plot(outflu1.sub,fit=outflu1.fit3)
-```
-
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_6.JPG") 
 ```
 
 ```{task}
@@ -405,13 +327,9 @@ How do the estimates from the incidence package and our manual estimate compare 
 
 The incidence package provides a method for automatically sub setting the data by finding the optimum fit of two log-linear models (minimising the squared error of both):
 
-```{r, eval = FALSE}
+```{r, warning = FALSE, message = FALSE, fig.width = 7}
 outflu1.fit5 = fit_optim_split(outfluenza1.i)
 plot(outfluenza1.i,fit=outflu1.fit5$fit)
-```
-
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_7.JPG") 
 ```
 
 ```{info, title = "Note:", collapsible = FALSE}
@@ -428,8 +346,8 @@ outflu1.fit5
 
 Which should also generate a plot of the mean r squared error (R2) of the two log-linear models against different dates for the changepoint:
 
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_8.JPG") 
+```{r, echo = FALSE, results='hide', fig.keep='all', fig.width = 7}
+outflu1.fit5
 ```
 
 
@@ -437,40 +355,18 @@ knitr::include_graphics("Materials/BYOM/Plots/plot_8.JPG")
 
 Finally we will use the earlyR package implementation of the Tuenis and Wallinga method to estimate $R_{0}$ and compare to the other methods. The key function of the earlyR package is the `get_R` function that returns an estimate of $R_{0}$ when passed an incidence object and a serial interval distribution. The serial interval can be specified manually, but we will use the default gamma distribution which is parameterised by the mean (`si_mean`) and standard deviation (`si_sd`). For outfluenza, the serial interval distribution is exponentially distributed with mean equal to the variance (si_mean $= 5$, si_sd $= 5$).
 
-```{r, eval = FALSE}
-> estR = get_R(outfluenza1.i,si_mean=5,si_sd=5)
-> estR
-
-/// Early estimate of reproduction number (R) //
- // class: earlyR, list
-
- // Maximum-Likelihood estimate of R ($R_ml):
-[1] 1.001001
-
- // $lambda:
-  0.1812692 0.1484107 0.1215084 0.09948267 0.2627188 0.5776344...
-
- // $dates:
-[1] "2019-02-25" "2019-02-26" "2019-02-27" "2019-02-28" "2019-03-01"
-[6] "2019-03-02"
-...
-
- // $si (serial interval):
-A discrete distribution
-  name: gamma
-  parameters:
-    shape: 1
-    scale: 5
+```{r, warning = FALSE, message = FALSE}
+library(earlyR)
+estR = get_R(outfluenza1.i,si_mean=5,si_sd=5)
+estR
 ```
 
 Once again we have obtained a much lower estimate of $R (R_{0}=1.0)$ than expected as the earlyR method is only valid during the exponential phase of the epidemic. If we subset again using the first 100 cases you should obtain a more consistent estimate of $R_{0}$ of 2.43.
 
 We can calculated a boostrapped 95% confidence interval for the estimate using the `sample_R` function:
 
-```{r, eval = FALSE}
+```{r}
 quantile(sample_R(estR),c(0.025,0.975))
-    2.5%  97.5%
-2.022022 3.0030
 ```
 
 So our earlyR estimate of $R_{0} = 2.43$ (2.0-3.0, 95% CI).
@@ -516,6 +412,14 @@ source('SEIRmodels.R')
 N = 1300
 ```
 
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+source('Materials/BYOM/Data/SIRmodels.R')
+source('Materials/BYOM/Data/SEIRmodels.R')
+
+N = 1300
+```
+
+
 “SIRmodels.R” provides two familiar functions:
 
 
@@ -557,14 +461,10 @@ $$\begin{aligned} \frac{dS}{dt} &= -\frac{\beta SI}{N} \\ \frac{dE}{dt} &= \frac
 
 You can check this new code for the deterministic SEIR model by simulating an epidemic using the Biggles parameters from the lecture and comparing to the figures in the lecture notes:
 
-```{r, eval = FALSE}
+```{r, fig.width = 7}
 # Biggles Examplar Epidemic
 det.sol<-DetSEIR.dyn(1300, 1,0, 0.5, 1/5.0, 1.0/5.0, 150)
 matplot(det.sol[,1],det.sol[,2:5],type='l',xlab='Days',ylab='Population',lwd=2)
-```
-
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_9.JPG") 
 ```
 
 Checking the stochastic model is more difficult as the output will be different every time we run it! As a first sanity check we can compare stochastic simulations to the deterministic epidemic, checking that they (roughly) scatter evenly around the “mean” behaviour:
@@ -575,8 +475,11 @@ out <- run(model=SEIRmodel)
 plot(out)
 ```
 
-```{r, echo = FALSE} 
-knitr::include_graphics("Materials/BYOM/Plots/plot_10.JPG") 
+```{r, echo = FALSE, fig.width = 7}
+set.seed(123)
+SEIRmodel <- create.StocSEIR(1300, 1, 0, 0.5, 1.0/5.0, 1/5.0, 150,1)
+out <- run(model=SEIRmodel)
+plot(out)
 ```
 
 To simplify working with the incidence package we also provide a wrapper function `line_list()` that takes a SimInf object (out) as argument, along with a numeric value (node) and returns a line list of dates of cases for specified node:
