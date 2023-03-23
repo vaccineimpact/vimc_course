@@ -21,7 +21,8 @@ rmd_files:
         'Materials/Epidemic_models/Epidemic_models-P3.Rmd',
         'Materials/BYOM/Estimating_R0.Rmd',
         'Materials/BYOM/Measles.Rmd',
-        'Materials/BYOM/Influenza.Rmd'
+        'Materials/BYOM/Influenza.Rmd',
+        'ch_appendix.Rmd'
     ]
     
 output_dir: "docs"

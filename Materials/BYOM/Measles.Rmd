@@ -70,8 +70,7 @@ Important to note that the estimated transmission parameters from the TSIR model
 We also provided you with hope-simpon's estimates of the serial interval of measles and illustrated that it suggests that the latent and infectious periods of measles are less dispersed (less variable) than exponential and well described by a gamma distribution where the shape and scale parameters are approximately equal:
 
 ```{r, echo = FALSE}
-household <- as_tibble(read.csv('Materials/BYOM/Data/measles_hope_simpson.csv')) %>%
-    rename("interval" = "ï..interval")
+household <- as_tibble(read.csv('Materials/BYOM/Data/measles_hope_simpson.csv'))
 
 SIR_gamma <-  tibble(interval=seq(0,21,0.1),value=dgamma(seq(0,21,0.1),22,22/11))
 SEIR_gamma <- tibble(interval=seq(0,21,0.1),value=dgamma(seq(0,21,0.1),22,22/11))

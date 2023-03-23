@@ -26,14 +26,14 @@ We will first implement a slight modification to the code that has been presente
 - Open a new blank script file
 - Save it as `Stock_SI.R`
 
-If you haven't already instealled the package `SimInf`:
+If you haven't already installed the package `SimInf`:
 
 - Click packages tab in lower right sub-window
 - Click Install
 - Type: `SimInf` in the Packages box
 - Click Install
 
-If you’re on a Windows computer then you’ll need to do some additional work to use `SimInf` (macOs and Linux users should be fine)
+If you're on a Windows computer then you’ll need to do some additional work to use `SimInf` (macOSand Linux users should be fine)
 
 - Download Rtools from [https://cran.r-project.org/bin/windows/Rtools/](https://cran.r-project.org/bin/windows/Rtools/)
     + Click on the appropriate version of RTools on the left
@@ -277,7 +277,7 @@ There will be an R script file called `Det_SI.R` on the shared drive (your demon
 
 ```{r, eval = FALSE}
 #Adding a deterministic trajectory
-source('Det_SI.r')
+source('Det_SI.R')
 det.sol <- DetSI.dyn(500, 1, 0.5, 30)
 
 det.t <- det.sol[,1]
@@ -289,7 +289,7 @@ lines(det.t, det.I, lwd=3 , col='red')
 ```{r, echo = FALSE}
 plot(out , 'I', range=FALSE , type = 'l')
 
-source('Materials/Epidemic_models/Functions/Det_SI.r')
+source('Materials/Epidemic_models/Functions/Det_SI.R')
 det.sol <- DetSI.dyn(500, 1, 0.5, 30)
 
 det.t <- det.sol[,1]
