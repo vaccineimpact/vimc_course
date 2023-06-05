@@ -3,9 +3,14 @@
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{breakable}
 
+\newgeometry{margin=1in}
+
+\definecolor{vimcdarkblue}{HTML}{27327a}
+\definecolor{vimclightblue}{HTML}{3871c2}
+
 \definecolor{taskCol}{HTML}{404040}
 \definecolor{solCol}{HTML}{808080}
-\definecolor{infoCol}{HTML}{1C668F}
+\definecolor{infoCol}{HTML}{3871c2}
 
 \tcbset{colback=white,colframe=taskCol,arc=0mm}
 
@@ -68,3 +73,27 @@
 }
 
 \newcommand{\colpageref}[1]{\hypersetup{linkcolor=white}\pageref{#1}}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  frame=single,
+  breaklines=true
+}
+
+% fonts
+\usepackage[sfdefault,light]{FiraSans}
+%\usepackage{FiraMono}
+
+% colour of code chunks
+\colorlet{shadecolor}{gray!15}
+
+% set up logo on title page
+\usepackage{titling}
+\pretitle{\begin{center}
+\includegraphics[width = 0.4\textwidth]{VIMC landscape logo CMYK.pdf}\LARGE\\\vspace{2\baselineskip}}
+\posttitle{\end{center}}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks,linkcolor=vimclightblue,urlcolor=vimclightblue,citecolor=vimclightblue}

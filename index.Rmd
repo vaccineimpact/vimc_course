@@ -9,11 +9,12 @@ output:
     bookdown::gitbook:
         config:
             sharing: null
+            toc:
+                before: |
+                    <a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
         css: 'style.css'
         includes:
             in_header: _toggle.html
-        keep_md: TRUE
-linkcolor: blue
 documentclass: book
 link-citations: yes
 description: "R-Practical"
@@ -21,7 +22,7 @@ description: "R-Practical"
 
 # Opening
 
-```{r, child = "_setup.Rmd", include = FALSE, purl = FALSE, cache = FALSE}
+```{r, child = "_setup.Rmd", include = FALSE, purl = FALSE}
 ```
 
 This file should contain written practicals for VIMC practicals.

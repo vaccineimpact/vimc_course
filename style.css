@@ -3,8 +3,8 @@
     --taskCol: #404040;    /* task boxes */
     --solCol: #808080;   /* solution boxes */
     --solColh: #808080cc;   /* solution boxes hover */
-    --infoCol: #1C668F;    /* info boxes */
-    --infoColh: #1C668Fcc;    /* info boxes hover */
+    --infoCol: #3871c2;    /* info boxes */
+    --infoColh: #3871c2cc;    /* info boxes hover */
     --fsize: medium;
 }
 
@@ -95,3 +95,33 @@ pre {
 div.resize > * {
   font-size: var(--fsize);
 }
+
+/*-----Body Links-------*/
+
+.book .book-body .page-wrapper .page-inner section.normal a {
+    color: var(--infoCol);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal a:hover {
+    color: #003c3c; /* darker color when hovering */
+    text-decoration: none;
+}
+
+.book .book-summary ul.summary li a, 
+.book .book-summary ul.summary li span {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: var(--infoCol);
+}
+.summary a:hover {
+    color: #003c3c !important;
+} 
+
+.book .book-summary ul.summary li.active>a {
+    color: var(--infoCol) !important;
+    border-left: solid 4px;
+    border-color: #003c3c;
+    padding-left: 11px !important;
+}  
