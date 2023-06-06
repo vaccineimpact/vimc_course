@@ -1,6 +1,6 @@
 # Programming Practical---P1
 
-**Nik Cunniffe ([njc1001@cam.ac.uk](mailto:njc1001@cam.ac.uk))**
+## Nik Cunniffe ([njc1001@cam.ac.uk](mailto:njc1001@cam.ac.uk)) {.unlisted .unnumbered}
 
 ## Getting started
 
@@ -221,7 +221,7 @@ print(paste("Sum is", runningSum))
 Note you can do the above more efficiently using vectorised operators, e.g. `sum(2^(1:15))`.
 ```
 
-### A loop for which the number of iterations is not know in advance
+### A loop for which the number of iterations is not known in advance
 
 Write code to answer the following question.
 
@@ -461,11 +461,12 @@ for(i in 1:numRuns) {
     if(gotSticker[thisSticker]==FALSE) {     # this is the line which had an error (fixed here)
       gotSticker[thisSticker] <- TRUE
       numLeft <- numLeft - 1
-  #   commented out the following print statement to save time
+  #   commented out the following print statement to save space
   #   print(paste('got', thisSticker, 'still need',numLeft))
     }
   }
-  print(paste("Run",i,"bought", numStickersBought))
+  #   commented out the following print statement to save space
+  # print(paste("Run",i,"bought", numStickersBought))
   myEstimates[i] <- numStickersBought
 }
 hist(myEstimates)
@@ -485,9 +486,9 @@ If there are a total of $N$ stickers, of which you have already collected $M$, t
 
 The number of stickers that you must buy to complete the entire album is then just the expected number of stickers to get the first sticker in your album (i.e. when you have already got 0), plus the expected number required for your second sticker (i.e. when you have already got 1), ..., all the way up to the expected number to get the final sticker (i.e. when you have already got $N – 1$).
 
-Therefore $$\text{Average number of stickers required} = \frac{1}{p_{0}} + \frac{1}{p_{1}} + \text{... } +\frac{1}{p_{N-1}}.$$
+Therefore $$\text{Average number of stickers required} = \frac{1}{p_{0}} + \frac{1}{p_{1}} + \dots +\frac{1}{p_{N-1}}.$$
 
-However (by the definition of $p_{M}$) this reduces to $$\begin{aligned} \text{Average number of stickers required} &= \frac{N}{N} + \frac{N}{N-1} + \text{... } + \frac{N}{1} \\ &=N\left(\frac{N}{N} + \frac{N}{N-1} + \text{... } + \frac{1}{1}\right) \\ &=N\left(1 + \text{... } + \frac{1}{N-1} + \frac{1}{N}\right) \\ &=N \times H_{N}\end{aligned} $$
+However (by the definition of $p_{M}$) this reduces to $$\begin{aligned} \text{Average number of stickers required} &= \frac{N}{N} + \frac{N}{N-1} + \dots + \frac{N}{1} \\ &=N\left(\frac{N}{N} + \frac{N}{N-1} + \dots + \frac{1}{1}\right) \\ &=N\left(1 + \dots + \frac{1}{N-1} + \frac{1}{N}\right) \\ &=N \times H_{N}\end{aligned} $$
 
 where we reversed the order of the sum in going from line 2 to line 3, and have used the definition of the $N^{th}$ harmonic number (see lecture slides) on line 4.
 ```
