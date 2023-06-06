@@ -1,6 +1,8 @@
-# Epidemic models - P3
+# Epidemic models---P3
 
-**Stochastic models**
+## Matt Castle ([mdc31@cam.ac.uk](mailto:mdc31@cam.ac.uk)) and Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
+
+## **Stochastic models**
 
 *Aim*: To explore the effects of stochasticity on simple SI and SIR models and contrast their behaviour with previous deterministic results.
 
@@ -8,39 +10,38 @@
 
 By the end of this practical participants should be able to achieve the following:
 
-- Code up a simple stochastic SI model in R using the `SimInf` package
-- Code up a simple stochastic SIR model in R using the `SimInf` package
-- Run both single and multiple realisations and visualise the results
-- Explore extensions to both SI and SIR models
+* Code up a simple stochastic SI model in R using the `SimInf` package
+* Code up a simple stochastic SIR model in R using the `SimInf` package
+* Run both single and multiple realisations and visualise the results
+* Explore extensions to both SI and SIR models
     + Expand the SI model to include additional transitions
     + Understand the impact of R0 values on stochastic extinction
     
 *Background*: This practical follows on from the Stochastic Epidemic Models Lecture 5 and echoes the content presented there.
 
-
 ## Coding a simple SI model
 
 We will first implement a slight modification to the code that has been presented to you in the previous Stochastic Epidemic Lecture (Epidemics L5). The key difference between the code presented in the lecture and the code shown here is that we are putting the code into a function (called `StocSI.dyn`) rather than just running a series of commands.
 
-- Open Rstudio
-- Open a new blank script file
-- Save it as `Stock_SI.R`
+* Open Rstudio
+* Open a new blank script file
+* Save it as `Stock_SI.R`
 
 If you haven't already installed the package `SimInf`:
 
-- Click packages tab in lower right sub-window
-- Click Install
-- Type: `SimInf` in the Packages box
-- Click Install
+* Click packages tab in lower right sub-window
+* Click Install
+* Type: `SimInf` in the Packages box
+* Click Install
 
-If you're on a Windows computer then you’ll need to do some additional work to use `SimInf` (macOSand Linux users should be fine)
+If you're on a Windows computer then you'll need to do some additional work to use `SimInf` (macOSand Linux users should be fine)
 
-- Download Rtools from [https://cran.r-project.org/bin/windows/Rtools/](https://cran.r-project.org/bin/windows/Rtools/)
+* Download Rtools from [https://cran.r-project.org/bin/windows/Rtools/](https://cran.r-project.org/bin/windows/Rtools/)
     + Click on the appropriate version of RTools on the left
-    + For RTools 4.2 (the most up to date version) click on the link `Rtools42_installer`. It’s in the third paragraph down in the second section
-    + Once it’s downloaded install it using all of the default settings
-    + This might take a couple of minutes, but click Finish when it’s done
-- Add the path to Rtools to your PATH environment variable
+    + For RTools 4.2 (the most up to date version) click on the link `Rtools42_installer`. It's in the third paragraph down in the second section
+    + Once it's downloaded install it using all of the default settings
+    + This might take a couple of minutes, but click Finish when it's done
+* Add the path to Rtools to your PATH environment variable
     + Click on the windows icon in the bottom right of the screen
     + Type environment variable in the search box
     + This should bring up the System Properties window. Click on the Environment Variables button
@@ -52,7 +53,6 @@ If you're on a Windows computer then you’ll need to do some additional work to
 Great!
 
 Now we can finally actually get on with the simulations.
-
 
 **In the script window type the following commands**:
 
@@ -72,16 +72,15 @@ create.StocSI <- function(N, I0, beta , f_time) {
 }
 ```
 
-
 Make sure you save your file and that your working directory is the same as the folder you have saved this into (Choose from menu Session > Set Working Directory > To Source File Location).
 
-This code creates a function that creates a single stochastic SI model. We’ll dissect/explain the code in the next section.
+This code creates a function that creates a single stochastic SI model. We'll dissect/explain the code in the next section.
 
 Open a new blank script file.
 
 Save it as `Epi_P3.R`
 
-We’ll use this script to record all of the steps in this practical (unless otherwise indicated).
+We'll use this script to record all of the steps in this practical (unless otherwise indicated).
 
 In the script window type the following commands and then run (select and press run button in RStudio):
 
@@ -107,10 +106,10 @@ Here we can see the two trajectories for an SI epidemic. The susceptible curve (
 
 The function we have just created is a wrapper that takes the basic parameters that define the SI model for a particular population and creates a R object that the `SimInf` package can use to simulate the model. Our function `create.StocSI` takes four inputs:
 
-- Total population size: <span style="color:red">N</span>
-- Initial number of infected: <span style="color:red">I0</span>
-- Infection rate: <span style="color:red">beta</span>
-- Time to simulate for: <span style="color:red">f_time</span>
+* Total population size: <span style="color:red">N</span>
+* Initial number of infected: <span style="color:red">I0</span>
+* Infection rate: <span style="color:red">beta</span>
+* Time to simulate for: <span style="color:red">f_time</span>
 
 Inside the function we combine this information to create four R objects that when passed to the `SimInf` function `mparse`. The output from the `mparse` function is returned as the output to our `create.StocSI` function.
 
@@ -126,11 +125,11 @@ The `SimInf` package includes its own function that defines SIR, SEIR and SIS mo
 
 The `mparse` function requires that you specify the following information:
 
-- The list of all compartments of the system
-- The initial states (or compartments) of the system
-- the events (or transitions) of the system
-- the values of any parameters
-- the time points where the value of each state is to be recorded for each simulation
+* The list of all compartments of the system
+* The initial states (or compartments) of the system
+* the events (or transitions) of the system
+* the values of any parameters
+* the time points where the value of each state is to be recorded for each simulation
 
 An SI model is described by the following system of *differential* equations:
 
@@ -141,13 +140,13 @@ And from these equations we can derive a transition diagram from the system:
 
 $$ S \rightarrow \beta\frac{SI}{N} \rightarrow I$$
 
-- From this diagram we can see that there are two states for this system: susceptible and infected (S & I). We define all of the compartments of the model using a vector:
+* From this diagram we can see that there are two states for this system: susceptible and infected (S & I). We define all of the compartments of the model using a vector:
 
 ```{r, eval = FALSE}
 compartments <- c("S","I")
 ```
 
-- In order to begin the simulation, we need to specify the initial values of each compartment. We specify these using a data frame with a single row and column for each compartment specified above:
+* In order to begin the simulation, we need to specify the initial values of each compartment. We specify these using a data frame with a single row and column for each compartment specified above:
 
 ```{r, eval = FALSE}
 initial_state <- data.frame(S = N-I0, I = I0)
@@ -155,7 +154,7 @@ initial_state <- data.frame(S = N-I0, I = I0)
 
 where `N` (the total population number) and `I0` (the initial number of infected) have been specified by the user.
 
-- There is one event (or transition): infection.
+* There is one event (or transition): infection.
 
 ```{r, eval = FALSE}
 transitions <- c("S -> beta*S*I/(S+I) -> I")
@@ -163,7 +162,7 @@ transitions <- c("S -> beta*S*I/(S+I) -> I")
 
 where the effect is to move one susceptible into the infected compartment at a rate $\beta \frac{SI}{N}$ where $N=S+I$ and beta must be specified by the user. The syntax we use here should be self-explanatory (hopefully) but the idea is that we have the following syntax “A $\rightarrow$ rate $\rightarrow$ B” where A is the name of the starting compartment, B is the name of the ending compartment and rate explains how to calculate the rate.
 
-- We must tell algorithm how long we want it to run for before stopping and at what points we wish to record the value of the compartments. We use the user specified variable `f_time` to specify a sequence of daily output values up to a maximum value of `f_time`.
+* We must tell algorithm how long we want it to run for before stopping and at what points we wish to record the value of the compartments. We use the user specified variable `f_time` to specify a sequence of daily output values up to a maximum value of `f_time`.
 
 ```{r, eval = FALSE}
 tspan <- seq(from = 1, to = f_time, by = 1)
@@ -171,9 +170,9 @@ tspan <- seq(from = 1, to = f_time, by = 1)
 
 NB: `SimInf` was designed to work with real epidemiological data and as such the minimum output timestep size is 1 (corresponding to 1 day).
 
-- The `mparse` function takes the arguments we’ve just created, processes (*‘parses’*) them into a low-level computer language and compiles the resulting program into machine code. This machine code is considerably (orders of magnitude) faster than the equivalent R code. We assign the output of this function to the object `SImodel` (An object in R is a special data type that combines functions with data).
+* The `mparse` function takes the arguments we've just created, processes (*'parses'*) them into a low-level computer language and compiles the resulting program into machine code. This machine code is considerably (orders of magnitude) faster than the equivalent R code. We assign the output of this function to the object `SImodel` (An object in R is a special data type that combines functions with data).
 
-- Objects can be used as arguments to functions in the same way as normal data types. In this case we can use the `run()` function to run a stochastic simulation of the `SImodel`:
+* Objects can be used as arguments to functions in the same way as normal data types. In this case we can use the `run()` function to run a stochastic simulation of the `SImodel`:
 
 ```{r, eval = FALSE}
 out <- run(model = SImodel, threads = 1)
@@ -181,19 +180,19 @@ out <- run(model = SImodel, threads = 1)
 
 The threads argument is optional here, but this argument would allow us to parallelise our code (if our setup allows it).
 
-- The run function implements (and runs) the stochastic simulation algorithm for any stochastic model defined by the `mparse` function and returns a new object which contains the output of the simulation (which we’ve called out).
+* The run function implements (and runs) the stochastic simulation algorithm for any stochastic model defined by the `mparse` function and returns a new object which contains the output of the simulation (which we've called out).
 
-- The `SimInf` package provides a special plot function for this output
+* The `SimInf` package provides a special plot function for this output
 
 ```{r, eval = FALSE}
 plot(out)
 ```
 
-This explains the code you’ve produced so far, but there are limitations. We would like to plot multiple stochastic realisations onto a single plot and investigate their aggregated properties. To do this we will need to modify our code somewhat.
+This explains the code you've produced so far, but there are limitations. We would like to plot multiple stochastic realisations onto a single plot and investigate their aggregated properties. To do this we will need to modify our code somewhat.
 
 ## Performing Multiple Simulations
 
-Let’s update our `create.StocSI` function in the (`Stoch_SI.R` file) to create a model with multiple copies of the same population. This is the simplest possible meta-population model where there is no interaction between patches, and a neat hack to run multiple replicate simulations at the same time.
+Let's update our `create.StocSI` function in the (`Stoch_SI.R` file) to create a model with multiple copies of the same population. This is the simplest possible meta-population model where there is no interaction between patches, and a neat hack to run multiple replicate simulations at the same time.
 
 **Edit `Stoch_SI.R` to update the definition of the `create.StocSI` as follows:**
 
@@ -210,11 +209,11 @@ create.StocSI <- function(N, I0, beta, f_time, reps = 1) {
 }
 ```
 
-The only two things we’ve changed here are:
+The only two things we've changed here are:
 
-1. We’ve created a new argument call `reps` which we’re using to specify the number of simulations that we want the code to run.
+1. We've created a new argument call `reps` which we're using to specify the number of simulations that we want the code to run.
 
-2. We’ve changed how we specify the `initial_state` dataframe. This is now a dataframe that has `reps` number of rows and 2 columns. The first column contains the starting number of susceptible individuals in each of our simulations, and the second column contains the number of initial infected individuals.
+2. We've changed how we specify the `initial_state` dataframe. This is now a dataframe that has `reps` number of rows and 2 columns. The first column contains the starting number of susceptible individuals in each of our simulations, and the second column contains the number of initial infected individuals.
 
 Again, remember to **save** your file.
 
@@ -247,7 +246,7 @@ By default the plot command will always:
 
 1. plot the curves for all states on the same graph (so we can see both S and I curves here)
 
-2. use a step function to plot the curves (which is why it’s a bit, um, step-y)
+2. use a step function to plot the curves (which is why it's a bit, um, step-y)
 
 3. show the average and interquartile range as a transparent envelope when multiple simulations have been run.
 
@@ -263,9 +262,9 @@ This should produce a plot that look similar to the following:
 plot(out , 'I', range=FALSE , type = 'l')
 ```
 
-- The second argument is a character vector specifying which compartments we want to see. Here we’ve asked to only see the curves for the infected I compartment.
-- The named argument `range` is used to specify the shaded quantile on the plot. By specifying `FALSE`, we’ve turned it off and forced R to plot the individual trajectories instead. If we’d specified a numeric value between 0 and 1 then we would see the equivalent shaded range plotted instead (i.e. $range=0.5$ corresponds to plotting the interquartile range and $range = 0.95$ corresponds to plotting the wider 95% quantiles)
-- We can use the standard `type` argument from the base R plot function to specify the type of curve we want. The default is `type='s'` for steps, but here we’re asking for the smoother `type='l'` lines option.
+* The second argument is a character vector specifying which compartments we want to see. Here we've asked to only see the curves for the infected I compartment.
+* The named argument `range` is used to specify the shaded quantile on the plot. By specifying `FALSE`, we've turned it off and forced R to plot the individual trajectories instead. If we'd specified a numeric value between 0 and 1 then we would see the equivalent shaded range plotted instead (i.e. $range=0.5$ corresponds to plotting the interquartile range and $range = 0.95$ corresponds to plotting the wider 95% quantiles)
+* We can use the standard `type` argument from the base R plot function to specify the type of curve we want. The default is `type='s'` for steps, but here we're asking for the smoother `type='l'` lines option.
 
 
 
@@ -346,7 +345,7 @@ The deterministic model predicts a constant value of $t_{\frac{1}{2}}$ given by 
 
 $$t_{\frac{1}{2}} = -\frac{1}{\beta}ln\frac{I_{0}}{N-I_{0}}$$
 
-(This can be derived exactly from the analytic solution to the system of differential equations for the SI system. This isn’t going to be possible for more complex models).
+(This can be derived exactly from the analytic solution to the system of differential equations for the SI system. This isn't going to be possible for more complex models).
 
 ### The stochastic half-time
 
@@ -387,9 +386,9 @@ stoc_halftime <- function(model) {
 
 The function `det_halftime` takes three arguments:
 
-- The total host population <span style="color:red">N</span>
-- The initial number of infected <span style="color:red">I0</span>
-- The infection rate <span style="color:red">beta</span>
+* The total host population <span style="color:red">N</span>
+* The initial number of infected <span style="color:red">I0</span>
+* The infection rate <span style="color:red">beta</span>
 
 and returns the deterministic value of the time to half-height.
 
@@ -446,12 +445,12 @@ One a new script in RStudio.
 
 Using the functions developed in the previous sections as a template construct a `create.StocSIR` function that takes five arguments:
 
-- N: the total population size
-- I0: the initial number of infected individuals
-- beta: the infection rate
-- mu: the recovery rate
-- f_time: the time the simulation will run for (daily steps)
-- reps: the number of replicate simulations to run
+* N: the total population size
+* I0: the initial number of infected individuals
+* beta: the infection rate
+* mu: the recovery rate
+* f_time: the time the simulation will run for (daily steps)
+* reps: the number of replicate simulations to run
 
 The skeleton function below can serve as a starting point.
 
@@ -595,13 +594,13 @@ Repeat the previous steps for this model and create a `create.StocSI_demo` funct
 
 ```{info, title = "Hint", collapsible = FALSE}
 
-- To specify a birth (or death) event then we use the @ symbol to represent the “empty” compartment from which births appear (or to which deaths end up). So a birth event into the susceptible compartment would have the following transition string:
+* To specify a birth (or death) event then we use the @ symbol to represent the “empty” compartment from which births appear (or to which deaths end up). So a birth event into the susceptible compartment would have the following transition string:
 
 ``{r, eval = FALSE}
 '@ -> ?? -> S'
 ``
 
-- Use these initial values for the parameters:
+* Use these initial values for the parameters:
     + alpha $= 0.1$
     + beta $=0.5$
     + lambda $=100$
@@ -617,9 +616,9 @@ In order to further explore the effects of stochasticity in the SIR model we are
 
 ```{task}
 
-- What is the final size of an epidemic?
-- What does it mean?
-- Which state variable do we need to consider in order to calculate the final epidemic size?
+* What is the final size of an epidemic?
+* What does it mean?
+* Which state variable do we need to consider in order to calculate the final epidemic size?
     
 For stochastic simulations the final epidemic size will vary between realisations of the epidemic which will mean that we need to think about a *distribution* of final epidemic sizes.
 
@@ -636,9 +635,9 @@ Write code to calculate the final epidemic size from a `SimInf` output object.
 
 ```{info, title = "Hint", collapsible = FALSE}
 
-- What value should the final time for the simulations be set to (roughly)?
-- As we’ve seen before, the function `trajectory` can be used to extract the actual values of the different compartments at each time point.
-- Look at the code we used in the previous practical for calculating the halftime values for a single simulation and modify that logic accordingly.
+* What value should the final time for the simulations be set to (roughly)?
+* As we've seen before, the function `trajectory` can be used to extract the actual values of the different compartments at each time point.
+* Look at the code we used in the previous practical for calculating the halftime values for a single simulation and modify that logic accordingly.
 
 ```
 
@@ -657,8 +656,8 @@ knitr::include_graphics("Materials/Epidemic_models/Plots/plot_2.JPG")
 
 ```{info, title = "Hint", collapsible = FALSE}
 
-- You’ll probably want to use a loop to extract the final size for each simulation
-- Set the histogram to use 500 bins
+* You'll probably want to use a loop to extract the final size for each simulation
+* Set the histogram to use 500 bins
 
 ```
 
@@ -670,8 +669,8 @@ Recall that the final epidemic size for the deterministic SIR model showed stron
 
 ```{task}
 
-- Write down an expression for $R_{0}$ for this system as a function of the parameters $\beta$ and $\mu$.
-- Does this help explain the bimodal result?
+* Write down an expression for $R_{0}$ for this system as a function of the parameters $\beta$ and $\mu$.
+* Does this help explain the bimodal result?
     
 ```
 
@@ -704,8 +703,8 @@ As with the final epidemic size, the extinction time will vary over realisations
 
 Adapt your previous code to calculate the extinction time for each realisation.
 
-- What value should the final time for the simulation be set to?
-- Run 100 realisations in order to produce a histogram of the time to extinction, as per the figure below:
+* What value should the final time for the simulation be set to?
+* Run 100 realisations in order to produce a histogram of the time to extinction, as per the figure below:
 
 
 ``{r, echo = FALSE} 
@@ -713,9 +712,9 @@ knitr::include_graphics("Materials/Epidemic_models/Plots/plot_3.JPG")
 ``
 
     
-- Explore the distribution of extinction times for several values of $R_{0} = 20.0$, $5.0$, $2.0$, $1.2$, $1.0$, $0.9$, $0.5$.
+* Explore the distribution of extinction times for several values of $R_{0} = 20.0$, $5.0$, $2.0$, $1.2$, $1.0$, $0.9$, $0.5$.
 
-- What do you notice about the distribution as $R_{0}$ gets close to 1?
+* What do you notice about the distribution as $R_{0}$ gets close to 1?
 
 ```
 

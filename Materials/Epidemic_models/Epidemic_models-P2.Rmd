@@ -1,28 +1,37 @@
-# Epidemic models - P2
+# Epidemic models---P2
+
+## Katy Gaythorpe ([k.gaythorpe@imperial.ac.uk](mailto:k.gaythorpe@imperial.ac.uk)) {.unlisted .unnumbered}
 
 ## Calculating $R_{0}$
 
 We wish to calculate $R_{0}$ which is defined as the expected number of secondary infections per generation given one infected individuals is introduced to an entirely susceptible population.
 
-Mathematically, we examine our system equations for the **infectious compartments only* at **disease free equilibrium** and see how they *change** as each infectious variable changes.
+Mathematically, we examine our system equations for the *infectious compartments only* at **disease free equilibrium** and see how they *change** as each infectious variable changes.
 
 We divide this into two situations:
 
-- Transmission events where a new infectious variable is created eg. a susceptible person be-comes infected
-
-- Transition events where an infectious variable is lost eg. an infected person recovers.
+* Transmission events where a new infectious variable is created eg. a susceptible person be-comes infected
+* Transition events where an infectious variable is lost eg. an infected person recovers.
 
 SIR example:
 
-$$ \frac{dS}{dt} = \mu H - \beta SI - \mu S$$
-$$ \frac{dI}{dt} = \beta SI - \mu I - \gamma I$$
-$$ \frac{dR}{dt} = \gamma I - \mu R$$
+$$
+    \frac{dS}{dt} = \mu H - \beta SI - \mu S
+$$
+$$
+    \frac{dI}{dt} = \beta SI - \mu I - \gamma I
+$$
+$$
+    \frac{dR}{dt} = \gamma I - \mu R
+$$
 
 We only have one infectious variable: $I$.
 
 So our system of infectious compartments is only the equation for the change in the infected population over time.
 
-$$ \frac{dI}{dt} = \beta SI - \mu I-\gamma I$$
+$$
+    \frac{dI}{dt} = \beta SI - \mu I-\gamma I
+$$
 
 Next we wish to know how this equation varies as the infectious variable, $I$, varies.
 

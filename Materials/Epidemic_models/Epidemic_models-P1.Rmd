@@ -1,34 +1,36 @@
-# Epidemic models - P1
+# Epidemic models---P1
+
+## Katy Gaythorpe ([k.gaythorpe@imperial.ac.uk](mailto:k.gaythorpe@imperial.ac.uk)) {.unlisted .unnumbered}
 
 ## The basic SIR model
 
 ```{task}
-
 Write down the equations of a frequency-dependent SIR model with no births or deaths and transmission rate $\beta$ and recovery rate $\gamma$.
-    
 ```
 
 ```{solution}
-
-$$\begin{aligned} \frac{dS}{dt} &= \frac{-\beta SI}{N} \\ \frac{dI}{dt} &= \frac{\beta SI}{N} - \gamma I \\ \frac{dR}{dt} &= \gamma I\end{aligned}$$
-
+$$
+    \begin{aligned} \frac{dS}{dt} &= \frac{-\beta SI}{N} \\ 
+    \frac{dI}{dt} &= \frac{\beta SI}{N} - \gamma I \\ 
+    \frac{dR}{dt} &= \gamma I\end{aligned}
+$$
 ```
 
 ```{task}
-
 Show that for this model the population size remains constant, i.e. that $dN/dt=0$.
-
 ```
 
 ```{solution}
-
-$$\begin{aligned} \frac{dN}{dt} &= \frac{dS}{dt} + \frac{dI}{dt} + \frac{dR}{dt} \\ &= \frac{-\beta SI}{N} + \frac{\beta SI}{N} - \gamma I + \gamma I \\ &= 0 \end{aligned}$$
-
+$$
+    \begin{aligned} \frac{dN}{dt} &= \frac{dS}{dt} + \frac{dI}{dt} + \frac{dR}{dt} \\ 
+    &= \frac{-\beta SI}{N} + \frac{\beta SI}{N} - \gamma I + \gamma I \\ 
+    &= 0 \end{aligned}
+$$
 ```
 
 ## Coding the model
 
-We’ll follow the template for deSolve that we used in the previous practical, starting with the core function that calculates $dS/dt$, $dI/dt$ and $dR/dt$. Open R, create a new text files and type in:
+We'll follow the template for deSolve that we used in the previous practical, starting with the core function that calculates $dS/dt$, $dI/dt$ and $dR/dt$. Open R, create a new text files and type in:
 
 ```{r}
 # SIR Epidemic model - Practical 1
@@ -55,7 +57,7 @@ SIR_dyn <- function(t,var,par) {
 
 **REMEMBER TO SAVE YOUR FILE REGULARLY**
 
-Note that in this model, the total number of individuals $S + I + R$ remains constant, so we would actually only need to define 2 variables (say $S$ and $I$) and calculate 2 derivatives. I’ve included the 3 variables for clarity only. Then define parameter values, initial variables values and the vector of time values:
+Note that in this model, the total number of individuals $S + I + R$ remains constant, so we would actually only need to define 2 variables (say $S$ and $I$) and calculate 2 derivatives. I've included the 3 variables for clarity only. Then define parameter values, initial variables values and the vector of time values:
 
 ```{r}
 beta <- 1
@@ -81,31 +83,17 @@ R <- SIR_sol[,4]
 N <- S + I + R
 ```
 
-```{info, title = "Note:", collapsible = FALSE}
-
+```{info, title = "Note", collapsible = FALSE}
 You cannot label time as `time` in lower case letters because it is an inbuilt function in R.
-
 ```
 
 ```{task}
-
 Plot $S(t)$, $I(t)$ and $R(t)$ together on a graph, using the commands `plot()`, `lines()` and `legend()`.
-
-``{r, echo = FALSE}
-plot(TIME, S, col = "blue", type = "l", ylab = "S, I, R", xlab = "Time")
-lines(TIME, I, col = "red")
-lines(TIME, R, col = "darkgreen")
-
-legend("topright", legend = c("Susceptible", "Infected", "Recovered"),
-       col = c("red", "blue", "darkgreen"),
-       pch = c("-","-", "-") )
-``
-
 ```
 
 ```{solution}
 
-``{r, eval = FALSE}
+``{r}
 plot(TIME, S, col = "blue", type = "l", ylab = "S, I, R", xlab = "Time")
 lines(TIME, I, col = "red")
 lines(TIME, R, col = "darkgreen")
@@ -120,9 +108,7 @@ legend("topright", legend = c("Susceptible", "Infected", "Recovered"),
 You don't have to always plot things against time, it can also be useful to plot variables against each other. Try plotting $S$ against $I$:
 
 ```{r}
-
 plot(S/N, I/N, type = "l", lwd = 3, col = "darkgreen")
-
 ```
 
 It can be difficult to read this graph at first. Find where $\text{TIME} = 1$ (at the start $S/N \approx 1$ and $I \approx 0$) and label it on the graph.
@@ -142,25 +128,21 @@ text(S[index]/N[index],I[index]/N[index],"t=1",pos=2)
 ```
 
 ```{task}
-
 Also label $t=2$, $t=5$, $t=10$ and $t=15$. What is happening to time in this plot?
-
 ```
 
 ```{solution}
-
 Approaching the steady state.
-
 ```
 
 ## Some properties of the model
 
-An important question is when does the epidemic reach its peak? A common misconception based on graphs similar to the one above is “$I(t)$ reaches its maximum when $S(t) = R(t)$”.
+An important question is when does the epidemic reach its peak? A common misconception based on graphs similar to the one above is "$I(t)$ reaches its maximum when $S(t) = R(t)$".
 
-By now you know that “$I(t)$ reaches its maximum when $dI/dt=0$”.
+By now you know that "$I(t)$ reaches its maximum when $dI/dt=0$".
 
-- Given that $dI/dt=\beta SI/N-\gamma I$, when $I$ is maximum we get $S/N=\gamma /\beta$.
-- Check this relationship using the graph of $S/N$ plotted against $I/N$. You might want to use `which.max()` which gives the position of the largest element in a vector.
+* Given that $dI/dt=\beta SI/N-\gamma I$, when $I$ is maximum we get $S/N=\gamma /\beta$.
+* Check this relationship using the graph of $S/N$ plotted against $I/N$. You might want to use `which.max()` which gives the position of the largest element in a vector.
 
 *Tip*: you can use `abline` to mark on the plot where $I/N$ reaches its maximum.
 
@@ -197,17 +179,18 @@ for (i in 1:6) {
                    SIR_t,
                    SIR_dyn,
                    SIR_par)
-    plot(....., ylim=c(0,1),type="l", main=paste0(“beta = “,beta,”gamma = “,gamma))
+    plot(....., ylim=c(0,1),type="l", main=paste0("beta = ",beta,"gamma = ",gamma))
     lines(.....) # I(t)
     lines(.....) # R(t)
 }
+par(mfrow = c(1, 1))
 ``
 
 ```
 
 ```{solution}
 
-``{r, fig.dim = c(8, 6)}
+``{r, fig.dim = c(8, 6), fig.show = "hold"}
 # set up a 2 by 3 grid for the plots:
 par(mfrow=c(2,3), xaxs='i', yaxs='i')
 # define the parameters:
@@ -232,6 +215,7 @@ for (i in 1:6) {
     print(paste("peak time = ",TIME[which.max(I/N)]) )
     print(paste("Epidemic size = ",max(R/N)))
 }
+par(mfrow = c(1, 1))
 ``
 
 ```
@@ -243,42 +227,37 @@ You can also use the functions `max()` and `which.max()`.
 Remember from the lecture that $R_{0}=\beta / \gamma$, therefore $\beta = \gamma R_{0}$.
 
 ```{task}
-
 Which of the last 3 quantities appear linked to $R_{0}$?
-
 ```
 
 ```{solution}
-
 Peak size and epidemic size.
-
 ```
 
 
 ```{info, title = "Note:", collapsible = FALSE}
-
-It can be shown mathematically that the epidemic size and the height of the epidemic peak are functions of $R_{0}$ only, although this requires some clever manipulation of the ODES (see Appendix at the end of this handout if you’re interested).
+It can be shown mathematically that the epidemic size and the height of the epidemic peak are functions of $R_{0}$ only, although this requires some clever manipulation of the ODES (see Appendix at the end of this handout if you're interested).
 
 The time to the epidemic peak cannot be directly expressed from the equations, but it is linked to the initial rate of spread of the epidemic. The variations in the number of infected individuals are given by:
-    
-$$dI/dt = I(\beta S/N-\gamma)$$
+$$
+    dI/dt = I(\beta S/N-\gamma)
+$$
 
 At the very beginning of the outbreak, $I(t) << S(t) \approx N$. So we can approximate the ODE above as $dI/dt = (\beta - \gamma )I$, which can be solved as:
-    
-$$ I(t) = I_{0} exp(\beta - \gamma)t$$
+$$
+    I(t) = I_{0} exp(\beta - \gamma)t
+$$
     
 So the number of infected individuals initially follows an exponential growth with rate
-
-$$ \beta N - \gamma = \gamma (R_{0} - 1) $$
-
+$$
+    \beta N - \gamma = \gamma (R_{0} - 1)
+$$
 ```
 
 ```{task}
-
 Plot $log(I(t))$ for $t$ in $[0,4]$ for the same parameter combinations above and check that the initial gradient is equal to $\beta - \gamma$.
 
-*TIP*: you can use `abline` again, this time to impose a straight line $(y=bx + c)$.
-
+**TIP**: you can use `abline` again, this time to impose a straight line $(y = bx + c)$.
 ```
 
 ```{solution}
@@ -308,21 +287,15 @@ for (i in 1:6) {
 ```
 
 ```{task}
-
 What dynamics do you expect with $R_{0} = 1$? Plot the graph for $\beta = 1$, $\gamma = 1$. Why does $I(t)$ decreases?
-    
 ```
 
 ```{solution}
-
 As our initial conditions are with $99$ susceptible people, and $R_{0}=1$ this renders the **effective reproduction number** less than $1$ so $I(t) decreases.
-
 ```
 
 ```{task}
-
 Explore the behaviour of the system around $R_{0} \approx 1$ using the loop you wrote before. Try changing $0.9 < R_{0} < 1.1$ and altering the initial number of individuals infected.
-
 ```
 
 ```{solution}
@@ -356,7 +329,7 @@ main=paste("R0 = ",Rzero[i]))
 
 If the recovery rate of a disease is $\gamma = 0.2$ days$^{-1}$, what is the average infectious period?
 
-- For a given constant recovery rate of $\gamma = 0.2$ days$^{-1}$ plot the proportion of individuals still infected over time.
+* For a given constant recovery rate of $\gamma = 0.2$ days$^{-1}$ plot the proportion of individuals still infected over time.
 
 ```{r, eval = FALSE}
 # set up a vector of times:
@@ -368,47 +341,36 @@ gamma=0.2
 # define the exponential function:
 fx=exp(-gamma*x)
 
-#plot:
+# plot:
 plot(x,fx,type="l")
 ```
 
-- Calculate the average infectious period using the function defined above.
+* Calculate the average infectious period using the function defined above.
 
 ```{r, eval = FALSE}
 print(sum(fx*x)/sum(fx))
 ```
 
 ```{task}
-
 How do your two answers compare?
-    
 ```
 
 ```{solution}
-
 Not quite the same but perhaps will have a better approximation as you use more points.
-
 ```
 
 
-## Optional section - extending SIR to other compartments
+## Optional section---extending SIR to other compartments
 
 As we saw in the lecture, the S-I-R framework is only a crude representation of the real natural history of a disease. Think of another formulation and see how the results compare to a standard SIR model. Some suggestions:
 
-- Include loss of immunity, so that Recovered individuals become Susceptible again after a certain period
-of time.
-- Include a latent state post-infection but before an individual becomes infectious (this type of model is often called an SEIR model, where E stands for the Exposed class).
-- Include treatment in the model, allowing Infected individuals to recover more quickly.
-
-
-- Sketch a diagram of your model, showing the compartments and the flows between them.
-
-
-- Write down the equations that govern your model
-
-
-- Write a function, such as `SEIR_dyn()` that calculates the derivatives of your model for use with `lsoda()`.
-- Plot the epidemic curve, $I(t)$. How does this compare to an equivalent SIR model?
+* Include loss of immunity, so that Recovered individuals become Susceptible again after a certain period of time.
+* Include a latent state post-infection but before an individual becomes infectious (this type of model is often called an SEIR model, where E stands for the Exposed class).
+* Include treatment in the model, allowing Infected individuals to recover more quickly.
+* Sketch a diagram of your model, showing the compartments and the flows between them.
+* Write down the equations that govern your model
+* Write a function, such as `SEIR_dyn()` that calculates the derivatives of your model for use with `lsoda()`.
+* Plot the epidemic curve, $I(t)$. How does this compare to an equivalent SIR model?
 
 ```{solution}
 
@@ -470,33 +432,42 @@ legend("right", col = c("blue","orange", "red","cyan","green"), legend = c("S","
 ``
 
 Plenty to note on the different dynamics as you experiment with the above- one thing to examine is that we now have multiple infected states and this can make calculating $R_{0}$ more complicated as we need to use the next generation matrix approach, shown later in the course.
-
 ```
 
-
-## Appendeix - Epidemic peak and final epidemic size
+## Appendix---Epidemic peak and final epidemic size
 
 Although it is not possible to solve the differential equations of the SIR system analytically to obtain expressions for $S(t)$, $I(t)$ and $R(t)$, we can obtain an implicit solution in the $(S,I)$ phase plane. In other words, we can obtain a mathematical relationship between the values of $S$ and $I$ at any time point. The trick is to re-write the system
 
-$$\begin{aligned} \frac{dS}{dt} &= -\beta SI/N \\ \frac{dI}{dt} &= \beta SI/N - \gamma I \end{aligned}$$
+$$
+    \begin{aligned} 
+        \frac{dS}{dt} &= -\beta SI/N \\
+        \frac{dI}{dt} &= \beta SI/N - \gamma I
+    \end{aligned}
+$$
 
-as a single differential equation for $I$ as a function of $S$. Under certain mathematical conditions that we won’t discuss here, the variations of $I$ with respect to $S$ can conveniently be written as:
+as a single differential equation for $I$ as a function of $S$. Under certain mathematical conditions that we won't discuss here, the variations of $I$ with respect to $S$ can conveniently be written as:
 
-$$\frac{dI}{dS} = \frac{dI/dt}{dS/dt} = \frac{\beta SI/N - \gamma I}{-\beta SI/N} = \frac{\gamma N}{\beta S} - 1$$
+$$
+    \frac{dI}{dS} = \frac{dI/dt}{dS/dt} = \frac{\beta SI/N - \gamma I}{-\beta SI/N} = \frac{\gamma N}{\beta S} - 1
+$$
 
 Using the integration rules from the maths lectures, we can actually solve this ODE:
 
 So, given the initial conditions, we can deduce the value of $I(t)$ from the value of $S(t)$ at any time point. How is that helpful? First consider the question of the height of the epidemic peak. We know that $I(t)$ reaches its maximum when $S(t) = \gamma/\beta$. Hence the height of the epidemic peak:
 
-$$I_{max} = I_{0} + \frac{\gamma}{\beta} log \frac{\gamma}{\beta S_{0}} + S_{0} - \frac{\gamma}{\beta}$$
+$$
+    I_{max} = I_{0} + \frac{\gamma}{\beta} log \frac{\gamma}{\beta S_{0}} + S_{0} - \frac{\gamma}{\beta}
+$$
 
 Assuming that $I(0) << S(0) \approx N$, then we can write $R_{0}\approx\beta S(0)/\gamma$, hence:
 
-$$I_{max}/N \approx 1-(1+logR_{0})/R_{0}$$
+$$
+    I_{max}/N \approx 1-(1+\log R_{0})/R_{0}
+$$
 
-You can check it on the graphs from section 2 above. Next, the final epidemic size is given by the final valuep of $S(0) - S(t)$, i.e. taking $t \rightarrow \infty$. Under the same assumptions as above, and letting $x = S(0) - S(\infty)$ be the proportion of the $N$ population that gets infected over the whole epidemic, we get the following equation: $x + log(1 - x)$, which can only be solved numerically.
+You can check it on the graphs from section 2 above. Next, the final epidemic size is given by the final value of $S(0) - S(t)$, i.e. taking $t \rightarrow \infty$. Under the same assumptions as above, and letting $x = S(0) - S(\infty)$ be the proportion of the $N$ population that gets infected over the whole epidemic, we get the following equation: $x + \log(1 - x)$, which can only be solved numerically.
 
-R does not have a built-in numerical solver for nonlinear equation, but it has a function called `optimize()` that searches for the minimum of a numerical function. The trick is to notice that solving an equation of the form $f(x) = 0$ is equivalent to finding the minimum of $f^{2}(x)$, the square of $f(x)$. If you’re not convinced, sketch a graph of an arbitrary function that crosses the x-axis, then sketch the square of that function.
+R does not have a built-in numerical solver for nonlinear equation, but it has a function called `optimize()` that searches for the minimum of a numerical function. The trick is to notice that solving an equation of the form $f(x) = 0$ is equivalent to finding the minimum of $f^{2}(x)$, the square of $f(x)$. If you're not convinced, sketch a graph of an arbitrary function that crosses the x-axis, then sketch the square of that function.
 
 We can therefore estimate the epidemic size for any value of R0 using the following code:
 
@@ -507,11 +478,11 @@ my_fun <- function(x,R0) {
 optimize(my_fun, c(0,1), R0=2)
 ```
 
-where the three arguments of optimize are: 
+where the three arguments of `optimize` are: 
 
-- the function to minimize with respect to its first argument (in this case $x$), - the interval over which to search for a solution
-- the numerical values of any other argument of `my_fun` (in this case $R_{0}$).
+* the function to minimize with respect to its first argument (in this case $x$), 
+* the interval over which to search for a solution
+* the numerical values of any other argument of `my_fun` (in this case $R_{0}$).
 
-
-We’ll see more about `optimize()` next week, so I wont give any more detail here.
+We'll see more about `optimize()` next week, so I wont give any more detail here.
 
