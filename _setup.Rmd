@@ -256,4 +256,7 @@ knit_hooks$set(chunk = function(x, options) {
     }
     x
 })
+
+## creates nojekyll file
+file.create("docs/.nojekyll")
 ```
