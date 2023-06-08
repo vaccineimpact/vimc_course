@@ -1,4 +1,4 @@
-# Dynamic models Practical
+# Dynamic models practical
 
 ## Katy Gaythorpe ([k.gaythorpe@imperial.ac.uk](mailto:k.gaythorpe@imperial.ac.uk)) {.unlisted .unnumbered}
 
@@ -10,7 +10,12 @@
 
 We have discussed the solutions of two differential equations using the fact that we were able to solve them analytically:
 
-$$\begin{aligned} \frac{dN}{dt} &= rN \rightarrow N(t) = N_{0}e^{rt}  \\ \frac{dN}{dt} &= rN\left(1-\frac{N}{K}\right) \rightarrow N(t) = \frac{K}{1+\frac{K-N_{0}}{N_{0}}e^{rt}}\end{aligned}$$
+$$
+    \begin{aligned} 
+    \frac{dN}{dt} &= rN \rightarrow N(t) = N_{0}e^{rt}  \\
+    \frac{dN}{dt} &= rN\left(1-\frac{N}{K}\right) \rightarrow N(t) = \frac{K}{1+\frac{K-N_{0}}{N_{0}}e^{rt}}
+    \end{aligned}
+$$
 
 However, most differential equations cannot be solved analytically. For example, with the predation model presented in Dynamic Models Lecture 2, we cannot obtain a mathematical formula giving the number of bacteria (prey) $N(t)$ and amoeba (predators) $P(t)$ as functions of the parameters and initial conditions. Instead we have to resort to numerical methods to obtain approximate values of $N(t)$ and $P(t)$ for any given set of parameter values. Since this is the case for the vast majority of differential equations of interest in science, such numerical methods have been developed for many years and the advent of computers have made them increasingly popular. Throughout this course we will be using a ready-made package in R called `deSolve` which can solve numerically virtually any system of ordinary differential equations (ODE).
 
@@ -24,15 +29,22 @@ Although we will be using `deSolve` as a black box, for your information here is
 
 Here I illustrate the method with a single differential equation, but it can easily be extended to any number. Consider the logistic growth model with an arbitrary choice of parameter values: $dN/dt = 0.5N(1 - N/100)$ and initial condition $N(0) = 1$.
 
-The trick is then to 'discretise' this equation, i.e. replace the infinitesimal variations of the differential equation by small 'discrete' variations. Remember the formal definition of the derivative of a function: $$\frac{dN}{dt} = \lim_{\delta t\rightarrow 0}\frac{N(t+\delta t)-N(t)}{\delta t}$$
+The trick is then to 'discretise' this equation, i.e. replace the infinitesimal variations of the differential equation by small 'discrete' variations. Remember the formal definition of the derivative of a function: 
+$$
+    \frac{dN}{dt} = \lim_{\delta t\rightarrow 0}\frac{N(t+\delta t)-N(t)}{\delta t}
+$$
 
 We then approximate the variations during a small time step $\delta t$ as follows:
 
-$$ \frac{N(t+\delta t)-N(t)}{\delta t} \approx 0.5N(t)\left( 1-\frac{N(t)}{100}\right)$$
+$$
+    \frac{N(t+\delta t)-N(t)}{\delta t} \approx 0.5N(t)\left( 1-\frac{N(t)}{100}\right)
+$$
 
 So, if we know the value of $N(t)$ at a given time $t$, we can estimate the value at the next time point:
 
-$$ N(t+\delta t) \approx N(t) + 0.5N(t)\left( 1-\frac{N(t)}{100} \right) \delta t$$
+$$
+    N(t+\delta t) \approx N(t) + 0.5N(t)\left( 1-\frac{N(t)}{100} \right) \delta t
+$$
 If you know the initial density, say $N(0) = 1$, and you choose $\delta t = 0.1$, then you can iteratively calculate approximate values of $N(0.1) \approx 1.0495$, $N(0.2) \approx 1.1014$, etc. which eventually enables you to reconstruct the numerical solution $N(t)$.
 
 The only problem is that $N(0.2)$ is estimated based on an approximate value of $N(0.1)$, and so on. So, as you iterate the process, you accumulate errors and you run the risk of seeing your 'numerical solution' drift away from the true solution.
@@ -379,5 +391,3 @@ par(mfrow = c(1, 1))
 
 Similar equilibrium but it takes different times to reach it.
 ```
-
-
