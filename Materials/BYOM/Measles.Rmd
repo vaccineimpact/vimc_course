@@ -2,16 +2,15 @@
 
 ## Measles data and challenge
 
-You have been asked to implement a determinsitic model to predict the impact of vaccination on the timing of outbreaks of measles in London. You have been asked to make a number of assumptions to proceed:
+Implement a deterministic model to predict the impact of vaccination on the timing of outbreaks of measles in London. You should make the following assumptions to proceed:
 
 * Constant population size of 3.3 million
 * Birth rate of 20 per thousand per year
 * Basic reproduction number $R_{0} = 17$ (for sinusoidal forcing model)
 * Cases can be approximately calculated from the number of infectives by multiplying by 7/5 (i.e. reporting period /average infectious period)
+* The reporting rate during this period was 40%
 
-You were provided with a time-series of measles cases from London from 1950-1964 (immediately prior to the introduction of vaccination in the UK) and asked to assume that the reporting rate at this time was 40%. 
-
-These data are included as part of the `tsiR` package in R that provides historical time-series data from England and Wales along with functions to work with the so-called time-series SIR model (TSIR) - a discrete time chain binomial model that can be used to very successfully model and predict measles dynamics (and to a lesser extent other strongly immunizing childhood infections).
+A time-series of measles cases from London from 1950-1964 (immediately prior to the introduction of vaccination in the UK) are included as part of the `tsiR` package in R that provides historical time-series data from England and Wales along with functions to work with the so-called time-series SIR model (TSIR) - a discrete time chain binomial model that can be used to very successfully model and predict measles dynamics (and to a lesser extent other strongly immunizing childhood infections).
 
 The "plotdata" function from the `tsiR` package provides a summary of the incidence and demographic data (birth rates and population size):
 
