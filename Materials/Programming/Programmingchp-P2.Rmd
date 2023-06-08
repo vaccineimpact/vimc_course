@@ -34,7 +34,7 @@ This is an example of a discrete random variables, and so the distribution is ca
 
 For continuous random variables we can only calculate the probability of being in an interval.
 
-A Normal Distribution will be able to gives us the probability of measurement errors, $x$, being a certain size.
+A Normal Distribution gives us the probability of measurement errors, $x$, being a certain size.
 
 ```{r, eval = TRUE}
 plot(

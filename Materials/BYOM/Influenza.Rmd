@@ -2,11 +2,11 @@
 
 ## Data Summary and challenge
 
-We will build and roughly calibrate a transmission model to describe the outbreak of influenza in a English boarding school we first met in the stochastic modelling practical.
+In this practical you will calibrate a transmission model to describe the outbreak of influenza in a English boarding school.
 
-For the purposes of this practical we assume that the numbers of pupils in bed measure the numbers infectious on each date. Not a great assumption as they are to an extent self-isolating, but also not terrible given the relatively short latent and (effective) infectious period for influenza ($\sim 1$ day).
+For the purposes of this practical assume that the numbers of pupils in bed measure the numbers infectious on each date. Not a great assumption as they are to an extent self-isolating, but also not terrible given the relatively short latent and (effective) infectious period for influenza ($\sim 1$ day).
 
-We are asked to model the likely impact on the outbreak should 80% of the boys have been vaccinated before the start of the outbreak with a vaccine with 50% (direct) protection from infection. For a single outbreak reasonable to neglect the potential for loss of immunity to reinfection so modelling vaccination in this case only amounts to changing the **initial conditions** of the model (i.e. the number susceptible and recovered when infection is introduced.) We are told to assume an exposed period of 1 hour and an infectious period of 2 days so a standard SEIR compartmental model should be sufficient. We will first address the question using a deterministic and stochastic model in turn.
+Model the likely impact on the outbreak should 80% of the boys have been vaccinated before the start of the outbreak with a vaccine with 50% (direct) protection from infection. Note: for a single outbreak it is reasonable to neglect the potential for loss of immunity to reinfection so modelling vaccination in this case only amounts to changing the **initial conditions** of the model (i.e. the number susceptible and recovered when infection is introduced.) We are told to assume an exposed period of 1 hour and an infectious period of 2 days so a standard SEIR compartmental model should be sufficient. You should use a deterministic model for your initial calibration and the explore how the dynamics differ for the corresponding stochastic model.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 require(outbreaks)
