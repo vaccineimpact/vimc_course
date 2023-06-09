@@ -1,12 +1,18 @@
 # Outbreak of influenza in a boarding school
 
-## Data Summary and challenge
+## Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
+
+## Data summary and challenge
 
 In this practical you will calibrate a transmission model to describe the outbreak of influenza in a English boarding school.
 
 For the purposes of this practical assume that the numbers of pupils in bed measure the numbers infectious on each date. Not a great assumption as they are to an extent self-isolating, but also not terrible given the relatively short latent and (effective) infectious period for influenza ($\sim 1$ day).
 
-Model the likely impact on the outbreak should 80% of the boys have been vaccinated before the start of the outbreak with a vaccine with 50% (direct) protection from infection. Note: for a single outbreak it is reasonable to neglect the potential for loss of immunity to reinfection so modelling vaccination in this case only amounts to changing the **initial conditions** of the model (i.e. the number susceptible and recovered when infection is introduced.) We are told to assume an exposed period of 1 hour and an infectious period of 2 days so a standard SEIR compartmental model should be sufficient. You should use a deterministic model for your initial calibration and the explore how the dynamics differ for the corresponding stochastic model.
+Model the likely impact on the outbreak should 80% of the boys have been vaccinated before the start of the outbreak with a vaccine with 50% (direct) protection from infection. 
+
+```{info, title = "Note", collapsible = FALSE}
+For a single outbreak it is reasonable to neglect the potential for loss of immunity to reinfection so modelling vaccination in this case only amounts to changing the **initial conditions** of the model (i.e. the number susceptible and recovered when infection is introduced.) We are told to assume an exposed period of 1 hour and an infectious period of 2 days so a standard $SEIR$ compartmental model should be sufficient. You should use a deterministic model for your initial calibration and the explore how the dynamics differ for the corresponding stochastic model.
+```
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 require(outbreaks)
@@ -16,12 +22,11 @@ require(deSolve)
 ggplot(influenza_england_1978_school,aes(x=date,y=in_bed)) + geom_point() + geom_line() + xlab('Date') + ylab('In Bed (Assumed Infectious)')
 
 targetI <- influenza_england_1978_school$in_bed
-
 ```
 
 ## Deterministic model
 
-For the standard SEIR model with constant rates of progression through the exposed and infectious compartments an $R_0$ of $\sim 4.0$ gives a rough calibration to the observed data (black points and lines):
+For the standard $SEIR$ model with constant rates of progression through the exposed and infectious compartments an $R_0$ of $\sim 4.0$ gives a rough calibration to the observed data (black points and lines):
 
 ```{r, echo = FALSE}
 SEIR_gamma <- function(t,y,theta) {
@@ -136,8 +141,7 @@ ggplot(det_calibrate,aes(x=time,y=I,col=var)) + geom_line() + geom_point() +
 
 ```
 
-This rough calibration does not hold up if we now vary the distributional assumption for the latent and infectious periods. The supplied code has implemented the SEIR model with gamma distributed (strictly an erlang distribution were the shape parameter is an integer) latent and infectious periods. If we vary the shape parameters for I and E we see that the peak prevalence and initial rate of exponential growth are very sensitive to changes in the distribution. Less dispersed distributions (i.e. higher shape parameters) have sharper epidemics with higher peak prevalence. The final size (and approximate value of R0) on the other had are insensitive to these changes. Below we plot a set of three curves below for shape parameters = 10 illustrating that we now require a lower value of $R_{0}$ to (roughly) match the data. The fit is not as good as I deliberately picked the average infectious and latent periods to give a reasonable fit with the exponential model...
-
+This rough calibration does not hold up if we now vary the distributional assumption for the latent and infectious periods. The supplied code has implemented the $SEIR$ model with gamma distributed (strictly an Erlang distribution were the shape parameter is an integer) latent and infectious periods. If we vary the shape parameters for I and E we see that the peak prevalence and initial rate of exponential growth are very sensitive to changes in the distribution. Less dispersed distributions (i.e. higher shape parameters) have sharper epidemics with higher peak prevalence. The final size (and approximate value of $R_0$) on the other had are insensitive to these changes. Below we plot a set of three curves below for shape parameters = 10 illustrating that we now require a lower value of $R_{0}$ to (roughly) match the data. The fit is not as good as I deliberately picked the average infectious and latent periods to give a reasonable fit with the exponential model...
 
 ```{r, echo = FALSE}
 # Standard SEIR model (gamma 10 latent, infectious periods)
@@ -237,32 +241,23 @@ return(output)
 
 ```
 
-
 ```{r, echo = FALSE}
 out <- tibble()
 
-for(i in 1:100)
-{
-
-out <- out %>% bind_rows(stochastic_rep_SEIR(4.0,0.04,2.0, 0.0, 30) %>% mutate(rep=i))
-
+for(i in 1:100) {
+    out <- out %>% bind_rows(stochastic_rep_SEIR(4.0,0.04,2.0, 0.0, 30) %>% mutate(rep=i))
 }
 
 ggplot(out,aes(x=t,y=I,col=rep,group=rep)) + geom_path() + scale_y_sqrt() + 
   annotate('point',1:14,targetI[1:14]) + annotate('line',1:14,targetI[1:14]) + 
   scale_color_fermenter(palette = "Spectral") + xlab('Time') + ylab('Infected')
-
-
 ```
 
 ```{r, echo = FALSE}
 outvacc <- tibble()
 
-for(i in 1:100)
-{
-
-outvacc <- outvacc %>% bind_rows(stochastic_rep_SEIR(4.0,0.04,2.0, 0.8, 30) %>% mutate(rep=i))
-
+for(i in 1:100) {
+    outvacc <- outvacc %>% bind_rows(stochastic_rep_SEIR(4.0,0.04,2.0, 0.8, 30) %>% mutate(rep=i))
 }
 
 outagg <- (out %>% mutate(vacc=FALSE)) %>% bind_rows(outvacc %>% mutate(vacc=TRUE))
@@ -273,10 +268,17 @@ ggplot(outagg,
 
 The main reason for considering a stochastic model for this question is then to quantify how vaccination changes the chances of seeing an outbreak at all. We can calculate this from our simulated scenarios by calculate the mean number of simulations that have more than one infection ( mean(outbreak) in table below) or compare the final size distribution for the two scenarios.
 
-
 ```{r, message = FALSE, echo = FALSE}
+outagg %>% 
+    group_by(rep,vacc) %>% 
+    summarise(outbreak=max(R)>1) %>% 
+    ungroup() %>% 
+    group_by(vacc) %>% 
+    summarise(mean(outbreak))
 
-outagg %>% group_by(rep,vacc) %>% summarise(outbreak=max(R)>1) %>% ungroup() %>% group_by(vacc) %>% summarise(mean(outbreak))
-
-ggplot(outagg %>% group_by(rep,vacc) %>% summarise(fsize=max(R)),aes(x=vacc,y=fsize)) + stat_summary(fun.data = "mean_cl_boot")
+ggplot(outagg %>% 
+        group_by(rep,vacc) %>% 
+        summarise(fsize=max(R)),
+    aes(x=vacc,y=fsize)) + 
+        stat_summary(fun.data = "mean_cl_boot")
 ```
