@@ -1,6 +1,5 @@
 --- 
-title: "R-Practical"
-author: "Pedro Cardoso"
+title: "Inference in infectious disease systems practicals"
 site: bookdown::bookdown_site
 output:
     bookdown::pdf_book:
@@ -17,7 +16,9 @@ output:
             in_header: _toggle.html
 documentclass: book
 link-citations: yes
-description: "R-Practical"
+linkcolor: blue
+description: "Inference in infectious disease systems practicals"
+bibliography: ref.bib
 ---
 
 # Opening
@@ -26,4 +27,6 @@ description: "R-Practical"
 ```
 
 This file should contain written practicals for VIMC practicals.
+
+**REFERENCES AND BIBTEX FILE COULD BE ADDED.**
 
