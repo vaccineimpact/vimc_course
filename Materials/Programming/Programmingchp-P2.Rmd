@@ -1,4 +1,4 @@
-# Programming Practical---P2
+# Programming---Practical 2
 
 ## Nik Cunniffe ([njc1001@cam.ac.uk](mailto:njc1001@cam.ac.uk)) {.unlisted .unnumbered}
 
@@ -17,7 +17,7 @@ Examples:
 
 A probability distribution will tell us the probability of a random variable taking a specific value.
 
-A Binomial Distribution will be able to give us the probability of obtaining $x$ heads if we toss a coin 10 times (where $x$ is any number).
+A binomial distribution will be able to give us the probability of obtaining $x$ heads if we toss a coin 10 times (where $x$ is any number).
 
 ```{r, eval = TRUE}
 plot(
@@ -34,7 +34,7 @@ This is an example of a discrete random variables, and so the distribution is ca
 
 For continuous random variables we can only calculate the probability of being in an interval.
 
-A Normal Distribution gives us the probability of measurement errors, $x$, being a certain size.
+A normal distribution gives us the probability of measurement errors, $x$, being a certain size.
 
 ```{r, eval = TRUE}
 plot(
@@ -106,7 +106,7 @@ This can be used to calculate actual probabilities for discrete distributions.
 
 #### `dbinom()`---discrete distribution
 
-Consider a Binomial Distribution with 10 trials, each with a probability of success of 0.5. The R function `dbinom()` describes the distribution of the probability of success.
+Consider a binomial distribution with 10 trials, each with a probability of success of 0.5. The R function `dbinom()` describes the distribution of the probability of success.
 
 It takes the following arguments:
 
@@ -128,7 +128,7 @@ plot(0:10, dbinom(0:10, 10, 0.5), type = "h", xlab = "x", ylab = "Probability Ma
 
 #### `dnorm()`---continuous distribution
 
-Consider a Normal Distribution with mean 0 and standard deviation 1.
+Consider a normal distribution with mean 0 and standard deviation 1.
 
 The R function `dnorm()` gives the probability density at a given value of $x$.
 
@@ -153,7 +153,7 @@ For a distribution dist `pdist(x, ...)` returns the probability $P(X\le x)$ (whi
 
 #### `pnorm()`---probability calculations
 
-If we want to find the probability of having a value below $-1$ from a Normal Distribution we use `pnorm()`.
+If we want to find the probability of having a value below $-1$ from a normal distribution we use `pnorm()`.
 
 ```{r}
 pnorm(-1, 0, 1)
@@ -172,7 +172,7 @@ curve(dnorm(x,0,1),xlim=bounds, xlab = "x", ylab = "Probability Density")
 polygon(cord.x,cord.y,col='darkblue')
 ```
 
-If we want to find the probability of having a value between $-1$ and $1.5$ from a Normal Distribution we use `pnorm()`.
+If we want to find the probability of having a value between $-1$ and $1.5$ from a normal distribution we use `pnorm()`.
 
 ```{r}
 pnorm(1.5, 0, 1) - pnorm(-1, 0, 1)
@@ -197,9 +197,9 @@ For a distribution dist `rdist()` returns $n$ random numbers drawn from that dis
 
 This function is of great use when trying to run stochastic models. The ability to draw random numbers from many different types of distribution is incredibly useful.
 
-### `rnorm()`---Normal Distribution
+#### `rnorm()`---normal distribution
 
-Consider a Normal Distribution with mean and standard deviation.
+Consider a normal distribution with mean and standard deviation.
 
 The R function `rnorm()` returns random numbers drawn from this distribution.
 
@@ -214,7 +214,7 @@ norm.dat <- rnorm(5, 0, 1)
 print(norm.dat)
 ```
 
-Consider a Normal Distribution with mean 0 and variable 1. We will draw thousands of random numbers from this distribution and plot a histogram of them. This should then look like the theoretical Normal Distribution curve we produce with `dnorm()`.
+Consider a normal distribution with mean 0 and variable 1. We will draw thousands of random numbers from this distribution and plot a histogram of them. This should then look like the theoretical normal distribution curve we produce with `dnorm()`.
 
 ```{r}
 norm.dat <- rnorm(50000, 0, 1)
@@ -223,7 +223,7 @@ x <- seq(-4, 4, 0.01)
 lines(x, dnorm(x, 0, 1), col = "red")
 ```
 
-## Example one---using probabilities for simulation
+## Example---using probabilities for simulation
 
 Consider tossing a biased coin. There are two outcomes: Heads or Tails.
 
@@ -231,9 +231,9 @@ $P(H) = \frac{1}{3}$ \& $P(T) = \frac{2}{3}$
 
 How can we use probability distributions in R to simulate this?
 
-### Binomial Distribution
+### Binomial distribution
 
-Using the Binomial Distribution:
+Using the binomial distribution:
 
 * 1 observation
 * 1 trial
@@ -260,7 +260,7 @@ rbinom(15, 1, 1/3)
 
 ### Uniform distribution
 
-Using the uuniform distribution:
+Using the uniform distribution:
 
 Generate single number uniformly between 0 and 1.
 
@@ -291,7 +291,7 @@ polygon(cord.x,cord.y,col='darkblue')
 
 The shaded area corresponds to the probability of drawing Heads.
 
-## Example two---multiple choices
+## Example---multiple choices
 
 Consider tossing a very thick biased coin. There are three outcomes: Heads, Tails, or edge.
 
@@ -333,16 +333,12 @@ polygon(cord.x,cord.y,col='red')
 
 The blue shaded area corresponds to the probability of drawing Heads. The red shaded area corresponds to the probability of drawing Tails. The unshaded area corresponds to the probability of drawing Edge.
 
-## Exercise one---using R to model a die
-
-Consider a regular six-sided die.
-
 ```{task}
-How could we simulate a single throw of a die?
+Consider a regular six-sided die. How could we simulate a single throw of a die in R?
     
 * What are the possible outcomes?
-* Use `runif()`
-* Use (lots of) `if else` statements
+* Use `runif()`.
+* Use (lots of) `if else` statements.
 
 ```
 
@@ -383,9 +379,9 @@ This is easy to do in R.
 nAlive <- 100                       # current number of live animals
 max.time <- 200                     # keep going for up to 200 steps
 nAliveStore <- numeric(max.time+1)  # vector to store how many were alive at each step
-nAliveStore[1] <- nAliveStore       # store how many were alive at the start
+nAliveStore[1] <- nAlive            # store how many were alive at the start
 for (iTim in 1:max.time) {          # loop over all time steps
-    pr <- runif(nAlive, 0, 1)       # get probability of dying for all currently live animals
+    pr <- runif(nAlive, 0, 1)       # probability of dying for all currently live animals
     died <- which(pr < 0.05)        # find out which animals have died
     nDead <- length(died)           # count up how many animals have died
     nAlive <- nAlive - nDead        # update the number of currently living animals

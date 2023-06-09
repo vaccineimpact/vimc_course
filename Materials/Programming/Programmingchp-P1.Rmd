@@ -1,4 +1,4 @@
-# Programming Practical---P1
+# Programming---Practical 1
 
 ## Nik Cunniffe ([njc1001@cam.ac.uk](mailto:njc1001@cam.ac.uk)) {.unlisted .unnumbered}
 
@@ -37,11 +37,8 @@ You should note that:
 
 You should also note that the code gives a different result each time you run it, since repeating the `sample` command leads to `b` being set to a new permutation of `a`.
 
-### Example one
-
-Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
-
 ```{task}
+Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
 
 ``{r, eval = FALSE}
 for (i in 1:10) {
@@ -62,11 +59,8 @@ for (i in 1:10) {
 
 ```
 
-### Example two
-
-Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
-
 ```{task}
+Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
 
 ``{r, eval = FALSE}
 for (i in 1:10) {
@@ -77,7 +71,7 @@ for (i in 1:10) {
 ```
 
 ```{solution}
-Prints numbers in reverse order according to whatever is in sample b.
+Prints numbers in reverse order according to whatever is in sample `b`.
 
 ``{r, eval = TRUE, echo = FALSE}
 for (i in 1:10) {
@@ -87,11 +81,8 @@ for (i in 1:10) {
 
 ```
 
-### Example three
-
-Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
-
 ```{task}
+Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
 
 ``{r, eval = FALSE}
 for (i in a) {
@@ -112,11 +103,8 @@ for (i in a) {
 
 ```
 
-### Example four
-
-Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
-
 ```{task}
+Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
 
 ``{r, eval = FALSE}
 for (i in sample(a)) {
@@ -286,7 +274,9 @@ sayHelloWithArg(whoTo="nik")
 
 ``{r, eval = TRUE, error = TRUE, wrap = TRUE}
 sayHelloWithArg()       # error, since not passed argument
-sayHelloWithArg         # echos function's code to screen (happens in general if type function's name without brackets)
+# echos function's code to screen (happens in general if 
+# type function's name without brackets)
+sayHelloWithArg
 sayHelloWithArg("nik")  # works as expected
 sayHello("nik")         # error, since too many arguments for the simpler function
 sayHelloWithArg(nik)    # error, since variable nik is not defined
@@ -358,8 +348,8 @@ The new function should calculate the sum and the mean of whatever vector it rec
 ```{solution}
 
 ``{r, eval = FALSE}
-
-mySumAndMean <- function(toSum) { # my function to sum elements of a vector and return that and the mean
+# my function to sum elements of a vector and return that and the mean
+mySumAndMean <- function(toSum) { 
   retVal <- 0
   for(i in 1:length(toSum))
   { 
@@ -412,7 +402,6 @@ You should see that this line of code creates a vector of length 4 where all fou
 One way of writing a simulation of a single attempt to collect the entire album would be something like the code that follows. **However, this code contains a deliberate mistake.**
 
 ```{task}
-
 Enter the code into your script, find the mistake, fix it, and run the code.
 
 ``{r, eval = FALSE}
@@ -522,58 +511,44 @@ logisticValues <- function(r,N,x0) {
 The given function returns $N$ iterates of the logistic map starting at $x_0$ (note, it does not store the initial value).
 ```
 
-Include the function `logisticValues` in your script. Also include the following code that uses the function to plot a graph.
+Copy the function `logisticValues` into your script file. Also include the following code that uses the function to plot a graph.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 r <- 1.5        # growth rate
 N <- 100        # max generation
 x0 <- 0.01      # initial value
-xn <- logisticValues(r,N,x0)  # next N starting at x0 
-plot(0:N,c(x0,xn),type='o',xlab='n',ylab='x_n')  # plot
+xn <- logisticValues(r, N, x0)  # next N starting at x0 
+plot(0:N, c(x0, xn), type = 'o', xlab = 'n', ylab = 'x_n')  # plot
 ```
+
+This code shows the behaviour of the logistic map with $r = 1.5$ for 100 generations. Note the slightly clunky way of making sure the initial point is returned.
 
 ```{task}
 Try running the code for different values of $r$. What does the graph show you?
-```
-
-```{solution}
-This code shows the behaviour of the logistic map with $r = 1.5$ for 100 generations. Note the slightly clunky way of making sure the initial point is returned.
-
-``{r, eval = TRUE, echo = FALSE}
-r <- 1.5        # growth rate
-N <- 100        # max generation
-x0 <- 0.01      # initial value
-xn <- logisticValues(r,N,x0)  # next N starting at x0 
-plot(0:N,c(x0,xn),type='o',xlab='n',ylab='x_n')  # plot
-``
-
-```
 
 Good values of $r$ to try would be $r = 0.5$, $r = 1.5$, $r = 2.5$, $r = 3.1$, $r = 3.5$, $r = 3.7$. You should also test the behaviour for different initial conditions: suitable values would be $x_{0} = 0.01$ and $x_{0} = 0.1$.
+```
 
 ```{info, title = "Note", collapsible = FALSE}
 As you change the value of $r$ in the above code the system goes from having a single equilibrium in the long term, to oscillating between a pair of values, to oscillating between four values. By $r = 3.7$, the trajectory depends very sensitively to the initial value $x_0$ (as is demonstrated by the below code). This is called deterministic chaos.
 ```
 
-You should note that in the case $r = 3.7$, the pattern of successive population sizes appears to be fairly random. It also depends on the initial value of $x_0$.
-
-The following code confirms this (note the first five lines are almost exactly as they were before): include this code in your script to check this.
+You should note that in the case $r = 3.7$, the pattern of successive population sizes appears to be fairly random. It also depends on the initial value of $x_0$. The following code confirms this (note the first five lines are almost exactly as they were before): include this code in your script to check this.
 
 ```{r}
 r <- 3.7            # growth rate
 N <- 100            # max generation
 x0 <- 0.01          # initial value
 xn <- logisticValues(r,N,x0)    # next N starting at x0
-plot(0:N,c(x0,xn),type='o',xlab='n',ylab='x_n') # plot 
+plot(0:N, c(x0, xn), type = 'o', xlab = 'n', ylab = 'x_n') # plot 
 x0 <- 0.01001       # different initial value
-xn <- logisticValues(r,N,x0)    # next N starting there
-lines(0:N,c(x0,xn),type='o',col='red') # overlay on plot
+xn <- logisticValues(r, N, x0)    # next N starting there
+lines(0:N, c(x0, xn), type = 'o', col = 'red') # overlay on plot
 ```
 
 Notice that, despite starting very close together, the trajectories diverge over time. "Sensitive dependence on initial conditions" is characteristic of deterministic chaos.
 
 ```{task}
-
 What do you think the following code does?
 
 Test your understanding by typing the function in and running it by issuing an appropriate call to the function at the command prompt.
@@ -612,11 +587,11 @@ for(r in rVals) {
 } 
 ```
 
-```{task}
+```{task, title = "Question"}
 Do you understand what the plot---a so-called "bifurcation diagram"---is showing?
 ```
 
-```{solution}
+```{solution, title = "Answer"}
 The key idea is that, for each value of $r$, it calculates $N=1000$ iterations of the map, but totally ignores them. It then plots the values of the next 100 iterations (as the $y$-value on a graph which has the value of $r$ as the $x$-ordinate). The idea behind all this is to let the system equilibriate---if it is ever going to do so. So from the bifurcation diagram you can see from this picture that there is/are:
     
 * a single equilibrium for $2.5 < r < 3.0$
