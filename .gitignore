@@ -6,3 +6,4 @@
 # ignore compiled files
 docs/
 _bookdown*
+R0_files.zip

@@ -1,12 +1,12 @@
-# Dynamic models practical
+# Dynamic models---Practical
 
 ## Katy Gaythorpe ([k.gaythorpe@imperial.ac.uk](mailto:k.gaythorpe@imperial.ac.uk)) {.unlisted .unnumbered}
 
-## Introduction to `deSolve`
+This practical introduces the `deSolve` package in R.
 
-### A bit of theory
+## A bit of theory
 
-#### Rationale:
+### Rationale:
 
 We have discussed the solutions of two differential equations using the fact that we were able to solve them analytically:
 
@@ -19,11 +19,11 @@ $$
 
 However, most differential equations cannot be solved analytically. For example, with the predation model presented in Dynamic Models Lecture 2, we cannot obtain a mathematical formula giving the number of bacteria (prey) $N(t)$ and amoeba (predators) $P(t)$ as functions of the parameters and initial conditions. Instead we have to resort to numerical methods to obtain approximate values of $N(t)$ and $P(t)$ for any given set of parameter values. Since this is the case for the vast majority of differential equations of interest in science, such numerical methods have been developed for many years and the advent of computers have made them increasingly popular. Throughout this course we will be using a ready-made package in R called `deSolve` which can solve numerically virtually any system of ordinary differential equations (ODE).
 
-```{info, collapsible = FALSE}
+```{info, title = "Note", collapsible = FALSE}
 In earlier versions of R, the package was called `odesolve` but worked in the same way.
 ```
 
-#### A few notes on Euler's method
+### A few notes on Euler's method
 
 Although we will be using `deSolve` as a black box, for your information here is a very basic introduction to how differential equation solvers work. The general principle was devised by Swiss mathematician [Leonhard Euler (1707--1783)](https://en.wikipedia.org/wiki/Leonhard_Euler). Among many other things, Euler also came up with the fascinating formula $e-i\pi + 1 = 0$, but that's another story.
 
@@ -51,15 +51,15 @@ The only problem is that $N(0.2)$ is estimated based on an approximate value of 
 
 Of course, the smaller $\delta t$, the more accurate the discretisation. See the graph below, where the solid curve is the true solution of the above differential equation (which, in this case, can be solved analytically) and the dots are two 'discretised solutions', using $\delta t = 1$ (discs) and $\delta t = 0.5$ (squares):
 
-```{r, echo = FALSE} 
+```{r, echo = FALSE, out.width = "50%"} 
 knitr::include_graphics("Materials/Dynamic_Models/Plots/plot_1.JPG") 
 ```
 
-So, that's basically what deSolve or any other software does to generate 'numerical solutions' of differential equations. They actually use more sophisticated algorithms (but based on the same 'discretisation' principle) in order to reduce the potential 'drift' from the (unknown) true solution. Different algorithms will perform better on different classes of models, but they are not 100% accurate. One of the most popular class of algorithms for the kind of ODEs used in population dynamics was designed by German mathematicians Runge & Kutta almost 100 years ago.
+So, that's basically what `deSolve` or any other software does to generate 'numerical solutions' of differential equations. They actually use more sophisticated algorithms (but based on the same 'discretisation' principle) in order to reduce the potential 'drift' from the (unknown) true solution. Different algorithms will perform better on different classes of models, but they are not 100% accurate. One of the most popular class of algorithms for the kind of ODEs used in population dynamics was designed by German mathematicians Runge & Kutta almost 100 years ago.
 
-### The return of the logistic model
+## The return of the logistic model
 
-#### Load the `deSolve` package
+### Load the `deSolve` package
 
 But enough theory for now. Let's shut the bonnet and sit behind the wheel! We'll start by re-visiting the logistic growth model to get you acquainted with `deSolve`.
 
@@ -77,11 +77,14 @@ library(deSolve)
 
 **REMEMBER TO SAVE YOUR FILE REGULARLY**
 
-#### Define the model
+### Define the model
 
 First, we must define a function `logistic_dyn()` that returns the value of the derivative $dN/dt$, in this case $rN(1 - N/K)$, given the values of $r$, $K$ and $N$. This function will be used by the differential equation solver to generate the numerical solution $N(t)$, so we have to follow specific rules set by the authors of the `deSolve` package:
 
-* The function that defined the derivative must take three arguments: time, a vector containing the values of the variables (in this case a single variable $N$) and a vector of parameter values (in this case two parameters $r$ and $K$).
+* The function that defined the derivative must take three arguments: 
+    * time, 
+    * a vector containing the values of the variables (in this case a single variable $N$), and 
+    * a vector of parameter values (in this case two parameters $r$ and $K$).
 * The function must return a list containing the value(s) of the derivative(s).
 
 Note that the name of the function, `logistic_dyn`, is arbitrary; you may call it anything you like. Type the following code in your script file:
@@ -124,7 +127,7 @@ Next, create three variables:
     logistic_t <- seq(0, 20, 0.1)
     ```
 
-* the initial state of the system (in this case just the value of $N_{0}):
+* the initial state of the system (in this case just the value of $N_{0}$):
 
     ```{r}
     logistic_init <- 1
@@ -138,7 +141,7 @@ logistic_sol <- lsoda(logistic_init, logistic_t, logistic_dyn, logistic_par)
 
 Save your file and run all your code so far (click on Source in the top right corner of the script window). In the Workspace window, you should now see the variables you've defined under Values, or your new function `logistic_dyn`, under Functions. To visualise the contents of the function, click on its name in the Workspace window, or type `fix(logistic_dyn)` in the Console: this opens a separate window that you must remember to close before you can re-gain access to the command line. You can also look at the contents of the matrix `logistic_sol` in the same way: the first column is your `logistic_t` vector (i.e. the time steps) and the second column contains the corresponding values of $N(t)$.
 
-#### Version with names parameters
+### Version with named parameters {#namedpars}
 
 A feature of R that can make your life a bit easier when using `lsoda()` is the ability to name the elements of a vector. When we defined `logistic_par` earlier, we had to remember that the first element must be $r$ and the second one $K$. Not too bad with only two parameters, but it can be more of an issue with higher numbers of variables and parameters, as we'll see next in the next part.
 
@@ -173,7 +176,7 @@ named_logistic_sol <- lsoda(logistic_init,
 
 This will give you exactly the same result as `logistic_sol` above. So, with this method, you don't need to remember the order of the parameters in the function that calculated the derivative, but you need to remember their names.
 
-#### Plot the dynamics
+### Plot the dynamics
 
 The next step is to plot the dynamics of $N(t)$ using the contents of `logistic_sol`:
 
@@ -191,9 +194,9 @@ points(logistic_t,1/(0.01+0.99*exp(-logistic_t)),col='red')
 Now plot a few more graphs with different parameter values (re-define `logistic_par`) or different initial values (`logistic_int`).
 ```
 
-### The revenge of the amoeba
+## The revenge of the amoeba
 
-#### Code the model
+### Code the model
 
 We'll follow the template described in the previous section, starting with the core function that calculates $dN/dt$ and $dP/dt$. The only difference is that we now have 2 variables, so the function must return a list of two derivatives. There are 5 parameters, so you must be extra careful with the order in which you store them in the vector. To be safe, we'll enter them in alphabetical order:
 
@@ -227,15 +230,19 @@ predation_sol <- lsoda(predation_init,
 
 The resulting matrix has 3 columns: `predation_sol[,1]` contains the time points, `predation_sol[,2]` the values of $N$ and `predation_sol[,3]` the values of $P$.
 
-Once again, we only defined the local variables $a$, $b$, $d$, etc. to make it easier to read the code and spot any mistake. But we could write a more concise version using only `par[1]`, `par[2]`, etc. instead. Alternatively, you could use `with(as.list(c(par,var)),{ ... })` as we saw in question 2-c above.
+Once again, we only defined the local variables $a$, $b$, $d$, etc. to make it easier to read the code and spot any mistakes. But we could write a more concise version using only `par[1]`, `par[2]`, etc. instead. Alternatively, you could use `with(as.list(c(par,var)),{ ... })` as we saw [above](#namedpars).
 
-#### Plot some graphs
+### Plot some graphs
 
 Since we have two variables in this model, we can generate more diverse graphs. You should now be getting familiar with plotting instructions, so I'll let you work out how to produce the following graphs.
 
+```{task}
 Plot $N(t)$ and $P(t)$ against time, together on a graph, using `plot()`, `lines()` and `legend()`.
+```
 
-```{r}
+```{solution}
+
+``{r}
 # plot the first line using `plot()`
 plot(predation_sol[,1], predation_sol[,2], type = "l", main='Predation model', 
      xlab='t', ylab='N.P', ylim = c(0, 100), col = "blue")
@@ -244,11 +251,14 @@ plot(predation_sol[,1], predation_sol[,2], type = "l", main='Predation model',
 lines(predation_sol[,1], predation_sol[,3], col = "red")
 
 # add legend using `legend()`
-legend(25, 95, legend=c("Prey, N", "Predator, P"),col=c("blue", "red"), lty=1, cex=0.8)
+legend(25, 95, legend=c("Prey, N", "Predator, P"),
+       col=c("blue", "red"), lty=1, cex=0.8)
+``
+
 ```
 
 ```{task}
-Plot $N$ and $P$ in the phase plane. Use the notes from lecture 2 to find the equations of the nullclines, and draw them using `abline()`. Finally add the equilibrium points.
+Plot $N$ and $P$ in the phase plane. Use the notes from Lecture 2 to find the equations of the nullclines, and draw them using `abline()`. Finally add the equilibrium points.
 ```
 
 ```{solution}
@@ -285,7 +295,7 @@ points(
 
 ```
 
-#### Discussion and further investigations
+### Discussion and further investigations
 
 ```{task}
 The model has three equilibrium points, determined by the values of the parameters. In the example above, the dynamics converged to the equilibrium point where the prey and predator coexist. 
@@ -320,12 +330,27 @@ The model has three equilibrium points, determined by the values of the paramete
     lines(predation_sol[,1], predation_sol[,3], col = "red")
     
     # add legend using `legend()`
-    legend(25, 95, legend=c("Prey, N", "Predator, P"),col=c("blue", "red"), lty=1, cex=0.8)
+    legend(25, 95, legend=c("Prey, N", "Predator, P"),
+           col=c("blue", "red"), lty=1, cex=0.8)
     ``
 
 ```
 
-Is that what you expected from a biological point of view? *Hopefully! No food for the predators but because this is deterministic, the populations still reach the equilibrium.* What limitations of the model does this suggest? *No stochastic die out.*
+```{task, title = "Question"}
+Is that what you expected from a biological point of view?
+```
+
+```{solution, title = "Answer"}
+Hopefully! No food for the predators but because this is deterministic, the populations still reach the equilibrium.
+```
+
+```{task, title = "Question"}
+What limitations of the model does this suggest? 
+```
+
+```{solution, title = "Answer"}
+No stochastic die out.
+```
 
 ```{task}
 Observe the effects of changing values of $b$ and $d$ on the equilibrium points and the dynamics. What happens if $d > bK$?
@@ -346,13 +371,15 @@ predation_sol <- lsoda(predation_init,
                        predation_par)
 
 # plot the first line using `plot()`
-plot(predation_sol[,1], predation_sol[,3], type = "l", main='Predation model', xlab='t', ylab='N.P', col = "red")
+plot(predation_sol[,1], predation_sol[,3], type = "l", 
+     main='Predation model', xlab='t', ylab='N.P', col = "red")
 
 # plot the second line using `lines()`
 lines(predation_sol[,1], predation_sol[,2], col = "blue")
 
 # add legend using `legend()`
-legend(25, 160, legend=c("Prey, N", "Predator, P"),col=c("blue", "red"), lty=1, cex=0.8)
+legend(25, 160, legend=c("Prey, N", "Predator, P"),
+       col=c("blue", "red"), lty=1, cex=0.8)
 ``
 
 ```

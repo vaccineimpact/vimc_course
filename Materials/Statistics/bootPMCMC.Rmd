@@ -1,0 +1,462 @@
+# Particle MCMC
+
+## T. J. McKinley ([t.mckinley@exeter.ac.uk](mailto:t.mckinley@exeter.ac.uk)) {.unlisted .unnumbered}
+
+Here we use a simple model to illustrate how we can use particle Markov chain Monte Carlo (PMCMC) routine [@andrieuetal:2010] with a bootstrap particle filter [@gordonetal:1993] as a way of fitting compartmental models to partially observed data, as described in the lectures. 
+
+Note that PMCMC is extremely computationally intensive, and the only real way to make it tractable for many problems is to code both the simulation code and the MCMC code in a low-level language such as C/C++. We could use `pomp` to fit this model using the same PMCMC routine described here, but the syntax is different to the `SimInf` style. So instead we will use the `SimBIID` package, which provides a function `PMCMC()` that runs this algorithm. You must pass a `SimBIID_model` object (see [here](#sec:model)) to this function, and then it will automatically compile in the correct manner.
+
+Please note that an alternative frequentist approach, using maximum likelihood via iterated filtering (MIF) framework of @ionidesetal:2006, and implemented in the `pomp` package, can be found [here](https://kingaa.github.io/sbied/mif/mif.html#an-iterated-filtering-algorithm-if2).
+
+## Case Study
+
+To illustrate some of these ideas we will use a case study of influenza in a boarding school. These data are from a paper in the BMJ in 1978 [@anonymous:1978] and provided in the [`outbreaks`](http://www.repidemicsconsortium.org/outbreaks/index.html) R package. We use a simple $SIRR_1$ model with two removal classes, $R$ and $R_1$. We will assume that the bed-rest counts in the data correspond to the number of individuals in the $R$ class, and will ignore the other time-series for the time being. This has been used various times in the literature, including @murray:2003, @devriesetal:2006 and in some of the [`pomp` tutorials](https://kingaa.github.io/sbied/mif/mif.html#an-iterated-filtering-algorithm-if2). The stochastic model we will use has event probabilities:
+\begin{align*}
+    P\left[S_{t + \delta t} = S_t - 1, I_{t + \delta t} = I_t + 1\right] &\approx \beta S I / N\\
+    P\left[I_{t + \delta t} = I_t - 1, R_{t + \delta t} = R_t + 1\right] &\approx \gamma I\\
+    P\left[R_{t + \delta t} = R_t - 1, R_{1, t + \delta t} = R_{1,t} + 1\right] &\approx \gamma_1 R
+\end{align*}
+The initial population size is 763 pupils, and we assume an initial introduction of infection of a single individual at day 0.
+
+First, we load the data and the `SimBIID` package:
+
+```{r, boot-simbiid, warning = FALSE, message = FALSE}
+## load libraries
+library(outbreaks)
+library(SimBIID)
+
+## set up data
+flu <- influenza_england_1978_school
+flu$day <- 1:nrow(flu)
+```
+
+```{r, plot-BS, message = FALSE, warning = FALSE, fig.height = 3.5, fig.width = 3.5}
+## plot data
+plot(flu$day, flu$in_bed, xlab = "Day", ylab = "Number in bed-rest", type = "l")
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+## Arguments for `PMCMC()` function
+
+If you look at the help file for the `PMCMC()` function (e.g. `?PMCMC`), you will see the main arguments to the `PMCMC()` function , which are summarised below:
+
+* `x`: a `data.frame` containing time series count data, with the first column called `t`, followed by columns of time-series counts. The time-series counts columns must be in the order of the `counts` object in the `func` function (see below).
+* `priors`: a `data.frame` containing columns: `parnames`, `dist`, `p1` and `p2`, with number of rows equal to the number of parameters. The column `parname` simply gives names to each parameter for plotting and summarising. Each entry in the `dist` column must contain one of `c("unif", "norm", "gamma")`, and the corresponding `p1` and `p2` entries relate to the hyperparameters (lower and upper bounds in the uniform case; mean and standard deviation in the normal case; and shape and rate in the gamma case).
+* `func`: a `SimBIID_model` object (which can be created using `mparseRcpp()`). This must have a stochastic observation process specified---see Section \@ref(obsprocess).
+* `u`: a named vector of initial states.
+* `npart`: an integer specifying the number of particles for the bootstrap particle filter.
+* `iniPars`: a named vector of initial values for the parameters of the model. If left unspecified, then these are sampled from the prior distribution(s).
+* `niter`: an integer specifying the number of iterations to run the MCMC.
+
+### Data {#data}
+
+The `x` argument that we will pass to the `PMCMC()` function will be a `data.frame` with the first column corresponding to `t` and the second corresponding to the *observed* $R$ curve. Here we set up a `data.frame` called `flu_dat` that is in the correct format:
+
+```{r, boot-data}
+## set up data to pass to PMCMC
+flu_dat <- data.frame(t = flu$day, Robs = flu$in_bed)
+head(flu_dat)
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+### Observation process {#obsprocess}
+
+When we specify our simulation model using `mparseRcpp()`, we also need to specify a **stochastic** observation process. This is passed as an argument called `obsProcess` to the `mparseRcpp()` function. This argument must be a `data.frame`, with columns in the order: `dataNames`, `dist`, `p1`, `p2`. 
+
+* `dataNames` is a character denoting the observed data (must match a column in the `x` data frame---see Section \@ref(data)); 
+* `dist` is a character specifying the distribution of the observation process (must be one of `"unif"`, `"pois"` or `"binom"` at the current time); 
+* `p1` is the first parameter (the lower bound in the case of `"unif"`, the rate in the case of `"pois"`, or the size in the case of `"binom"`); 
+* `p2` is the second parameter (the upper bound in the case of `"unif"`, `NA` in the case of `"pois"`, and `prob` in the case of `"binom"`).
+
+Here we will place a Poisson observation process around the $R$ curve, such that:
+$$
+    R_t \sim \mbox{Po}(R^\prime_t + 10^{-6}),
+$$
+where $R_t$ is the **observed** $R$ count at time $t$, $R^\prime_t$ is the simulated count. We add a small constant ($10^{-6}$ here) following the suggestion [here](https://kingaa.github.io/sbied/mif/mif.html#applying-if2-to-the-boarding-school-influenza-outbreak). This is important to prevent numerical errors, since the simulated counts $R^\prime_t$ could be zero, which would result in the Poisson rate parameter being zero, which violates the conditions of the Poisson distribution, and would thus produce non-finite likelihood estimates. The addition of a small constant prevents this from happening.
+
+```{info, title = "Note on Poisson assumptions"}
+The idea of putting some form of Poisson noise on the parameters of time-series count models has been used various times in the literature [e.g. @funketal:2016]. Often the observation term is placed on the *incidence* curves (i.e. new infections / removals). The variance of the Poisson distribution is equal to the mean (so a mean of $R^\prime_t$ has a variance of $R^\prime_t$ also), and since incidence curves tend to be smaller in magnitude than the counts in each class, then this can result in a tighter match between the simulations and the data. It is often usual that the mean of the Poisson noise is also scaled by some parameter corresponding to an *under-reporting* rate, meaning that the model assumes that the average observed counts are less than the true values.
+
+In this example, we do not have *incidence* curves, so we place a Poisson error around the $R^\prime_t$ counts instead. Note here that there is no strong epidemiological reason for the Poisson term in this case. We can assume that in a closed boarding school population, it would be unlikely that too many ill boys would be missed, and hence the observed counts are likely to be close to the true counts, and thus the amount of variation added by the Poisson noise term here is likely to be larger than we might ideally think is present in the data. In essence the Poisson term is providing an **approximation**, allowing simulations to have a non-negligible weight even if they do not match the observed curves exactly. As such the introduction of this term in this instance is introducing some approximation into the process, but in doing so is allowing us to fit a model in a computationally feasible way. In practice I would want to use a distribution with lower variances however.
+
+To this end, other options might include putting a Gaussian error around the observed counts, where the variance could be made smaller than the mean (e.g. $R_t \sim N(R^\prime_t, \alpha R^\prime_t + 1)$ for $\alpha \in (0, 1)$). This would penalise simulations that lie further away from the observed data more than the Poisson model we are using, at the cost of requiring a larger number of particles / a longer run time to evaluate. (Bear in mind also that the Gaussian models *continuous* random variables, and is unbounded. Hence if you simulate from this observation process then you could get simulated counts that are both non-integer and negative-valued. This type of approximation might help model fitting, but is a good example of where the the biological interpretation of the noise process is not always realistic, but might be "good enough".) 
+
+Hence, other (better) observation processes could also be used, but this choice allows us to produce some reasonable estimates in a reasonable computational load.
+```
+
+The observed data, $R_t$, is coded as the `Robs` column in the `flu_dat` data frame---see Section \@ref(data). To set up the observation process defined above, we define a `data.frame` as follows:
+
+```{r, boot-obs}
+## set up observation process
+obs <- data.frame(
+    dataNames = "Robs",
+    dist = "pois",
+    p1 = "R + 1e-5",
+    p2 = NA,
+    stringsAsFactors = FALSE
+)
+obs
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+### Setting up the model {#sec:model}
+
+```{info, collapsible = FALSE, title = "Note"}
+We do not dwell on how to use `SimBIID` to specify simulation models here. If you are interested, then please see the extended documentation available at:
+
+[https://tjmckinley.github.io/SimBIID_tutorial/set-up-simple-simulation-model.html](https://tjmckinley.github.io/SimBIID_tutorial/set-up-simple-simulation-model.html)
+
+Hopefully the code below will look similar to `SimInf`, and you will be able to see how the model is set-up.
+```
+
+To specify the above simulation model:
+
+```{r, boot-model}
+## set up model
+transitions <- c(
+    "S -> beta * S * I / (S + I + R + R1) -> I", 
+    "I -> gamma * I -> R",
+    "R -> gamma1 * R -> R1"
+)
+compartments <- c("S", "I", "R", "R1")
+pars <- c("beta", "gamma", "gamma1")
+model <- mparseRcpp(
+    transitions = transitions, 
+    compartments = compartments,
+    pars = pars,
+    obsProcess = obs
+)
+```
+
+```{info, title = "Note", collapsible = FALSE}
+`SimBIID` has an option to pre-compile models, but we do **not** do this here. The `PMCMC()` function will do this for us. This is because we need to compile as an object to run from C rather than R, so the `PMCMC()` function deals with this automatically.
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+## Running the PMCMC algorithm
+
+Now we run the PMCMC algorithm for 5,000 iterations, using 25 particles. We pass the a set of initial states, and use $U(0, 5)$ priors for each of the three parameters. We print summaries to the screen every 1,000 iterations (`nprintsum = 1000`):
+
+```{r, boot-setseed, include = FALSE}
+set.seed(55)
+```
+
+```{r, boot-priors0}
+## set priors
+priors <- data.frame(
+    parnames = c("beta", "gamma", "gamma1"), 
+    dist = rep("unif", 3), 
+    stringsAsFactors = FALSE)
+priors$p1 <- c(0, 0, 0)
+priors$p2 <- c(5, 5, 5)
+
+## define initial states
+iniStates <- c(S = 762, I = 1, R = 0, R1 = 0)
+```
+
+```{r, boot-priors}
+## run PMCMC algorithm
+post <- PMCMC(
+    x = flu_dat, 
+    priors = priors, 
+    func = model, 
+    u = iniStates,
+    npart = 25,
+    niter = 5000, 
+    nprintsum = 1000
+)
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+```{r, boot-trace}
+## plot MCMC traces
+plot(post, "trace")
+```
+
+We can see that the chain looks like it's converging towards a stationary distribution, but let's run it for a bit longer. We can do this simply by passing our current `PMCMC` object back into the `PMCMC()` function:
+
+```{r, boot-extrun, results = "hide"}
+post <- PMCMC(post, niter = 5000, nprintsum = 1000)
+```
+
+(I've suppressed the output for brevity here...)
+
+```{r, boot-extrun-plot}
+plot(post, "trace")
+```
+
+## Optimising the number of particles
+
+The mixing of the chain and the speed of convergence is related to the number of particles (amongst other things). There is no strong consensus, but a rule-of-thumb is to try to choose the number of particles such that the variance of the log-likelihood estimate at a suitable set of parameters $\theta^\prime$ is between 1--3. Clearly the larger the number of particles, the higher the computational burden, so in practice the additional computational burden of the simulations must be balanced against the improved mixing and faster convergence. This is tricky, so instead here we take a simpler approach.
+
+Firstly we run the chain for a fixed number of particles until it looks like the chain has converged. Then we choose a set of parameter values $\theta^\prime$ (the posterior medians here). We then generate 500 estimates of the log-likelihood for a range of different numbers of particles, from which we can calculate the variance of these estimates. We then choose the smallest number of particles with a variance of the log-likelihood of less than 3.
+
+Hence, from the training runs above we can remove some burn-in iterations, and extract the posterior medians:
+
+```{r, boot-med}
+postMed <- window(post, start = 2000)
+postMed <- as.matrix(postMed$pars)
+postMed <- apply(postMed, 2, median)
+postMed <- postMed[-length(postMed)]
+postMed
+```
+
+We can produce 500 estimates of the log-likelihood by setting the `fixpars = TRUE` argument to the `PMCMC()` function, passing in the `postMed` estimates above.
+
+```{r, boot-train, results = "hide"}
+flu_train <- PMCMC(
+    x = flu_dat, 
+    priors = priors, 
+    func = model, 
+    u = iniStates,
+    npart = 25, 
+    iniPars = postMed,
+    niter = 500, 
+    fixpars = TRUE
+)
+```
+
+This produces a list where the first element is a matrix of log-likelihood estimates. Hence we can extract this and calculate the sample variance as follows:
+
+```{r, boot-trainvar}
+## calculate the sample variance
+flu_train <- var(flu_train$output)
+flu_train
+```
+
+Here the variance is $`r round(flu_train, 0)`$, which is larger than 3. Hence let's try increasing the number of particles and repeating these steps.
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+```{r, boot-train1, results = "hide"}
+## generate numbers of particles to trial
+npart <- c(50, 75, 100, 125)
+
+flu_train <- list()
+for(i in 1:length(npart)){
+    flu_train[[i]] <- PMCMC(
+       x = flu_dat, 
+       priors = priors, 
+       func = model, 
+       u = iniStates, 
+       npart = npart[i], 
+       iniPars = postMed,
+       niter = 500, 
+       fixpars = TRUE
+    )
+    flu_train[[i]] <- var(flu_train[[i]]$output)
+}
+names(flu_train) <- paste0("npart = ", npart)
+flu_train <- do.call("c", flu_train)
+```
+
+```{r, boot-vistrain}
+flu_train
+```
+
+Here we will choose the number of particles to be 75 (ideally should be a bit larger---but for the sake of exposition we'll tone down a touch). We now start a new chain using 75 particles, and with starting values derived from the training runs.
+
+```{r, boot-fullrun, results = "hide"}
+post <- PMCMC(
+    x = flu_dat, 
+    priors = priors, 
+    func = model, 
+    npart = 75, 
+    u = iniStates, 
+    iniPars = postMed,
+    niter = 10000, 
+    nprintsum = 1000
+)
+```
+
+(Again I have suppressed the output here for brevity...)
+
+```{r, boot-fullsum}
+## plot and summarise MCMC output
+plot(post, "trace")
+```
+
+```{info, title = "Note", collapsible = FALSE}
+We need to run for longer in practice and run multiple chains, but for the sake of time we will proceed with what we have.
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+## Visualising and summarising the posterior distributions
+
+We can visualise the approximate posterior distributions (after removing some burn-in):
+
+```{r, boot-fullsum1}
+## remove burn-in
+post <- window(post, start = 2000)
+## plot and summarise outputs
+plot(post)
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+```{r, boot-fullsum2}
+summary(post)
+```
+
+```{task}
+Produce summaries of the posteriors for $R_0$ and the average length of the infectious period. 
+
+``{info, title = "Hint"}
+Pass a `transfunc` argument to the `summary()` function. Take a look at the help file for the `summary()` method for `PMCMC` objects i.e. `?summary.PMCMC`.
+``
+
+```
+
+```{solution}
+
+``{r, boot-soltrans}
+## function to calculate R0 and length of
+## infectious periods
+R0fn <- function(beta, gamma) {
+    data.frame(
+        R0 = beta / gamma, 
+        infperiod = 1 / gamma
+    )
+}
+
+## summarise approximate posterior
+summary(post, transfunc = R0fn)
+``
+
+```
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+## Predictive posterior distributions
+
+We can also use the model to predict the future course of an outbreak (with uncertainties). The `SimBIID` packages provides a `predict()` method for `PMCMC` objects. To produce predictions we first fit a model to the current available data. This produces a set of posterior samples for each of the parameters. Then, for each set of posterior samples we can produce an estimate of the states of the system at the final observed time point. We do this by running a bootstrap particle filter over the observed time points for each parameter set, and then sampling a trajectory from the weighted set of particles. Hence we also obtain a set of posterior samples for the states of the system at the final observed time point. 
+
+Once these have been obtained, we can use the corresponding posterior samples to seed a set of forward simulations into the future up to some pre-determined time point. All of this is done within the `predict()` function; we just need to pass it a suitable `PMCMC` object and a `tspan` argument for the time points we wish to predict to.
+
+As an example, let's pretend that we are at day 3 of the outbreak, and let's fit a model to the observed data up to that time point:
+
+```{r, boot-pred-setseed, include = FALSE}
+set.seed(45)
+```
+
+```{r, boot-pred, results = "hide", fig.show = "hide"}
+## run PMCMC algorithm
+post <- PMCMC(
+    x = flu_dat[1:3, ], 
+    priors = priors, 
+    func = model, 
+    u = iniStates, 
+    npart = 75, 
+    niter = 10000, 
+    nprintsum = 1000
+)
+## plot traces
+plot(post, "trace")
+```
+
+(Output and trace plots suppressed here for brevity...)
+
+Now let's predict forward up to day 14, based on the posterior distributions at day 3. To speed this up we will take 1,000 posterior samples. These can be obtained by using the `window()` function, to remove the first 2,000 iterations as burn-in, and then thin the remaining 8,000 samples by sub-sampling every 8^th^ sample. The `predict()` function produces a `SimBIID_runs` object, which we can plot as before. Since `obsProcess` was specified in the model, the `predict()` function will also produce predictions that take the **observation** process into account. Here the observation process acts only on the $R$ class, and so this will produce an extra column called `Iobs` here, which contains predictions assuming a Poisson observation error around the simulated `R` counts (called `Robs` here which is specified in the `datNames` column of the original `obsProcess` object).
+
+`r ifelse(opts_knit$get("rmarkdown.pandoc.to") == "latex", "\\newpage", "")`
+
+```{r, boot-pred01, eval = FALSE}
+## run predictions forward in time
+post_pred <- predict(window(post, start = 2000, thin = 8), tspan = 4:14)
+
+## plot predictions
+plot(post_pred, quant = c(0.6, 0.7, 0.8, 0.9))
+```
+
+```{r, boot-pred1, echo = FALSE, warning = FALSE, message = FALSE}
+## run predictions forward in time
+post_pred <- predict(window(post, start = 2000, thin = 8), tspan = 4:14)
+
+## plot predictions
+plot(post_pred, quant = c(0.6, 0.7, 0.8, 0.9))
+```
+
+The uncertainties up to the blue dashed line are derived from the bootstrap particle filter, whereas the uncertainties going forward are from direct simulations from the model. Since the $R$ curve can be compared directly to the observed data, we can add the observed data in as additional arguments to the `plot()` method here. We just have to add an additional `matchData` argument to tell the function which columns of the data to plot against which output from the model. In this case we pass the complete data to the function, just so that we can see how close the predictions (estimated from the model fitted at the dashed blue time point) were to the actual data. If you were doing this in real time you would only have the data up to the dashed blue time point.
+
+```{info, title = "Note", collapsible = FALSE}
+The `matchData = c("Robs = R")` below tells the `plot()` function to match the column called `Robs` in the data set to the `R` class from the simulations. It might be worth plotting the observations against the `Robs` output from the simulations also, since the simulated `Robs` curves include the **observation process**.
+```
+
+```{r, boot-pred3}
+## plot predictions and add observed I curve
+plot(post_pred, quant = c(0.6, 0.7, 0.8, 0.9), 
+     data = flu_dat, matchData = c("Robs = R", "Robs = Robs"))
+```
+
+```{task}
+Repeat the above procedure, refitting at days 5, 8 and 11. What happens to the uncertainties in the predictions? Why is this so?
+```
+
+```{solution}
+Note that I've suppressed the fitting and plotting code for brevity.
+
+``{r, boot-solpred, include = FALSE}
+post_pred <- list()
+pred_days <- c(5, 8, 11)
+    
+pdf("testTrace.pdf")
+for(i in 1:length(pred_days)) {
+
+    ## extract posterior medians from previous time step
+    ## as initial conditions
+    iniPars <- window(post$pars, start = 5000)
+    iniPars <- as.matrix(iniPars)
+    iniPars <- apply(iniPars, 2, median)
+    iniPars <- iniPars[-length(iniPars)]
+
+    ## run PMCMC algorithm
+    post <- PMCMC(
+        x = flu_dat[1:pred_days[i], ], 
+        priors = priors, 
+        func = model, 
+        u = iniStates, 
+        npart = 75,
+        iniPars = iniPars,
+        niter = 10000, 
+        nprintsum = 1000
+    )
+    
+    ## plot traces
+    plot(post, "trace")
+    
+    ## run predictions forward in time
+    post_pred[[i]] <- predict(window(post, start = 2000, thin = 8), tspan = (pred_days[i] + 1):14)
+}
+dev.off()
+``
+
+``{r, boot-solplotpred, echo = FALSE}
+post_plot <- list()
+for(i in 1:length(post_pred)){
+    ## plot predictions
+    post_plot[[i]] <- plot(post_pred[[i]], quant = c(0.6, 0.7, 0.8, 0.9),
+        data = flu_dat, matchData = c("Robs = Robs", "Robs = R"))
+}
+``
+
+``{r, boot-solpred1, echo = FALSE}
+post_plot[[1]] + ggplot2::ggtitle("Predictions at day 5")
+``
+
+``{r, boot-solpred2, echo = FALSE}
+post_plot[[2]] + ggplot2::ggtitle("Predictions at day 8")
+``
+
+``{r, boot-solpred3, echo = FALSE}
+post_plot[[3]] + ggplot2::ggtitle("Predictions at day 11")
+``
+
+We can see that the uncertainties reduce as we fit to more data and as the epidemic begins to die out. We can also see that the actual observed outbreak is within the main uncertainty bounds for each of the model fits, as long as we take account for the observation process. Here the observation process acts mostly as a means of modelling **underreporting**, and hence the **observed** counts tend to be less than the **simulated** counts (shown here by adding the observed data line to both the `R` and `Robs` plots). We can also see that the uncertainties in the forecasts get smaller the more data we fit to and also as the epidemic begins to die out.
+
+```

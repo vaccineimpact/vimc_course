@@ -1,25 +1,36 @@
-# Estimating $R_{0}$ - P1
+# Estimating $R_{0}$
 
+## Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
 
 *Aim*: To compare final size and exponential growth estimators for $R_{0}$ using simulated data.
 
 *Outline*: 
 
-1. Introduction: Models and Data sets
+1. Introduction: models and data sets
 
-2. Final Size Method
+2. Final size method
 
-3. Regression Method
+3. Regression method
 
-4. RECON earlyR Method
+4. RECON `earlyR` method
 
-## Introduction: Models and Data sets
+```{r, include = FALSE}
+library(utils)
+files2zip <- dir("./Materials/BYOM/Data", full.names = TRUE)
+zip(zipfile = "R0_files", files = files2zip, extras = "-j")
+file.copy("R0_files.zip", "Materials/BYOM/R0_files.zip", overwrite = TRUE)
+file.remove("R0_files.zip")
+```
 
-In Epidemic Practicals 1,2 & 3 you wrote functions to numerically solve and simulate the deterministic and stochastic SIR models. For this practical we have extended these functions to add a latent class and implement the SEIR epidemic model introduced in lectures. If you have time at the end of this practical you can use these functions to simulate your own “Outfluenza” and “Biggles” and explore the performance of the final size and linear regression methods.
+```{info, title = "Important", collapsible = FALSE}
+All required data and script files can be downloaded [here](https://vaccineimpact.github.io/vimc_course/Materials/BYOM/R0_files.zip). Please download this ZIP file and extract the files to your working directory.
+```
 
-However, so we all get the same results, we have provided simulated epidemics of “Outfluenza” and “Biggles” from which we will estimate $R_{0}$ using the final size, (log)-linear regression and the earlyR method from the **R** **E**pidemics **Con**sortium (RECON, [https://www.repidemicsconsortium.org/](https://www.repidemicsconsortium.org/)).
+## Introduction: models and data sets
 
-Copy “Outfluenza1_cases.dat”, “Outfluenza2_cases.dat” “Biggles_cases.dat”, “SIRmodels.R” and “SEIRmodels.R” which are provided in the shared folder to your working directory.
+In Epidemic Practicals [1](#epi1), [2](#epi2) & [3](#epi3) you wrote functions to numerically solve and simulate the deterministic and stochastic SIR models. For this practical we have extended these functions to add a latent class and implement the SEIR epidemic model introduced in lectures. If you have time at the end of this practical you can use these functions to simulate your own "Outfluenza" and "Biggles" data and explore the performance of the final size and linear regression methods.
+
+However, so we all get the same results, we have provided simulated epidemics of "Outfluenza" and "Biggles" from which we will estimate $R_{0}$ using the final size, (log)-linear regression and the `earlyR` method from the **R** **E**pidemics **Con**sortium (RECON, [https://www.repidemicsconsortium.org/](https://www.repidemicsconsortium.org/)).
 
 The simulated outbreaks are provided as **line lists**, a common instrument used to collect data on individual cases during an outbreak where the date of infection (or rather the notification of a case) is recorded along with other relevant epidemiological information. For our purposes, the date of notification is sufficient to reconstruct the epidemic curve and test our different estimators of $R_{0}$.
 
@@ -53,12 +64,11 @@ biggles <- read.table('Materials/BYOM/Data/biggles_cases.dat')
 biggles$x = as.Date(biggles$x)
 ```
 
+We are going to use the `incidence` package from RECON which has been written to simplify computing, visualising and modelling incidence of infectious disease from dated event data such as line lists.
 
-We are going to use the ‘incidence’ package from RECON which has been written to simplify computing, visualising and modelling incidence of infectious disease from dated event data such as line lists.
+To illustrate the key functions and concepts we will use `incidence` to construct daily incidence and cumulative incidence curves for the first outfluenza outbreak.
 
-To illustrate the key functions and concepts we will use ‘incidence’ to construct daily incidence and cumulative incidence curves for the first outfluenza outbreak.
-
-The main workhorse function is called ‘incidence’ which converts a list of dates into an ‘incidence’ object that bins cases into a given interval:
+The main workhorse function is called `incidence` which converts a list of dates into an `incidence` object that bins cases into a given interval:
 
 ```{r}
 outfluenza1.i = incidence(outfluenza1$x,interval=1)
@@ -72,7 +82,7 @@ outfluenza1.i
 
 So, the outfluenza1 outbreak consists of 1183 cases over the course of 65 days. We have chosen to bin cases on a daily interval (which is also the default so we could have simply left out this argument and will do so from now on).
 
-The incidence package provides custom plot functions for incidence objects:
+The `incidence` package provides custom plot functions for `incidence` objects:
 
 ```{r, warning = FALSE, message = FALSE, fig.width = 7}
 plot(outfluenza1.i)
@@ -86,7 +96,7 @@ You can try experimenting with different intervals to see how this affects the s
 plot(incidence(outfluenza1$x,interval=7))
 ```
 
-incidence also allows you to subset curves between start and end dates:
+`incidence` also allows you to subset curves between start and end dates:
 
 ```{r, warning = FALSE, message = FALSE, fig.width = 7}
 plot(subset(outfluenza1.i,from=outfluenza1$x[1],to=outfluenza1$x[100]))
@@ -97,7 +107,7 @@ What is the significance of choosing the dates to subset in this way?
 ```
 
 ```{solution}
-We have limited the graph to only plot the first 100 cases. We achieved this by using the date of the 100$^{th}$ entry of the line list (outfluenza1$x) to set the upper limit.
+We have limited the graph to only plot the first 100 cases. We achieved this by using the date of the 100$^{th}$ entry of the line list (`outfluenza1$x`) to set the upper limit.
 ```
 
 The `cumulate()` function returns a the cumulative incidence curve:
@@ -106,18 +116,16 @@ The `cumulate()` function returns a the cumulative incidence curve:
 plot(cumulate(outfluenza1.i))
 ```
 
-Finally, you can convert an incidence object to a data frame by using the cast function `data.frame()`:
+Finally, you can convert an `incidence` object to a data frame by using the cast function `data.frame()`:
 
 ```{r}
 outfluenza1.df = data.frame(outfluenza1.i)
 head(outfluenza1.df)
 ```
 
+## Final size method
 
-
-## Final Size Method
-
-Final size methods for $R_{0}$ are in themselves a whole field of research. In this practical we will consider the utility of the basic deterministic “first estimate” also known as the final size formula:
+Final size methods for $R_{0}$ are in themselves a whole field of research. In this practical we will consider the utility of the basic deterministic "first estimate" also known as the final size formula:
 
 \begin{equation} 
     (\#eq:1)
@@ -127,9 +135,7 @@ R_{0} = -\frac{ln(1-z_{f})}{z_{f}}
 where $z_{f}$ is the total fraction of the population infected at the end of an epidemic in a closed population.
 
 ```{task}
-
 Write a function `R0final` that returns the value of $R_{0}$ for a given value of $z_{f}$. Is there any restriction on the values that $z_{f}$ can take for the final size equation to be valid? Your function should check that $z_{f}$ takes a valid value and return a missing value (NA) when the final size equation is not defined.
-
 ```
 
 ```{solution}
@@ -150,7 +156,6 @@ R0final <- function(zf) {
 ```
 
 This formula is more commonly used to predict the final size ($z_{f}$) of an epidemic once we have an independent estimate of $R_{0}$. This is less straightforward as we cannot solve equation \@ref(eq:1) explicitly for $z_{f}$. We can progress by rewriting \@ref(eq:1) into a problem we can solve numerically:
-
 
 \begin{equation} 
     (\#eq:2)
@@ -177,17 +182,12 @@ FinalSize(0.9)
 
 The exact values may differ slightly between versions of R on different machines.
 
-
-```{info, title = "Note:", collapsible = FALSE}
-
-Numerical methods are only accurate up to a specified precision or **tolerance**. This is fundamentally limited by the precision with which real numbers can be represented on a computer (that naturally works with integer or binary numbers). `.Machine$double.xmin` is the smallest number (or difference between two numbers) that can be stored in a given version of R. This value may change between versions and on different computer platforms (Windows, Mac OS, Linux…)
-
+```{info, title = "Note", collapsible = FALSE}
+Numerical methods are only accurate up to a specified precision or **tolerance**. This is fundamentally limited by the precision with which real numbers can be represented on a computer (that naturally works with integer or binary numbers). `.Machine$double.xmin` is the smallest number (or difference between two numbers) that can be stored in a given version of R. This value may change between versions and on different computer platforms (Windows, Mac OS, Linux...)
 ```
 
 ```{task}
-
 Use the auxiliary functions of the incidence package and these new functions you have just written to estimate $R_{0}$ for the exemplar outfluenza and biggles outbreaks. (Remember the school size for all of these outbreaks was 1300 children.)
-
 ```
 
 ```{solution}
@@ -200,8 +200,7 @@ R0final(incidence(biggles$x)$n/1300)
 
 ```
 
-
-## Regression Method
+## Regression method
 
 In the lectures we discussed how the early phase of an epidemic can be approximately modelled by an exponential growth model:
 
@@ -217,9 +216,9 @@ where the exponential rate can be related to $R_{0}$ with the functional form de
 log(I(t)) = \Lambda t + log(I(0))
 \end{equation}
 
-with y-intercept given by the constant $log(I(0)$ and slope $\Lambda$. So, we canp therefore obtain a first approximation to $R_{0}$ simply by estimating the slope of the (logged) epidemic curve.
+with y-intercept given by the constant $log(I(0)$ and slope $\Lambda$. So, we can therefore obtain a first approximation to $R_{0}$ simply by estimating the slope of the (logged) epidemic curve.
 
-In principle, estimating $R_{0}$ using this method could be as straightforward as plotting the incidence or cumulative incidence curve on logarithmic graph paper and fitting a “best-fit” line, or using the Solver in Excel. We can be a little more sophisticated and use the linear regression model (`lm`) function in R. `lm()` uses a least squares method, effectively optimising the fit of the straight line to minimise the squared error between the line and the data.
+In principle, estimating $R_{0}$ using this method could be as straightforward as plotting the incidence or cumulative incidence curve on logarithmic graph paper and fitting a "best-fit" line, or using the Solver in Excel. We can be a little more sophisticated and use the linear regression model (`lm`) function in R. `lm()` uses a least squares method, effectively optimising the fit of the straight line to minimise the squared error between the line and the data.
 
 As the exponential approximation is only valid early in the epidemic, including data from the full epidemic curve would bias our estimate of $R_{0}$. As discussed in the lecture we will use the first 100 cases. For a given simulation we need to select all the data-points up to the 100^{th} case. We can achieve this by sub setting the incidence object as before:
 
@@ -231,14 +230,11 @@ We fit a linear model (best straight line fit) to find the slope of the log cumu
 
 ```{r}
 # Fit straight line to plot of biggles$t (time) and log of the cumulative cases (C)
-
 outflu1.fit = lm(log(1+counts) ~ dates, data=outflu1.sub)
 ```
 
 ```{info, title = "Note:", collapsible = FALSE}
-
 We add 1 to counts to handle any zero cases (this should not affect the estimated slope).
-
 ```
 
 We can see the result of the regression by using the `summary` function:
@@ -248,15 +244,11 @@ summary(outflu1.fit)
 ```
 
 ```{task}
-
 The `summary()` function provides a lot of detailed information on the statistical fit of the regression line – for the purpose of estimating $R_{0}$ the key value is the estimated slope highlighted in bold above. Using the expression for the SIR model presented in the lectures calculate the $R_{0}$ of outfluenza using this slope:
-
 ```
 
 ```{solution}
-
 $R_{0} = 1 + 0.335*5 = 2.67$
-
 ```
 
 We can estimate the uncertainty in our estimate of $R_{0}$ from the uncertainty in our estimate of the slope from the linear regression. The R function `confint()` will calculate 95% confidence intervals for our regression model:
@@ -266,35 +258,26 @@ confint(outflu1.fit)
 ```
 
 ```{task}
-
 Use these confidence intervals to calculate a 95% confidence interval for your estimate of $R_{0}$.
-
 ```
 
 ```{solution}
-
 $R_{0} = 2.67$ (95% CI, 2.1 - 3.1)
-
 ```
 
-The incidence package has built in functions that simplify estimating the exponential growth rate. The base function is `fit` returns an `incidence_fit` object which returns details of the fit including the estimated exponential growth rate r and the confidence interval:
+The incidence package has built in functions that simplify estimating the exponential growth rate. The base function is `fit` returns an `incidence_fit` object which returns details of the fit including the estimated exponential growth rate $r$ and the confidence interval:
 
 ```{r, warning = FALSE, message = FALSE}
 outflu1.fit2 <- fit(outfluenza1.i)
-
 outflu1.fit2
 ```
 
-```{task}
-
+```{task, title = "Question"}
 Why does `fit` ignore dates with 0 incidence?
-
 ```
 
-```{solution}
-
-We are fitting a log-linear relationship and $log(0)$ is undefined.
-
+```{solution, title = "Answer"}
+We are fitting a log-linear relationship and $\log(0)$ is undefined.
 ```
 
 The estimated $r$ is much lower than we obtained by our manual estimate. To see what has happened we can add the obtained fit to a plot of the incidence:
@@ -313,29 +296,23 @@ outflu1.fit3 = fit(outflu1.sub)
 plot(outflu1.sub,fit=outflu1.fit3)
 ```
 
-```{task}
-
-How do the estimates from the incidence package and our manual estimate compare to each other and why (what’s different)?
-
+```{task, title = "Question"}
+How do the estimates from the incidence package and our manual estimate compare to each other and why (what's different)?
 ```
 
-```{solution}
-
+```{solution, title = "Answer"}
 `outflu1.fit2` is clearly a poor fit to the exponential growth rate as we have not subsetted the data to the exponential phase. The point estimates from the incidence package and our manual estimate are pretty comparable, however the confidence intervals from our manual estimate are smaller (0.2-0.4 compared to 0.2-0.5) reflecting the effective **smoothing** we applied to the data by using the cumulative case counts instead of raw incidence. We could similarly smooth the time series by increasing the time interval to sum up incidence - this runs the risk of introducing **artifacts** to the data or giving us false confidence in our estimates.
-
 ```
 
-The incidence package provides a method for automatically sub setting the data by finding the optimum fit of two log-linear models (minimising the squared error of both):
+The `incidence` package provides a method for automatically sub setting the data by finding the optimum fit of two log-linear models (minimising the squared error of both):
 
 ```{r, warning = FALSE, message = FALSE, fig.width = 7}
 outflu1.fit5 = fit_optim_split(outfluenza1.i)
 plot(outfluenza1.i,fit=outflu1.fit5$fit)
 ```
 
-```{info, title = "Note:", collapsible = FALSE}
-
+```{info, title = "Note", collapsible = FALSE}
 The output of `fit_optim_split` now continues information on the two log-linear model fits, the first for the attack of the epidemic, the second describing the decay after the epidemic peak (which is also estimated as the **changepoint** between the two models).
-
 ```
 
 Examine the output by entering into the R console:
@@ -344,16 +321,15 @@ Examine the output by entering into the R console:
 outflu1.fit5
 ```
 
-Which should also generate a plot of the mean r squared error (R2) of the two log-linear models against different dates for the changepoint:
+Which should also generate a plot of the mean r-squared error ($R^2$) of the two log-linear models against different dates for the changepoint:
 
 ```{r, echo = FALSE, results='hide', fig.keep='all', fig.width = 7}
 outflu1.fit5
 ```
 
+## RECON `earlyR` method
 
-## RECON earlyR method
-
-Finally we will use the earlyR package implementation of the Tuenis and Wallinga method to estimate $R_{0}$ and compare to the other methods. The key function of the earlyR package is the `get_R` function that returns an estimate of $R_{0}$ when passed an incidence object and a serial interval distribution. The serial interval can be specified manually, but we will use the default gamma distribution which is parameterised by the mean (`si_mean`) and standard deviation (`si_sd`). For outfluenza, the serial interval distribution is exponentially distributed with mean equal to the variance (si_mean $= 5$, si_sd $= 5$).
+Finally we will use the `earlyR` package implementation of the Teunis and Wallinga method to estimate $R_{0}$ and compare to the other methods. The key function of the `earlyR` package is the `get_R` function that returns an estimate of $R_{0}$ when passed an incidence object and a serial interval distribution. The serial interval can be specified manually, but we will use the default gamma distribution which is parameterised by the mean (`si_mean`) and standard deviation (`si_sd`). For outfluenza, the serial interval distribution is exponentially distributed with mean equal to the variance (`si_mean = 5`, `si_sd = 5`).
 
 ```{r, warning = FALSE, message = FALSE}
 library(earlyR)
@@ -361,19 +337,18 @@ estR = get_R(outfluenza1.i,si_mean=5,si_sd=5)
 estR
 ```
 
-Once again we have obtained a much lower estimate of $R (R_{0}=1.0)$ than expected as the earlyR method is only valid during the exponential phase of the epidemic. If we subset again using the first 100 cases you should obtain a more consistent estimate of $R_{0}$ of 2.43.
+Once again we have obtained a much lower estimate of $R$ ($R_{0} = 1.0$) than expected as the `earlyR` method is only valid during the exponential phase of the epidemic. If we subset again using the first 100 cases you should obtain a more consistent estimate of $R_{0}$ of 2.43.
 
 We can calculated a boostrapped 95% confidence interval for the estimate using the `sample_R` function:
 
 ```{r}
-quantile(sample_R(estR),c(0.025,0.975))
+quantile(sample_R(estR), c(0.025, 0.975))
 ```
 
-So our earlyR estimate of $R_{0} = 2.43$ (2.0-3.0, 95% CI).
+So our `earlyR` estimate of $R_{0} = 2.43$ (2.0--3.0, 95% CI).
 
 ```{task}
-
-Now we have introduced all of the methods, let’s compare the estimates (and confidence intervals where possible) of $R_{0}$ for our three exemplar outbreaks. Complete the following table by adapted the code you have used in the practical.
+Now we have introduced all of the methods, let's compare the estimates (and confidence intervals where possible) of $R_{0}$ for our three exemplar outbreaks. Complete the following table by adapting the code you have used in the practical.
 
 Remember that for Outfluenza the mean serial interval is 5 days (standard deviation 5 days). For Biggles the latent period is 5 days, the exposed period is 5 days. As discussed in lectures, adding two exponentially distributed variables together gives a gamma distributed variable. So the serial interval for Biggles will be gamma distributed with a scale parameter of 10 days and a shape parameter of 2, giving a mean serial interval of 10 and standard deviation of $5\sqrt{2}$. *(Ask your instructor for more details if interested!)*
 
@@ -386,22 +361,18 @@ Remember that for Outfluenza the mean serial interval is 5 days (standard deviat
 ```
 
 ```{task}
-
 Compare your estimates from the three methods of estimation. Are you surprised by the variability in estimates of $R_{0}$ that you have obtained compared to the size of the 95% confidence intervals of the estimates?
-
 ```
 
 ```{solution}
-
 The confidence intervals from our regression model capture the variability (scatter) in the model output around the best-fit line for this particular realisation of the epidemic model. Stochastic effects will generate far greater variability between realisations, which our linear model contains no information about. The uncertainty in the estimate of the slope will therefore typically underestimate the true variability in the epidemic model. The Likelihood function for the earlyR method includes more information on the variability of the serial interval derived from an epidemic model and better represents the true **uncertainty** in our estimates.
-
 ```
 
 ## Appendix
 
 You might be interested now in explore how well the final size and regression estimators perform on different stochastic replicates of the SIR or SEIR models.
 
-“SIRmodels.R” and “SEIRmodels.R” provide functions to allow you to generate your own simulated epidemics of Biggles and Outfluenza.
+`SIRmodels.R` and `SEIRmodels.R` files provide functions to allow you to generate your own simulated epidemics of Biggles and Outfluenza.
 
 To load the functions into the R workspace using the following R code:
 
@@ -419,47 +390,50 @@ source('Materials/BYOM/Data/SEIRmodels.R')
 N = 1300
 ```
 
+`SIRmodels.R` provides two familiar functions:
 
-“SIRmodels.R” provides two familiar functions:
+* `DetSIR.dyn`
 
+    Uses the internal R function `lsoda()` to numerically solve the **deterministic** SIR model given 5 parameters:
+    
+    * `N`: Population size
+    * `I0`: Initial infected
+    * `B`: transmission rate
+    * `M`: "recovery" rate = $1/T_{I}$ corresponding to average infectious period of $T_{I}$
+    * `f_time`: run time for numerical solution
 
-`DetSIR.dyn`
+* `create.StocSIR` defines an stochastic SIR model to use with the SimInf package and takes 6 arguments:
+    
+    * `N`: Population size
+    * `I0`: Initial infected
+    * `beta`: transmission rate
+    * `m`: "recovery" rate = $1/T_{I}$ corresponding to average infectious period of $T_{I}$
+    * `f_time`: run time for numerical solution
+    * `reps`: number of replicates to simulate
 
-Uses the internal R function `lsoda()` to numerically solve the **deterministic** SIR model given 5 parameters:
-
-- N: Population size
-- I0: Initial infected
-- B: transmission rate
-- M: “recovery” rate = $1/T_{I}$ corresponding to average infectious period of $T_{I}$
-- f_time: run time for numerical solution
-
-`create.StocSIR` defines an stochastic SIR model to use with the SimInf package and takes 6 arguments:
-
-- N: Population size
-- I0: Initial infected
-- beta: transmission rate
-- m: “recovery” rate = $1/T_{I}$ corresponding to average infectious period of $T_{I}$
-- f_time: run time for numerical solution
-- reps: number of replicates to simulate
-
-
-“SEIRmodels.R” provides equivalent functions `DetSEIR.dyn` and `StocSEIR.dyn` that implement the deterministic and stochastic SEIR epidemic model respectively.
+`SEIRmodels.R` provides equivalent functions `DetSEIR.dyn` and `StocSEIR.dyn` that implement the deterministic and stochastic SEIR epidemic model respectively.
 
 Both of these functions implementing the SEIR model take 7 parameters in the order that follows:
 
-- N: Population size
-- I0: Initial infected
-- E0: Initial exposed
-- B: transmission rate
-- G: “progression” rate = $1/T_{E}$, with average exposed period of $T_{E}$
-- M: “recovery” rate = $1/T_{I}$ corresponding to average infectious period of $T_{I}$
-- f_time: run time for numerical solution
+* `N`: Population size
+* `I0`: Initial infected
+* `E0`: Initial exposed
+* `B`: transmission rate
+* `G`: "progression" rate = $1/T_{E}$, with average exposed period of $T_{E}$
+* `M`: "recovery" rate = $1/T_{I}$ corresponding to average infectious period of $T_{I}$
+* `f_time`: run time for numerical solution
 
 The deterministic equations for the SEIR are then:
 
-$$\begin{aligned} \frac{dS}{dt} &= -\frac{\beta SI}{N} \\ \frac{dE}{dt} &= \frac{\beta SI}{N} - gE \\ \frac{dI}{dt} &= gE -mI \\ \frac{dR}{dt} &= mI \end{aligned}$$
+$$
+    \begin{aligned} \frac{dS}{dt} &= -\frac{\beta SI}{N} \\ 
+        \frac{dE}{dt} &= \frac{\beta SI}{N} - gE \\ 
+        \frac{dI}{dt} &= gE -mI \\ 
+        \frac{dR}{dt} &= mI 
+    \end{aligned}
+$$
 
-You can check this new code for the deterministic SEIR model by simulating an epidemic using the Biggles parameters from the lecture and comparing to the figures in the lecture notes:
+You can check this new code for the deterministic $SEIR$ model by simulating an epidemic using the Biggles parameters from the lecture and comparing to the figures in the lecture notes:
 
 ```{r, fig.width = 7}
 # Biggles Examplar Epidemic
@@ -467,7 +441,7 @@ det.sol<-DetSEIR.dyn(1300, 1,0, 0.5, 1/5.0, 1.0/5.0, 150)
 matplot(det.sol[,1],det.sol[,2:5],type='l',xlab='Days',ylab='Population',lwd=2)
 ```
 
-Checking the stochastic model is more difficult as the output will be different every time we run it! As a first sanity check we can compare stochastic simulations to the deterministic epidemic, checking that they (roughly) scatter evenly around the “mean” behaviour:
+Checking the stochastic model is more difficult as the output will be different every time we run it! As a first sanity check we can compare stochastic simulations to the deterministic epidemic, checking that they (roughly) scatter evenly around the "mean" behaviour:
 
 ```{r, eval = FALSE}
 SEIRmodel <- create.StocSEIR(1300, 1, 0, 0.5, 1.0/5.0, 1/5.0, 150,1)
@@ -482,15 +456,10 @@ out <- run(model=SEIRmodel)
 plot(out)
 ```
 
-To simplify working with the incidence package we also provide a wrapper function `line_list()` that takes a SimInf object (out) as argument, along with a numeric value (node) and returns a line list of dates of cases for specified node:
+To simplify working with the incidence package we also provide a wrapper function `line_list()` that takes a `SimInf` object (out) as argument, along with a numeric value (node) and returns a line list of dates of cases for specified node:
 
 ```{r, eval = FALSE}
 SEIRmodel <- create.StocSEIR(1300, 1, 0, 0.5, 1.0/5.0, 1/5.0, 150,100)
 out <- run(model=SEIRmodel)
 line_list(out,1)
 ```
-
-
-
-
-

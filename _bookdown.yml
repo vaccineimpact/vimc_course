@@ -9,7 +9,10 @@ rmd_files:
         'Materials/Epidemic_models/Epidemic_models-P3.Rmd',
         'Materials/BYOM/Estimating_R0.Rmd',
         'Materials/BYOM/Measles.Rmd',
-        'Materials/BYOM/Influenza.Rmd'
+        'Materials/BYOM/Influenza.Rmd',
+        'Materials/Statistics/catalytic.Rmd',
+        'Materials/Statistics/bootPMCMC.Rmd',
+        'Materials/Statistics/references.Rmd'
     ]
     latex: [
         'index.Rmd', 
@@ -22,6 +25,9 @@ rmd_files:
         'Materials/BYOM/Estimating_R0.Rmd',
         'Materials/BYOM/Measles.Rmd',
         'Materials/BYOM/Influenza.Rmd',
+        'Materials/Statistics/catalytic.Rmd',
+        'Materials/Statistics/bootPMCMC.Rmd',
+        'Materials/Statistics/references.Rmd',
         'ch_appendix.Rmd'
     ]
     
