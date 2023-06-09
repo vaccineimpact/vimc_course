@@ -127,3 +127,5 @@ if(opts_knit$get("rmarkdown.pandoc.to") == "latex") {
 }
 cat(x)
 ```
+
+# References {-}
