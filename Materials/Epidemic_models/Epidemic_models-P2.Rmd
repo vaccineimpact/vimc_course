@@ -1,4 +1,4 @@
-# Epidemic models---P2
+# Epidemic models---Practical 2 {#epi2}
 
 ## Katy Gaythorpe ([k.gaythorpe@imperial.ac.uk](mailto:k.gaythorpe@imperial.ac.uk)) {.unlisted .unnumbered}
 
@@ -6,24 +6,20 @@
 
 We wish to calculate $R_{0}$ which is defined as the expected number of secondary infections per generation given one infected individuals is introduced to an entirely susceptible population.
 
-Mathematically, we examine our system equations for the *infectious compartments only* at **disease free equilibrium** and see how they *change** as each infectious variable changes.
+Mathematically, we examine our system equations for the *infectious compartments only* at **disease free equilibrium** and see how they **change** as each infectious variable changes.
 
 We divide this into two situations:
 
 * Transmission events where a new infectious variable is created eg. a susceptible person be-comes infected
-* Transition events where an infectious variable is lost eg. an infected person recovers.
+* Transition events where an infectious variable is lost e.g. an infected person recovers.
 
-SIR example:
+$SIR$ example:
 
-$$
-    \frac{dS}{dt} = \mu H - \beta SI - \mu S
-$$
-$$
-    \frac{dI}{dt} = \beta SI - \mu I - \gamma I
-$$
-$$
-    \frac{dR}{dt} = \gamma I - \mu R
-$$
+\begin{align}
+    \frac{dS}{dt} &= \mu H - \beta SI - \mu S\\
+    \frac{dI}{dt} &= \beta SI - \mu I - \gamma I\\
+    \frac{dR}{dt} &= \gamma I - \mu R.
+\end{align}
 
 We only have one infectious variable: $I$.
 
@@ -33,39 +29,20 @@ $$
     \frac{dI}{dt} = \beta SI - \mu I-\gamma I
 $$
 
-Next we wish to know how this equation varies as the infectious variable, $I$, varies.
-
-To do this we _____________________ with respect to $I$ to get:
-
 ```{task}
+We wish to know how this equation varies as the infectious variable, $I$, varies.
 
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
+To do this we _____________________ with respect to $I$. What do you get if you do this?
 ```
 
+```{solution, title = "SOLUTION NEEDED"}
+```
+
+**NEED SOLUTIONS TASK ETC. BELOW**
 
 We are interested in our system at disease free equilibrium, so wherever we see a variable, we replace it with its **equilibrium value**.
 
 At disease free equilibrium: $S^{*}=H$, $I^{*}=0$, $R^{*}=0$.
-
-```{task}
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-&nbsp;
-
-```
-
 
 Now we can divide our equation into **transmission** events and **transition** events.
 
@@ -83,7 +60,6 @@ Now we can divide our equation into **transmission** events and **transition** e
 
 ```
 
-
 **Transition terms:**
 
 ```{task}
@@ -97,7 +73,6 @@ Now we can divide our equation into **transmission** events and **transition** e
 &nbsp;
 
 ```
-
 
 Finally, $R_{0}$ is calculated by dividing the **Transmission** terms by (- **Transition** terms).
 
