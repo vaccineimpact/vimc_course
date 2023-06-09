@@ -27,7 +27,6 @@ rmd_files:
         'Materials/BYOM/Influenza.Rmd',
         'Materials/Statistics/catalytic.Rmd',
         'Materials/Statistics/bootPMCMC.Rmd',
-        'Materials/Statistics/references.Rmd',
         'ch_appendix.Rmd'
     ]
     

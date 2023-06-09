@@ -1,6 +1,6 @@
 # Programming---Practical 2
 
-## Nik Cunniffe ([njc1001@cam.ac.uk](mailto:njc1001@cam.ac.uk)) {.unlisted .unnumbered}
+## Matt Castle ([mdc31@cam.ac.uk](mailto:mdc31@cam.ac.uk)) {.unlisted .unnumbered}
 
 ## Random variables
 
