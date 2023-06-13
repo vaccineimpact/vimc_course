@@ -129,7 +129,7 @@ Final size methods for $R_{0}$ are in themselves a whole field of research. In t
 
 \begin{equation} 
     (\#eq:1)
-R_{0} = -\frac{ln(1-z_{f})}{z_{f}}
+R_{0} = -\frac{\ln(1-z_{f})}{z_{f}}
 \end{equation}
 
 where $z_{f}$ is the total fraction of the population infected at the end of an epidemic in a closed population.
