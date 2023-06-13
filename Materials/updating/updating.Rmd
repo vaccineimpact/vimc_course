@@ -205,8 +205,7 @@ Next we checkout the `main` branch, and then pull in the changes from `upstream`
 $ git checkout main
 
 Switched to branch 'main'
-Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
-  (use "git pull" to update your local branch)
+Your branch is up-to-date with 'origin/test'.
 ```
  
 ```{bash, eval = FALSE}
@@ -238,7 +237,7 @@ o https://github.com/USERNAME/vimc_course.git
  - [deleted]         testBranch
 ```
 
-**Note**: you can also delete branches this in GitHub itself if you prefer.
+**Note**: you can also delete branches in GitHub itself if you prefer.
 
 ```{bash, eval = FALSE}
 $ git push origin main
