@@ -1,6 +1,6 @@
 # VIMC Course Practicals
 
-For information on how to make changes to these practical notes see [https://github.com/vaccineimpact/vimc_course/Materials/updating/updating.pdf](https://github.com/vaccineimpact/vimc_course/Materials/updating/updating.pdf).
+For information on how to make changes to these practical notes see [https://github.com/vaccineimpact/vimc_course/blob/main/Materials/updating/updating.pdf](https://github.com/vaccineimpact/vimc_course/blob/main/Materials/updating/updating.pdf).
 
 The code provides a template for R practicals written using the [`bookdown`](https://bookdown.org/) package. The template provides some customised "Task" and "Solution" boxes (amongst other things). To see some examples on how to use this template, see the tutorial skeleton code linked below (or look at examples in the main code):
 
