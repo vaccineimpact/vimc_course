@@ -25,7 +25,7 @@ For the following steps, each lecturer should have their own personal GitHub acc
 
 1. Firstly, create a **fork** of the main repository into you own personal GitHub account.
 
-    To do this, migrate to the main page at [https://github.com/vaccineimpact/vimc_course](https://github.com/vaccineimpact/vimc_course), and then click on the ![](forkicon.png){height=11px} button as shown below:
+    To do this, navigate to the main page at [https://github.com/vaccineimpact/vimc_course](https://github.com/vaccineimpact/vimc_course), and then click on the ![](forkicon.png){height=11px} button as shown below:
     
     ```{r, echo = FALSE, out.width = "100%", fig.align = "center"}
     include_graphics("fork.png")
@@ -37,9 +37,9 @@ For the following steps, each lecturer should have their own personal GitHub acc
     include_graphics("forkyes.png")
     ```
     
-    Now you can migrate to your fork at e.g. `https://github.com/USERNAME/vimc_course`, where `USERNAME` is replaced by your personal GitHub user name.
+    Now you can navigate to your fork at e.g. `https://github.com/USERNAME/vimc_course`, where `USERNAME` is replaced by your personal GitHub user name.
     
-2. Now you can clone your forked repository to your local machine in the usual way e.g. in a terminal window (or Git Bash on Windows), migrate to the location where you want to store the repository, and then type e.g. (noting that the `$` just denotes that these commands should be typed into a `bash` terminal):
+2. Now you can clone your forked repository to your local machine in the usual way e.g. in a terminal window (or Git Bash on Windows), navigate to the location where you want to store the repository, and then type e.g. (noting that the `$` just denotes that these commands should be typed into a `bash` terminal):
     
     ```{bash, eval = FALSE}
     $ git clone https://github.com/USERNAME/vimc_course.git
@@ -49,7 +49,7 @@ For the following steps, each lecturer should have their own personal GitHub acc
     
 3. If you wish to make changes to the code and to share those changes to the main repository, then the best way to do this is to create a new branch, make changes to that branch, and then push those changes up to GitHub and create a [**Pull Request**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests). A simple example of this workflow is below.
 
-    To create a new branch, migrate to your local repository and type e.g.
+    To create a new branch, navigate to your local repository and type e.g.
     
     ```{bash, eval = FALSE}
     $ git checkout main
