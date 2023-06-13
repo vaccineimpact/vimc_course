@@ -8,11 +8,20 @@ urlcolor: blue
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
 ```
 
-The main repository for these course materials can be found at: [https://github.com/vaccineimpact/vimc_course](https://github.com/vaccineimpact/vimc_course). As is best practice, only the course administrators have write access to this central repository. Therefore, to make changes and updates, the following workflow is required.
+For ease-of-updating, to aid reproducibility and to keep all materials consistent in format, we have decided to use a specific template based on [bookdown](https://bookdown.org/). This has some custom features and personalisation for this course. 
 
-For the following steps, each lecturer should have their own personal GitHub account set up and be logged in. 
+The main repository for these course materials can be found at: [https://github.com/vaccineimpact/vimc_course](https://github.com/vaccineimpact/vimc_course). 
+
+You can clone or download the materials from this central repository, but as is best practice, only the course administrators have write access to this central repository. Therefore, to make changes and updates, the following workflow is required. Note that this requires some knowledge of Git procedures, such as **cloning**, **forking**, **pushing** and **pulling**. I have tried to detail the workflow below, but if anyone has any questions or anything is unclear, please just e-mail me.
+
+**Alternatively**, if you really aren't comfortable with Git, then please just download the current PDF version of the notes from: [https://vaccineimpact.github.io/vimc_course/_main.pdf](https://vaccineimpact.github.io/vimc_course/_main.pdf), annotate the PDF and then forward suggestions to me and I will update the notes for you.
+
+For information on how the template works, please see the `README.md` file in the main repository.
+
+For the following steps, each lecturer should have their own personal GitHub account set up and be logged in. Note that GitHub recently changed their access protocol, and so when pushing and pulling to a GitHub repo using HTTPS then you might require a Personal Access Token (PAT) to be set-up. Some information about this can be found at [https://happygitwithr.com/https-pat.html](https://happygitwithr.com/https-pat.html). Again, please let me know if you have any problems with this.
 
 1. Firstly, create a **fork** of the main repository into you own personal GitHub account.
 
@@ -205,8 +214,7 @@ Next we checkout the `main` branch, and then pull in the changes from `upstream`
 $ git checkout main
 
 Switched to branch 'main'
-Your branch is behind 'origin/main' by 1 commit, and can be fast-forwarded.
-  (use "git pull" to update your local branch)
+Your branch is up-to-date with 'origin/test'.
 ```
  
 ```{bash, eval = FALSE}
@@ -238,7 +246,7 @@ o https://github.com/USERNAME/vimc_course.git
  - [deleted]         testBranch
 ```
 
-**Note**: you can also delete branches this in GitHub itself if you prefer.
+**Note**: you can also delete branches in GitHub itself if you prefer.
 
 ```{bash, eval = FALSE}
 $ git push origin main
