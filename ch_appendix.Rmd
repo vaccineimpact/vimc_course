@@ -1,3 +1,7 @@
+# References {-}
+
+<div id="refs"></div>
+
 ```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- "\\begin{comment}"
 if(opts_knit$get("rmarkdown.pandoc.to") == "latex") {
@@ -17,7 +21,7 @@ cat(x)
 
 \newgeometry{margin=0.5in}
 
-# (PART) Appendix {-}
+# (APPENDIX) Appendix {-}
 
 ```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- ""
@@ -127,5 +131,3 @@ if(opts_knit$get("rmarkdown.pandoc.to") == "latex") {
 }
 cat(x)
 ```
-
-# References {-}
