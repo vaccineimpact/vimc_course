@@ -28,5 +28,41 @@ bibliography: ref.bib
 
 This file should contain written practicals for VIMC practicals.
 
+# Acknowledgements
+
+The materials, practicals and examples for this course were originally developed for the short course "Mathematical Models for Infectious Disease Dynamics" organised and run by the Wellcome Trust Advanced Courses Program between 2010-2020. A number of instructors, in addition to those involved in the current iteration, have contributed and adapted these materials over the years as the course has evolved. We would like to thank and acknowledge the contribution of all of these course alumni:
+
+Dr Olivier Restif [(Department of Veterinary Medicine, University of Cambridge)](https://www.vet.cam.ac.uk/directory/or226%40cam.ac.uk)
+
+Dr Andrew Conlan [(Department of Veterinary Medicine, University of Cambridge)](https://www.vet.cam.ac.uk/directory/ajkc2%40cam.ac.uk)
+
+Dr TJ McKinley [(Medical School, University of Exeter)](https://medicine.exeter.ac.uk/people/profile/index.php?web_id=TJ_McKinley)
+
+Dr Cerian Webb [(Department of Plant Sciences, University of Cambridge)](https://www.plantsci.cam.ac.uk/directory/cerian-webb)
+
+Dr Ken Eames (Church of England Research and Statistics unit)
+
+Dr Nik Cunniffe [(Department of Plant Sciences, University of Cambridge)](https://www.plantsci.cam.ac.uk/directory/cunniffe-nik)
+
+Dr Matt Castle [(Cambridge Centre for Data-Driven Discovery, University of Cambridge)](https://www.c2d3.cam.ac.uk/directory/2311/dr-matt-castle)
+
+Dr Ellen Brooks Pollock [(School of Social and Community Medicine, University of Bristol, UK)](https://www.bristol.ac.uk/people/person/Ellen-Brooks%20Pollock-9ffd9ff9-0949-49c4-97f7-bae51aa23d51/)
+
+Dr Leon Danon [(Department of Engineering Mathematics, University of Bristol)](https://www.bristol.ac.uk/people/person/Leon-Danon-fdeec554-b1a0-4e1a-aff4-b05bbccd443f/)
+
+Dr Katy Gaythorpe [(Faculty of Medicine, School of Public Health, Imperial College)](https://www.imperial.ac.uk/people/k.gaythorpe)
+
+Dr Roberto Sainz (Facultad de Ciencias, Universidad de Colima)
+
+Dr Joshua Ross [(School of Computer and Mathematical Sciences, University of Adelaide)](https://researchers.adelaide.edu.au/profile/joshua.ross)
+
+Dr Robin Thompson [(Mathematics Institute, University of Warwick)](https://warwick.ac.uk/fac/sci/maths/people/staff/thompson/)
+
+Dr Sophie Ip 
+
+Dr Johann von Kirchbach
+
+Dr James Cox 
+
 **REFERENCES AND BIBTEX FILE COULD BE ADDED.**
 
