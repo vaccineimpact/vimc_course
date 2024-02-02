@@ -3,6 +3,9 @@ title: "Updating the practicals"
 author: "TJ McKinley"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
+header-includes: 
+    - \usepackage{tcolorbox}
+    - \usepackage{hyperref}
 urlcolor: blue
 ---
 
@@ -19,19 +22,21 @@ You can clone or download the materials from this central repository, but as is 
 
 **Alternatively**, if you really aren't comfortable with Git, then please just download the current PDF version of the notes from: [https://vaccineimpact.github.io/vimc_course/_main.pdf](https://vaccineimpact.github.io/vimc_course/_main.pdf), annotate the PDF and then forward suggestions to me and I will update the notes for you.
 
-For information on how the template works, please see the `README.md` file in the main repository.
+\begin{tcolorbox}
+For information on how the template works, please see the \href{https://github.com/vaccineimpact/vimc_course}{\texttt{README.md}} file in the main repository.
+\end{tcolorbox}
 
 For the following steps, each lecturer should have their own personal GitHub account set up and be logged in. Note that GitHub recently changed their access protocol, and so when pushing and pulling to a GitHub repo using HTTPS then you might require a Personal Access Token (PAT) to be set-up. Some information about this can be found at [https://happygitwithr.com/https-pat.html](https://happygitwithr.com/https-pat.html). Again, please let me know if you have any problems with this.
 
 1. Firstly, create a **fork** of the main repository into you own personal GitHub account.
 
-    To do this, navigate to the main page at [https://github.com/vaccineimpact/vimc_course](https://github.com/vaccineimpact/vimc_course), and then click on the ![](forkicon.png){height=11px} button as shown below:
+    To do this, navigate to the main page at [https://github.com/vaccineimpact/vimc_course](https://github.com/vaccineimpact/vimc_course), and then click on the ![](forkicon.png){height=15px} button as shown below:
     
     ```{r, echo = FALSE, out.width = "100%", fig.align = "center"}
     include_graphics("fork.png")
     ```
     
-    This will take you to a confirmation screen where you can click ![](forkyesicon.png){height=11px}:
+    This will take you to a confirmation screen where you can click ![](forkyesicon.png){height=15px}:
     
     ```{r, echo = FALSE, out.width = "50%", fig.align = "center"}
     include_graphics("forkyes.png")
@@ -111,13 +116,13 @@ For the following steps, each lecturer should have their own personal GitHub acc
     branch 'testBranch' set up to track 'origin/testBranch'.
     ```
     
-    Once you have pushed these changes to your forked repository, then you can go to the GitHub page at `https://github.com/USERNAME/vimc_course` and then locate the ![](pushedicon.png){height=11px} icon:
+    Once you have pushed these changes to your forked repository, then you can go to the GitHub page at `https://github.com/USERNAME/vimc_course` and then locate the ![](pushedicon.png){height=15px} icon:
     
     ```{r, echo = FALSE, out.width = "80%", fig.align = "center"}
     include_graphics("pushed.png")
     ```
     
-    Clicking on this pulls up a summary of your current branches, from which you can select the ![](testBranchicon.png){height=11px} button:
+    Clicking on this pulls up a summary of your current branches, from which you can select the ![](testBranchicon.png){height=15px} button:
     
     ```{r, echo = FALSE, out.width = "80%", fig.align = "center"}
     include_graphics("testBranch.png")
@@ -129,7 +134,7 @@ For the following steps, each lecturer should have their own personal GitHub acc
     include_graphics("gubbins.png")
     ```
     
-    You can see here that the Pull Request (PR) wants to merge the `testBranch` on `USERNAME/vimc_course` with the `main` branch on `vaccineimpact/vimc_course`. You can write a message explaining what the request is doing, and once happy you can click the ![](gubbinsicon.png){height=11px} button to create the PR.
+    You can see here that the Pull Request (PR) wants to merge the `testBranch` on `USERNAME/vimc_course` with the `main` branch on `vaccineimpact/vimc_course`. You can write a message explaining what the request is doing, and once happy you can click the ![](gubbinsicon.png){height=15px} button to create the PR.
     
     This can then be checked by the course administrators, before the final decision is made about whether to merge your suggested changes into the main repository straight away, or the admin team can suggest further changes to be made before they will OK the PR. You should get e-mail reminders if any correspondance is requested on the PR, and you can view this at any time via GitHub via the Pull Requests tab:
     
