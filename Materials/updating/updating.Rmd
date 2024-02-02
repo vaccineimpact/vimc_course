@@ -16,6 +16,31 @@ library(knitr)
 
 For ease-of-updating, to aid reproducibility and to keep all materials consistent in format, we have decided to use a specific template based on [bookdown](https://bookdown.org/). This has some custom features and personalisation for this course. 
 
+You will need to install the `bookdown` package, and I would also recommend installing [TinyTeX](https://yihui.org/tinytex/). These can be installed in the usual way (note that `tinytex` is an R package, but TinyTeX is a LaTeX distribution which can be installed using the `tinytex` package as detailed below):
+
+```{r, eval = FALSE}
+## install bookdown
+install.packages("bookdown")
+
+## install the tinytex R package
+install.packages("tinytex")
+
+## now install the 
+tinytex::install_tinytex()
+## to uninstall TinyTeX, run tinytex::uninstall_tinytex()
+```
+
+TinyTeX is a light-weight TeX distribution, and if you come across any errors relating to e.g. missing `.sty` files when compiling, then you can search for the correct package and install it using `tinytex` as detailed below. For example, if you are missing the `times.sty` file, then you can search for which package it is in and then install that package using e.g. 
+
+```{r, eval = FALSE}
+library(tinytex)
+tlmgr_search('/listings.sty')   ## search for listings.sty
+tlmgr_install('listings')       ## install the listings package
+tlmgr_update()                  ## update TeX installation
+```
+
+Please see the Maintenance section at [https://yihui.org/tinytex/](https://yihui.org/tinytex/) or contact me if you have any issues. If you are using another type of LaTeX distribution (such as TeXlive or MikTeX), then you can install the missing packages in the usual way.
+
 The main repository for these course materials can be found at: [https://github.com/vaccineimpact/vimc_course](https://github.com/vaccineimpact/vimc_course). 
 
 You can clone or download the materials from this central repository, but as is best practice, only the course administrators have write access to this central repository. Therefore, to make changes and updates, the following workflow is required. Note that this requires some knowledge of Git procedures, such as **cloning**, **forking**, **pushing** and **pulling**. I have tried to detail the workflow below, but if anyone has any questions or anything is unclear, please just e-mail me.
@@ -24,6 +49,10 @@ You can clone or download the materials from this central repository, but as is 
 
 \begin{tcolorbox}
 For information on how the template works, please see the \href{https://github.com/vaccineimpact/vimc_course}{\texttt{README.md}} file in the main repository.
+\end{tcolorbox}
+
+\begin{tcolorbox}
+\textbf{Note:} any dependency R packages used in the notes will need to be installed. Since the notes can change over time I haven't added a compilation script for these, but the code should throw an error if packages are missing and tell you which ones you should install. Please let me know if you have any issues with installing any of the packages.
 \end{tcolorbox}
 
 For the following steps, each lecturer should have their own personal GitHub account set up and be logged in. Note that GitHub recently changed their access protocol, and so when pushing and pulling to a GitHub repo using HTTPS then you might require a Personal Access Token (PAT) to be set-up. Some information about this can be found at [https://happygitwithr.com/https-pat.html](https://happygitwithr.com/https-pat.html). Again, please let me know if you have any problems with this.
