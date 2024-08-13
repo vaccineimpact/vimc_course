@@ -1,0 +1,1228 @@
+# Fundamentals of R
+
+## Variables in R
+
+R makes use of symbolic variables, i.e. words or letters that can be used to represent or store other values or objects. We will use the assignment operator `<-` to 'assign' a value (or object) to a given word (or letter). Run the following commands to see how this works (don't worry about the comments, these are for your understanding):
+
+```{r}
+## assign to x the value 5
+x <- 5 
+
+## print the value assigned to the 
+## variable x to the screen
+x 
+
+## we can also assign text to a variable
+y <- "Hello There" 
+
+## print y
+y
+
+## we can re-assign variables
+y <- sqrt(10)
+
+## or assign a variable in terms 
+## of other variables
+ziggy <- x + y
+
+## print variable "ziggy"
+ziggy
+```
+
+You will notice that as we create each of these variables, they begin to appear in the **environment** pane in the top right-hand side of the RStudio window. This shows the current R **workspace**, which is a collection of objects that R stores in memory. We can remove objects from the workspace using the `rm()` function e.g.
+
+```{r}
+## remove the variables x and y
+rm(x, y)
+```
+
+Notice that `x` and `y` have now disappeared from the workspace. The variable `ziggy` still contains the correct answer though (these are not ***relative*** objects, such as the macros assigned in a program like Excel).
+
+```{r}
+ziggy
+```
+
+Another way of visualising the working directory is to use the `ls()` function, which lists all objects currently in the workspace e.g.
+
+```{r, eval = FALSE}
+ls()
+```
+
+```{r, echo = FALSE}
+ls()[ls() == "ziggy"]
+```
+
+```{info, title = "Note", collapsible = FALSE}
+Names of variables can be chosen quite freely in R. They can be built from letters, digits and other characters, such as `_`. They can't, however, start with a digit or a `.` followed by a digit. Names are **case sensitive** and so `height` is a different variable from `Height`. Try to choose **informative** variable names where possible (`height` is more informative than `x` when talking about heights for example).
+
+**Don't use spaces in variable names**. Underscores are much safer[^uscore]. Try to avoid using long words (since you will have to type them out each time you want to access the corresponding elements---although RStudio does have *autocomplete* functionality). Often I will try to convert as much to lower case as possible. If you do need to include multiple words try to use an underscore `_` (e.g. `child_heights`), or some people prefer to use something like [CamelCase](https://en.wikipedia.org/wiki/Camel_case) (e.g. `childHeights` or `ChildHeights`). Use whatever you prefer but try to be **consistent**.
+```
+
+[^uscore]: some people also use dots, e.g. `child.heights`, but in general I would avoid this, since dots are often used when working with functions of specific classes such as `print.lm()`
+
+## Functions in R
+
+Next we need to understand how to do more complicated things in R. For this we need functions. This section illustrates how R's inbuilt functions work. Most commands that are used in R require the use of functions. These are very similar to mathematical functions (such as `log(x)`), in that they require both the name of the function (i.e. `log`) and some **arguments** (i.e. `x`). However a lot of functions in R have multiple arguments which can be of completely different types.
+
+The format is that a function name is followed by a set of parentheses containing the arguments. For example, if we type `seq(0, 3, 0.5)`, the function name is `seq` and the specified arguments are `0`, `3` and `0.5`. `seq()` is an inbuilt R function that generates sequences of numbers, and we're going to continue to use it to illustrate how functions work. Try typing in the command:
+
+```{r}
+seq(0, 3, 0.5)
+```
+
+You can see that this function produces a sequence that starts at 0, ends at 3 and has steps of 0.5. Spaces before the parentheses or between the arguments are not important when writing functions so `seq(0,3,0.5)` will work just as well as `seq    (0,    3,    0.5)`. However, as stated [earlier](#legible), I think spaces in sensible places can make the code much more legible i.e. `seq(0, 3, 0.5)` is better than either of the previous options.
+
+All functions in R have **defaults** for the majority of their arguments (some functions have dozens of arguments, and having default values avoids you having to specify them all every time you use the function). For example, the `seq()` function has the following four main arguments (in this order):
+
+Argument | Description
+:----------------: | :--------------------------------------------------------------
+`from, to` | the starting and (maximal) end values of the sequence. Of length 1 unless just `from` is supplied as an unnamed argument.
+`by` | number: increment of the sequence.
+`length.out` | desired length of the sequence. A non-negative number, which for seq and seq.int will be rounded up if fractional.
+`along.with` | take the length from the length of this argument.
+
+When we write `seq(0, 3, 0.5)` R assumes that the first argument corresponds to `from`, the second argument corresponds to `to` and the third argument corresponds to `by`. This is known as **positional matching**. This means that `seq(0, 3, 0.5)` will produce a vector consisting of the sequence of numbers starting at 0, ending at 3 by adding 0.5 each time. If we write `seq(10, 0, 0.5)`, then R will attempt to create a sequence starting at 10, ending at 0 by adding 0.5 each time.
+
+```{task}
+Try typing `seq(10, 0, 0.5)`. R returns an error. Why?
+```
+
+```{solution}
+R returns an error because you've asked the `seq()` function to move from 10 to 0 by adding 0.5 each time, which it clearly can't do. The step size would have to be -0.5 in order to generate decreasing numbers.
+```
+
+The other type of matching is called **named matching** and this would allow you to write `seq(from = 0, to = 3, by = 0.5)` or `seq(to = 3, from = 0, by = 0.5)` as equivalent function commands (i.e. the **order** of the arguments **doesn't matter** if using *named* matching).
+
+Using named matching also allows us to access the other argument: `length.out` if we wanted to use it, though you should recognise that you cannot, in general, use all four arguments in this case to specify a vector. (Why not, do you think?)
+
+In fact, this command needs three arguments to work, and it doesn't matter which three of the four arguments you use. To find out what arguments a function can take and what they mean use the `?FUNCTION` syntax (where you replace `FUNCTION` with whichever function you're interested in e.g. `?seq` or `?atan`). This will open the internal R help file for the function. The **[Help](#help)** section  of these notes contains detailed information on these help files.
+
+Being able to access these internal help files will be of particular help for all of the statistical functions we will want to use which generally have many arguments.
+    
+```{task}
+Use the R function `seq()` to create the following sequences:
+
+1. 2, 4, 6, ..., 30.
+2. A sequence of 14 numbers starting at -2.5 and ending at 15.34.
+3. A sequence of 7 numbers starting at 0, increasing in increments of 0.04.
+4. A sequence starting at 101, ending at -20, in decrements of 11.
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## 1.
+seq(2, 30, by = 2)
+## 2.
+seq(-2.5, 15.34, length.out = 14)
+## 3.
+seq(0, by = 0.04, length.out = 7)
+## 4.
+seq(101, -20, by = -11)
+``
+
+```
+
+### Nesting functions {#nested}
+
+A useful feature of R is its ability to **nest** functions. This can help make the code more concise and avoids the need to create lots of temporary variables. Nonetheless, if used too extensively then this can render code difficult to interpret, so a balance is necessary. For example,
+
+```{r}
+exp(sqrt(10))
+```
+
+This is a simple nested function, since `sqrt(10)` produces a single number, which is then used as an argument to the `exp()` function. Mathematically, this gives $e^{\sqrt{10}}$. We could have also done this in two steps, but this would have involved creating a temporary variable to store the result of the sum:
+
+```{r}
+x <- sqrt(10)
+exp(x)
+```
+
+To understand nested functions, think about evaluating the **inner** functions first, seeing what they output and then how that slots into the next function. We will see more examples of this [later](#nestex).
+
+## Help files {#help}
+
+It is a requirement of R packages that any function made available to an end user as part of a package must be documented in a **help file**. As such, the `?` command is simply a way to get more information on any given function. 
+For example, if you wanted to know more about how to use the `hist` function (this function is used for plotting histograms), then you could type:
+
+```
+?hist
+```
+
+This will produce something like Figure \@ref(fig:histhelp) to appear in the in the bottom-right pane. 
+
+```{r, histhelp, echo = FALSE, fig.cap = "Help file for the `hist()` function", out.width = '60%'}
+include_graphics("Materials/Introduction/images/histhelp.png")
+```
+
+This new window contains all of the information you need to understand how to use the `hist()` function. Although these help files can seem daunting at first, once you get used to them they will provide the route for your continued exploration of R. Help files provide all of the details that the author of the command saw fit to include. They all aim to be comprehensive but some authors assume that you are more
+familiar with what's going on than others. Most help files will have the following sections:
+
+Table: (\#tab:helpfile) General structure of R helpfiles
+
+Section | Description
+:-----------: | :---------------------------------------------------------------
+Usage: | This will show you the minimum required arguments and also what the default value are for each of the optional arguments. In this case only `x` is a required argument and all of the others are optional.
+Arguments: | This gives an explanation of what each argument does and what sort of data type it should be. In this case the argument `x` needs to be a numerical vector.
+Details: | This section tells you what the function should do along with any subtleties in its usage or clarifications.
+Value: | This tells you what actually happens when you run the function and specifically what sort of R object the function produces. In this case it produces a special `histogram` object (which is actually just a normal list with certain specific components).
+References: | This gives you some selected text books that the author feels explains the theory behind the function in greater detail.
+See Also: | This should be a list of other R commands that are related to the current function. They might be of more use to you, or their help files might be better written and clarify what you're trying to do.
+Examples: | This should be a set of R commands that you can copy-and-paste into either a script file or the console pane. These should give you a practical example of how to use the function in several different settings.
+
+If you're really stuck, there is an international community of R users who regularly post questions and answers on advanced topics on sites like [StackOverFlow](https://stackoverflow.com/). I tend to succeed mostly by Googling the problem. For example, Googling 'R importing data' finds me this rather excellent tutorial: [http://www.r-tutor.com/r-introduction/data-frame/data-import](http://www.r-tutor.com/r-introduction/data-frame/data-import).
+
+## Objects in R
+
+R defines various types of object (and allows you to define your own if you so wish). We will explore the most common object types below.
+
+### Vectors
+
+**Vectors** are fundamental R objects. In fact, we have already seen them at work in earlier examples. For instance, notice that if we type the number `10` into the command prompt, the output when R prints this to the screen is prefixed with a `[1]`:
+
+```{r}
+10
+```
+
+This shows that the output is a **vector**. (The `[1]` in the output shows that the object is of one **dimension**. Confusingly, the `1` corresponds to the element of the vector that is first printed to the screen---so here `10` is element `1` of the vector. The fact that it has one dimension can be seen by the fact that there is only one number in the square brackets. A 2-dimensional object like a matrix, would have e.g. `[1, ]`, as we will see [later](#matrix).) If we had a long vector, e.g.
+
+```{r}
+seq(1, 100, by = 2)
+```
+
+then when we print to the screen the vector is split up, and we can see that the first element is `1`, and the twenty-sixth element is `51` etc.
+
+The `ziggy` variable we created earlier is also a vector of length 1:
+
+```{r}
+ziggy
+```
+
+Note that vectors do not have to be numerical in value e.g.
+
+```{r}
+"somewords"
+```
+
+is also a vector of length 1. R distinguishes between different 'types' of vector, with the four main types being:
+
+* `numeric` where each element is a number (either integer or decimal);
+* `character` where each element is a word or letter;
+* `factor` where each element is a word or letter, but with some additional "grouping" information;
+* `logical` where each element is either `TRUE` or `FALSE`.
+
+In this section we will look at several different commands which produce vectors and then see how we can manipulate these objects in R.
+
+#### Creating vectors
+
+Probably the most common ways of creating vectors are to use the `c()`, `seq()` and `:` commands. Of these, `:` creates integer sequences, `seq()` creates structured sequences (only useful for numeric vectors), and `c()` is short-hand for *concatenate*, and it binds together all of the elements that you put inside the brackets to make a single vector.
+
+Run the following commands to see how we can create different types of vectors:
+
+```{r, results = "hold"}
+1:5
+6:2
+```
+
+Notice that brackets can be important, for example, note the differences below.
+
+```{r, results = "hold"}
+-4:1
+-(4:1)
+```
+
+The first line above creates an integer sequence from -4 to 1, and the second creates one from -4 to -1. The `seq()` command we saw earlier, and here are some more examples:
+
+```{r, results = "hold"}
+seq(0, 1, by = 0.1)
+seq(0, 1, length = 6)
+seq(10, 5, by = -0.5)
+```
+
+The `c()` function is very useful for concatenating non-sequential numbers or vectors of other data types e.g.
+
+```{r, results = "hold"}
+c(1, 3, 5, 7)
+c(0.1, -6, 1, 0)
+c("bob", "sam", "ted")
+```
+
+```{info, title = "Note", collapsible = FALSE}
+Notice that we needed to use double-quotes to signify `character` types e.g. `c("bob", "sam", "ted")`. Note that R does not distinguish between single or double-quotes, so `c('bob', 'sam', 'ted')` would have worked equally well. 
+```
+
+If you forget the quotes (e.g. `c(bob, sam, ted)`) then R would instead have looked for three **objects** called `bob`, `sam` and `ted` and tried to concatenate these together. If these objects do not exist, then R will return an error:
+
+```{r, error = T}
+c(bob, sam, ted)
+```
+
+To this end, it is worth noting that we can also use `c()` to concatenate objects that are of the same type together. For example:
+
+```{r}
+c(1, -6, ziggy)
+```
+
+```{r}
+c(ziggy, seq(3, 6, length = 5))
+```
+
+(In the example above we have used [**nested**](#nested) functions to make the code more concise.) If we try to concatenate objects of a different type, R will either return an error, or it will convert one of the objects into the same class as the other. For example,
+
+```{r, error = T}
+c(c("bob", "sam", "ted"), ziggy)
+```
+
+(Here we use [**nested**](#nested) `c()` functions to first create a `character` vector out of the strings `"bob"`, `"sam"` and `"ted"`, and then to concatenate this with the object `ziggy`.) Notice that the concatenated vector is a `character` vector (notice the **double-quotes** around `"8.16227766016838"`), indicating that R has converted the elements of `ziggy` into `characters` in order to concatenate them with a `character` vector. 
+
+```{info, title = "Note", collapsible = FALSE}
+R will always convert to the most complex object type: so a combination of `character` and `numeric` values will be converted to a `character`.
+```
+
+Notice that R has not changed the value of the object `ziggy`---if we print `ziggy` to the screen we can see it is still a `numeric` vector:
+
+```{r}
+ziggy
+```
+
+Rather, it created a copy of `ziggy` which it converted into a `character` before concatenating. In order to change the value of an object permanently, we need to reassign the object. For example, the function `as.character()` will convert a `numeric` vector into a `character` vector without changing the object e.g.
+
+```{r}
+as.character(ziggy)
+ziggy
+```
+
+To reassign it we can pass the output of the function and overwrite the original object using the assignment operator `<-` e.g.
+
+```{r}
+ziggy <- as.character(ziggy)
+ziggy
+```
+
+We can see that now the object `ziggy` has been changed to a `character` permanently.
+
+You can also create "empty" vectors of specific lengths by using e.g. `numeric()`, `character()`, `logical()` functions. For example, to create an empty vectors of length 10 say, then you can use e.g.
+
+```{r}
+y <- numeric(10)
+y
+y <- character(10)
+y
+y <- logical(10)
+y
+```
+
+Note that these are not "empty" specifically, rather they have been filled with identical default values, however these are useful functions for creating objects that you can "fill-in" later on.
+
+```{task}
+Use the various vector creation commands to create the following sequences:
+
+1. 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11.
+2. 2, 4, 6, 8, 10, ... , 50.
+3. All of the odd numbers from 17 through to 33.
+4. The letters of the days of the week (i.e. M, T, W, T, F, S, S).
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## 1.
+1:11
+## 1. (alternative)
+seq(1, 11, by = 1)
+## 2.
+seq(2, 50, by = 2)
+## 3.
+seq(17, 33, by = 2)
+## 4.
+c("M", "T", "W", "T", "F", "S", "S")
+``
+
+```
+
+#### Subsetting and re-arranging vectors
+
+If we only want to get at certain elements of a vector then we need to be able to subset the vector. In R, square brackets `[]` are used to get subsets of a vector.
+
+```{info, title = "Important", collapsible = FALSE}
+In R, objects are **indexed** such that the **first** element is element `1` (unlike C or Python for example, which indexes relative to `0`). In R the first element of `x` is `x[1]`, whereas in Python it would be `x[0]`.
+
+Note also that in Python the command `x[-1]` would extract the **last** element of the vector `x`, whereas in R the `-` is used to **remove** elements; hence `x[-1]` would ***remove*** the **first** element of `x`.
+```
+
+```{task}
+Copy the following commands into your script file and then run them in order to see how this works. Annotate each line using comments to describe what it is doing.
+
+``
+x <- 1:5
+x[3]
+x[c(2, 3, 4)]
+x[1] <- 17
+x[-3]
+w <- x[-3]
+y <- c(1, 5, 2, 4, 7)
+y[-c(3, 5)]
+y[c(1, 4, 5)]
+i <- 1:3
+y[i]
+z <- c(9, 10, 11)
+y[i] <- z
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## generate a vector x of five elements from 1 to 5
+x <- 1:5
+
+## extract the third element of x
+x[3]
+
+## extract the 2, 3 and 4th elements of x
+x[c(2, 3, 4)]
+
+## change the first element of x to 17
+x[1] <- 17
+
+## extract all elements of x except the third
+x[-3]
+
+## extract all elements of x except the third
+## and save to new object w
+w <- x[-3]
+
+## create a vector of length 5 called y with
+## corresponding entries below
+y <- c(1, 5, 2, 4, 7)
+
+## extract all elements of y except the third
+## and fifth
+y[-c(3, 5)]
+
+## extract elements 1, 4 and 5 from y
+y[c(1, 4, 5)]
+
+## create a vector i containing three elements:
+## 1, 2 and 3
+i <- 1:3
+
+## extract elements 1, 2 and 3 from y
+y[i]
+
+## create a vector z of length 3 with elements
+## 9, 10 and 11
+z <- c(9, 10, 11)
+
+## replace elements 1, 2 and 3 in y with z
+y[i] <- z
+``
+
+```
+
+```{task}
+Can you work out what the following functions do?
+
+1. `order(y)`
+2. `rev(y)`
+3. `sort(y)`
+
+Can you work out a way to sort `y` into decreasing order?
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## 1. this sorts the vector y into increasing order.
+order(y)
+## 2. this reverses the order of y.
+rev(y)
+## 3. this sorts the vector y into increasing order.
+sort(y)
+
+## there are various ways to sort `y` into decreasing order e.g.
+sort(y, decreasing = TRUE)
+rev(sort(y))
+order(-y)
+``
+
+```
+
+#### Element-wise (or vectorised) operations {#vecrep} 
+
+R performs most operations on vectors **element-wise** , meaning that it performs each calculation on each element of a vector or array **independently** of the other elements. This can make for very fast manipulation of large data sets.
+
+```{info, title = "Aside", collapsible = FALSE}
+R is a **high-level** language, meaning that it is built on **low-level** languages, in this case C and Fortran. In C, if we wish to apply a function to each element of an array, we need to write a loop. In R there are so-called **vectorised** functions, that will apply a function to each element of a vector or array. We will cover loops in R later on, but generally they are much slower than the equivalent loops in C or Fortran. The source code for vectorised functions are often written in C or Fortran and hence run much faster than writing a loop in native R code. In addition they make the code more concise. For simple functions the difference in run time is often too small to really notice, but for more complex or large-scale functions the difference in run time can be large. To this end, R also offers various ways of using C code within R functions. But that is beyond the scope of this workshop...
+```
+
+```{task}
+Copy the following commands into your script file and then run them in order to see how this works. Annotate each line using comments to describe what it is doing.
+
+``
+y <- 1:10
+y^2
+log(y)
+exp(y)
+x <- c(5, 4, 3, 2, 1, 5, 4, 3, 2, 1)
+x + y
+x * y
+z <- c(-1, 2.2, 10)
+z + y
+z * y
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## creates a vector y containing entries
+## 1, 2,  ..., 10
+y <- 1:10
+
+## squares each entry of y
+y^2
+
+## takes the natural log of each entry of y
+log(y)
+
+## takes the anti-log of each entry of y
+exp(y)
+
+## creates a vector called x containing 
+## entries below
+x <- c(5, 4, 3, 2, 1, 5, 4, 3, 2, 1)
+
+## adds each element of x to its corresponding
+## element in y
+x + y
+
+## multiplies each element of x with its corresponding
+## element in y
+x * y
+
+## creates a vector of length 3 called z
+## with entries below
+z <- c(-1, 2.2, 10)
+
+## repeats z 4 times, and takes the first
+## 11 entries, which it then adds to
+## each corresponding entry of y
+z + y
+
+## repeats z 4 times, and takes the first
+## 11 entries, which it then multiplies with
+## each corresponding entry of y
+z * y
+``
+
+```
+
+If you add or multiply vectors of different lengths then R automatically repeats the smaller vector to make it bigger. This generates a warning if the length of the smaller vector is not a divisor of the length of the longer vector. Division and subtraction work in the same way e.g.
+
+```{r, error = TRUE}
+c(1:6) * c(1:2)
+c(1:3) * c(1:2)
+```
+
+This is a useful property if the shorter vector is of length 1, in which case R multiplies each element of the longer vector by the scalar e.g.
+
+```{r}
+c(1:3) * 2
+```
+
+```{info, title = "Important", collapsible = FALSE}
+You must be **very careful** with this. I only use this feature when multiplying a vector by a scalar; otherwise I will always generate vectors of the same length, since I think this makes explicit what you are trying to achieve. Hence instead of writing `c(1:6) * c(1:2)`, I would write `c(1:6) * rep(1:2, 3)`. (I personally would rather that R did not allow elementwise operations on vectors that are of different lengths, unless one of the lengths is one. However, it does, and so one should be careful...)
+```
+
+R will also perform **matrix multiplication** (e.g. dot products) on vectors, and this is described in a [later section](#matmult).
+
+#### Logical vectors and conditional subsetting {#logop}
+
+Vectors can be created according to logical criteria using the following comparison operators:
+
+Table: (\#tab:logop) Logical operators
+
+Operator | Definition
+:--------: | :----------------------
+`!=` | not equal 
+`<` | less than 
+`<=` | less than or equal to 
+`>` | greater than 
+`>=` | greater than or equal to 
+`==` | logical equals 
+`|` | logical OR
+`&` | logical AND
+`!` | logical NOT
+
+```{task}
+Copy the following commands into your script file and then run them in order to see how this works. Annotate each line using comments to describe what it is doing.
+
+``
+x <- 1:10
+y <- c(5, 4, 3, 2, 1, 5, 4, 3, 2, 1)
+x < 4
+x[x < 4]
+y[x < 4]
+y > 1 & y <= 4
+y[y > 1 & y <= 4]
+z <- y[y != 3]
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## create a vector x containing elements 1:10
+x <- 1:10
+
+## create a vector y containing the elements below
+y <- c(5, 4, 3, 2, 1, 5, 4, 3, 2, 1)
+
+## generate a logical vector where each
+## element denotes whether x is < 4 (TRUE)
+## or >= 4 (FALSE)
+x < 4
+
+## extracts all elements of x that are < 4
+x[x < 4]
+
+## extracts all elements of y where
+## x < 4
+y[x < 4]
+
+## creates a logical vector where elements are TRUE
+## if the element of y is > 1 AND <= 4, and FALSE
+## otherwise
+y > 1 & y <= 4
+
+## extracts all elements of y that are > 1 and
+## <= 4
+y[y > 1 & y <= 4]
+
+## extracts all elements of y that are not equal
+## to 3 and pass them into a new vector z
+z <- y[y != 3]
+``
+
+```
+
+Finally there are many commands that are specifically aimed at vectors or sets of data. The following is a small selection for reference purposes:
+
+Table: (\#tab:comfunc) Common R functions
+
+Function | Description
+:----------------:|:---------------------------------------------------------------
+`length(x)` | returns the length of vector `x` (i.e. the number of elements in `x`)
+`names(x)` | get or set names of `x` (i.e. we can give names to the individual elements of `x` as well as just having them numbered)
+`min(x)` | returns the smallest value in `x`
+`max(x)` | returns the largest value in `x`
+`median(x)` | returns the median of `x`
+`range(x)` | returns a vector with the smallest and largest values in `x`
+`sum(x)` | returns the sum of values in `x`
+`mean(x)` | returns the mean of values in `x`
+`sd(x)` | returns the standard deviation of `x`
+`var(x)` | returns the variance of `x`
+`diff(x)` | returns a vector with all of the differences between subsequent values of `x`. This vector is of length 1 less than the length of `x`
+`summary(x)` | returns different types of summary output depending on the type of variable stored in `x`
+
+```{hypertarget, label = "nestex"}
+```
+
+```{task}
+Now that we know about **elementwise** operations, try to understand the [nested](#nested) function `sum(sqrt(log(seq(1, 10, by = 0.5))))`. To help with this, try to write this out in a series of steps and figure out what is returned at each stage of the nesting, and how this is passed to the next function.
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## Here are the steps:
+
+## 1. First create a sequence of numbers
+## from 1 to 10 in increments of 0.5
+## returns a vector
+seq(1, 10, by = 0.5)
+
+## 2. take the natural log of each 
+## element of the vector - returns a vector
+log(seq(1, 10, by = 0.5))
+
+## 3. take the square root of each logged
+## element - returns a vector
+sqrt(log(seq(1, 10, by = 0.5)))
+
+## 4. sums all the elements of the
+## transformed vector - returns a single
+## number (a vector of length 1)
+sum(sqrt(log(seq(1, 10, by = 0.5))))
+``
+
+```
+
+
+#### Factors {#factor}
+
+We have seen that we can create `character` vectors. These are collections of strings, but with no further information. For example, if I try to summarise a character vector, R returns no useful information:
+
+```{r}
+x <- c("bob", "sam", "ted")
+summary(x)
+```
+
+A `factor` is simply a character vector with some additional "grouping" information attached. For example,
+
+
+```{r}
+x <- factor(c("bob", "sam", "ted"))
+x
+summary(x)
+```
+
+Now the `x` object has grouped together all elements of the vector that share the same name (called the `levels` of the factor), and the `summary()` function tells us how many entries there are for each level. The `levels()` function will return the levels of a factor:
+
+```{r}
+levels(x)
+```
+
+R coerces `characters` to `factors` in **[lexicographical order](https://en.wikipedia.org/wiki/Lexicographical_order)**. If you wish to set specific `levels`, then you can add a `levels` argument to the `factor()` function.
+
+```{task}
+Copy the following commands into your script file and then run them in order to see how this works. Annotate each line using comments to describe what it is doing.
+
+``
+y <- c(5, 4, 3, 2, 10, 5, 4, 3, 2, 1)
+factor(y)
+factor(y, levels = 1:10)
+y <- as.character(c(5, 4, 3, 2, 10, 5, 4, 3, 2, 1))
+factor(y)
+factor(y, levels = sort(unique(as.numeric(y))))
+y <- c("low", "mid", "mid", "high", "low")
+factor(y)
+factor(y, levels = c("low", "mid", "high"))
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## create a vector y containing the numbers below
+y <- c(5, 4, 3, 2, 10, 5, 4, 3, 2, 1)
+
+## visualise y as a factor
+factor(y)
+
+## visualise y as a factor but set the levels
+## this means some levels will have zero
+## entries
+factor(y, levels = 1:10)
+
+## create a character vector y containing the numbers
+## below coded a strings
+y <- as.character(c(5, 4, 3, 2, 10, 5, 4, 3, 2, 1))
+
+## visualise y as a factor - sorts levels 
+## lexicographically (hence 10 coded before 2 etc.)
+factor(y)
+
+## visualise y as a factor, but set levels that would
+## be equivalent to if y was numeric instead of
+## a character vector
+factor(y, levels = sort(unique(as.numeric(y))))
+
+## create a character vector y containing the strings below
+y <- c("low", "mid", "mid", "high", "low")
+
+## visualise y as a factor - sorts levels 
+## lexicographically (so alphabetically in this case)
+factor(y)
+
+## visualise y as a factor - sorts levels 
+## into a more sensible ordering
+factor(y, levels = c("low", "mid", "high"))
+``
+
+```
+
+`factor` objects are incredibly useful when working with data, since they essentially code up **categorical** variables, though care must be taken when manipulating them. We explore the use `factor` objects in more detail in a [later section](#data) and care must be taken when [converting](#convert) between factors and other types.
+
+### Conversions between object types {#convert}
+
+Before we progress to other objects, we should have a brief aside to talk about conversion between types. So far we have introduced `numeric` vectors, which store numerical values (note that R makes no distinction between `integer` or `double` types, like C or Python do). We have also seen `character` types, which store strings, and `factor` types that store strings with additional grouping information attached. We have also seen `logical` types, which simply store `TRUE` or `FALSE` values.
+
+It is possible to convert between these different forms, using an `as.TYPE()` function (where `TYPE` is replaced with the correct type of interest). For example, we can easily convert numbers to characters:
+
+```{r}
+x <- c(0, 1, 3, 10, 0, 4)
+x
+as.character(x)
+```
+
+(Notice the double-quotes around the elements of the converted vectors.) They can also easily be converted into factors (if you want to set the levels of the factor specifically, then you can use the `factor()` function as described [earlier](#factor)):
+
+```{r}
+factor(x)
+```
+
+We can also convert numbers to logical strings, in which case R converts `0` values to `FALSE` and anything else to `TRUE`. Hence,
+
+```{r}
+as.logical(x)
+```
+
+Conversions of `logical` vectors to `numeric` vectors results in `TRUE` values becoming `1` and `FALSE` values becoming `0`.
+
+R can also convert characters to numbers, but only if the conversion makes sense. For example,
+
+```{r}
+y <- c("10", "2", "8")
+y
+as.numeric(y)
+```
+
+If the conversion doesn't make sense, then R will return a **missing value** (`NA`) and print a warning:
+
+```{r}
+y <- c("10", "2", "bob")
+as.numeric(y)
+```
+
+```{hypertarget, label = "factconv"}
+```
+
+**Factors** are tricky little blighters! Superficially they can look like `numeric` types when printed to the screen, but in fact they are named **groups**, and as such if we convert a `factor` to a `numeric`, then R converts according to the **level** of the factor:
+
+```{r}
+y <- factor(c("10", "2", "8"))
+y
+as.numeric(y)
+```
+
+**Notice** that this returns `r as.numeric(y)` rather than `r as.numeric(as.character(y))`.
+
+If a `factor` holds a numerical value you wish to convert directly, then you must convert the factor to a `character` first (for which you can often use nested functions to do) e.g.
+
+```{r}
+y <- factor(c("10", "2", "8"))
+as.numeric(y)
+as.numeric(as.character(y))
+```
+
+Conversions to `character` types are straightforward in any case, using `as.character()`. Conversions of `characters` or `factors` to `logical` types will produce missing values (`NA`).
+
+### Matrices {#matrix}
+
+Matrices are another way of storing data in R. They can be thought of as 2D versions of vectors; a single structured group of numbers or words arranged in both rows and columns. Each element of the matrix is numbered according to the row and column it is in (starting from the top-left corner). The size of the matrix is given as two numbers which specify the number of rows and columns it has. The size is referred to as the **dimension** of the matrix.
+
+The simplest way of creating a matrix in R is to use the `matrix()` function.
+
+```{task}
+Copy the following commands into your script file and then run them in order to see how this works. Annotate each line using comments to describe what it is doing.
+
+``
+matrix(1:4, 2, 2)
+matrix(1:4, 2, 2, byrow = TRUE)
+matrix(0, 3, 4)
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## creates a (2 x 2) matrix with entries 
+## 1:4 placed down the columns first
+matrix(1:4, 2, 2)
+
+## creates a (2 x 2) matrix with entries
+## 1:4 placed across the rows first
+matrix(1:4, 2, 2, byrow = TRUE)
+
+## creates a (3 x 4) matrix filled with zeros
+matrix(0, 3, 4)
+``
+
+```
+
+Like vectors, matrices can also contain `character` values e.g.
+
+```{r}
+matrix(letters[1:9], 3, 3)
+```
+
+```{info, title = "Note", collapsible = FALSE}
+All elements of a `matrix` must be of the same type. You can have a `numeric` matrix, or a `character` matrix, but not a mixture. If you try to specify a mixture then R will convert all entries to the most complex type, which can lead to unexpected consequences unless you are careful!
+```
+
+#### Subsetting matrices
+
+Getting access to elements of a matrix follows on naturally from getting access to elements of a vector. In the case of a matrix though you must specify both the row and column of the element that you want, using the format `[ROW, COL]`.
+
+```{task}
+Copy the following commands into your script file and then run them in order to see how this works. Annotate each line using comments to describe what it is doing.
+
+``
+vals <- c(1, 2, 3, 4, 5, 0.5, 2, 6, 0, 1, 1, 0)
+mat <- matrix(vals, 4, 3)
+mat[2, 3]
+mat[1, ]
+mat[, 3]
+mat[-2, ]
+mat[c(1, 3), c(2, 3)]
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## create a vector vals and fill with values
+vals <- c(1, 2, 3, 4, 5, 0.5, 2, 6, 0, 1, 1, 0)
+
+## create a (4 x 3) matrix and fill with entries 
+## from vals, filling down the columns first
+mat <- matrix(vals, 4, 3)
+
+## extract the entry of mat in the 
+## 2nd row and 3rd column
+mat[2, 3]
+
+## extract the first row of mat
+mat[1, ]
+
+## extract the third column of mat
+mat[, 3]
+
+## extract all rows of mat except the second
+mat[-2, ]
+
+## extract entries in the first and third row,
+## and second and third column
+mat[c(1, 3), c(2, 3)]
+``
+
+```
+
+#### Creating matrices
+
+As well as using the `matrix()` function, we can also create matrices by binding together several vectors (or other matrices). We use two commands here: `cbind()` and `rbind()`.
+
+```{task}
+Copy the following commands into your script file and then run them in order to see how this works. Annotate each line using comments to describe what it is doing.
+
+``
+x1 <- 1:3
+x2 <- c(7, 5, 6)
+x3 <- c(12, 19, 25)
+cbind(x1, x2, x3)
+rbind(x1, x2, x3)
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## create a vector x1 containing the entries 1:3
+x1 <- 1:3
+
+## create a vector x2 containing the entries below
+x2 <- c(7, 5, 6)
+
+## create a vector x3 containing the entries below
+x3 <- c(12, 19, 25)
+
+## bind x1, x2 and x3 together as columns 
+## to form a (3 x 3) matrix
+cbind(x1, x2, x3)
+
+## bind x1, x2 and x3 together as rows
+## to form a (3 x 3) matrix
+rbind(x1, x2, x3)
+``
+
+```
+
+Some useful commands for matrices are listed in Table \@ref(tab:matfunc).
+
+Table: (\#tab:matfunc) Useful `matrix` commands in R
+
+Function | Example | Description
+:-------------|:----------------------------|:-----------------------------------------------
+`matrix()` | `matrix(0, 3, 4)` | Creates a $(3 \times 4)$ matrix filled with zeros 
+`dim()` | `dim(mat)` | 	Returns the dimensions of a matrix `mat` in the form (rows $\times$ columns)
+`t()` | `t(mat)` | Transpose a matrix `mat`
+`rownames()` | `rownames(mat)` | Returns or sets a vector of row names for a matrix `mat`		
+`colnames()` | `colnames(mat)` | Returns or sets a vector of column names for a matrix `mat`
+`cbind()` | `cbind(v1, v2)`	| Binds vectors or matrices together by column
+`rbind()` | `rbind(v1, v2)`	| Binds vectors or matrices together by row	
+
+#### Elementwise operations
+
+Elementwise operations also work similarly to vectors, though even more care must be taken when the vectors have different lengths.
+
+```{task}
+Copy the following commands into your script file and then run them in order to see how this works. Annotate each line using comments to describe what it is doing.
+
+``
+x <- matrix(1:9, 3, 3)
+x
+x * 2
+x * c(1:3)
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+## create a (3 x 3) matrix x containing
+## the numbers 1:9 down the columns
+x <- matrix(1:9, 3, 3)
+
+## print x to the screen
+x
+
+## mutliply each element of x by 2
+x * 2
+
+## multiply row 1 by 1, row 2 by 2 and row 3 by 3
+x * c(1:3)
+``
+
+```
+
+#### Matrix multiplication {#matmult}
+
+Another key aspect of matrix manipulation that is required for many algorithms is **matrix multiplication**. R does this by using the `%*%` syntax. Note the differences between **matrix multiplication** and **elementwise multiplication**:
+
+```{r}
+x <- matrix(1:9, 3, 3)
+
+## matrix multiplication
+x %*% x
+
+## elementwise multiplication
+x * x
+```
+
+Matrix multiplication also works with vectors. In this case the vector will be promoted to either a row or column matrix to make the two arguments conformable. If two vectors are of the same length, it will return the inner (or dot) product (as a matrix). Compare the following (taking note of the comments):
+
+```{r}
+## setup a vector of length 3 
+x <- 1:3
+
+## conduct elementwise multiplication
+x * x
+
+## return matrix multiplication of (1 x 3) and (3 x 1) matrix
+t(x) %*% x
+
+## matrix multiplication of (3 x 1) and (1 x 3) matrix
+x %*% t(x)
+
+## create new vector
+y <- 5:6
+
+## return matrix multiplication of (3 x 1) and (1 x 2) matrix
+x %*% t(y)
+
+## set up some new matrices
+x <- matrix(1:6, 3, 2)
+y <- matrix(1:8, 2, 4)
+
+## return matrix multiplication of (3 x 2) and (2 x 4) matrix
+x %*% y
+```
+
+### Lists {#lists}
+
+An R list is an object consisting of an ordered collection of objects known as its components (or elements). There is no particular need for the components to be of the same type (unlike vectors), and, for example, a list could consist of a numeric vector, a logical value, a matrix, a complex vector, a character array, and so on. 
+
+The following command creates a list object called `simpsons`, with four components: the first two are character strings, the third is an integer, and the fourth component is a numerical vector. Try creating a list as follows:
+
+```{r}
+simpsons <- list(
+    father = "Homer", 
+    mother = "Marge", 
+    no_children = 3, 
+    child_ages = c(10, 8, 1)
+)
+```
+
+The components of a list are always numbered and may always be referred to as such. Thus with `simpsons` above, its components may be individually referred to as `simpsons[[1]]`, `simpsons[[2]]`, `simpsons[[3]]` and `simpsons[[4]]`. Since `simpsons[[4]]` is a ***vector***, we can access the elements of the vector using the `[]` notation (i.e. `simpsons[[4]][1]` is its first element).
+
+The command `length(simpsons)` gives the number of components it has, in this case four.
+
+The components of lists may also be named (here the names are `father`, `mother`, `no_children` and `child_ages`) and in this case the component may be referred to either by giving the component name as a character string in place of the number in double square brackets i.e. `simpsons[["father"]]` (note the double-quotes), or, more conveniently, by giving an expression of the form `simpsons$father` (note no double-quotes, since `father` is an object contained within `simpsons`).
+
+This means that the following will all return the first component of the list `simpsons`:
+
+```{r}
+simpsons[[1]]
+simpsons[["father"]]
+simpsons$father
+```
+
+The command `names(simpsons)` will return a vector of the component names of the list `simpsons`:
+
+```{r}
+names(simpsons)
+```
+
+Note the strange double square bracket notation. We can also subset a list using single square brackets, though the returned object is different. For example, typing
+
+```{r}
+simpsons[1]
+is.list(simpsons[1])
+```
+
+returns a `list` object, of length 1, where the first element of the list is called `father` and is a `character` vector. Using double square brackets returns the `character` vector itself i.e.
+
+```{r}
+simpsons[[1]]
+is.list(simpsons[[1]])
+```
+
+Sometimes we might wish to extract certain components of a list, but keep a list structure, for example
+
+```{r}
+simpsons[c(1, 3)]
+```
+
+produces a `list` of length 2, containing two components: the first is a `character` vector called `father`, and the second is a `numeric` vector called `no_children`.
+
+Lists can be useful ways of collecting together a wide range of different bits of information that are all related. R naturally uses lists in a variety of situations but most commonly they are produced as a result of a function call. (In fact most custom classes in R are essentially lists, but with specific methods associated with that class e.g. `plot` or `summary` functions for example).
+
+### Data frames {#dataframes}
+
+A `data.frame` object is a special type of list where all of the components are in some sense the same size. The simplest form of `data.frame` consists of a list of vectors all of the same length, but not necessarily of the same type (`numeric`, `character` or `logical`). In this case a `data.frame` object may be regarded as a matrix with columns for each vector. It can be displayed in a matrix layout, and the data in its rows and columns extracted
+using the matrix subsetting notation (`[ROWS, COLS]`). (However, because it is also a special type of `list`, we can also extract columns by using the `DFNAME$COLNAME` notation, where `DFNAME` is the name of the `data.frame` of interest, and `COLNAME` is the name of a specific column. The `[[]]` notation also works for `data.frame` objects.)
+
+The important difference (to R at least) between a `matrix` object and a `data.frame` object that only contains `numeric` vectors, is that R thinks of the matrix as a single object, but it thinks of the `data.frame` as several connected, but distinct objects. (To the user it can be hard to distinguish between objects, and the commands `is.matrix()`, `is.list()` and `is.data.frame()` will return `TRUE` or `FALSE` depending on whether an object is a `matrix`, a `list` or `data.frame` respectively.)
+
+```{info, title = "Note", collapsible = FALSE}
+`data.frames` are very important for statistical analysis, as they frequently fit the form of available data. They are so important in fact that a lot of statistical functions actually expect this, and we devote entire later [sections](#advis) to reading, summarising, plotting and manipulating data.
+```
+
+## Reading in data
+
+Most data are stored in e.g. Excel files. Although some packages allow Excel files to be read directly into R, it is (in my opinion) much better practice to save the data as a **text file**, since this strips out unnecessary formatting and results in smaller file that can be universally used by any end user. Excel also has lots of other problems; see e.g. [here](https://nsaunders.wordpress.com/2016/08/25/data-corruption-using-excel-12-years-and-counting/) for various examples.
+
+```{info, title = "Aside", collapsible = FALSE}
+You can save Excel spreadsheets as comma-separated text files using e.g. *File > Save As > ...*, then from the 'Save as type' options choose 'CSV (comma separated)'. There is no need to add a suffix, because Excel will automatically add `.csv` to your file name.
+
+`.csv` files can be read into R directly as `data.frame` objects, using the `read.csv()` function.
+
+A `.csv` file is simply a text file where each element is separated by a comma (the delimiter). This can be easily viewed and manipulated in any text editor (such as Notepad). Many R users prefer to use 'Text – Tab delimited' data files. In this case each entry is delimited by a tab. In fact, one can use any delimiter one prefers, but I often prefer commas, which are so common they have their own suffix! If you choose the tab-delimited route, you have to be **extra careful** about spaces between words in your spreadsheet, and to read the data file into R you should use `read.table()` instead of `read.csv()` (where you can explicitly specify the delimiter as an argument to the function). This is similarly true if using `.csv` files: one must be careful not to include entries with commas in them.
+
+**Note**: `read.csv()` might fail if there are any spaces between words within data cells. If this happens, replace all these spaces by underscores `_` before saving the spreadsheet in Excel.
+```
+
+In fact, it is good practice to store your data in a much simpler way than many people are used to. Generally, try to avoid spaces between words at all in your data, even in column headers. Underscores are much safer. Try to avoid using long words (since you will have to type them out each time you want to access the corresponding elements), and often I will try to convert as much to lower case as possible (since R is case sensitive, so it speeds up your typing).
+
+### Example: sexual reproduction in fruitflies {#fruitflies}
+
+These are data from [Partridge and Farquhar (1981)](https://www.nature.com/articles/294580a0), when at the time the paper was published the cost of increased reproduction in terms of reduced longevity had been shown for female fruitflies, but not for males. The authors set up an experiment that used a factorial design to assess whether increased sexual activity affected the lifespan of male fruitflies.
+
+The flies used were an outbred stock. Sexual activity was manipulated by supplying individual males with one or eight receptive virgin females per day. The longevity of these males was compared with that of two control types. The first control consisted of two sets of individual males kept with one or eight newly inseminated females. Newly inseminated females will not usually remate for at least two days, and thus served as a control for any effect of competition with the male for food or space. The second control was a set of individual males kept with no females. There were 25 males in each of the five groups, which were treated identically in number of anaesthetisations (using $\mathrm{CO}_2$) and provision of fresh food medium.
+
+The data should have the following columns:
+
+* **partners**: number of companions (0, 1 or 8).
+* **partner type**: type of companion (inseminated female; virgin female; control (when 'partners = 0')).
+* **longevity**: lifespan, in days.
+* **thorax**: length of thorax, in mm.
+
+The file `r ifelse(!is_latex_output(), "[ff.csv](Materials/Introduction/uploadFiles/ff.csv)", "ff.csv")` contains the data from this experiment. Download this data set to your working directory. (You can view this file in a text editor if you so wish.) We can load this into R using the `read.csv()` function, here storing the resulting `data.frame` as an R object called `ff`:
+
+```{r, eval = FALSE}
+ff <- read.csv("ff.csv")
+```
+
+```{r, echo = FALSE}
+ff <- read.csv("Materials/Introduction/uploadFiles/ff.csv")
+```
+
+```{info, title = "Note", collapsible = FALSE}
+If R can't find the file, check it's in the working directory, or pass the full path to `read.csv()`.
+```
+
+```{r}
+head(ff)
+summary(ff)
+```
+
+Looking at the data we can see a number of things:
+
+* Since the original data had spaces in the column names, these spaces have been replaced by dots.
+* Columns that can be converted into numbers in sensible ways are stored as such (e.g. the `thorax` column). You can tell this because the `summary()` function returns numerical summaries.
+* Columns that can't be easily converted are stored as `character` columns (e.g. the `type` column). You can tell this because the `summary()` function returns no useful summaries for these columns except to say they are `character` columns[^charcols].
+
+[^charcols]: note that in versions of R before R 4.0.0 these columns would have been automatically converted to `factor` columns. Whilst this is often a useful thing to do, it is much better now that R does not do this automatically and instead forces you to do this explicitly in your code so that it is documented.
+
+These defaults can be useful sometimes for finding errors. For example, if a column of numbers contains a typo that prevents an entry from being converted to a number, then the whole column will be read in as a `character()`. Thus if you spot this you can often track down the typo and correct it. Please see the section on [converting between types](#convert) for further details on how to manually convert between types.
+
+```{info, title = "Important", collapsible = FALSE}
+It is a good idea to always check and read-in data to ensure each column is in the correct format before progressing any further with your analysis. A common error is that often categorical variables are coded as numbers. For example, a data set might contain numbers `0` or `1` to denote e.g. died/survived. In this case R will read the column in as a `numeric`, when it should be a `factor`. In this case you would want to manually convert your column to a `factor` before proceeding.
+```
+
+```{task}
+Convert the `partners` column of the `ff` data frame into a `factor`. Do the same for `partner.type`. Produce a summary on the revised `ff` object. [**Hint**: you can do this by overwriting the relevant columns in `ff`.] What do you notice about the summary?
+```
+
+```{solution}
+
+``{r}
+## convert columns to factors
+ff$partners <- factor(ff$partners)
+ff$partner.type <- factor(ff$partner.type)
+
+## produce summary
+summary(ff)
+``
+
+Notice that the summary now produces counts for each level of the relevant categorical variables.
+```
+
+Objects saved as an [`.rds` file](#save) can be read in and assigned to objects using the `readRDS()` function e.g.
+
+```{r, eval = FALSE}
+## save worms data frame as an .rds file
+saveRDS(ff, "ff.rds")
+
+## read in as a new object
+ff1 <- readRDS("ff.rds")
+```
+
+Here the new `ff1` object is identical to the original `ff` object. I often read in `.csv` files, clean them up into the correct formats, and then save as an `.rds` file for further analysis. Since the `.rds` file stores R objects directly, then reading in the `.rds` file means I don't have to do all the cleaning up again. For large data sets, the resulting `.rds` file can often be a much smaller file size than the original text file.
+
+Alternative approaches can be found in other packages, and indeed a good package is `readr`, which is part of the `tidyverse` suite of packages, which we will introduce in the [Advanced Visualisation](#advis) and [Data Wrangling](#wrangling) tutorials---see [here](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf) for a useful cheat sheet. Some other options can be found [here](http://www.r-tutor.com/r-introduction/data-frame/data-import).
+
+Once we have data read in as a `data.frame` object, we can do all sorts of useful things with them, so-much-so that most of the rest of the module will be built around using these objects. As a little example, consider the ease with which we can produce a mean thorax length for control flies with just a short piece of code:
+
+```{r}
+## calculate mean thorax length for control flies
+mean(ff$thorax[ff$partner.type == "Control"])
+```
+
+We will see many more complex examples in coming practicals.
+
+## Saving outputs {#save}
+
+R allows you to save various things, with regards to inputs we can save:
+
+* the full history of all commands used in the current session---via `savehistory()`. This creates text files with '.Rhistory' suffixes.
+* Individual script files (as text files with '.R' suffixes). We've already seen these.
+
+With regards to outputs we can save:
+
+* the current R workspace---via `save.image()`. This creates a **binary** file with a '.RData' suffix. This can be reloaded into R using the `load()` function, and includes all objects in the current workspace.
+* A selection of objects---via the `save()` function. Here we can extract subsets of objects and save them. For example, `save(x, y, file = "practical1.RData")` will save only the objects `x` and `y` into a file called "practical1.RData". Alternatively a character vector of objects can be supplied e.g. `save(list = c("x", "y"), file = "practical1.RData")` will do the same thing as the previous command.
+* A single object can be saved using `saveRDS()`. This saves into a binary file with a suffix '.rds'. This is really useful for saving single objects, often cleaned `data.frame` objects, which can be loaded into R without having to recreate from scratch again. For example, `saveRDS(x, "x.rds")` would save the `x` object into a file called "x.rds". This can be loaded into a new session via the `readRDS()` function. Another useful feature is that `readRDS()` can be used to pass the contents of a .rds file directly into an object of your choice e.g. `y <- readRDS("x.rds")` will create a new object called `y`, that contains the contents of the file "x.rds".
+

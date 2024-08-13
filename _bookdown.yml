@@ -1,6 +1,8 @@
 rmd_files:
     html: [
         'index.Rmd', 
+        'Materials/Introduction/Getting_started.Rmd',
+        'Materials/Introduction/Fundamentals.Rmd',
         'Materials/Programming/Programmingchp-P1.Rmd',
         'Materials/Programming/Programmingchp-P2.Rmd',
         'Materials/Dynamic_Models/Dynamic_models.Rmd',
@@ -16,6 +18,8 @@ rmd_files:
     ]
     latex: [
         'index.Rmd', 
+        'Materials/Introduction/Getting_started.Rmd',
+        'Materials/Introduction/Fundamentals.Rmd',
         'Materials/Programming/Programmingchp-P1.Rmd',
         'Materials/Programming/Programmingchp-P2.Rmd',
         'Materials/Dynamic_Models/Dynamic_models.Rmd',

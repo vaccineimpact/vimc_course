@@ -1,0 +1,306 @@
+# (PART) Introduction to R {-} 
+
+# Getting Started in R {#gettingstarted}
+
+```{hypertarget, label = "introinfo"}
+```
+
+R---available at [https://cran.r-project.org/](https://cran.r-project.org/)---is a comprehensive statistical programming language. It can be thought of as an open-source, freely available implementation of the [S](https://en.wikipedia.org/wiki/S_(programming_language)) language. R is an **interpreted language**, and so can be used interactively, without having to compile the code into an executable file. 
+
+Although R is a functional programming language in its own right, its popularity is in large part due to its fantastic capabilities as a statistical package. However, R is much more than that. R has amazing graphical capabilities; can integrate with other languages, such as C and Python; can use scripts and be run in batch mode; and can even be used to produce **reproducible** documents, presentations and interactive webpages. Even better than that, R is completely **free** and **open-source**! Professional editions of packages such as SAS, Stata, S-Plus or SPSS can cost hundreds of pounds. 
+
+To top it off, R is also **multi-platform**, and so can be used on Windows, Mac and Linux operating systems. R is supported by a wide user base, and is extended by a large number of additional packages, and even provides the capabilities to create your own. Whilst R provides its own development environment, we will use a fantastic IDE[^ide] provided by RStudio. This is free to download, provides some neat features, and crucially, operates the same way on all operating systems!
+
+[^ide]: Integrated Desktop Environment
+
+All of the instructions in this practical will assume that you are using RStudio.
+
+## Installing R and RStudio
+
+If you want to download R for your own computer, first go to [http://cran.r-project.org](http://cran.r-project.org), and follow the instructions in the box called 'Download and Install R'. **You only need to install the `base` package**. During installation, selecting the default options should be sufficient.
+
+Once you have installed R, you can install the **free desktop** version of RStudio from [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/). Again, selecting the default options during installation should be sufficient. University machines should have these pieces of software already installed, so just load RStudio and you're good-to-go!
+
+## What is R?
+
+R is an **object-orientated** programming language. This means that you create objects, and give them names. You can then **do things** to those objects: you can perform calculations, statistical tests, make tables or draw plots. Objects can be single numbers, characters, vectors of numbers, matrices, multi-dimensional arrays, lists containing different objects and so on. 
+
+## RStudio
+
+```{r, rstudio, fig.cap = "RStudio window", echo = FALSE, out.width = '60%'}
+include_graphics("Materials/Introduction/images/rstudio.png")
+```
+
+After loading, the RStudio window should look something like Figure \@ref(fig:rstudio). It consists of:
+
+* **Script pane** (top-left): this is essentially RStudio's built-in text editor. It has all the usual features one would expect: syntax highlighting, automatic indentation, bracket matching, line highlighting and numbering and so on. You can open any type of text file in here, not just R scripts. (You might have to go to *File > New File > R Script* to open a new R script if you don't have one already open.)
+* **Console pane** (bottom-left): This is where you run R commands and view outputs.
+* **Workspace/history pane** (top-right): this shows a list of all of the objects and variables that you create during a session or a history of all of the commands that have been sent to the command window during the session.
+* **Plot/help pane** (bottom-right): this shows any plots that you create or any help files that you access.
+
+You can alter the size of the various panes by clicking and dragging the grey bar in between each window to suit your needs. You can also change their arrangement by going to *Tools > Global Options*, and then selecting the *Pane Layout* option.
+
+### Cheat Sheets
+
+The helpful folks at RStudio also produce a series of excellent Cheat Sheets, available [here](https://www.rstudio.com/resources/cheatsheets/). Please note, these are updated semi-regularly as new packages are added or existing packages updated. Note also that these cheat sheets focus on the use of RStudio, and a subset of packages that are developed by the RStudio team (e.g. `tidyverse`, `shiny`, `rmarkdown`). For example, a nice Cheat Sheet for RStudio itself can be found [here](https://raw.githubusercontent.com/rstudio/cheatsheets/master/rstudio-ide.pdf).
+
+I will provide links to some of these cheat sheets as we progress through the practicals, but please note that they might change over time, and older versions exist online. They are a brilliant resource where applicable.
+
+## Setting up an R session {#setup}
+
+It is worthwhile getting into a workflow when using R. General guidelines I would suggest are:
+
+* Use a different folder for each new project / assignment. This helps to keep all data / script / output files in one self-contained place.
+* Set the **Working Directory** for R at the outset of each session to be the folder you've specified for the particular assignment you're working on. This can be done in RStudio by going to *Session > Set Working Directory > Choose Directory*. This sets the default search path to this folder.
+* Always use [**script files**](#script) to keep a record of your work, so that it can be reproduced at a later date.
+* **Additional**: I also initialise a [Git](#version-control) repository in each project folder (unless the project is very small). This is slightly more advanced, but is so useful that we'll devote a [whole section to this later on in the module](#version-control), but don't worry for the time being. Linking to an online repository such as [GitHub](https://github.com/) or [BitBucket](https://bitbucket.org/product) also provides a cloud-based backup service, as well as an ability to share code and collaborate. 
+
+We will explore the **console** and **script** panes below, dealing with the other panes as and when they arise.
+
+## Console Pane
+
+The console pane provides a direct interface with R, and looks similar to command line R (in Linux and Macs), and the console pane in R for Windows. You enter commands via the standard prompt `>`. For example, type the following into the console pane:
+
+```{r}
+10 + 5 * 3
+```
+
+You can see here that R has returned a value of `r 10 + 5 * 3`, illustrating one of R's key features: that it can be used as an overgrown calculator, simply by entering commands into the prompt. R supports lots of basic mathematical operators, such as those found in Table \@ref(tab:mathop).
+
+Table: (\#tab:mathop) Basic mathematical operators
+
+ Symbol    | Meaning 
+:--------: | :--------
+`+`    | addition 
+`-` | subtraction 
+`*` | multiplication 
+`/` | division 
+`^` | to the power 
+`%%` | the remainder of an integer division (modulo)
+`%/%` | integer division
+
+Meanwhile, Table \@ref(tab:mathfunc) has some other ones you might need. (**Note**: these are functions: just replace e.g. `x` with a number.)
+
+Table: (\#tab:mathfunc) Other useful mathematical functions
+
+Function 	|	           Meaning 
+:---------: | :----------------------------
+`log(x)` 	|	$\log_e(x)$ (or $\ln(x)$)
+`exp(x)` 	|	$e^x$ 
+`log(x, n)` 	|	$\log_n(x)$
+`log10(x)` 	|	$\log_{10}(x)$ 
+`sqrt(x)` 	|	$\sqrt{x}$ 
+`factorial(x)` 	|	$x!$ 
+`choose(n, x)` 	|	binomial coefficients: $\frac{n!}{x!(n - x)!}$
+`gamma(x)` 	|	$\Gamma\left(x\right)$ for continuous $x$ or $(x-1)!$ for integer $x$
+`lgamma(x)` 	|	natural log of $\Gamma\left(x\right)$ 
+`floor(x)` 	|	greatest integer $< x$
+`ceiling(x)` 	|	smallest integer $> x$
+`trunc(x)` 	|	closest integer to $x$ between $x$ and 0 \newline e.g. `trunc(1.5) = 1`, `trunc(-1.5) = -1` \newline `trunc` is like `floor` for positive values and like `ceiling` for negative values
+`round(x, digits = 0)` 	|	round the value of $x$ to an integer 
+`signif(x, digits = 6)` 	|	round $x$ to 6 significant figures 
+`cos(x)` 	|	cosine of $x$ in radians 
+`sin(x)`	|	sine of $x$ in radians 
+`tan(x)` 	|	tangent of $x$ in radians 
+`acos(x)`, `asin(x)`, `atan(x)` 	|	inverse trigonometric transformations of real or complex numbers
+`acosh(x)`, `asinh(x)`, `atanh(x)` 	|	inverse hyperbolic trigonometric transformations on real or complex numbers 
+`abs(x)` 	|	the absolute value of $x$, ignoring the minus sign if there is one 
+
+R retains a **history** of all the commands you have used in a particular session. You can scroll back through these using the up (&#x2191;) and down (&#x2193;) arrows whilst in the console pane. (You can even save the history---though we will discuss a *much* better option in the next section.)
+
+One important thing to note is that unlike a language like C, R does not require the semicolon (`;`) symbol to denote the end of each command. A carriage return is sufficient. A semicolon can be used to allow multiple commands to be written on the same line if required. For example, 
+
+```{r, results = "hold", tidy = FALSE}
+10 + 5 * 3; sin(10)
+```
+
+is equivalent to
+
+```{r, results="hold"}
+10 + 5 * 3
+sin(10)
+```
+
+One thing to note is that if a command is incomplete, then R will change the `>` prompt for a `+` prompt. For example, typing `10 + 5 *` into the console pane will result in the `+` prompt appearing, telling you that the previous line is incomplete i.e.
+
+```{r, prompt = TRUE, tidy = FALSE}
+10 + 5 *
+3
+```
+
+You must either complete the line or hit the `Esc` key to cancel the command. 
+
+## Script pane and R scripts {#script}
+
+The console window is the engine room of R, and one can interact directly with it. One key advantage to R is that it *records* all of the commands that you enter into the console (known as the command *history*). It is possible to save the command history, or run back through it using the arrow keys. However, a much better approach is to use the **script pane** to write an R script that contains all the commands necessary for a particular project. In fact, one might argue that this is probably one of the most important features of R relative to a point-and-click statistical package such as SPSS.
+
+Put simply, ***R scripts are just text files that contain commands to run in R***. They are **vitally important** for the following reasons:
+
+* They keep a systematic record of your analysis, which enables you to **reproduce** your work at a later date. Scripts can be passed to collaborators or other users to enable them to **replicate** your work.
+* This record means that you do not have to rely on your memory to figure out **what** you did.
+* R scripts allow you to **comment** your code, which means that you also won't forget **why** you did it.
+* In more advanced settings, R scripts can also be run in **batch** mode, which means that you can run scripts remotely on a server somewhere without having to be sat in front of a computer manually entering commands.
+* Although programs like SPSS allow **outputs** to be saved, R scripts contain **inputs**, which are much more useful, since it is easier to generate the outputs from the inputs than it is to reconstruct the likely inputs from the outputs.
+* In fact, R scripts can be combined with a markup language called 'markdown' to generate fully reproducible documents, containing both inputs and outputs. It does this using the fantastic [`knitr`](https://yihui.name/knitr/) and [`rmarkdown`](https://rmarkdown.rstudio.com/) packages. (In fact these notes were written using `rmarkdown` and a package called [`bookdown`](https://bookdown.org/yihui/bookdown/).)
+
+Some comments:
+
+* RStudio comes with its own text editor, but if you are not using RStudio, then there are plenty of others available. 
+* R is case-sensitive. If something doesn't work, it's often because you have failed to capitalise, or capitalised where you shouldn't have. **NEVER, EVER, EVER** use Word to edit your R scripts! Word often tries to correct your grammar and is an absolute nightmare for writing code. If you don't like RStudio's editor, then lots of lightweight and free text editors exist that you can use. By all means use Word for writing up the work (although we will see even better ways to do this in the later [Literate Programming](#litprog) section), but ***please***, ***NEVER*** use it for writing code!
+
+In RStudio, you can open a new script in R using: *File > New File > R Script*. 
+
+Type the following into the **script file**:
+
+```{r, eval = FALSE}
+## calculate the hypotenuse from a right-angled triangle
+## with the two other sides equal to 3 and 4
+sqrt(3^2 + 4^2)
+```
+
+Notice that nothing has happened. All you've done is write some commands into a text window. However, if you highlight these lines and then hit the `Run` button in the top right-hand corner of the script pane (or, in Windows certainly, press `Ctrl-Enter`), then RStudio runs these lines in the console pane. (Alternatively, you can manually copy-and-paste these lines into the console window.) This should return:
+
+```{r, echo = FALSE}
+sqrt(3^2 + 4^2)
+```
+
+```{info, title = "Note", collapsible = FALSE}
+Notice that the `#` symbol in the input code denotes a **comment**, such that any text after the `#` is ignored (up to the end of the current line). I have used a double hash here `##`, though this is simply because I've written this practical using [R Markdown](http://rmarkdown.rstudio.com/) (more on this later), and it seems to typeset better. This is not absolutely necessary though, since anything after the first `#` is ignored. 
+
+Comments are ***vital*** in code to ensure **reproducibility** and **readability**. You should ensure that all code is commented, so that both you and anyone else who wants to use your code is able to decipher it. Even if no one else is going to look at your code, it is still worthwhile to comment it. What seems obvious to you as you write a piece of code, often becomes confusing when you return to it in six months time and can't remember what you did or why you did it...
+```
+
+It is conventional to save R script files using the suffix '.R', though remember that they are simply **text files**, and can be viewed in any text editor. Make sure you have set up a folder to store the code for this practical in, and have changed the **working directory** to this folder (see the [setup](#setup) section), and then save this script file as something like `IntroToR.R`.
+
+```{info, title = "Important", collapsible = FALSE}
+Make sure you save your script file regularly to prevent data loss!
+```
+
+### Notes on legibility {#legible}
+
+**NOTE**: that I use spaces within the code to make it clearer. R does not require this, but again I think it is good practice to think about how to make your code legible. Different coders have different preferences, but personally I prefer `plot(Worm.density ~ Vegetation, data = worms)` over `plot(Worm.density~Vegetation,data=worms)`. As [Hadley Wickham](http://style.tidyverse.org/) says: "Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread."
+
+Note that different coders prefer different styles---there is no universal agreement. However, it's worth getting into the habit of writing your code neatly and with legibility in mind. A guide that is similar to my own is the `tidyverse` guide [here](http://style.tidyverse.org/). (Note that unlike e.g. Python, R does not require specific indentation. Instead it uses curly brackets to group lines of code together. However, indentation is still key for legibility.)
+
+I tend to use script files to keep a record of all commands that need to be reproduced, but I often enter commands directly into the console window when I'm testing or visualising things. Try to keep redundant code out of your script files. **In this module I expect you to use script files from the outset! Make sure the code is legible and commented.**
+
+## R packages {#packages}
+
+R has hundreds of add-on **packages** that provide functionality for a wide range of techniques. These repositories are growing all of the time; some packages become redundant and are removed, others are updated, some are superceded or incorporated into others, and completely new ones appear regularly. A key part of becoming proficient with R is learning how to install and update packages.
+
+```{info, title = "Note", collapsible = FALSE}
+R packages can be thought of in a similar way to Matlab toolboxes or Python libraries.
+```
+
+The principal R package repository can be found on [CRAN](https://cran.r-project.org/) (the Comprehensive R Archive Network). Another popular repository, predominantly aimed at bioinformatics packages, is [Bioconductor](https://www.bioconductor.org/), though installation of packages through Bioconductor is more difficult than through CRAN, so we will focus on the latter only here.
+
+Some packages are included as part of R's base package. To load a package, you can use the `library()` function, passing the name of the required package. For example, to load the `tidyr` package, type:
+
+```{r tidyr, eval = FALSE, cache = FALSE}
+library(tidyr)
+```
+
+If this doesn't return any error, then the package is loaded and you are now able to use any function in `tidyr` in your R code. R packages must contain help files and documentation in order to be included on CRAN. For example, the documentation for the `tidyr` package can be found [here](https://cran.r-project.org/web/packages/tidyr/), through the *Reference Manual* link, plus some vignettes through the *Vignettes* link.
+
+### Installing packages from CRAN
+
+If the package you want is not installed, then you will need to install it. To install a package that is hosted on CRAN, you can use the `install.packages()` function. For example, to install `tidyr` you can type:
+
+```{r, eval = FALSE}
+install.packages("tidyr")
+```
+
+This will ask that you select a mirror repository---choosing one close-to-home is a good idea. It might also ask you to set up a local R library in your user directory. This is a good idea, so I would just accept the default if it asks.
+
+If it installs without any errors, then you can load the library using `library(tidyr)` as above.
+
+```{info, title = "Note", collapsible = FALSE}
+You only have to install a package **once** (unless you update R). You have to **load** the library once during each **session**. I prefer to enter all my calls to `library()` at the top of my script file, so I can quickly see which packages are required for my script to run.
+```
+
+### Installing from a local file
+
+You can also install a package from a local ZIP file if required (though this is required much less often). For example, from the [CRAN](https://cran.r-project.org/) website, click on the *Packages* link, find the correct package and simply download a suitable Windows / Mac binary file as appropriate, or the 'Package Source' file (if you are on Linux, or if you have the appropriate compiler tools installed). See Figure \@ref(fig:tidyrsource) for an example of where these can be found for the `tidyr` package.
+
+Once you have downloaded one of these, you can install using:
+
+```{r, eval = FALSE}
+install.packages("PATH/TO/PACKAGENAME", repos = NULL)
+```
+
+where `PATH/TO/PACKAGENAME` is the path to the package source file (be careful to get the path in the correct format---Windows users might have to use `\` instead of `/`). The `repos = NULL` argument tells R to look for the file locally, and not online.
+
+```{r, tidyrsource, fig.cap = "Location of source / binary files for `tidyr`", echo = FALSE, out.width = '60%'}
+include_graphics("Materials/Introduction/images/tidyr.png")
+```
+
+### Installing archived versions of a package
+
+Sometimes R packages are not updated as quickly as R itself, and occasionally you might need to install an older version of a package. A really useful package is called [`devtools`](https://cran.r-project.org/web/packages/devtools/index.html). This provides functions to install R packages directly from CRAN archives, which can be found by going to [https://cran.r-project.org/](https://cran.r-project.org/), and clicking on the *Packages* link followed by the *Archived* link. This provides a list of older versions of a package, which can be installed using the `install_version()` function in `devtools` (as detailed below).
+
+For example, I once had an issue with a package called [`cowplot`](https://cran.r-project.org/web/packages/cowplot/), that didn't exist for my version of R, and returned the following error message (**don't run the code now**):
+
+```{r, eval = FALSE}
+install.packages("cowplot")
+```
+
+```
+Installing package into ‘/home/tj/R/x86_64-pc-linux-gnu-library/3.2’
+(as ‘lib’ is unspecified)
+Warning in install.packages :
+  package ‘cowplot’ is not available (for R version 3.2.3)
+```
+
+I solved this by finding an older version of the package on CRAN (by clicking on *Packages* then *Archived*):
+
+```{r, echo = FALSE, out.width = '60%'}
+include_graphics("Materials/Introduction/images/cowplot.png")
+```
+
+I noted the version number, and then used `install_version()` from the `devtools` package as follows (**don't run the code now**):
+
+```{r, eval = FALSE}
+library(devtools)
+install_version("cowplot", version = "0.6.3", repos = "https://cran.r-project.org/")
+```
+
+These can also be installed manually from source as in the previous section.
+
+### Installing development packages
+
+In order to upload a package to CRAN, the package must pass a series of tests. The versions you find on CRAN are the **stable** versions (i.e. they have passed these tests and work well with the current version of R). However, developers often keep the latest **development** version of their package on an online repository such as [GitHub](https://github.com/). Development packages usually contain the most up-to-date functions, but are likely to contain more bugs---use them at your own risk! In addition, some packages simply aren't available on CRAN---there is no requirement to add them to this repository. 
+
+For example, to install the development version of the `gganimate` package from GitHub, locate the source code on e.g. GitHub; in this case it can be found at [https://github.com/dgrtwo/gganimate](https://github.com/dgrtwo/gganimate). Then the package can be installed using `devtools` as follows (**don't run the code now**):
+
+```{r, eval = FALSE}
+install_github("dgrtwo/gganimate")
+```
+
+Note the syntax `DEVELOPER/PACKAGENAME`---this can be found from the address of the repository e.g. [https://github.com/dgrtwo/gganimate](https://github.com/dgrtwo/gganimate). For CRAN packages, the source code URL is usually listed on the package page. For example, Figure \@ref(fig:tidyrsource) shows that the GitHub page for `tidyr` is at [https://github.com/tidyverse/tidyr](https://github.com/tidyverse/tidyr).
+
+### Packages to install for this module
+
+On the university machines, all required packages have already been installed, but if you wish to use your own machines, then the packages you need to install for this module are listed below. Some are installed automatically by R, but have been listed here for completeness. (Please let me know if you come across any that aren't listed here.)
+
+`r ifelse(is_latex_output(), "\\newpage", "")`
+
+* `tidyverse`
+* `gapminder`
+* `patchwork`
+* `sf`
+* `gifski`
+* `av`
+* `plotly`
+
+Many of these packages depend on other packages, but R should install all dependencies automatically. `tidyverse` in particular will take a long time to install! 
+
+The following packages will also be needed, though in theory they should either be installed by default, or installed as one of the required dependencies for the packages above. They are listed here for completeness.
+
+* `knitr`
+* `rmarkdown`
+* `tinytex`
+* `datasets`
+* `readxl`
+* `lubridate`
+
+
