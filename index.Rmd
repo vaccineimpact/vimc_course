@@ -21,16 +21,12 @@ description: "Inference in infectious disease systems practicals"
 bibliography: ref.bib
 ---
 
-# Opening
-
 ```{r, child = "_setup.Rmd", include = FALSE, purl = FALSE}
 ```
 
-This file should contain written practicals for VIMC practicals.
-
 # Acknowledgements
 
-The materials, practicals and examples for this course were originally developed for the short course "Mathematical Models for Infectious Disease Dynamics" organised and run by the Wellcome Trust Advanced Courses Program between 2010-2020. A number of instructors, in addition to those involved in the current iteration, have contributed and adapted these materials over the years as the course has evolved. We would like to thank and acknowledge the contribution of all of these course alumni:
+The materials, practicals and examples for this course were originally developed for the short course "Mathematical Models for Infectious Disease Dynamics" organised and run by the Wellcome Trust Advanced Courses Program between 2010--2020. A number of instructors, in addition to those involved in the current iteration, have contributed and adapted these materials over the years as the course has evolved. We would like to thank and acknowledge the contribution of all of these course alumni:
 
 Dr Olivier Restif [(Department of Veterinary Medicine, University of Cambridge)](https://www.vet.cam.ac.uk/directory/or226%40cam.ac.uk)
 
@@ -54,15 +50,13 @@ Dr Katy Gaythorpe [(Faculty of Medicine, School of Public Health, Imperial Colle
 
 Dr Roberto Sainz (Facultad de Ciencias, Universidad de Colima)
 
-Dr Joshua Ross [(School of Computer and Mathematical Sciences, University of Adelaide)](https://researchers.adelaide.edu.au/profile/joshua.ross)
+Dr Joshua Ross [(School of Computer and Mathematical Sciences, University of Adelaide)](http://www.maths.adelaide.edu.au/joshua.ross/)
 
-Dr Robin Thompson [(Mathematics Institute, University of Warwick)](https://warwick.ac.uk/fac/sci/maths/people/staff/thompson/)
+Dr Robin Thompson [(Mathematical Institute, University of Oxford)](https://www.maths.ox.ac.uk/people/robin.thompson)
 
 Dr Sophie Ip 
 
 Dr Johann von Kirchbach
 
-Dr James Cox 
-
-**REFERENCES AND BIBTEX FILE COULD BE ADDED.**
+Dr James Cox
 
