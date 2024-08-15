@@ -2,24 +2,26 @@
 
 # Getting Started in R {#gettingstarted}
 
+## TJ McKinley ([t.mckinley@exeter.ac.uk](mailto:t.mckinley@exeter.ac.uk)) {.unlisted .unnumbered}
+
 ```{hypertarget, label = "introinfo"}
 ```
 
 R---available at [https://cran.r-project.org/](https://cran.r-project.org/)---is a comprehensive statistical programming language. It can be thought of as an open-source, freely available implementation of the [S](https://en.wikipedia.org/wiki/S_(programming_language)) language. R is an **interpreted language**, and so can be used interactively, without having to compile the code into an executable file. 
 
-Although R is a functional programming language in its own right, its popularity is in large part due to its fantastic capabilities as a statistical package. However, R is much more than that. R has amazing graphical capabilities; can integrate with other languages, such as C and Python; can use scripts and be run in batch mode; and can even be used to produce **reproducible** documents, presentations and interactive webpages. Even better than that, R is completely **free** and **open-source**! Professional editions of packages such as SAS, Stata, S-Plus or SPSS can cost hundreds of pounds. 
+Although R is a functional programming language in its own right, its popularity is in large part due to its fantastic capabilities as a statistical package. However, R is much more than that. R has amazing graphical capabilities; can integrate with other languages, such as C and Python; can use scripts and be run in batch mode; and can even be used to produce [**reproducible** documents](https://rmarkdown.rstudio.com/), presentations and [interactive webpages](https://www.rstudio.com/products/shiny/). Even better than that, R is completely **free** and **open-source**! 
 
 To top it off, R is also **multi-platform**, and so can be used on Windows, Mac and Linux operating systems. R is supported by a wide user base, and is extended by a large number of additional packages, and even provides the capabilities to create your own. Whilst R provides its own development environment, we will use a fantastic IDE[^ide] provided by RStudio. This is free to download, provides some neat features, and crucially, operates the same way on all operating systems!
 
 [^ide]: Integrated Desktop Environment
 
-All of the instructions in this practical will assume that you are using RStudio.
+All of the instructions in these practicals will assume that you are using RStudio.
 
 ## Installing R and RStudio
 
 If you want to download R for your own computer, first go to [http://cran.r-project.org](http://cran.r-project.org), and follow the instructions in the box called 'Download and Install R'. **You only need to install the `base` package**. During installation, selecting the default options should be sufficient.
 
-Once you have installed R, you can install the **free desktop** version of RStudio from [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/). Again, selecting the default options during installation should be sufficient. University machines should have these pieces of software already installed, so just load RStudio and you're good-to-go!
+Once you have installed R, you can install the **free desktop** version of RStudio from [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/). Again, selecting the default options during installation should be sufficient.
 
 ## What is R?
 
@@ -40,12 +42,6 @@ After loading, the RStudio window should look something like Figure \@ref(fig:rs
 
 You can alter the size of the various panes by clicking and dragging the grey bar in between each window to suit your needs. You can also change their arrangement by going to *Tools > Global Options*, and then selecting the *Pane Layout* option.
 
-### Cheat Sheets
-
-The helpful folks at RStudio also produce a series of excellent Cheat Sheets, available [here](https://www.rstudio.com/resources/cheatsheets/). Please note, these are updated semi-regularly as new packages are added or existing packages updated. Note also that these cheat sheets focus on the use of RStudio, and a subset of packages that are developed by the RStudio team (e.g. `tidyverse`, `shiny`, `rmarkdown`). For example, a nice Cheat Sheet for RStudio itself can be found [here](https://raw.githubusercontent.com/rstudio/cheatsheets/master/rstudio-ide.pdf).
-
-I will provide links to some of these cheat sheets as we progress through the practicals, but please note that they might change over time, and older versions exist online. They are a brilliant resource where applicable.
-
 ## Setting up an R session {#setup}
 
 It is worthwhile getting into a workflow when using R. General guidelines I would suggest are:
@@ -53,7 +49,6 @@ It is worthwhile getting into a workflow when using R. General guidelines I woul
 * Use a different folder for each new project / assignment. This helps to keep all data / script / output files in one self-contained place.
 * Set the **Working Directory** for R at the outset of each session to be the folder you've specified for the particular assignment you're working on. This can be done in RStudio by going to *Session > Set Working Directory > Choose Directory*. This sets the default search path to this folder.
 * Always use [**script files**](#script) to keep a record of your work, so that it can be reproduced at a later date.
-* **Additional**: I also initialise a [Git](#version-control) repository in each project folder (unless the project is very small). This is slightly more advanced, but is so useful that we'll devote a [whole section to this later on in the module](#version-control), but don't worry for the time being. Linking to an online repository such as [GitHub](https://github.com/) or [BitBucket](https://bitbucket.org/product) also provides a cloud-based backup service, as well as an ability to share code and collaborate. 
 
 We will explore the **console** and **script** panes below, dealing with the other panes as and when they arise.
 
@@ -146,7 +141,7 @@ Put simply, ***R scripts are just text files that contain commands to run in R**
 Some comments:
 
 * RStudio comes with its own text editor, but if you are not using RStudio, then there are plenty of others available. 
-* R is case-sensitive. If something doesn't work, it's often because you have failed to capitalise, or capitalised where you shouldn't have. **NEVER, EVER, EVER** use Word to edit your R scripts! Word often tries to correct your grammar and is an absolute nightmare for writing code. If you don't like RStudio's editor, then lots of lightweight and free text editors exist that you can use. By all means use Word for writing up the work (although we will see even better ways to do this in the later [Literate Programming](#litprog) section), but ***please***, ***NEVER*** use it for writing code!
+* R is case-sensitive. If something doesn't work, it's often because you have failed to capitalise, or capitalised where you shouldn't have. **NEVER, EVER, EVER** use Word to edit your R scripts! Word often tries to correct your grammar and is an absolute nightmare for writing code. If you don't like RStudio's editor, then lots of lightweight and free text editors exist that you can use. By all means use Word for writing up the work^[although [`rmarkdown`](https://rmarkdown.rstudio.com/) provides a powerful alternative], but ***please***, ***NEVER*** use it for writing code!
 
 In RStudio, you can open a new script in R using: *File > New File > R Script*. 
 
@@ -165,7 +160,7 @@ sqrt(3^2 + 4^2)
 ```
 
 ```{info, title = "Note", collapsible = FALSE}
-Notice that the `#` symbol in the input code denotes a **comment**, such that any text after the `#` is ignored (up to the end of the current line). I have used a double hash here `##`, though this is simply because I've written this practical using [R Markdown](http://rmarkdown.rstudio.com/) (more on this later), and it seems to typeset better. This is not absolutely necessary though, since anything after the first `#` is ignored. 
+Notice that the `#` symbol in the input code denotes a **comment**, such that any text after the `#` is ignored (up to the end of the current line). I have used a double hash here `##`, though this is simply because I've written this practical using [R Markdown](http://rmarkdown.rstudio.com/) and it seems to typeset better. This is not absolutely necessary though, since anything after the first `#` is ignored. 
 
 Comments are ***vital*** in code to ensure **reproducibility** and **readability**. You should ensure that all code is commented, so that both you and anyone else who wants to use your code is able to decipher it. Even if no one else is going to look at your code, it is still worthwhile to comment it. What seems obvious to you as you write a piece of code, often becomes confusing when you return to it in six months time and can't remember what you did or why you did it...
 ```
@@ -180,9 +175,9 @@ Make sure you save your script file regularly to prevent data loss!
 
 **NOTE**: that I use spaces within the code to make it clearer. R does not require this, but again I think it is good practice to think about how to make your code legible. Different coders have different preferences, but personally I prefer `plot(Worm.density ~ Vegetation, data = worms)` over `plot(Worm.density~Vegetation,data=worms)`. As [Hadley Wickham](http://style.tidyverse.org/) says: "Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread."
 
-Note that different coders prefer different styles---there is no universal agreement. However, it's worth getting into the habit of writing your code neatly and with legibility in mind. A guide that is similar to my own is the `tidyverse` guide [here](http://style.tidyverse.org/). (Note that unlike e.g. Python, R does not require specific indentation. Instead it uses curly brackets to group lines of code together. However, indentation is still key for legibility.)
+Note that different coders prefer different styles---there is no universal agreement, and you will notice that different lecturers on this course have slightly different styles. However, it's worth getting into the habit of writing your code neatly and with legibility in mind. A guide that is similar to my own is the `tidyverse` guide [here](http://style.tidyverse.org/). (Note that unlike e.g. Python, R does not require specific indentation. Instead it uses curly brackets to group lines of code together. However, indentation is still key for legibility.)
 
-I tend to use script files to keep a record of all commands that need to be reproduced, but I often enter commands directly into the console window when I'm testing or visualising things. Try to keep redundant code out of your script files. **In this module I expect you to use script files from the outset! Make sure the code is legible and commented.**
+I tend to use script files to keep a record of all commands that need to be reproduced, but I often enter commands directly into the console window when I'm testing or visualising things. Try to keep redundant code out of your script files and try to make sure the code is legible and commented.
 
 ## R packages {#packages}
 
@@ -194,7 +189,7 @@ R packages can be thought of in a similar way to Matlab toolboxes or Python libr
 
 The principal R package repository can be found on [CRAN](https://cran.r-project.org/) (the Comprehensive R Archive Network). Another popular repository, predominantly aimed at bioinformatics packages, is [Bioconductor](https://www.bioconductor.org/), though installation of packages through Bioconductor is more difficult than through CRAN, so we will focus on the latter only here.
 
-Some packages are included as part of R's base package. To load a package, you can use the `library()` function, passing the name of the required package. For example, to load the `tidyr` package, type:
+Some packages are included as part of R's base package. To load a package, you can use the `library()` or `require()` functions, passing the name of the required package. For example, to load the `tidyr` package, type:
 
 ```{r tidyr, eval = FALSE, cache = FALSE}
 library(tidyr)
@@ -280,27 +275,21 @@ Note the syntax `DEVELOPER/PACKAGENAME`---this can be found from the address of 
 
 ### Packages to install for this module
 
-On the university machines, all required packages have already been installed, but if you wish to use your own machines, then the packages you need to install for this module are listed below. Some are installed automatically by R, but have been listed here for completeness. (Please let me know if you come across any that aren't listed here.)
+The packages you need to install for this module are listed below. Some are installed automatically by R, but have been listed here for completeness. (Please let me know if you come across any that aren't listed here.)
 
 `r ifelse(is_latex_output(), "\\newpage", "")`
 
+* `deSolve`
+* `earlyR`
+* `MCMCpack`
+* `outbreaks`
+* `SimInf`
+* `SimBIID`
+* `utils`
 * `tidyverse`
-* `gapminder`
+* `incidence`
 * `patchwork`
-* `sf`
-* `gifski`
-* `av`
-* `plotly`
+* `tsiR`
+* `chron`
 
-Many of these packages depend on other packages, but R should install all dependencies automatically. `tidyverse` in particular will take a long time to install! 
-
-The following packages will also be needed, though in theory they should either be installed by default, or installed as one of the required dependencies for the packages above. They are listed here for completeness.
-
-* `knitr`
-* `rmarkdown`
-* `tinytex`
-* `datasets`
-* `readxl`
-* `lubridate`
-
-
+Many of these packages depend on other packages, but R should install all dependencies automatically.

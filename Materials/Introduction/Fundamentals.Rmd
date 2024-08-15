@@ -1,5 +1,7 @@
 # Fundamentals of R
 
+## TJ McKinley ([t.mckinley@exeter.ac.uk](mailto:t.mckinley@exeter.ac.uk)) {.unlisted .unnumbered}
+
 ## Variables in R
 
 R makes use of symbolic variables, i.e. words or letters that can be used to represent or store other values or objects. We will use the assignment operator `<-` to 'assign' a value (or object) to a given word (or letter). Run the following commands to see how this works (don't worry about the comments, these are for your understanding):
