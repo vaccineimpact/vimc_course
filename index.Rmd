@@ -24,7 +24,15 @@ bibliography: ref.bib
 ```{r, child = "_setup.Rmd", include = FALSE, purl = FALSE}
 ```
 
-# Acknowledgements
+```{r, echo = FALSE}
+## set path to stored files
+# pathtofiles <- "."
+pathtofiles <- "https://vaccineimpact.github.io/vimc_course"
+```
+
+<!-- @hensetal:2012 -->
+
+# Acknowledgements {-}
 
 The materials, practicals and examples for this course were originally developed for the short course "Mathematical Models for Infectious Disease Dynamics" organised and run by the Wellcome Trust Advanced Courses Program between 2010--2020. A number of instructors, in addition to those involved in the current iteration, have contributed and adapted these materials over the years as the course has evolved. We would like to thank and acknowledge the contribution of all of these course alumni:
 
@@ -60,3 +68,38 @@ Dr Johann von Kirchbach
 
 Dr James Cox
 
+# Structure of this workshop {-}
+
+In these notes, R commands to be entered into the console are shown in grey boxes e.g.
+
+```{r, eval = FALSE}
+seq(0, 1, length = 11)
+```
+
+and the corresponding outputs look like:
+
+```{r, echo = FALSE}
+seq(0, 1, length = 11)
+```
+
+`r ifelse(!is_latex_output(), "If you're reading this online, there is a downloadable PDF version of these notes if you prefer, available via the link next to the title at the top of the page:", "")`
+
+```{r, pdfloc, echo = FALSE, out.width = '30%', include = !is_latex_output()}
+include_graphics("Materials/Introduction/images/pdf.png")
+```
+
+`r ifelse(!is_latex_output(), "Also, if you are reading the HTML notes, then you can easily copy code into R by hovering over the code chunk and clicking the copy button:", "")`
+
+```{r, copycode, echo = FALSE, out.width = '80%', include = !is_latex_output()}
+include_graphics("Materials/Introduction/images/selection.png")
+```
+
+## Tasks {-}
+
+```{task}
+All **tasks** will be denoted in panel boxes like this one. In the HTML version, all solutions can be toggled by hitting the **Show Solution** buttons. In the PDF version solutions are given in the Appendix and are linked via the **Show Solution** buttons.
+```
+
+```{solution}
+The answer is, of course, 42. 
+```
