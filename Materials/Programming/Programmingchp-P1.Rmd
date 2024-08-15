@@ -1,3 +1,5 @@
+# (PART) Programming {-} 
+
 # Programming---Practical 1
 
 ## Nik Cunniffe ([njc1001@cam.ac.uk](mailto:njc1001@cam.ac.uk)) {.unlisted .unnumbered}
@@ -63,7 +65,7 @@ for (i in 1:10) {
 Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.
 
 ``{r, eval = FALSE}
-for (i in 1:10) {
+for (i in 10:1) {
     print(paste(i, b[i]))
 }
 ``
@@ -74,7 +76,7 @@ for (i in 1:10) {
 Prints numbers in reverse order according to whatever is in sample `b`.
 
 ``{r, eval = TRUE, echo = FALSE}
-for (i in 1:10) {
+for (i in 10:1) {
     print(paste(i, b[i]))
 }
 ``
@@ -325,8 +327,7 @@ Type the code into your script and make sure you are happy with how it works.
 
 mySum <- function(toSum) { # my function to sum elements of a vector
   retVal <- 0
-  for(i in 1:length(toSum))
-  { 
+  for(i in 1:length(toSum)) { 
     retVal <- retVal + toSum[i]  
   } 
   return(retVal)
@@ -351,8 +352,7 @@ The new function should calculate the sum and the mean of whatever vector it rec
 # my function to sum elements of a vector and return that and the mean
 mySumAndMean <- function(toSum) { 
   retVal <- 0
-  for(i in 1:length(toSum))
-  { 
+  for(i in 1:length(toSum)) { 
     retVal <- retVal + toSum[i]  
   } 
   meanVal <- retVal/length(toSum) # find the mean, too
@@ -411,11 +411,11 @@ numLeft <- totStickers
 numStickersBought <- 0
 while(numLeft > 0) {
   numStickersBought <- numStickersBought + 1
-  thisSticker <- sample(1:totStickers,1)
-  if(gotSticker[thisSticker]==TRUE) {
+  thisSticker <- sample(1:totStickers, 1)
+  if(gotSticker[thisSticker] == TRUE) {
     gotSticker[thisSticker] <- TRUE
     numLeft <- numLeft - 1
-    print(paste('got', thisSticker, 'still need',numLeft))
+    print(paste('got', thisSticker, 'still need', numLeft))
   }
 }
 print(paste('bought', numStickersBought))
@@ -446,16 +446,12 @@ for(i in 1:numRuns) {
   numStickersBought <- 0
   while(numLeft > 0) {
     numStickersBought <- numStickersBought + 1
-    thisSticker <- sample(1:totStickers,1)
-    if(gotSticker[thisSticker]==FALSE) {     # this is the line which had an error (fixed here)
+    thisSticker <- sample(1:totStickers, 1)
+    if(gotSticker[thisSticker] == FALSE) {     # this is the line which had an error (fixed here)
       gotSticker[thisSticker] <- TRUE
       numLeft <- numLeft - 1
-  #   commented out the following print statement to save space
-  #   print(paste('got', thisSticker, 'still need',numLeft))
     }
   }
-  #   commented out the following print statement to save space
-  # print(paste("Run",i,"bought", numStickersBought))
   myEstimates[i] <- numStickersBought
 }
 hist(myEstimates)
@@ -494,7 +490,7 @@ One way of writing the logistic map is via the following recurrence $$x_{n+1} = 
 What do you think is the purpose of the following function?
 
 ``{r}
-logisticValues <- function(r,N,x0) { 
+logisticValues <- function(r, N, x0) { 
   retVal <- numeric(N)
   thisX <- x0
   for(i in 1:N) { 
@@ -529,7 +525,7 @@ Try running the code for different values of $r$. What does the graph show you?
 Good values of $r$ to try would be $r = 0.5$, $r = 1.5$, $r = 2.5$, $r = 3.1$, $r = 3.5$, $r = 3.7$. You should also test the behaviour for different initial conditions: suitable values would be $x_{0} = 0.01$ and $x_{0} = 0.1$.
 ```
 
-```{info, title = "Note", collapsible = FALSE}
+```{solution}
 As you change the value of $r$ in the above code the system goes from having a single equilibrium in the long term, to oscillating between a pair of values, to oscillating between four values. By $r = 3.7$, the trajectory depends very sensitively to the initial value $x_0$ (as is demonstrated by the below code). This is called deterministic chaos.
 ```
 
@@ -539,7 +535,7 @@ You should note that in the case $r = 3.7$, the pattern of successive population
 r <- 3.7            # growth rate
 N <- 100            # max generation
 x0 <- 0.01          # initial value
-xn <- logisticValues(r,N,x0)    # next N starting at x0
+xn <- logisticValues(r, N, x0)    # next N starting at x0
 plot(0:N, c(x0, xn), type = 'o', xlab = 'n', ylab = 'x_n') # plot 
 x0 <- 0.01001       # different initial value
 xn <- logisticValues(r, N, x0)    # next N starting there
@@ -554,7 +550,7 @@ What do you think the following code does?
 Test your understanding by typing the function in and running it by issuing an appropriate call to the function at the command prompt.
 
 ``{r, eval = TRUE}
-logisticValuesAfterBurnIn <- function(r,N,M,x0) { 
+logisticValuesAfterBurnIn <- function(r, N, M, x0) { 
   retVal <- numeric(M)
   thisX <- x0
   for(i in 1:N) { 
@@ -577,13 +573,13 @@ The given code performs $N$ iterations of the logistic map starting from $x_0$ b
 Enter the following code and run it.
 
 ```{r, eval = TRUE}
-rVals <- seq(2.5,4,by=0.005)
-plot(c(2.5,4),c(0,1),type='n',xlab='r',ylab='orbit')
+rVals <- seq(2.5, 4, by = 0.005)
+plot(c(2.5, 4), c(0, 1), type = 'n', xlab = 'r', ylab = 'orbit')
 for(r in rVals) { 
   N <- 1000     
   M <- 100 
-  xn <- logisticValuesAfterBurnIn(r,N,M,0.01)   
-  points(rep(r,M),xn,pch=19,cex=0.01)
+  xn <- logisticValuesAfterBurnIn(r, N, M, 0.01)
+  points(rep(r, M), xn, pch = 19, cex = 0.01)
 } 
 ```
 
