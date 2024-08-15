@@ -1,3 +1,5 @@
+# (PART) Epidemic models {-} 
+
 # Epidemic models---Practical 1 {#epi1}
 
 ## Katy Gaythorpe ([k.gaythorpe@imperial.ac.uk](mailto:k.gaythorpe@imperial.ac.uk)) {.unlisted .unnumbered}
@@ -30,7 +32,7 @@ $$
 
 ## Coding the model
 
-We'll follow the template for deSolve that we used in the previous practical, starting with the core function that calculates $dS/dt$, $dI/dt$ and $dR/dt$. Open R, create a new text files and type in:
+We'll follow the template for `deSolve` that we used in the previous practical, starting with the core function that calculates $dS/dt$, $dI/dt$ and $dR/dt$. Open R, create a new text files and type in:
 
 ```{r}
 # SIR Epidemic model - Practical 1
@@ -200,7 +202,7 @@ par(mfrow = c(1, 1))
 
 ```{solution}
 
-``{r, fig.dim = c(8, 6), fig.show = "hold"}
+``{r, fig.dim = c(8, 6), fig.show = "hold", results = "hold"}
 # set up a 2 by 3 grid for the plots:
 par(mfrow=c(2,3), xaxs='i', yaxs='i')
 # define the parameters:
@@ -231,7 +233,7 @@ par(mfrow = c(1, 1))
 
 ```
 
-For each combination of parameter values, write down $\beta$ and read off the approximate values of the height and time of the epidemic peak and the final epidemic size (the total number of individuals that were infected). (Hint: you may have to extend the time period!)
+For each combination of parameter values, write down $\beta$ and read off the approximate values of the height and time of the epidemic peak and the final epidemic size (the total number of individuals that were infected). (**Hint:** you may have to extend the time period!)
 
 You can also use the functions `max()` and `which.max()`.
 
@@ -246,16 +248,16 @@ Peak size and epidemic size.
 ```
 
 ```{info, title = "Note:", collapsible = FALSE}
-It can be shown mathematically that the epidemic size and the height of the epidemic peak are functions of $R_{0}$ only, although this requires some clever manipulation of the ODES (see Appendix at the end of this handout if you're interested).
+It can be shown mathematically that the epidemic size and the height of the epidemic peak are functions of $R_{0}$ only, although this requires some clever manipulation of the ODEs (see [Appendix](#appepi) at the end of this practical if you're interested).
 
 The time to the epidemic peak cannot be directly expressed from the equations, but it is linked to the initial rate of spread of the epidemic. The variations in the number of infected individuals are given by:
 $$
     dI/dt = I(\beta S/N-\gamma)
 $$
 
-At the very beginning of the outbreak, $I(t) << S(t) \approx N$. So we can approximate the ODE above as $dI/dt = (\beta - \gamma )I$, which can be solved as:
+At the very beginning of the outbreak, $I(t) \ll S(t) \approx N$. So we can approximate the ODE above as $dI/dt = (\beta - \gamma )I$, which can be solved as:
 $$
-    I(t) = I_{0} exp(\beta - \gamma)t
+    I(t) = I_{0} \exp(\beta - \gamma)t
 $$
     
 So the number of infected individuals initially follows an exponential growth with rate
@@ -275,7 +277,7 @@ You can use `abline` again, this time to impose a straight line $(y = bx + c)$.
 
 ```{solution}
 
-``{r, fig.dim = c(8, 6)}
+``{r, fig.dim = c(8, 6), fig.show = "hold"}
 #checking initial gradient
 par(mfrow=c(2,3))
 # define the parameters:
@@ -292,15 +294,17 @@ for (i in 1:6) {
     I <- SIR.sol[,3]
     R <- SIR.sol[,4]
     N <- S + I + R
-    plot(TIME[1:41],log( I[1:41]/N[1:41] ),col='red', type='l', main=paste("beta = ",beta,"gamma = ",gamma))
+    plot(TIME[1:41],log( I[1:41]/N[1:41] ),col='red', type='l', 
+         main=paste("beta = ",beta,"gamma = ",gamma))
     abline(a = log( I[1]/N[1] ), b = beta-gamma, col = "black")
 }
+par(mfrow=c(1,1))
 ``
 
 ```
 
 ```{task}
-What dynamics do you expect with $R_{0} = 1$? Plot the graph for $\beta = 1$, $\gamma = 1$. Why does $I(t)$ decreases?
+What dynamics do you expect with $R_{0} = 1$? Plot the graph for $\beta = 1$, $\gamma = 1$. Why does $I(t)$ decrease?
 ```
 
 ```{solution}
@@ -313,7 +317,7 @@ Explore the behaviour of the system around $R_{0} \approx 1$ using the loop you 
 
 ```{solution}
 
-``{r, fig.dim = c(8, 6)}
+``{r, fig.dim = c(8, 6), fig.show = "hold"}
 ### looking around R0 = 1
 par(mfrow=c(2,3))
 # define the parameters:
@@ -334,6 +338,7 @@ for (i in 1:6) {
     plot(TIME, I/N,col='red', type='l', ylim=c(0,0.03),
 main=paste("R0 = ",Rzero[i]))
 }
+par(mfrow=c(1,1))
 ``
 
 ```
@@ -348,7 +353,7 @@ If the recovery rate of a disease is $\gamma = 0.2$ days$^{-1}$, what is the ave
 The average infectious period is $1 / \gamma = 5$ days.
 ```
 
-* For a given constant recovery rate of $\gamma = 0.2$ days$^{-1}$ plot the proportion of individuals still infected over time.
+* For a given constant recovery rate of $\gamma = 0.2$ days$^{-1}$ we can plot the proportion of individuals still infected over time.
 
     ```{r, eval = FALSE}
     # set up a vector of times:
@@ -364,7 +369,7 @@ The average infectious period is $1 / \gamma = 5$ days.
     plot(x,fx,type="l")
     ```
 
-* Calculate the average infectious period using the function defined above.
+* We can also calculate the average infectious period using the function defined above.
     
     ```{r, eval = FALSE}
     print(sum(fx*x)/sum(fx))
@@ -452,7 +457,7 @@ legend("right", col = c("blue","orange", "red","cyan","green"), legend = c("S","
 Plenty to note on the different dynamics as you experiment with the above- one thing to examine is that we now have multiple infected states and this can make calculating $R_{0}$ more complicated as we need to use the next generation matrix approach, shown later in the course.
 ```
 
-## Appendix---Epidemic peak and final epidemic size
+## Appendix---Epidemic peak and final epidemic size {#appepi}
 
 Although it is not possible to solve the differential equations of the $SIR$ system analytically to obtain expressions for $S(t)$, $I(t)$ and $R(t)$, we can obtain an implicit solution in the $(S,I)$ phase plane. In other words, we can obtain a mathematical relationship between the values of $S$ and $I$ at any time point. The trick is to re-write the system
 
@@ -474,13 +479,13 @@ Using the integration rules from the maths lectures, we can actually solve this 
 So, given the initial conditions, we can deduce the value of $I(t)$ from the value of $S(t)$ at any time point. How is that helpful? First consider the question of the height of the epidemic peak. We know that $I(t)$ reaches its maximum when $S(t) = \gamma/\beta$. Hence the height of the epidemic peak:
 
 $$
-    I_{max} = I_{0} + \frac{\gamma}{\beta} log \frac{\gamma}{\beta S_{0}} + S_{0} - \frac{\gamma}{\beta}
+    I_{\mathrm{max}} = I_{0} + \frac{\gamma}{\beta} \log \frac{\gamma}{\beta S_{0}} + S_{0} - \frac{\gamma}{\beta}
 $$
 
-Assuming that $I(0) << S(0) \approx N$, then we can write $R_{0}\approx\beta S(0)/\gamma$, hence:
+Assuming that $I(0) \ll S(0) \approx N$, then we can write $R_{0}\approx\beta S(0)/\gamma$, hence:
 
 $$
-    I_{max}/N \approx 1-(1+\log R_{0})/R_{0}
+    I_{\mathrm{max}}/N \approx 1-(1+\log R_{0})/R_{0}
 $$
 
 You can check it on the graphs from section 2 above. Next, the final epidemic size is given by the final value of $S(0) - S(t)$, i.e. taking $t \rightarrow \infty$. Under the same assumptions as above, and letting $x = S(0) - S(\infty)$ be the proportion of the $N$ population that gets infected over the whole epidemic, we get the following equation: $x + \log(1 - x)$, which can only be solved numerically.

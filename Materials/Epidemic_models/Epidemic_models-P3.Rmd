@@ -10,12 +10,12 @@
 
 By the end of this practical participants should be able to achieve the following:
 
-* Code up a simple stochastic $SI$ model in R using the `SimInf` package
-* Code up a simple stochastic $SIR$ model in R using the `SimInf` package
-* Run both single and multiple realisations and visualise the results
-* Explore extensions to both $SI$ and $SIR$ models
-    + Expand the $SI$ model to include additional transitions
-    + Understand the impact of R0 values on stochastic extinction
+* Code up a simple stochastic $SI$ model in R using the `SimInf` package.
+* Code up a simple stochastic $SIR$ model in R using the `SimInf` package.
+* Run both single and multiple realisations and visualise the results.
+* Explore extensions to both $SI$ and $SIR$ models:
+    + Expand the $SI$ model to include additional transitions.
+    + Understand the impact of R0 values on stochastic extinction.
     
 *Background*: This practical follows on from the Stochastic Epidemic Models Lecture 5 and echoes the content presented there.
 
@@ -37,18 +37,18 @@ If you haven't already installed the package `SimInf`:
 If you're on a Windows computer then you'll need to do some additional work to use `SimInf` (macOS and Linux users should be fine).
 
 * Download Rtools from [https://cran.r-project.org/bin/windows/Rtools/](https://cran.r-project.org/bin/windows/Rtools/)
-    + Click on the appropriate version of RTools on the left
-    + For RTools 4.2 (the most up to date version) click on the link `Rtools42_installer`. It's in the third paragraph down in the second section
-    + Once it's downloaded install it using all of the default settings
-    + This might take a couple of minutes, but click Finish when it's done
-* Add the path to Rtools to your PATH environment variable
+    + Click on the appropriate version of RTools on the left.
+    + For RTools 4.4 (the most up to date version) click on the link `Rtools44_installer`. It's in the third paragraph down in the second section.
+    + Once it's downloaded install it using all of the default settings.
+    + This might take a couple of minutes, but click Finish when it's done.
+* Add the path to Rtools to your PATH environment variable:
     + Click on the windows icon in the bottom right of the screen
     + Type environment variable in the search box
-    + This should bring up the System Properties window. Click on the Environment Variables button
-    + Select on the *Path* row in the second table (entitled System Variables) and click Edit…
-    + Click New
-    + Type `C:\Rtools\bin`
-    + Click OK on all windows
+    + This should bring up the System Properties window. Click on the Environment Variables button.
+    + Select on the *Path* row in the second table (entitled System Variables) and click Edit...
+    + Click New.
+    + Type `C:\Rtools\bin`.
+    + Click OK on all windows.
     
 Great!
 
@@ -57,7 +57,7 @@ Now we can finally actually get on with the simulations.
 **In the script window type the following commands**:
 
 ```{r, message = FALSE}
-require(SimInf)
+library(SimInf)
 
 create.StocSI <- function(N, I0, beta , f_time) {
     
@@ -269,7 +269,7 @@ plot(out , 'I', range = FALSE , type = 'l')
 
 ### Adding the deterministic solution curve
 
-Download an R script file called [`Det_SI.R`](./Materials/Epidemic_models/Functions/Det_SI.R). It contains the code for a deterministic $SI$ model based upon the code you encountered in the first epidemic models practical. It is specifically designed to use the same parameters as have been used in the stochastic $SI$ code written above and will add a deterministic trajectory to your plot.
+Download an R script file called [`Det_SI.R`](`r pathtofiles`/Materials/Epidemic_models/Functions/Det_SI.R). It contains the code for a deterministic $SI$ model based upon the code you encountered in the first epidemic models practical. It is specifically designed to use the same parameters as have been used in the stochastic $SI$ code written above and will add a deterministic trajectory to your plot.
 
 **Type in the following:**
 
@@ -527,7 +527,7 @@ plot(out , 'I', range=FALSE , type = 'l', ylim = c(0, 200))
 ```
 
 ```{task}
-Load the R script called [`Det_SIR.R`](./Materials/Epidemic_models/Functions/Det_SIR.R) and adapting your code from the previous section make a plot that overlays the deterministic solution with the output of the stochastic model.
+Load the R script called [`Det_SIR.R`](`r pathtofiles`/Materials/Epidemic_models/Functions/Det_SIR.R) and adapting your code from the previous section make a plot that overlays the deterministic solution with the output of the stochastic model.
 
 This should produce a graph that looks like this:
 
