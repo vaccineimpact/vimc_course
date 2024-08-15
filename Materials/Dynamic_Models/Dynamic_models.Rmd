@@ -1,3 +1,5 @@
+# (PART) Dynamic models {-} 
+
 # Dynamic models---Practical
 
 ## Katy Gaythorpe ([k.gaythorpe@imperial.ac.uk](mailto:k.gaythorpe@imperial.ac.uk)) {.unlisted .unnumbered}
@@ -63,7 +65,7 @@ So, that's basically what `deSolve` or any other software does to generate 'nume
 
 But enough theory for now. Let's shut the bonnet and sit behind the wheel! We'll start by re-visiting the logistic growth model to get you acquainted with `deSolve`.
 
-Launch RStudio. The first thing to do is check whether the `deSolve` package is already installed, as it does not come with the R base. In RStudio, click on the “Packages” tab in the bottom-right window to see the list of R packages installed on your computer (those with a checked box are not only installed on the computer but currently loaded in your R session so that you can use them). If `deSolve` is not in the list, click on Install Packages, this opens a window asking you which package you which to install: type `deSolve` and click on Install (you may be asked first to choose a “Mirror”: scroll down the list to UK, and choose London or Bristol). This will download the package from the internet, which means your computer needs to be connected. You only need to do that once on any computer.
+Launch RStudio. The first thing to do is check whether the `deSolve` package is already installed, as it does not come with the R base. In RStudio, click on the “Packages” tab in the bottom-right window to see the list of R packages installed on your computer (those with a checked box are not only installed on the computer but currently loaded in your R session so that you can use them). If `deSolve` is not in the list, click on Install Packages, this opens a window asking you which package you which to install: type `deSolve` and click on Install (you may be asked first to choose a "Mirror": find the mirror closest to where you are currently located, and select it). This will download the package from the internet, which means your computer needs to be connected. You only need to do that once on any computer.
 
 **Note**: Instead of using RStudio's interface, you can type the following instructions in the console: `library()` will open a window with the list of installed packages. If `deSolve` is not there, close the window, return to the R console and type: `install.packages('deSolve')`.
 
@@ -157,7 +159,7 @@ named_logistic_dyn <- function(t,N,par) {
 }
 ```
 
-The syntax is a bit complicated because we have to tell R that $r$ and $K$ (which are undefined symbols) will actually be defined within `par`. That's the role of the `with(x,{...})` statement. A further complication is that `with(x,{...})` only works with a named list as its first argument, not a named vector, which is why we wrote `with(as.list(par),{...})`. As a result, every instruction that comes inside `{` `}` in the second argument of `with(x,{...})` can make use of the names of the elements of par.
+The syntax is a bit complicated because we have to tell R that $r$ and $K$ (which are undefined symbols) will actually be defined within `par`. That's the role of the `with(x,{...})` statement. A further complication is that `with(x,{...})` only works with a named list as its first argument, not a named vector, which is why we wrote `with(as.list(par),{...})`. As a result, every instruction that comes inside `{` `}` in the second argument of `with(x,{...})` can make use of the names of the elements of `par`.
 
 Once the function `named_logistic_dyn` has been defined, it can only be used with a named vector as a third argument. So, in our case, we must define a new vector:
 
