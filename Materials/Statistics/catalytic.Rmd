@@ -1,6 +1,12 @@
+# (PART) Statistical modelling {-} 
+
 # Estimating $R_0$ using catalytic models
 
 ## T. J. McKinley ([t.mckinley@exeter.ac.uk](mailto:t.mckinley@exeter.ac.uk)) and Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
+
+```{info, title = "Note", collapsible = FALSE}
+A PDF handout for the slides for the Statistical Modelling part of this workshop can be found [here](`r pathtofiles`/Materials/Statistics/StatsLectureNotes.pdf).
+```
  
 The aim of this practical is to estimate the age-stratified force-of-infection and basic reproductive ratio from age-stratified serological data for an endemic disease.
  
@@ -18,7 +24,7 @@ We approach these two objectives using two alternative methods:
  
 In this practical we will estimate the force-of-infection of rubella using serological survey data from the UK provided in the book ["Modelling Infectious Disease Parameters Based on Serological and Social Contact Data"](https://link.springer.com/book/10.1007/978-1-4614-4072-7) by @hensetal:2012
 
-You will need a copy of the data ([`Rubella-UK.csv`](https://vaccineimpact.github.io/Materials/Statistics/data/Rubella-UK.csv)), which you can download via the link. We will begin by loading and checking the contents of the rubella data table: 
+You will need a copy of the data ([`Rubella-UK.csv`](`r pathtofiles`/Materials/Statistics/data/Rubella-UK.csv)), which you can download via the link. We will begin by loading and checking the contents of the rubella data table: 
 
 ```{r, eval = FALSE}
 rubella <- read.csv("Rubella-UK.csv", header = TRUE) 
@@ -295,7 +301,7 @@ twogroup_mle <- optim(
 twogroup_mle
 ```
 
-The `convergence = 0` part suggests that the optimisation has converged (in practcie one might want to run `optim()` multiple times from different initial conditions to check that it's not converged to a local mode). We can check the fit of the model by plotting the predicted values against the data: 
+The `convergence = 0` part suggests that the optimisation has converged (in practice one might want to run `optim()` multiple times from different initial conditions to check that it's not converged to a local mode). We can check the fit of the model by plotting the predicted values against the data: 
 
 ```{r, propsus, fig.cap = "Predicted susceptible profile of two-group FOI model against data"}
 ages <- seq(0, 44, by = 0.1) 
@@ -718,7 +724,7 @@ The overall fit is actually pretty good. However if we look closely the model do
  
 We could generalise our mixing matrix to include additional parameters to describe this heterogeneity as before. Or we can test whether social contact patterns provide a better description of the observed force-of-infection. Here we assume that infectious contacts are distributed proportionally to a POLYMOD mixing matrix. 
  
-Copy the provided POLYMOD data from the shared folder to your working directory and load into R: 
+Download the [`POLYMOD.csv`](`r pathtofiles`/Materials/Statistics/data/POLYMOD.csv) file to your working directory and load into R: 
  
 ```{r, eval = FALSE}
 ## load (smoothed symmetrical) POLYMOD matrix 
@@ -746,7 +752,7 @@ Follow the same steps as before to find the maximum likelihood estimate of the n
 
 ```{solution}
 
-``{r}
+``{r, results = "hold", fig.show = "hold"}
 POLYMOD_mle <- optimise(
     NextGen_loglik,
     c(1, 15),
@@ -811,5 +817,5 @@ How do the predictions of the POLYMOD mixing model differ from homogeneous mixin
 ```{solution, title = "Answer"}
 The POLYMOD mixing assumption estimates a lower basic reproductive ratio than homogeneous mixing, implying that a lower level of vaccination coverage would be necessary to eliminate disease than might be expected under homogeneous mixing.
 
-However, more importantly the POLYMOD model predicts a very different pattern of transmission within the population. The POLYMOD mixing matrix generates two equal peaks in the force of infection that are both higher than the homogeneous mixing estimate. The second peak in young adults is of particular concern for rubella where the disease itself is of less concern than so-called congenital rubella syndrome (CRS)---where infection of pregnant women leads to severe problems for unborn children. Pre-vaccination, with a mean age of infection of ~10 years this second group was relatively unimportant as few susceptible individuals 'survived' to that age. But it may become more important after the introduction of vaccination which is likely to increases the mean age of infection into this second core-group. This is the motivation for supplemental vaccination campaigns in teenage girls---i.e. not to reduce the rate of transmission in the community but to directly protect against CRS. The magnitude of this, so-called perverse effect of vaccination, would be greatly underestimated by a (incorrect) assumption of homogeneous mixing.
+However, more importantly the POLYMOD model predicts a very different pattern of transmission within the population. The POLYMOD mixing matrix generates two equal peaks in the force of infection that are both higher than the homogeneous mixing estimate. The second peak in young adults is of particular concern for rubella where the disease itself is of less concern than so-called congenital rubella syndrome (CRS)---where infection of pregnant women leads to severe problems for unborn children. Pre-vaccination, with a mean age of infection of ~10 years this second group was relatively unimportant as few susceptible individuals 'survived' to that age. But it may become more important after the introduction of vaccination which is likely to increase the mean age of infection into this second core-group. This is the motivation for supplemental vaccination campaigns in teenage girls---i.e. not to reduce the rate of transmission in the community but to directly protect against CRS. The magnitude of this, so-called perverse effect of vaccination, would be greatly underestimated by a (incorrect) assumption of homogeneous mixing.
 ```
