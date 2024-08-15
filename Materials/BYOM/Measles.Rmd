@@ -189,7 +189,7 @@ ggplot(x,aes(x=time,y=I*(1/0.4)*(5/7))) + geom_line() + xlab('Years') + ylab('Ca
 
 For sinusoidal forcing the bifurcation to two-yearly cycles occurs for a very small amount of seasonal forcing ($\alpha \sim 0.02$) with the amplitude of the two-year cycle increasing with increasing $\alpha$ before further bifurcations to three, four and irregular multiannual cycles.
 
-If we now examine the effect of increasing vaccination coverage we see that at low coverage vaccination progressively increases the time between outbreaks---shifting cycles to 3,4 and higher (irregular cycles). However, the incidence between outbreaks now falls to unrealistically low levels (nano-scale number of infectives!)---highlighting the likely increased importance of stochastic effects after the introduction of vaccination. 
+If we now examine the effect of increasing vaccination coverage we see that at low coverage vaccination progressively increases the time between outbreaks---shifting cycles to 3, 4 and higher (irregular cycles). However, the incidence between outbreaks now falls to unrealistically low levels (nano-scale number of infectives!)---highlighting the likely increased importance of stochastic effects after the introduction of vaccination. 
 
 ```{r, echo = FALSE}
 

@@ -23,7 +23,7 @@ file.remove("R0_files.zip")
 ```
 
 ```{info, title = "Important", collapsible = FALSE}
-All required data and script files can be downloaded [here](https://vaccineimpact.github.io/vimc_course/Materials/BYOM/R0_files.zip). Please download this ZIP file and extract the files to your working directory.
+All required data and script files can be downloaded [here](`r pathtofiles`/Materials/BYOM/R0_files.zip). Please download this ZIP file and extract the files to your working directory.
 ```
 
 ## Introduction: models and data sets
@@ -159,7 +159,7 @@ This formula is more commonly used to predict the final size ($z_{f}$) of an epi
 
 \begin{equation} 
     (\#eq:2)
-R_{0} + \frac{ln(1-z_{f})}{z_{f}} = 0
+R_{0} + \frac{\ln(1-z_{f})}{z_{f}} = 0
 \end{equation}
 
 We can find the final size ($z_{f}$) corresponding to a given value of $R_{0}$, by solving for the value(s) of $z_{f}$ for which \@ref(eq:2) is equal to zero. Finding the roots of a function is a common problem, so it should not surprise you that there is a R function to do the job. `uniroot` uses an numerical procedure to estimate the roots of an arbitrary function `f` within a fixed `interval=c(lower,upper)`. We can use `uniroot` to write a function that returns the predicted final size for a given value of $R_{0}$:
@@ -213,14 +213,14 @@ where the exponential rate can be related to $R_{0}$ with the functional form de
 
 \begin{equation} 
     (\#eq:4)
-log(I(t)) = \Lambda t + log(I(0))
+\log(I(t)) = \Lambda t + \log(I(0))
 \end{equation}
 
-with y-intercept given by the constant $log(I(0)$ and slope $\Lambda$. So, we can therefore obtain a first approximation to $R_{0}$ simply by estimating the slope of the (logged) epidemic curve.
+with y-intercept given by the constant $\log(I(0)$ and slope $\Lambda$. So, we can therefore obtain a first approximation to $R_{0}$ simply by estimating the slope of the (logged) epidemic curve.
 
 In principle, estimating $R_{0}$ using this method could be as straightforward as plotting the incidence or cumulative incidence curve on logarithmic graph paper and fitting a "best-fit" line, or using the Solver in Excel. We can be a little more sophisticated and use the linear regression model (`lm`) function in R. `lm()` uses a least squares method, effectively optimising the fit of the straight line to minimise the squared error between the line and the data.
 
-As the exponential approximation is only valid early in the epidemic, including data from the full epidemic curve would bias our estimate of $R_{0}$. As discussed in the lecture we will use the first 100 cases. For a given simulation we need to select all the data-points up to the 100^{th} case. We can achieve this by sub setting the incidence object as before:
+As the exponential approximation is only valid early in the epidemic, including data from the full epidemic curve would bias our estimate of $R_{0}$. As discussed in the lecture we will use the first 100 cases. For a given simulation we need to select all the data-points up to the 100$^{th}$ case. We can achieve this by sub setting the incidence object as before:
 
 ```{r}
 outflu1.sub<- data.frame(subset(outfluenza1.i,from=outfluenza1$x[1],to=outfluenza1$x[100]))
@@ -248,7 +248,7 @@ The `summary()` function provides a lot of detailed information on the statistic
 ```
 
 ```{solution}
-$R_{0} = 1 + 0.335*5 = 2.67$
+$R_{0} = 1 + 0.335 \times 5 = 2.67$
 ```
 
 We can estimate the uncertainty in our estimate of $R_{0}$ from the uncertainty in our estimate of the slope from the linear regression. The R function `confint()` will calculate 95% confidence intervals for our regression model:
@@ -262,7 +262,7 @@ Use these confidence intervals to calculate a 95% confidence interval for your e
 ```
 
 ```{solution}
-$R_{0} = 2.67$ (95% CI, 2.1 - 3.1)
+$R_{0} = 2.67$ (95% CI, 2.1--3.1)
 ```
 
 The incidence package has built in functions that simplify estimating the exponential growth rate. The base function is `fit` returns an `incidence_fit` object which returns details of the fit including the estimated exponential growth rate $r$ and the confidence interval:
@@ -301,7 +301,7 @@ How do the estimates from the incidence package and our manual estimate compare 
 ```
 
 ```{solution, title = "Answer"}
-`outflu1.fit2` is clearly a poor fit to the exponential growth rate as we have not subsetted the data to the exponential phase. The point estimates from the incidence package and our manual estimate are pretty comparable, however the confidence intervals from our manual estimate are smaller (0.2-0.4 compared to 0.2-0.5) reflecting the effective **smoothing** we applied to the data by using the cumulative case counts instead of raw incidence. We could similarly smooth the time series by increasing the time interval to sum up incidence - this runs the risk of introducing **artifacts** to the data or giving us false confidence in our estimates.
+`outflu1.fit2` is clearly a poor fit to the exponential growth rate as we have not subsetted the data to the exponential phase. The point estimates from the incidence package and our manual estimate are pretty comparable, however the confidence intervals from our manual estimate are smaller (0.2--0.4 compared to 0.2--0.5) reflecting the effective **smoothing** we applied to the data by using the cumulative case counts instead of raw incidence. We could similarly smooth the time series by increasing the time interval to sum up incidence - this runs the risk of introducing **artifacts** to the data or giving us false confidence in our estimates.
 ```
 
 The `incidence` package provides a method for automatically sub setting the data by finding the optimum fit of two log-linear models (minimising the squared error of both):
@@ -365,7 +365,7 @@ Compare your estimates from the three methods of estimation. Are you surprised b
 ```
 
 ```{solution}
-The confidence intervals from our regression model capture the variability (scatter) in the model output around the best-fit line for this particular realisation of the epidemic model. Stochastic effects will generate far greater variability between realisations, which our linear model contains no information about. The uncertainty in the estimate of the slope will therefore typically underestimate the true variability in the epidemic model. The Likelihood function for the earlyR method includes more information on the variability of the serial interval derived from an epidemic model and better represents the true **uncertainty** in our estimates.
+The confidence intervals from our regression model capture the variability (scatter) in the model output around the best-fit line for this particular realisation of the epidemic model. Stochastic effects will generate far greater variability between realisations, which our linear model contains no information about. The uncertainty in the estimate of the slope will therefore typically underestimate the true variability in the epidemic model. The Likelihood function for the `earlyR` method includes more information on the variability of the serial interval derived from an epidemic model and better represents the true **uncertainty** in our estimates.
 ```
 
 ## Appendix
