@@ -2,6 +2,11 @@
 
 ## Matt Castle ([mdc31@cam.ac.uk](mailto:mdc31@cam.ac.uk)) and Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
 
+```{r, include = FALSE}
+file.copy("Materials/Epidemic_models/Functions/Det_SI.R", "docs/Materials/Epidemic_models/Functions/Det_SI.R", overwrite = TRUE)
+file.copy("Materials/Epidemic_models/Functions/Det_SIR.R", "docs/Materials/Epidemic_models/Functions/Det_SIR.R", overwrite = TRUE)
+```
+
 ## Stochastic models
 
 *Aim*: To explore the effects of stochasticity on simple $SI$ and $SIR$ models and contrast their behaviour with previous deterministic results.
