@@ -19,6 +19,7 @@ library(utils)
 files2zip <- dir("./Materials/BYOM/Data", full.names = TRUE)
 zip(zipfile = "R0_files", files = files2zip, extras = "-j")
 file.copy("R0_files.zip", "Materials/BYOM/R0_files.zip", overwrite = TRUE)
+if(!dir.exists("docs/Materials/BYOM")) dir.create("docs/Materials/BYOM", recursive = TRUE)
 file.copy("R0_files.zip", "docs/Materials/BYOM/R0_files.zip", overwrite = TRUE)
 file.remove("R0_files.zip")
 ```
