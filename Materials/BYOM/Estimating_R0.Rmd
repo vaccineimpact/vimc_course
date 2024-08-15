@@ -14,7 +14,7 @@
 
 4. RECON `earlyR` method
 
-```{r, include = FALSE}
+```{r, eval = TRUE, echo = FALSE}
 library(utils)
 files2zip <- dir("./Materials/BYOM/Data", full.names = TRUE)
 zip(zipfile = "R0_files", files = files2zip, extras = "-j")
