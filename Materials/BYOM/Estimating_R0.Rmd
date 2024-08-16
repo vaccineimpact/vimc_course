@@ -2,7 +2,8 @@
 
 ```{r, echo = FALSE}
 ## detach SimBIID package so it doesn't interfere with SimInf
-detach("package:SimBIID", unload = TRUE)
+library(conflicted)
+conflicts_prefer(SimInf::run())
 ```
 
 # Estimating $R_{0}$
