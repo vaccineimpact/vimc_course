@@ -23,6 +23,10 @@ If you want to download R for your own computer, first go to [http://cran.r-proj
 
 Once you have installed R, you can install the **free desktop** version of RStudio from [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/). Again, selecting the default options during installation should be sufficient.
 
+```{info, title = "Important", collapsible = FALSE}
+You will also have to install some additional R packages in order to complete the materials in this workshop. Details on how to install packages can be found at the end of this Chapter [here](#packages). I would suggest you read through all these notes before installing the packages, but this box is here to remind you to do this. A full list of which packages to install can also be found [here](#packagesneeded).
+```
+
 ## What is R?
 
 R is an **object-orientated** programming language. This means that you create objects, and give them names. You can then **do things** to those objects: you can perform calculations, statistical tests, make tables or draw plots. Objects can be single numbers, characters, vectors of numbers, matrices, multi-dimensional arrays, lists containing different objects and so on. 
@@ -273,9 +277,9 @@ install_github("dgrtwo/gganimate")
 
 Note the syntax `DEVELOPER/PACKAGENAME`---this can be found from the address of the repository e.g. [https://github.com/dgrtwo/gganimate](https://github.com/dgrtwo/gganimate). For CRAN packages, the source code URL is usually listed on the package page. For example, Figure \@ref(fig:tidyrsource) shows that the GitHub page for `tidyr` is at [https://github.com/tidyverse/tidyr](https://github.com/tidyverse/tidyr).
 
-### Packages to install for this module
+### Packages to install for this module {#packagesneeded}
 
-The packages you need to install for this module are listed below. Some are installed automatically by R, but have been listed here for completeness. (Please let me know if you come across any that aren't listed here.)
+The packages you need to install for this module are listed below. Some are installed automatically by R, but have been listed here for completeness. (Please let me know if you come across any that aren't listed here.) 
 
 `r ifelse(is_latex_output(), "\\newpage", "")`
 
@@ -292,4 +296,16 @@ The packages you need to install for this module are listed below. Some are inst
 * `tsiR`
 * `chron`
 
-Many of these packages depend on other packages, but R should install all dependencies automatically.
+Many of these packages depend on other packages, but R should install all dependencies automatically. These should all be available via CRAN, and so can be installed using e.g.
+
+```{r, eval = FALSE}
+install.packages("deSolve")
+```
+
+If you're on a Windows computer then you'll need to do some additional work to use `SimInf` and `SimBIID` (macOS and Linux users should be fine).
+
+* Download Rtools from [https://cran.r-project.org/bin/windows/Rtools/](https://cran.r-project.org/bin/windows/Rtools/)
+    + Click on the appropriate version of RTools on the left.
+    + For RTools 4.4 (the most up to date version) click on the link `Rtools44_installer`. It's in the third paragraph down in the second section.
+    + Once it's downloaded install it using all of the default settings.
+    + This might take a couple of minutes, but click Finish when it's done.

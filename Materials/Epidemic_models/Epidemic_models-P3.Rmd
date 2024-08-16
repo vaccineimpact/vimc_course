@@ -23,42 +23,15 @@ By the end of this practical participants should be able to achieve the followin
     + Expand the $SI$ model to include additional transitions.
     + Understand the impact of R0 values on stochastic extinction.
     
-*Background*: This practical follows on from the Stochastic Epidemic Models Lecture 5 and echoes the content presented there.
+*Background*: This practical follows on from the Stochastic Epidemic Models Lecture and echoes the content presented there.
 
 ## Coding a simple $SI$ model
 
-We will first implement a slight modification to the code that has been presented to you in the previous Stochastic Epidemic Lecture (Epidemics L5). The key difference between the code presented in the lecture and the code shown here is that we are putting the code into a function (called `StocSI.dyn`) rather than just running a series of commands.
+We will first implement a slight modification to the code that has been presented to you in the previous Stochastic Epidemic Lecture. The key difference between the code presented in the lecture and the code shown here is that we are putting the code into a function (called `StocSI.dyn`) rather than just running a series of commands.
 
 * Open Rstudio.
 * Open a new blank script file.
 * Save it as `Stock_SI.R`.
-
-If you haven't already installed the package `SimInf`:
-
-* Click packages tab in lower right sub-window.
-* Click Install.
-* Type: `SimInf` in the Packages box.
-* Click Install.
-
-If you're on a Windows computer then you'll need to do some additional work to use `SimInf` (macOS and Linux users should be fine).
-
-* Download Rtools from [https://cran.r-project.org/bin/windows/Rtools/](https://cran.r-project.org/bin/windows/Rtools/)
-    + Click on the appropriate version of RTools on the left.
-    + For RTools 4.4 (the most up to date version) click on the link `Rtools44_installer`. It's in the third paragraph down in the second section.
-    + Once it's downloaded install it using all of the default settings.
-    + This might take a couple of minutes, but click Finish when it's done.
-* Add the path to Rtools to your PATH environment variable:
-    + Click on the windows icon in the bottom right of the screen
-    + Type environment variable in the search box
-    + This should bring up the System Properties window. Click on the Environment Variables button.
-    + Select on the *Path* row in the second table (entitled System Variables) and click Edit...
-    + Click New.
-    + Type `C:\Rtools\bin`.
-    + Click OK on all windows.
-    
-Great!
-
-Now we can finally actually get on with the simulations.
 
 **In the script window type the following commands**:
 

@@ -1,3 +1,10 @@
+# (PART) Additional Materials {-} 
+
+```{r, echo = FALSE}
+## detach SimBIID package so it doesn't interfere with SimInf
+detach("package:SimBIID", unload = TRUE)
+```
+
 # Estimating $R_{0}$
 
 ## Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
