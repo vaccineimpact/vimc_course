@@ -2,6 +2,12 @@
 
 ## TJ McKinley ([t.mckinley@exeter.ac.uk](mailto:t.mckinley@exeter.ac.uk)) {.unlisted .unnumbered}
 
+```{r, eval = TRUE, echo = FALSE, results = "hide"}
+if(!dir.exists("docs/Materials/Introduction/data")) dir.create("docs/Materials/Introduction/data", recursive = TRUE)
+file.copy("Materials/Introduction/data/ff.rds", "docs/Materials/Introduction/data/ff.rds", overwrite = TRUE)
+file.copy("Materials/Introduction/data/ff.csv", "docs/Materials/Introduction/data/ff.csv", overwrite = TRUE)
+```
+
 ## Variables in R
 
 R makes use of symbolic variables, i.e. words or letters that can be used to represent or store other values or objects. We will use the assignment operator `<-` to 'assign' a value (or object) to a given word (or letter). Run the following commands to see how this works (don't worry about the comments, these are for your understanding):
@@ -1109,7 +1115,7 @@ using the matrix subsetting notation (`[ROWS, COLS]`). (However, because it is a
 The important difference (to R at least) between a `matrix` object and a `data.frame` object that only contains `numeric` vectors, is that R thinks of the matrix as a single object, but it thinks of the `data.frame` as several connected, but distinct objects. (To the user it can be hard to distinguish between objects, and the commands `is.matrix()`, `is.list()` and `is.data.frame()` will return `TRUE` or `FALSE` depending on whether an object is a `matrix`, a `list` or `data.frame` respectively.)
 
 ```{info, title = "Note", collapsible = FALSE}
-`data.frames` are very important for statistical analysis, as they frequently fit the form of available data. They are so important in fact that a lot of statistical functions actually expect this, and we devote entire later [sections](#advis) to reading, summarising, plotting and manipulating data.
+`data.frames` are very important for statistical analysis, as they frequently fit the form of available data. They are so important in fact that a lot of statistical functions actually expect this.
 ```
 
 ## Reading in data
@@ -1141,14 +1147,14 @@ The data should have the following columns:
 * **longevity**: lifespan, in days.
 * **thorax**: length of thorax, in mm.
 
-The file `r ifelse(!is_latex_output(), "[ff.csv](Materials/Introduction/uploadFiles/ff.csv)", "ff.csv")` contains the data from this experiment. Download this data set to your working directory. (You can view this file in a text editor if you so wish.) We can load this into R using the `read.csv()` function, here storing the resulting `data.frame` as an R object called `ff`:
+The file [`ff.csv`](`r pathtofiles`/Materials/Introduction/data/ff.csv) contains the data from this experiment. Download this data set to your working directory. (You can view this file in a text editor if you so wish.) We can load this into R using the `read.csv()` function, here storing the resulting `data.frame` as an R object called `ff`:
 
 ```{r, eval = FALSE}
 ff <- read.csv("ff.csv")
 ```
 
 ```{r, echo = FALSE}
-ff <- read.csv("Materials/Introduction/uploadFiles/ff.csv")
+ff <- read.csv("Materials/Introduction/data/ff.csv")
 ```
 
 ```{info, title = "Note", collapsible = FALSE}
@@ -1204,7 +1210,7 @@ ff1 <- readRDS("ff.rds")
 
 Here the new `ff1` object is identical to the original `ff` object. I often read in `.csv` files, clean them up into the correct formats, and then save as an `.rds` file for further analysis. Since the `.rds` file stores R objects directly, then reading in the `.rds` file means I don't have to do all the cleaning up again. For large data sets, the resulting `.rds` file can often be a much smaller file size than the original text file.
 
-Alternative approaches can be found in other packages, and indeed a good package is `readr`, which is part of the `tidyverse` suite of packages, which we will introduce in the [Advanced Visualisation](#advis) and [Data Wrangling](#wrangling) tutorials---see [here](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf) for a useful cheat sheet. Some other options can be found [here](http://www.r-tutor.com/r-introduction/data-frame/data-import).
+Alternative approaches can be found in other packages, and indeed a good package is `readr`, which is part of the `tidyverse` suite of packages---see [here](https://rstudio.github.io/cheatsheets/html/data-import.html) for a useful cheat sheet. Some other options can be found [here](http://www.r-tutor.com/r-introduction/data-frame/data-import).
 
 Once we have data read in as a `data.frame` object, we can do all sorts of useful things with them, so-much-so that most of the rest of the module will be built around using these objects. As a little example, consider the ease with which we can produce a mean thorax length for control flies with just a short piece of code:
 
