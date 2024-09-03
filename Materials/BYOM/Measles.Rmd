@@ -2,6 +2,11 @@
 
 ## Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
 
+```{r, eval = TRUE, echo = FALSE, results = "hide"}
+if(!dir.exists("docs/Materials/BYOM")) dir.create("docs/Materials/BYOM", recursive = TRUE)
+file.copy("Materials/BYOM/Data/measles_hope_simpson.csv", "docs/Materials/BYOM/measles_hope_simpson.csv", overwrite = TRUE)
+```
+
 ## Measles data and challenge
 
 Implement a deterministic model to predict the impact of vaccination on the timing of outbreaks of measles in London. You should make the following assumptions to proceed:
@@ -68,7 +73,7 @@ plotbeta(LondonRes) + annotate('line',x=seq(1,364,1)/14,y=mk_terms(mean(LondonRe
 
 Important to note that the estimated transmission parameters from the $TSIR$ model **do not** translate directly to the transmission parameters for continuous-time (ordinary differential or stochastic) models. The qualitative pattern is informative rather than the specific estimates. (Conceptually I would consider these estimates to be closer to reproduction numbers than transmission rates as they are usually presented.). Note also that the $\alpha$ used in the $TSIR$ model is not an amplitude of seasonality but a correction (i.e. fudge) factor for the density dependence of the transmission term which---in some sense---can be used to adjust for artifacts arising from the discrete time approximation.
 
-We also provided you with Hope-Simpson's estimates of the serial interval of measles and illustrated that it suggests that the latent and infectious periods of measles are less dispersed (less variable) than exponential and well described by a gamma distribution where the shape and scale parameters are approximately equal:
+We also provided you with [Hope-Simpson's estimates](`r pathtofiles`/Materials/BYOM/measles_hope_simpson.csv) of the serial interval of measles and illustrated that it suggests that the latent and infectious periods of measles are less dispersed (less variable) than exponential and well described by a gamma distribution where the shape and scale parameters are approximately equal:
 
 ```{r, echo = FALSE}
 household <- as_tibble(read.csv('Materials/BYOM/Data/measles_hope_simpson.csv'))
