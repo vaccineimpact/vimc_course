@@ -38,7 +38,7 @@ We will first implement a slight modification to the code that has been presente
 ```{r, message = FALSE}
 library(SimInf)
 
-create.StocSI <- function(N, I0, beta , f_time) {
+create.StocSI <- function(N, I0, beta, f_time) {
     
     initial_state <- data.frame(S = N-I0 , I = I0)
     compartments <- c("S", "I")
@@ -283,16 +283,64 @@ Modify the above code to explore the effects of different initial conditions ($I
 **Qualitatively what effect does this have on the variability between replicates?**
 ```
 
+```{solution}
+As the initial number of infectives increases the variability between replicates decreases.
+
+``{r, fig.show = "hold", results = "hold"}
+ninf <- c(1, 5, 10, 50, 100)
+par(mfrow = c(2, 3))
+for(i in ninf) {
+    SImodel <- create.StocSI(500, i, 0.5, 30, 20)
+    out <- run(model = SImodel)
+    plot(out, main = paste0("I0 = ", i))
+}
+par(mfrow = c(1, 1))
+``
+
+```
+
 ```{task}
 Now vary the population size ($N = 50, 500, 5000$) with $I_{0} = 1$.
 
 **Qualitatively what effect does this have on the variability between replicates?**
 ```
 
+```{solution}
+In contrast to varying the initial number of infectives, the host population size has little to no impact on the variability between replicates of the $SI$ model. The relevant "large population" limit for the $SI$ model is the number of infectives not the size of the host population.
+
+``{r, fig.show = "hold", results = "hold"}
+npop <- c(50, 500, 5000)
+par(mfrow = c(1, 3))
+for(i in npop) {
+    SImodel <- create.StocSI(i, 1, 0.5, 30, 20)
+    out <- run(model = SImodel)
+    plot(out, main = paste0("N = ", i))
+}
+par(mfrow = c(1, 1))
+``
+
+```
+
 ```{task}
 Now vary the infection rate ($\beta = 0.1, 0.5, 1$).
 
 **Qualitatively what effect does this have on the variability between replicates?**
+```
+
+```{solution}
+As discussed in lectures, increasing the transmission rate reduces the impact of stochasticity and the variability between replicates.
+
+``{r, fig.show = "hold", results = "hold"}
+beta <- c(0.1, 0.5, 1)
+par(mfrow = c(1, 3))
+for(i in beta) {
+    SImodel <- create.StocSI(500, 1, i, 30, 20)
+    out <- run(model = SImodel)
+    plot(out, main = paste0("beta = ", i))
+}
+par(mfrow = c(1, 1))
+``
+
 ```
 
 ## The delay time
@@ -414,6 +462,17 @@ $$
 
 Open a new script in RStudio.
 
+```{info, transhint, title = "Hint", collapsible = FALSE, include = FALSE}
+To specify multiple transitions in the `SimInf` algorithm you will need a transitions vector with two elements to it like this:
+
+``{r, eval = FALSE}
+transitions <- c('S -> ?? -> I', 'I -> ?? -> R')
+``
+
+where I have deliberately replaced the relevant transition rates with `??`. You will need to replace the `??` with the correct rate equations.
+```
+
+```{task}
 Using the functions developed in the previous sections as a template construct a `create.StocSIR` function that takes five arguments:
 
 * `N`: the total population size
@@ -425,7 +484,7 @@ Using the functions developed in the previous sections as a template construct a
 
 The skeleton function below can serve as a starting point.
 
-```{r, eval = FALSE}
+``{r, eval = FALSE}
 create.StocSIR <- function(N, I0, beta, mu, f_time, reps = 1) {
     initial_state <-
     compartments <-
@@ -439,27 +498,44 @@ create.StocSIR <- function(N, I0, beta, mu, f_time, reps = 1) {
                     tspan = tspan)
     
     return(model)
-    
 }
-```
-
-
-```{info, title = "Hint", collapsible = FALSE}
-To specify multiple transitions in the `SimInf` algorithm you will need a transitions vector with two elements to it like this:
-
-``{r, eval = FALSE}
-tansitions <- c('S -> ?? -> I', 'I -> ?? -> R')
 ``
 
-where I have deliberately replaced the relevant transition rates with `??`. You will need to replace the `??` with the correct rate equations.
-```
+``{info, ref.label = "transhint", title = "Hint", collapsible = FALSE}
+``
 
 Using your function run the following code:
 
-```{r, eval = FALSE}
-SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 30)
+``{r, eval = FALSE}
+SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 50)
 out <- run(model = SIRmodel)
 plot(out)
+``
+
+```
+
+```{solution}
+
+``{r, eval = FALSE}
+create.StocSIR <- function(N, I0, beta, mu, f_time, reps = 1) {
+    initial_state <- data.frame(S = rep(N-I0, reps), I = rep(I0, reps), R = rep(0, reps))
+    compartments <- c("S", "I", "R")
+    transitions <- c("S -> beta*S*I/(S+I+R) -> I", "I -> mu*I -> R")
+    tspan <- seq(from = 1, to = f_time, by = 1)
+    
+    model <- mparse(transitions = transitions,
+                    compartments = compartments,
+                    gdata = c(beta = beta, mu = mu),
+                    u0 = initial_state,
+                    tspan = tspan)
+    
+    return(model)
+}
+SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 50)
+out <- run(model = SIRmodel)
+plot(out)
+``
+
 ```
 
 This should produce a graph that looks like this:
@@ -468,7 +544,7 @@ This should produce a graph that looks like this:
 create.StocSIR <- function(N, I0, beta, mu, f_time, reps = 1) {
     initial_state <- data.frame(S = rep(N-I0, reps), I = rep(I0, reps), R = rep(0, reps))
     compartments <- c("S", "I", "R")
-    transitions <- c("S -> (beta*S*I/(S+I))-mu*I -> I", "I -> mu*I -> R")
+    transitions <- c("S -> beta*S*I/(S+I+R) -> I", "I -> mu*I -> R")
     tspan <- seq(from = 1, to = f_time, by = 1)
     
     model <- mparse(transitions = transitions,
@@ -480,46 +556,55 @@ create.StocSIR <- function(N, I0, beta, mu, f_time, reps = 1) {
     return(model)
 }
 set.seed(123)
-SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 30)
+SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 50)
 out <- run(model = SIRmodel)
 plot(out)
 ```
 
-However, some of you will see a very different graph. (If you do get something like this plot then try rerunning the model and plotting it several times until you see something different.)
+However, some of you will see a very different graph. (If you do get something like this plot then try re-running the model and plotting it several times until you see something different.)
 
 ```{task, title = "Question"}
 Why might this be the case?
 ```
 
-```{task}
-Use this function to plot 50 replicates of the infection curves (use the code in the previous $SI$ section as a guide.
+```{solution, title = "Answer"}
+For some replicates the initial infected individual will recover before transmitting, the disease will go extinct and there will be no epidemic.
+```
 
-This should produce a graph that looks like this:
+```{task}
+Use this function to plot 20 replicates of the infection curves (use the code in the previous $SI$ section as a guide).
+```
+
+```{solution}
 
 ``{r, echo = FALSE}
 set.seed(2141)
-SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 30, 20)
+``
+
+``{r}
+SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 50, 20)
 out <- run(model = SIRmodel)
-plot(out , 'I', range=FALSE , type = 'l', ylim = c(0, 200))
+plot(out , 'I', range=FALSE , type = 'l', ylim = c(0, 300))
 ``
 
 ```
 
 ```{task}
 Load the R script called [`Det_SIR.R`](`r pathtofiles`/Materials/Epidemic_models/Functions/Det_SIR.R) and adapting your code from the previous section make a plot that overlays the deterministic solution with the output of the stochastic model.
+```
 
-This should produce a graph that looks like this:
+```{solution}
 
 ``{r, echo = FALSE}
 set.seed(2141)
-SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 30, 20)
-out <- run(model = SIRmodel)
-plot(out , 'I', range=FALSE , type = 'l', ylim = c(0, 200))
+``
+
+``{r, echo = -1}
+plot(out , 'I', range=FALSE , type = 'l', ylim = c(0, 300))
 source('Materials/Epidemic_models/Functions/Det_SIR.R')
-det.sol <- DetSIR.dyn(500, 1, 1, 0.25, 30)
+det.sol <- DetSIR.dyn(500, 1, 1, 0.25, 50)
 det.t <- det.sol[,1]
 det.I <- det.sol[,3]
-
 lines(det.t, det.I, lwd = 3, col = 'red')
 ``
 
@@ -544,7 +629,39 @@ $$
 
 3. What are the parameters required for this model?
     
-4. Write a new function `create.StocSIS` based upon the `create.StocSI` function and add to the `Stoch_SI.R` file and repeat the above analysis.
+4. Write a new function `create.StocSIS` based upon the `create.StocSI` function and add to the `Stoch_SI.R` file and repeat the above analysis. Use these initial values for the parameters:
+    
+* $\alpha = 0.1$
+* $\beta = 0.5$
+
+```
+
+```{solution}
+
+``{r, echo = FALSE}
+set.seed(126)
+``
+
+``{r}
+create.StocSIS <- function(N, I0, alpha, beta, f_time, reps = 1) {
+    initial_state <- data.frame(S = rep(N-I0, reps), I = rep(I0, reps))
+    compartments <- c("S", "I")
+    transitions <- c("S -> beta*S*I/(S+I) -> I", "I -> alpha*I -> S")
+    tspan <- seq(from = 1, to = f_time, by = 1)
+
+    model <- mparse(transitions = transitions,
+                    compartments = compartments,
+                    gdata = c(alpha = alpha, beta = beta),
+                    u0 = initial_state,
+                    tspan = tspan)
+
+    return(model)
+}
+SISmodel <- create.StocSIS(500, 1, 0.1, 0.5, 30, 20)
+out <- run(model = SISmodel)
+plot(out)
+plot(out , 'I', range = FALSE , type = 'l')
+``
 
 ```
 
@@ -568,7 +685,7 @@ To specify a birth (or death) event then we use the `@` symbol to represent the 
 
 Use these initial values for the parameters:
     
-* $\alpha = 0.1$
+* $\mu = 0.1$
 * $\beta = 0.5$
 * $\lambda = 100$
     
@@ -582,18 +699,49 @@ Repeat the previous steps for this model and create a `create.StocSI_demo` funct
 
 ```
 
+```{solution}
+
+``{r, echo = FALSE}
+set.seed(126)
+``
+
+``{r}
+create.StocSI_demo <- function(N, I0, mu, beta, lambda, f_time, reps = 1) {
+    initial_state <- data.frame(S = rep(N-I0, reps), I = rep(I0, reps))
+    compartments <- c("S", "I")
+    transitions <- c(
+        "@ -> lambda -> S",
+        "S -> beta*S*I/(S+I) -> I",
+        "S -> mu*S -> @",
+        "I -> mu*I -> @"
+    )
+    tspan <- seq(from = 1, to = f_time, by = 1)
+
+    model <- mparse(transitions = transitions,
+                    compartments = compartments,
+                    gdata = c(mu = mu, beta = beta, lambda = lambda),
+                    u0 = initial_state,
+                    tspan = tspan)
+
+    return(model)
+}
+SI_demo_model <- create.StocSI_demo(500, 1, 0.1, 0.5, 100, 30, 20)
+out <- run(model = SI_demo_model)
+plot(out)
+plot(out, 'I', range = FALSE , type = 'l')
+``
+
+```
+
 ## $SIR$ Extension: The final epidemic size
 
 In order to further explore the effects of stochasticity in the $SIR$ model we are going to explore the how the final size of an epidemic varies between realisations.
-
-```{task}
 
 * What is the final size of an epidemic?
 * What does it mean?
 * Which state variable do we need to consider in order to calculate the final epidemic size?
     
 For stochastic simulations the final epidemic size will vary between realisations of the epidemic which will mean that we need to think about a *distribution* of final epidemic sizes.
-```
 
 ```{info, hint2, title = "Hint", collapsible = FALSE, include = FALSE}
 
@@ -604,9 +752,32 @@ For stochastic simulations the final epidemic size will vary between realisation
 ```
 
 ```{task}
-Write code to calculate the final epidemic size from a `SimInf` output object.
+Write code to calculate the final epidemic size from a `SimInf` output object. Use $\beta = 1$ and $\mu = 0.25$ as before, running the outbreak for 50 days.
 
 ``{info, title = "Hint", collapsible = FALSE, ref.label = "hint2", echo = FALSE}
+``
+
+```
+
+```{solution}
+
+``{r, echo = FALSE}
+set.seed(123)
+``
+
+Here we will extract the number of removals at time $t = 50$ as an approximation of the final epidemic size. 
+
+``{r}
+## check for a single simulation
+SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 50)
+out <- run(model = SIRmodel)
+
+## extract states
+u <- trajectory(out)
+
+## find approximate final epidemic size
+finalsize <- u$R[u$time == 50]
+finalsize
 ``
 
 ```
@@ -618,16 +789,44 @@ Write code to calculate the final epidemic size from a `SimInf` output object.
 
 ```
 
+```{r, finalsize, include = FALSE}
+set.seed(126)
+## run 100 replicates
+SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 50, 100)
+out <- run(model = SIRmodel)
+
+## extract states
+u <- trajectory(out)
+
+## find approximate final epidemic size for each replicate
+finalsize <- rep(NA, 100)
+for(i in 1:100) {
+    finalsize[i] <- u$R[u$node == i & u$time == 50]
+}
+hist(finalsize, breaks = 500)
+```
+
 ```{task}
 Run 100 realisations, extract the final epidemic size from each one and then produce a histogram of the final sizes. It should look something similar to the figure below:
 
-``{r, echo = FALSE} 
-knitr::include_graphics("Materials/Epidemic_models/Plots/plot_2.JPG")
+``{r, ref.label = "finalsize", echo = FALSE}
 ``
+
 ``{info, hint3, title = "Hint", collapsible = FALSE, ref.label = "hint3", echo = FALSE}
 ``
 
 **Why does the histogram have a bimodal distribution?**
+```
+
+```{solution}
+
+``{r, echo = FALSE}
+set.seed(126)
+``
+``{r, ref.label = "finalsize", echo = -1, eval = FALSE}
+``
+
+This has a bimodal distribution because as before, with a small number of initial infectious individuals there is a non-zero probability that these early infections will recover before they infect anyone else. If an epidemic does take off then the final sizes tend to cluster around the deterministic final size ($\approx N = 500$ here).
 ```
 
 Recall that the final epidemic size for the deterministic $SIR$ model showed strong dependency on the value of the basic reproductive number, $R_{0}$.
@@ -639,14 +838,64 @@ Recall that the final epidemic size for the deterministic $SIR$ model showed str
     
 ```
 
+```{solution}
+$$
+    R_0 = \frac{\beta}{\gamma} = \frac{1}{0.25} = 4.
+$$
+From the lecture notes we have that the probability of early extinction is $P(E) \approx \frac{1}{R_0} = 0.25$. We can produce an approximation of the early extinction probabilities by counting the proportion of realisations that die out early. Based on the final size graph above, given the two very distinct modes, if we define early extinction as being any realisation with a final size $<250$ say, then we can generate an estimate for $P(E)$ as:
+    
+``{r}
+PE <- sum(finalsize < 250) / length(finalsize)
+PE
+``
+
+We can see that this closely aligns to our theoretical approximation.
+```
+
 For this section, we shall vary the value of $R_{0}$ by varying the transmission rate, $\beta$, whilst keeping the recovery rate, $\mu$, at a fixed value.
 
 ```{task}
-
-Explore how the final size distribution varies with R0 by producing histograms of the final size distribution as per the above figure for values of $R_{0} = 20.0$, $5.0$, $2.0$, $1.2$, $1.0$, $0.9$, $0.5$.
+Explore how the final size distribution varies with $R_0$ by producing histograms of the final size distribution as per the above figure for values of $R_0 = 20.0, 5.0, 2.0, 1.2, 1.0, 0.9, 0.5$.
 
 Can you always identify the two modes of the distribution?
+```
 
+```{solution}
+
+``{r, fig.show = "hold", results = "hold", fig.width = 7, fig.height = 7}
+## set vector of R0 values
+R0 <- c(20, 5, 2, 1.2, 1.0, 0.9, 0.5)
+
+## set mu
+mu <- 0.25
+
+## set plot layout
+par(mfrow = c(3, 3))
+
+## loop over R0 values
+for(i in 1:length(R0)) {
+    
+    ## calculate beta for fixed mu and R0
+    beta <- R0[i] * mu
+    
+    ## set up and run model
+    SIRmodel <- create.StocSIR(500, 1, beta, mu, 50, 100)
+    out <- run(model = SIRmodel)
+    
+    ## extract states
+    u <- trajectory(out)
+    
+    ## find final epidemic size for each replicate
+    finalsize <- rep(NA, 100)
+    for(j in 1:100) {
+        finalsize[j] <- u$R[u$node == j & u$time == 50]
+    }
+    hist(finalsize, breaks = 500, main = paste0("R0 = ", R0[i]))
+}
+par(mfrow = c(1, 1))
+``
+
+For intermediate values of $R_0$ the two modes will merge together.
 ```
 
 ## $SIR$ Extension: Stochastic extinction
@@ -657,20 +906,88 @@ One of the primary differences between the deterministic and stochastic formulat
 Which state variable do we need to consider in order to calculate the time to epidemic extinction and what is the value of this state variable at extinction?
 ```
 
+```{solution, title = "Answer"}
+We should monitor the first time at which the number of infectious individuals, $I$, equals 0.
+```
+
 As with the final epidemic size, the extinction time will vary over realisations of the epidemic which will result in a distribution of extinction times, which we are now going to explore.
+
+```{r, finaltime, include = FALSE}
+set.seed(126)
+## run 100 replicates
+SIRmodel <- create.StocSIR(500, 1, 1, 0.25, 50, 100)
+out <- run(model = SIRmodel)
+
+## extract states
+u <- trajectory(out)
+
+## find extinction time for each replicate
+finaltime <- rep(NA, 100)
+for(i in 1:100) {
+    ## note that this will return an NA if the epidemic hasn't ended
+    finaltime[i] <- u$time[u$node == i & u$I == 0][1]
+}
+hist(finaltime)
+```
+
 
 ```{task}
 Adapt your previous code to calculate the extinction time for each realisation.
 
-* What value should the final time for the simulation be set to?
 * Run 100 realisations in order to produce a histogram of the time to extinction, as per the figure below:
 
-``{r, echo = FALSE} 
-knitr::include_graphics("Materials/Epidemic_models/Plots/plot_3.JPG")
+``{r, ref.label = "finaltime", echo = FALSE}
 ``
 
-* Explore the distribution of extinction times for several values of $R_{0} = 20.0$, $5.0$, $2.0$, $1.2$, $1.0$, $0.9$, $0.5$.
+* Explore the distribution of extinction times for several values of $R_{0} = 20.0, 5.0, 2.0, 1.2, 1.0, 0.9, 0.5$.
 
 * What do you notice about the distribution as $R_{0}$ gets close to 1?
+
+```
+
+```{solution}
+
+To generate the first figure, consider:
+    
+``{r, ref.label = "finaltime", eval = -1, eval = FALSE}
+``
+
+To then explore how this distribution changes for different values of $R_0$, consider:
+
+``{r, fig.show = "hold", results = "hold", fig.width = 7, fig.height = 7}
+## set vector of R0 values
+R0 <- c(20, 5, 2, 1.2, 1.0, 0.9, 0.5)
+
+## set mu
+mu <- 0.25
+
+## set plot layout
+par(mfrow = c(3, 3))
+
+## loop over R0 values
+for(i in 1:length(R0)) {
+    
+    ## calculate beta for fixed mu and R0
+    beta <- R0[i] * mu
+    
+    ## set up and run model
+    SIRmodel <- create.StocSIR(500, 1, beta, mu, 50, 100)
+    out <- run(model = SIRmodel)
+    
+    ## extract states
+    u <- trajectory(out)
+    
+    ## find extinction time for each replicate
+    finaltime <- rep(NA, 100)
+    for(j in 1:100) {
+        ## note that this will return an NA if the epidemic hasn't ended
+        finaltime[j] <- u$time[u$node == j & u$I == 0][1]
+    }
+    hist(finaltime, main = paste0("R0 = ", R0[i]))
+}
+par(mfrow = c(1, 1))
+``
+
+As $R_0$ gets closer to one, the extinction time distribution loses the upper mode and moves far closer to zero.
 
 ```
