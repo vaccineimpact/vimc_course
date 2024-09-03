@@ -21,7 +21,7 @@ A time-series of measles cases from London from 1950--1964 (immediately prior to
 
 The `plotdata` function from the `tsiR` package provides a summary of the incidence and demographic data (birth rates and population size):
 
-```{r, message = FALSE, warning = FALSE, echo = FALSE}
+```{r, message = FALSE, warning = FALSE}
 require(tsiR)
 require(tidyverse)
 require(ggplot2)
@@ -37,7 +37,7 @@ plotdata(LondonMeas)
 
 As you can see, our simplifying assumption of fixed birth and population size glosses over the "baby boom" post **WWII** that pushed the typical two-year cycle of measles epidemics into annual outbreaks and led (along with migration) to an increase in the population size. The $TSIR$ model can be used to estimate the seasonal variation in transmission rates presented in the background slides (on which we overlay the typical pattern of school terms in England and Wales calculated by the `mk_terms` function below):
 
-```{r, echo = FALSE}
+```{r}
 LondonRes <- runtsir(data=LondonMeas, IP = 2,
                      xreg = 'cumcases', regtype='gaussian',
                      alpha = NULL, sbar = NULL,
@@ -67,15 +67,13 @@ mk_terms <- function(beta, alpha)
 }
 
 plotbeta(LondonRes) + annotate('line',x=seq(1,364,1)/14,y=mk_terms(mean(LondonRes$beta),0.21),lwd=2,col='red')
-
-
 ```
 
 Important to note that the estimated transmission parameters from the $TSIR$ model **do not** translate directly to the transmission parameters for continuous-time (ordinary differential or stochastic) models. The qualitative pattern is informative rather than the specific estimates. (Conceptually I would consider these estimates to be closer to reproduction numbers than transmission rates as they are usually presented.). Note also that the $\alpha$ used in the $TSIR$ model is not an amplitude of seasonality but a correction (i.e. fudge) factor for the density dependence of the transmission term which---in some sense---can be used to adjust for artifacts arising from the discrete time approximation.
 
 We also provided you with [Hope-Simpson's estimates](`r pathtofiles`/Materials/BYOM/measles_hope_simpson.csv) of the serial interval of measles and illustrated that it suggests that the latent and infectious periods of measles are less dispersed (less variable) than exponential and well described by a gamma distribution where the shape and scale parameters are approximately equal:
 
-```{r, echo = FALSE}
+```{r}
 household <- as_tibble(read.csv('Materials/BYOM/Data/measles_hope_simpson.csv'))
 
 SIR_gamma <-  tibble(interval=seq(0,21,0.1),value=dgamma(seq(0,21,0.1),22,22/11))
@@ -87,11 +85,10 @@ ggplot(household,aes(x=interval,y=B/sum(B))) + geom_col() +
   xlab('Serial Interval') + ylab('Density')
 ```
 
-## Standard $SEIR$ (exponential) with sinusoidal forcing
+```{info, title = "Standard $SEIR$ (exponential) with sinusoidal forcing"}
+We first present an implementation of the standard $SEIR$ model---with constant rates of progression through the latent and infectious compartments---and sinusoidal forcing term. The basic template here is similar to what you have seen before in earlier practicals except that the transmission rate now depends on the time. Here we wrote a wrapper function which sets some sensible default initial conditions (the fixed points of the unforced $SEIR$ model where $\alpha=0.0$) and then runs the model for three periods. No matter the initial model conditions the seasonally forced $SEIR$ model will **eventually** converge towards a stable dynamic behaviour (often described as an "attractor" in analogy to the fixed points of an unforced model). We can run the model for a "burn-in" period (analogous to the same concept for MCMC convergence) to remove this "transient" behaviour. Our function solves the model for three periods. We forward-simulate the initial conditions for `burnin` years discarding the results but using the final state to set the initial conditions for a run of `prevacc` years. We then adjust the birth rate to model vaccination at birth and then run for an additional `postvacc` years, returning a tibble with the sampling times and state variables of the model:
 
-We first present an implementation of the standard $SEIR$ model---with constant rates of progression through the latent and infectious compartments---and sinusoidal forcing term. The basic template here is similar to what you have seen before in earlier practicals except that the transmission rate now depends on the time. Here we wrote a wrapper function which set's some sensible default initial conditions (the fixed points of the unforced $SEIR$ model where $\alpha=0.0$) and then runs the model for three periods. No matter the initial model conditions the seasonally forced $SEIR$ model will **eventually** converge towards a stable dynamic behaviour (often described as an "attractor" in analogy to the fixed points of an unforced model). We can run the model for a "burn-in" period (analogous to the same concept for MCMC convergence) to remove this "transient" behaviour. Our function solves the model for three periods. We forward-simulate the initial conditions for `burnin` years discarding the results but using the final state to set the initial conditions for a run of `prevacc` years. We then adjust the birth rate to model vaccination at birth and then run for an additional `postvacc` years, returning a tibble with the sampling times and state variables of the model:
-
-```{r, echo = FALSE}
+``{r}
 SEIR_exp <- function(t,y,theta) {
   
   beta = theta[1];
@@ -116,7 +113,6 @@ SEIR_exp <- function(t,y,theta) {
   
   return(list(dy_dt))
 }
-
 
 det_SEIR_exp <-function(N0,R0,TE,TI,mu,alpha,burnin,prevacc,postvacc,vacc)
 {
@@ -161,14 +157,11 @@ det_SEIR_exp <-function(N0,R0,TE,TI,mu,alpha,burnin,prevacc,postvacc,vacc)
   return(output)
   
 }
-
-```
-
+``
 
 Using the suggested parameter values you should find that a seasonal forcing of $\alpha = 0.19$ gives a reasonable qualitative fit to the two year cycle of measles outbreaks seen in London after 1950:
 
-
-```{r, message = FALSE, warning = FALSE, echo = FALSE}
+``{r, message = FALSE, warning = FALSE}
 x<-det_SEIR_exp(3.3e6,17,8,3,20/(1000*364),0.0,50,10,10,0.0)
 
 ggplot(x,aes(x=time,y=I*(1/0.4)*(5/7))) + geom_line() + xlab('Years') + ylab('Cases') +
@@ -188,15 +181,13 @@ x<-det_SEIR_exp(3.3e6,17,8,5,20/(1000*364),0.20,50,10,10,0.0)
 
 ggplot(x,aes(x=time,y=I*(1/0.4)*(5/7))) + geom_line() + xlab('Years') + ylab('Cases') +
   ggtitle("alpha = 0.20, vacc = 0.0") + ylim(0,8000)
-
-
-```
+``
 
 For sinusoidal forcing the bifurcation to two-yearly cycles occurs for a very small amount of seasonal forcing ($\alpha \sim 0.02$) with the amplitude of the two-year cycle increasing with increasing $\alpha$ before further bifurcations to three, four and irregular multiannual cycles.
 
 If we now examine the effect of increasing vaccination coverage we see that at low coverage vaccination progressively increases the time between outbreaks---shifting cycles to 3, 4 and higher (irregular cycles). However, the incidence between outbreaks now falls to unrealistically low levels (nano-scale number of infectives!)---highlighting the likely increased importance of stochastic effects after the introduction of vaccination. 
 
-```{r, echo = FALSE}
+``{r}
 
 x<-det_SEIR_exp(3.3e6,17,8,5,20/(1000*364),0.19,50,10,30,0.0)
 
@@ -218,17 +209,16 @@ x<-det_SEIR_exp(3.3e6,17,8,5,20/(1000*364),0.19,50,10,30,0.6)
 ggplot(x,aes(x=time,y=I*(1/0.4)*(5/7))) + geom_line() + xlab('Years') + ylab('Cases') +
   ggtitle("alpha = 0.19, vacc = 0.6") + ylim(0,8000)
 
-```
+``
 
-```{info, title = "Note", collapsible = FALSE}
 These types of models can be very sensitive to both initial conditions and numerical errors meaning that more sophisticated numerical methods (such as AUTO) need to be used to map out the full range of dynamical behaviours accurately.
+
 ```
 
-## Standard $SEIR$ (exponential) with term-time forcing
-
+```{info, title = "Standard $SEIR$ (exponential) with term-time forcing"}
 We now adapt the previous code to use a term-time forcing function and run the same model scenarios:
 
-```{r, echo = FALSE}
+``{r}
 SEIR_exp <- function(t,y,theta) {
   
   beta = theta[1];
@@ -254,12 +244,11 @@ SEIR_exp <- function(t,y,theta) {
   
   return(list(dy_dt))
 }
-
-```
+``
 
 The term-time forcing function leads to a very different (and richer) bifurcation structure. Indeed, if you tried this form of the model you likely could not find values of $\alpha$ that gave a reasonable match to the London time-series for the assumed parameter values. Reducing the assumed value of $R_{0}$ to 12 you can achieve a comparable fit (arguably better with respect to the qualitative shape of the attractor).
 
-```{r, echo = FALSE}
+``{r}
 
 x<-det_SEIR_exp(3.3e6,12,8,5,20/(1000*364),0.05,50,10,10,0.0)
 
@@ -280,13 +269,11 @@ x<-det_SEIR_exp(3.3e6,12,8,5,20/(1000*364),0.5,50,10,10,0.0)
 
 ggplot(x,aes(x=time,y=I*(1/0.4)*(5/7))) + geom_line() + xlab('Years') + ylab('Cases') +
   ggtitle("alpha = 0.5, vacc = 0.0") + ylim(0,10000)
-
-
-```
+``
 
 We see the same qualiative impact of vaccination as before, but note that the higher troughs in prevalence between major outbreaks predicted by the term-time forcing model mean that stable (and plausible in terms of depth of trough between outbreaks) dynamics are seen for a wider range of birth/vaccination rates:
 
-```{r, echo = FALSE}
+``{r}
 
 x<-det_SEIR_exp(3.3e6,12,8,5,20/(1000*364),0.21,50,10,30,0.0)
 
@@ -307,14 +294,14 @@ x<-det_SEIR_exp(3.3e6,12,8,5,20/(1000*364),0.21,50,10,30,0.6)
 
 ggplot(x,aes(x=time,y=I*(1/0.4)*(5/7))) + geom_line() + xlab('Years') + ylab('Cases') +
   ggtitle("alpha = 0.21, vacc = 0.6") + ylim(0,8000)
+``
 
 ```
 
-## Gamma $SEIR$ with term-time forcing
-
+```{info, title = "Gamma $SEIR$ with term-time forcing"}
 Finally, we present an implementation of the term-time forcing model with realistic (gamma) distributed latent and infectious periods. The Gamma-$SEIR$ model is much more sensitive to changes in the forcing amplitude $\alpha$ requiring lower amplitudes to generate the same qualitative dynamics as the (less biologically accurate) standard model with constant rates. These models are even more difficult to work with numerically and presented here purely for completeness and a cautionary note on the extent to which these model assumptions impact on the range of model parameters that will be consistent with real data. This sensitivity, and strong trade-offs between transmission rates, birth rates and distributional assumptions makes this type of model particular problematic (and therefore particularly interesting) to perform inference with.
 
-```{r, echo = FALSE}
+``{r}
 SEIR_gamma <- function(t,y,theta) {
   
   x_i = integer(2);
@@ -412,10 +399,9 @@ det_SEIR_gamma <-function(N0,R0,TE,TI,shape_E,shape_I,mu,alpha,burnin,prevacc,po
   
   
 }
+``
 
-```
-
-```{r, echo = FALSE}
+``{r}
 
 # The extra compartments in gamma-distributed models can cause memory problems
 # Here we run the garbage collection function manually to try and head off any crashes 
@@ -447,11 +433,9 @@ x<-det_SEIR_gamma(3.3e6,12,8,5,8,5,20/(1000*364),0.4,50,10,10,0.0)
 
 ggplot(x,aes(x=time,y=I*(1/0.4)*(5/7))) + geom_line() + xlab('Years') + ylab('Cases') +
   ggtitle("alpha = 0.4, vacc = 0.0") + ylim(0,10000)
+``
 
-
-```
-
-```{r, echo = FALSE}
+``{r}
 
 # gc()
 
@@ -482,5 +466,6 @@ x<-det_SEIR_gamma(3.3e6,12,8,5,8,5,20/(1000*364),0.21,50,10,30,0.6)
 
 ggplot(x,aes(x=time,y=I*(1/0.4)*(5/7))) + geom_line() + xlab('Years') + ylab('Cases') +
   ggtitle("alpha = 0.21, vacc = 0.6") + ylim(0,8000)
+``
 
 ```
