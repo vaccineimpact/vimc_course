@@ -1,3 +1,5 @@
+# (PART) Appendices {-} 
+
 # References {-}
 
 <div id="refs"></div>
@@ -20,8 +22,6 @@ cat(x)
 ```
 
 \newgeometry{margin=0.5in}
-
-# (APPENDIX) Appendix {-}
 
 ```{r, results = "asis", echo = FALSE, cache = FALSE}
 x <- ""
