@@ -27,7 +27,7 @@ In earlier versions of R, the package was called `odesolve` but worked in the sa
 
 ### A few notes on Euler's method
 
-Although we will be using `deSolve` as a black box, for your information here is a very basic introduction to how differential equation solvers work. The general principle was devised by Swiss mathematician [Leonhard Euler (1707--1783)](https://en.wikipedia.org/wiki/Leonhard_Euler). Among many other things, Euler also came up with the fascinating formula $e-i\pi + 1 = 0$, but that's another story.
+Although we will be using `deSolve` as a black box, for your information here is a very basic introduction to how differential equation solvers work. The general principle was devised by Swiss mathematician [Leonhard Euler (1707--1783)](https://en.wikipedia.org/wiki/Leonhard_Euler). Among many other things, Euler also came up with the fascinating formula $e^{-i\pi} + 1 = 0$, but that's another story.
 
 Here I illustrate the method with a single differential equation, but it can easily be extended to any number. Consider the logistic growth model with an arbitrary choice of parameter values: $dN/dt = 0.5N(1 - N/100)$ and initial condition $N(0) = 1$.
 
