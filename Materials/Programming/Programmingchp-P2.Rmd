@@ -241,7 +241,7 @@ Using the binomial distribution:
 
 ```{r}
 rbinom(
-  1,  # number of observation
+  1,  # number of observations
   1,  # number of binomial trials
   1/3 # binomial probability of success
 )
