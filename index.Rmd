@@ -103,3 +103,18 @@ All **tasks** will be denoted in panel boxes like this one. In the HTML version,
 ```{solution}
 The answer is, of course, 42. 
 ```
+
+## Lecture Notes {-}
+
+```{r, eval = TRUE, echo = FALSE, results = "hide"}
+library(utils)
+if(!dir.exists("docs/Materials")) dir.create("docs/Materials", recursive = TRUE)
+if(file.exists("LectureNotes.zip")) file.remove("LectureNotes.zip")
+zip(zipfile = "LectureNotes", flags = "-r9Xj", files = "Materials/Lecture_Notes")
+file.copy("LectureNotes.zip", "docs/Materials", overwrite = TRUE)
+file.remove("LectureNotes.zip")
+```
+
+```{info, title = "Note", collapsible = FALSE}
+The lecture notes for all parts of this workshop can be downloaded [here](`r pathtofiles`/Materials/LectureNotes.zip).
+```
