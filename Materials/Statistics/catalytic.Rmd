@@ -6,13 +6,8 @@
 
 ```{r, eval = TRUE, echo = FALSE, results = "hide"}
 if(!dir.exists("docs/Materials/Statistics/data")) dir.create("docs/Materials/Statistics/data", recursive = TRUE)
-file.copy("Materials/Statistics/StatsLectureNotes.pdf", "docs/Materials/Statistics/StatsLectureNotes.pdf", overwrite = TRUE)
 file.copy("Materials/Statistics/data/Rubella-UK.csv", "docs/Materials/Statistics/data/Rubella-UK.csv", overwrite = TRUE)
 file.copy("Materials/Statistics/data/POLYMOD.csv", "docs/Materials/Statistics/data/POLYMOD.csv", overwrite = TRUE)
-```
-
-```{info, title = "Note", collapsible = FALSE}
-A PDF handout for the slides for the Statistical Modelling part of this workshop can be found [here](`r pathtofiles`/Materials/Statistics/StatsLectureNotes.pdf).
 ```
  
 The aim of this practical is to estimate the age-stratified force-of-infection and basic reproductive ratio from age-stratified serological data for an endemic disease.
