@@ -15,7 +15,7 @@ We have discussed the solutions of two differential equations using the fact tha
 $$
     \begin{aligned} 
     \frac{dN}{dt} &= rN \rightarrow N(t) = N_{0}e^{rt}  \\
-    \frac{dN}{dt} &= rN\left(1-\frac{N}{K}\right) \rightarrow N(t) = \frac{K}{1+\frac{K-N_{0}}{N_{0}}e^{rt}}
+    \frac{dN}{dt} &= rN\left(1-\frac{N}{K}\right) \rightarrow N(t) = \frac{K}{1+\frac{K-N_{0}}{N_{0}}e^{-rt}}
     \end{aligned}
 $$
 
@@ -189,7 +189,7 @@ plot(logistic_sol[,1], logistic_sol[,2], type='l',
 # Just to check, you can superimpose the graph of the
 # analytical solution of the logistic growth model
 
-points(logistic_t,1/(0.01+0.99*exp(-logistic_t)),col='red')
+points(logistic_t, 100 / (1 + (100 - 1) * exp(-logistic_t)), col = 'red')
 ```
 
 ```{task}

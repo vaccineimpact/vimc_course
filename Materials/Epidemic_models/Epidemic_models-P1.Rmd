@@ -257,7 +257,7 @@ $$
 
 At the very beginning of the outbreak, $I(t) \ll S(t) \approx N$. So we can approximate the ODE above as $dI/dt = (\beta - \gamma )I$, which can be solved as:
 $$
-    I(t) = I_{0} \exp(\beta - \gamma)t
+    I(t) = I_{0} \exp([\beta - \gamma]t)
 $$
     
 So the number of infected individuals initially follows an exponential growth with rate
@@ -479,7 +479,7 @@ Using the integration rules from the maths lectures, we can actually solve this 
 So, given the initial conditions, we can deduce the value of $I(t)$ from the value of $S(t)$ at any time point. How is that helpful? First consider the question of the height of the epidemic peak. We know that $I(t)$ reaches its maximum when $S(t) = \gamma/\beta$. Hence the height of the epidemic peak:
 
 $$
-    I_{\mathrm{max}} = I_{0} + \frac{\gamma}{\beta} \log \frac{\gamma}{\beta S_{0}} + S_{0} - \frac{\gamma}{\beta}
+    I_{\mathrm{max}} = I_{0} + \frac{\gamma}{\beta} \log \left(\frac{\gamma}{\beta S_{0}}\right) + S_{0} - \frac{\gamma}{\beta}
 $$
 
 Assuming that $I(0) \ll S(0) \approx N$, then we can write $R_{0}\approx\beta S(0)/\gamma$, hence:
@@ -506,6 +506,4 @@ where the three arguments of `optimize` are:
 * the function to minimize with respect to its first argument (in this case $x$), 
 * the interval over which to search for a solution
 * the numerical values of any other argument of `my_fun` (in this case $R_{0}$).
-
-We'll see more about `optimize()` next week, so I wont give any more detail here.
 
