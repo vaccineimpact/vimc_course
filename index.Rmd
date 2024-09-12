@@ -106,7 +106,7 @@ The answer is, of course, 42.
 
 ## Lecture Notes {-}
 
-```{r, eval = TRUE, echo = FALSE, results = "hide"}
+```{r, eval = TRUE, echo = FALSE, results = "hide", cache = FALSE}
 library(utils)
 if(!dir.exists("docs/Materials")) dir.create("docs/Materials", recursive = TRUE)
 if(file.exists("LectureNotes.zip")) file.remove("LectureNotes.zip")

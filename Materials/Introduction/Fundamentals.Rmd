@@ -2,7 +2,7 @@
 
 ## TJ McKinley ([t.mckinley@exeter.ac.uk](mailto:t.mckinley@exeter.ac.uk)) {.unlisted .unnumbered}
 
-```{r, eval = TRUE, echo = FALSE, results = "hide"}
+```{r, eval = TRUE, echo = FALSE, results = "hide", cache = FALSE}
 if(!dir.exists("docs/Materials/Introduction/data")) dir.create("docs/Materials/Introduction/data", recursive = TRUE)
 file.copy("Materials/Introduction/data/ff.rds", "docs/Materials/Introduction/data/ff.rds", overwrite = TRUE)
 file.copy("Materials/Introduction/data/ff.csv", "docs/Materials/Introduction/data/ff.csv", overwrite = TRUE)

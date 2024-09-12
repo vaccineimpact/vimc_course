@@ -2,7 +2,7 @@
 
 ## Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
 
-```{r, eval = TRUE, echo = FALSE, results = "hide"}
+```{r, eval = TRUE, echo = FALSE, results = "hide", cache = FALSE}
 if(!dir.exists("docs/Materials/BYOM")) dir.create("docs/Materials/BYOM", recursive = TRUE)
 file.copy("Materials/BYOM/Data/measles_hope_simpson.csv", "docs/Materials/BYOM/measles_hope_simpson.csv", overwrite = TRUE)
 ```

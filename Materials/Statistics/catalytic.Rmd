@@ -4,7 +4,7 @@
 
 ## T. J. McKinley ([t.mckinley@exeter.ac.uk](mailto:t.mckinley@exeter.ac.uk)) and Andrew Conlan ([ajkc2@cam.ac.uk](mailto:ajkc2@cam.ac.uk)) {.unlisted .unnumbered}
 
-```{r, eval = TRUE, echo = FALSE, results = "hide"}
+```{r, eval = TRUE, echo = FALSE, results = "hide", cache = FALSE}
 if(!dir.exists("docs/Materials/Statistics/data")) dir.create("docs/Materials/Statistics/data", recursive = TRUE)
 file.copy("Materials/Statistics/data/Rubella-UK.csv", "docs/Materials/Statistics/data/Rubella-UK.csv", overwrite = TRUE)
 file.copy("Materials/Statistics/data/POLYMOD.csv", "docs/Materials/Statistics/data/POLYMOD.csv", overwrite = TRUE)

@@ -22,7 +22,7 @@ conflicts_prefer(SimInf::run())
 
 4. RECON `earlyR` method
 
-```{r, eval = TRUE, echo = FALSE, results = "hide"}
+```{r, eval = TRUE, echo = FALSE, results = "hide", cache = FALSE}
 library(utils)
 files <- dir("Materials/BYOM/Data", full.names = TRUE)
 files <- files[c(grep("Out.*_cases", files), grep(".R", files))]
