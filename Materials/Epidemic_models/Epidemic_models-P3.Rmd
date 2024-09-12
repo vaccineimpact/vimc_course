@@ -31,7 +31,7 @@ We will first implement a slight modification to the code that has been presente
 
 * Open Rstudio.
 * Open a new blank script file.
-* Save it as `Stock_SI.R`.
+* Save it as `Stoch_SI.R`.
 
 **In the script window type the following commands**:
 
