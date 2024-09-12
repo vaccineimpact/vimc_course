@@ -94,7 +94,7 @@ $$
 ```
     
 ```{task}
-Use the equation derived above to estimate the force-of-infection $\lambda$ within each annual age cohort ($i = 1, \dots, N_A$) and add as another column to the `rubella` data frame (e.g. `rubella$lambda`).
+Use the equation derived above to estimate the force-of-infection $\lambda_i$ within each annual age cohort ($i = 1, \dots, N_A$) and add as another column to the `rubella` data frame (e.g. `rubella$lambda`).
 
 ``{info, title = "Hints"}
 
@@ -106,9 +106,9 @@ Use the equation derived above to estimate the force-of-infection $\lambda$ with
 ```
 
 ```{solution}
-If $\Delta a = 1$ for all age-cohorts, then the equation for $\lambda$ can be estimated within each age-cohort as:
+If $\Delta a = 1$ for all age-cohorts, then the equation for $\lambda_i$ can be estimated within each age-cohort as:
 $$
-    \lambda = \log\left(p_{i - 1}\right) - \log\left(p_i\right)
+    \lambda_i = \log\left(p_{i - 1}\right) - \log\left(p_i\right)
 $$
 for $i = 1, \dots, N_A$ where $p_0 = 1$. This can be implemented in R using e.g.
 
