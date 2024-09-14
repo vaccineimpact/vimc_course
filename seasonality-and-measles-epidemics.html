@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>12 Seasonality and Measles Epidemics | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="12 Seasonality and Measles Epidemics | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="12 Seasonality and Measles Epidemics | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="12 Seasonality and Measles Epidemics | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="12 Seasonality and Measles Epidemics | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="12 Seasonality and Measles Epidemics | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="estimating-r_0.html"/>
+<link rel="next" href="outbreak-of-influenza-in-a-boarding-school.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="seasonality-and-measles-epidemics" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">12</span> Seasonality and Measles Epidemics<a href="seasonality-and-measles-epidemics.html#seasonality-and-measles-epidemics" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="andrew-conlan-ajkc2cam.ac.uk-1" class="section level2 unlisted unnumbered hasAnchor">
+<h2>Andrew Conlan (<a href="mailto:ajkc2@cam.ac.uk">ajkc2@cam.ac.uk</a>)<a href="seasonality-and-measles-epidemics.html#andrew-conlan-ajkc2cam.ac.uk-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="measles-data-and-challenge" class="section level2 hasAnchor" number="12.1">
+<h2><span class="header-section-number">12.1</span> Measles data and challenge<a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Implement a deterministic model to predict the impact of vaccination on the timing of outbreaks of measles in London. You should make the following assumptions to proceed:</p>
+<ul>
+<li>Constant population size of 3.3 million</li>
+<li>Birth rate of 20 per thousand per year</li>
+<li>Basic reproduction number <span class="math inline">\(R_{0} = 17\)</span> (for sinusoidal forcing model)</li>
+<li>Cases can be approximately calculated from the number of infectives by multiplying by 7/5 (i.e. reporting period /average infectious period)</li>
+<li>The reporting rate during this period was 40%</li>
+</ul>
+<p>A time-series of measles cases from London from 1950–1964 (immediately prior to the introduction of vaccination in the UK) are included as part of the <code>tsiR</code> package in R that provides historical time-series data from England and Wales along with functions to work with the so-called time-series <span class="math inline">\(SIR\)</span> model (<span class="math inline">\(TSIR\)</span>)—a discrete time chain binomial model that can be used to very successfully model and predict measles dynamics (and to a lesser extent other strongly immunizing childhood infections).</p>
+<p>The <code>plotdata</code> function from the <code>tsiR</code> package provides a summary of the incidence and demographic data (birth rates and population size):</p>
+<div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb461-1"><a href="seasonality-and-measles-epidemics.html#cb461-1" tabindex="-1"></a><span class="fu">require</span>(tsiR)</span>
+<span id="cb461-2"><a href="seasonality-and-measles-epidemics.html#cb461-2" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb461-3"><a href="seasonality-and-measles-epidemics.html#cb461-3" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb461-4"><a href="seasonality-and-measles-epidemics.html#cb461-4" tabindex="-1"></a><span class="fu">require</span>(patchwork)</span>
+<span id="cb461-5"><a href="seasonality-and-measles-epidemics.html#cb461-5" tabindex="-1"></a><span class="fu">require</span>(deSolve)</span>
+<span id="cb461-6"><a href="seasonality-and-measles-epidemics.html#cb461-6" tabindex="-1"></a></span>
+<span id="cb461-7"><a href="seasonality-and-measles-epidemics.html#cb461-7" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;twentymeas&quot;</span>)</span>
+<span id="cb461-8"><a href="seasonality-and-measles-epidemics.html#cb461-8" tabindex="-1"></a></span>
+<span id="cb461-9"><a href="seasonality-and-measles-epidemics.html#cb461-9" tabindex="-1"></a>LondonMeas <span class="ot">&lt;-</span> twentymeas[[<span class="st">&quot;London&quot;</span>]]</span>
+<span id="cb461-10"><a href="seasonality-and-measles-epidemics.html#cb461-10" tabindex="-1"></a></span>
+<span id="cb461-11"><a href="seasonality-and-measles-epidemics.html#cb461-11" tabindex="-1"></a><span class="fu">plotdata</span>(LondonMeas)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-441-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>As you can see, our simplifying assumption of fixed birth and population size glosses over the “baby boom” post <strong>WWII</strong> that pushed the typical two-year cycle of measles epidemics into annual outbreaks and led (along with migration) to an increase in the population size. The <span class="math inline">\(TSIR\)</span> model can be used to estimate the seasonal variation in transmission rates presented in the background slides (on which we overlay the typical pattern of school terms in England and Wales calculated by the <code>mk_terms</code> function below):</p>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb462-1"><a href="seasonality-and-measles-epidemics.html#cb462-1" tabindex="-1"></a>LondonRes <span class="ot">&lt;-</span> <span class="fu">runtsir</span>(<span class="at">data=</span>LondonMeas, <span class="at">IP =</span> <span class="dv">2</span>,</span>
+<span id="cb462-2"><a href="seasonality-and-measles-epidemics.html#cb462-2" tabindex="-1"></a>                     <span class="at">xreg =</span> <span class="st">&#39;cumcases&#39;</span>, <span class="at">regtype=</span><span class="st">&#39;gaussian&#39;</span>,</span>
+<span id="cb462-3"><a href="seasonality-and-measles-epidemics.html#cb462-3" tabindex="-1"></a>                     <span class="at">alpha =</span> <span class="cn">NULL</span>, <span class="at">sbar =</span> <span class="cn">NULL</span>,</span>
+<span id="cb462-4"><a href="seasonality-and-measles-epidemics.html#cb462-4" tabindex="-1"></a>                     <span class="at">family =</span> <span class="st">&#39;gaussian&#39;</span>, <span class="at">link =</span> <span class="st">&#39;identity&#39;</span>,</span>
+<span id="cb462-5"><a href="seasonality-and-measles-epidemics.html#cb462-5" tabindex="-1"></a>                     <span class="at">method =</span> <span class="st">&#39;negbin&#39;</span>, <span class="at">nsim =</span> <span class="dv">100</span>)</span></code></pre></div>
+<pre><code>##            alpha        mean beta         mean rho         mean sus 
+##         9.60e-01         1.19e-05         4.57e-01         1.14e+05 
+## prop. init. sus. prop. init. inf. 
+##         3.01e-02         6.12e-05</code></pre>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb464-1"><a href="seasonality-and-measles-epidemics.html#cb464-1" tabindex="-1"></a>mk_terms <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, alpha)</span>
+<span id="cb464-2"><a href="seasonality-and-measles-epidemics.html#cb464-2" tabindex="-1"></a>{</span>
+<span id="cb464-3"><a href="seasonality-and-measles-epidemics.html#cb464-3" tabindex="-1"></a>  s <span class="ot">=</span> <span class="fl">273.0</span><span class="sc">/</span><span class="fl">364.0</span></span>
+<span id="cb464-4"><a href="seasonality-and-measles-epidemics.html#cb464-4" tabindex="-1"></a>  bh <span class="ot">=</span> (beta<span class="sc">*</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>alpha<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>s))) </span>
+<span id="cb464-5"><a href="seasonality-and-measles-epidemics.html#cb464-5" tabindex="-1"></a>  bl <span class="ot">=</span> (beta<span class="sc">*</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>alpha<span class="sc">*</span>s)) </span>
+<span id="cb464-6"><a href="seasonality-and-measles-epidemics.html#cb464-6" tabindex="-1"></a>  </span>
+<span id="cb464-7"><a href="seasonality-and-measles-epidemics.html#cb464-7" tabindex="-1"></a>  terms <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">364</span>)</span>
+<span id="cb464-8"><a href="seasonality-and-measles-epidemics.html#cb464-8" tabindex="-1"></a>  </span>
+<span id="cb464-9"><a href="seasonality-and-measles-epidemics.html#cb464-9" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">252</span><span class="sc">:</span><span class="dv">299</span>)] <span class="ot">=</span> bh</span>
+<span id="cb464-10"><a href="seasonality-and-measles-epidemics.html#cb464-10" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">300</span><span class="sc">:</span><span class="dv">307</span>)] <span class="ot">=</span> bl</span>
+<span id="cb464-11"><a href="seasonality-and-measles-epidemics.html#cb464-11" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">308</span><span class="sc">:</span><span class="dv">355</span>)] <span class="ot">=</span> bh</span>
+<span id="cb464-12"><a href="seasonality-and-measles-epidemics.html#cb464-12" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">356</span><span class="sc">:</span><span class="dv">364</span>)] <span class="ot">=</span> bl</span>
+<span id="cb464-13"><a href="seasonality-and-measles-epidemics.html#cb464-13" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>)] <span class="ot">=</span> bl</span>
+<span id="cb464-14"><a href="seasonality-and-measles-epidemics.html#cb464-14" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">99</span>)] <span class="ot">=</span> bh</span>
+<span id="cb464-15"><a href="seasonality-and-measles-epidemics.html#cb464-15" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">100</span><span class="sc">:</span><span class="dv">115</span>)] <span class="ot">=</span> bl</span>
+<span id="cb464-16"><a href="seasonality-and-measles-epidemics.html#cb464-16" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">116</span><span class="sc">:</span><span class="dv">199</span>)] <span class="ot">=</span> bh</span>
+<span id="cb464-17"><a href="seasonality-and-measles-epidemics.html#cb464-17" tabindex="-1"></a>  terms[<span class="fu">c</span>(<span class="dv">200</span><span class="sc">:</span><span class="dv">251</span>)] <span class="ot">=</span> bl</span>
+<span id="cb464-18"><a href="seasonality-and-measles-epidemics.html#cb464-18" tabindex="-1"></a>  </span>
+<span id="cb464-19"><a href="seasonality-and-measles-epidemics.html#cb464-19" tabindex="-1"></a>  <span class="fu">return</span>(terms)</span>
+<span id="cb464-20"><a href="seasonality-and-measles-epidemics.html#cb464-20" tabindex="-1"></a>  </span>
+<span id="cb464-21"><a href="seasonality-and-measles-epidemics.html#cb464-21" tabindex="-1"></a>}</span>
+<span id="cb464-22"><a href="seasonality-and-measles-epidemics.html#cb464-22" tabindex="-1"></a></span>
+<span id="cb464-23"><a href="seasonality-and-measles-epidemics.html#cb464-23" tabindex="-1"></a><span class="fu">plotbeta</span>(LondonRes) <span class="sc">+</span> <span class="fu">annotate</span>(<span class="st">&#39;line&#39;</span>,<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">364</span>,<span class="dv">1</span>)<span class="sc">/</span><span class="dv">14</span>,<span class="at">y=</span><span class="fu">mk_terms</span>(<span class="fu">mean</span>(LondonRes<span class="sc">$</span>beta),<span class="fl">0.21</span>),<span class="at">lwd=</span><span class="dv">2</span>,<span class="at">col=</span><span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-442-1.png" width="480" style="display: block; margin: auto;" /><img src="_main_files/figure-html/unnamed-chunk-442-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Important to note that the estimated transmission parameters from the <span class="math inline">\(TSIR\)</span> model <strong>do not</strong> translate directly to the transmission parameters for continuous-time (ordinary differential or stochastic) models. The qualitative pattern is informative rather than the specific estimates. (Conceptually I would consider these estimates to be closer to reproduction numbers than transmission rates as they are usually presented.). Note also that the <span class="math inline">\(\alpha\)</span> used in the <span class="math inline">\(TSIR\)</span> model is not an amplitude of seasonality but a correction (i.e. fudge) factor for the density dependence of the transmission term which—in some sense—can be used to adjust for artifacts arising from the discrete time approximation.</p>
+<p>We also provided you with <a href="https://vaccineimpact.github.io/vimc_course/Materials/BYOM/measles_hope_simpson.csv">Hope-Simpson’s estimates</a> of the serial interval of measles and illustrated that it suggests that the latent and infectious periods of measles are less dispersed (less variable) than exponential and well described by a gamma distribution where the shape and scale parameters are approximately equal:</p>
+<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="seasonality-and-measles-epidemics.html#cb465-1" tabindex="-1"></a>household <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">read.csv</span>(<span class="st">&#39;Materials/BYOM/Data/measles_hope_simpson.csv&#39;</span>))</span>
+<span id="cb465-2"><a href="seasonality-and-measles-epidemics.html#cb465-2" tabindex="-1"></a></span>
+<span id="cb465-3"><a href="seasonality-and-measles-epidemics.html#cb465-3" tabindex="-1"></a>SIR_gamma <span class="ot">&lt;-</span>  <span class="fu">tibble</span>(<span class="at">interval=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">21</span>,<span class="fl">0.1</span>),<span class="at">value=</span><span class="fu">dgamma</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">21</span>,<span class="fl">0.1</span>),<span class="dv">22</span>,<span class="dv">22</span><span class="sc">/</span><span class="dv">11</span>))</span>
+<span id="cb465-4"><a href="seasonality-and-measles-epidemics.html#cb465-4" tabindex="-1"></a>SEIR_gamma <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">interval=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">21</span>,<span class="fl">0.1</span>),<span class="at">value=</span><span class="fu">dgamma</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">21</span>,<span class="fl">0.1</span>),<span class="dv">22</span>,<span class="dv">22</span><span class="sc">/</span><span class="dv">11</span>))</span>
+<span id="cb465-5"><a href="seasonality-and-measles-epidemics.html#cb465-5" tabindex="-1"></a></span>
+<span id="cb465-6"><a href="seasonality-and-measles-epidemics.html#cb465-6" tabindex="-1"></a><span class="fu">ggplot</span>(household,<span class="fu">aes</span>(<span class="at">x=</span>interval,<span class="at">y=</span>B<span class="sc">/</span><span class="fu">sum</span>(B))) <span class="sc">+</span> <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb465-7"><a href="seasonality-and-measles-epidemics.html#cb465-7" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&#39;line&#39;</span>,<span class="at">x=</span>SIR_gamma<span class="sc">$</span>interval,<span class="at">y=</span>SIR_gamma<span class="sc">$</span>value,<span class="at">col=</span><span class="st">&#39;red&#39;</span>,<span class="at">lwd=</span><span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb465-8"><a href="seasonality-and-measles-epidemics.html#cb465-8" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&#39;line&#39;</span>,<span class="at">x=</span>SEIR_gamma<span class="sc">$</span>interval,<span class="at">y=</span>SEIR_gamma<span class="sc">$</span>value,<span class="at">col=</span><span class="st">&#39;blue&#39;</span>,<span class="at">lwd=</span><span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb465-9"><a href="seasonality-and-measles-epidemics.html#cb465-9" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&#39;Serial Interval&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Density&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-443-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><infobutton id="displayTextunnamed-chunk-444" onclick="javascript:toggle('unnamed-chunk-444');">Show: Standard <span class="math inline">\(SEIR\)</span> (exponential) with sinusoidal forcing</infobutton></p>
+<div id="toggleTextunnamed-chunk-444" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>We first present an implementation of the standard <span class="math inline">\(SEIR\)</span> model—with constant rates of progression through the latent and infectious compartments—and sinusoidal forcing term. The basic template here is similar to what you have seen before in earlier practicals except that the transmission rate now depends on the time. Here we wrote a wrapper function which sets some sensible default initial conditions (the fixed points of the unforced <span class="math inline">\(SEIR\)</span> model where <span class="math inline">\(\alpha=0.0\)</span>) and then runs the model for three periods. No matter the initial model conditions the seasonally forced <span class="math inline">\(SEIR\)</span> model will <strong>eventually</strong> converge towards a stable dynamic behaviour (often described as an “attractor” in analogy to the fixed points of an unforced model). We can run the model for a “burn-in” period (analogous to the same concept for MCMC convergence) to remove this “transient” behaviour. Our function solves the model for three periods. We forward-simulate the initial conditions for <code>burnin</code> years discarding the results but using the final state to set the initial conditions for a run of <code>prevacc</code> years. We then adjust the birth rate to model vaccination at birth and then run for an additional <code>postvacc</code> years, returning a tibble with the sampling times and state variables of the model:</p>
+<div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb466-1"><a href="seasonality-and-measles-epidemics.html#cb466-1" tabindex="-1"></a>SEIR_exp <span class="ot">&lt;-</span> <span class="cf">function</span>(t,y,theta) {</span>
+<span id="cb466-2"><a href="seasonality-and-measles-epidemics.html#cb466-2" tabindex="-1"></a>  </span>
+<span id="cb466-3"><a href="seasonality-and-measles-epidemics.html#cb466-3" tabindex="-1"></a>  beta <span class="ot">=</span> theta[<span class="dv">1</span>];</span>
+<span id="cb466-4"><a href="seasonality-and-measles-epidemics.html#cb466-4" tabindex="-1"></a>  TE <span class="ot">=</span> theta[<span class="dv">2</span>];</span>
+<span id="cb466-5"><a href="seasonality-and-measles-epidemics.html#cb466-5" tabindex="-1"></a>  TI <span class="ot">=</span> theta[<span class="dv">3</span>];</span>
+<span id="cb466-6"><a href="seasonality-and-measles-epidemics.html#cb466-6" tabindex="-1"></a>  alpha <span class="ot">=</span> theta[<span class="dv">4</span>];</span>
+<span id="cb466-7"><a href="seasonality-and-measles-epidemics.html#cb466-7" tabindex="-1"></a>  mu    <span class="ot">=</span> theta[<span class="dv">5</span>]</span>
+<span id="cb466-8"><a href="seasonality-and-measles-epidemics.html#cb466-8" tabindex="-1"></a>  </span>
+<span id="cb466-9"><a href="seasonality-and-measles-epidemics.html#cb466-9" tabindex="-1"></a>  I_tot<span class="ot">=</span><span class="dv">0</span>;</span>
+<span id="cb466-10"><a href="seasonality-and-measles-epidemics.html#cb466-10" tabindex="-1"></a>  N_tot<span class="ot">=</span><span class="dv">0</span>;</span>
+<span id="cb466-11"><a href="seasonality-and-measles-epidemics.html#cb466-11" tabindex="-1"></a>  </span>
+<span id="cb466-12"><a href="seasonality-and-measles-epidemics.html#cb466-12" tabindex="-1"></a>  dy_dt <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">4</span>);</span>
+<span id="cb466-13"><a href="seasonality-and-measles-epidemics.html#cb466-13" tabindex="-1"></a>  </span>
+<span id="cb466-14"><a href="seasonality-and-measles-epidemics.html#cb466-14" tabindex="-1"></a>  N_tot <span class="ot">=</span> <span class="fu">sum</span>(y)</span>
+<span id="cb466-15"><a href="seasonality-and-measles-epidemics.html#cb466-15" tabindex="-1"></a>  </span>
+<span id="cb466-16"><a href="seasonality-and-measles-epidemics.html#cb466-16" tabindex="-1"></a>  lambda <span class="ot">=</span> (<span class="dv">1</span>  <span class="sc">+</span> alpha <span class="sc">*</span> <span class="fu">cos</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">*</span>t<span class="sc">/</span><span class="dv">364</span>))<span class="sc">*</span>beta<span class="sc">*</span>y[<span class="dv">3</span>]<span class="sc">/</span>N_tot</span>
+<span id="cb466-17"><a href="seasonality-and-measles-epidemics.html#cb466-17" tabindex="-1"></a>  </span>
+<span id="cb466-18"><a href="seasonality-and-measles-epidemics.html#cb466-18" tabindex="-1"></a>  dy_dt[<span class="dv">1</span>] <span class="ot">=</span> mu<span class="sc">*</span>N_tot <span class="sc">-</span> (lambda  <span class="sc">+</span> mu) <span class="sc">*</span> y[<span class="dv">1</span>];</span>
+<span id="cb466-19"><a href="seasonality-and-measles-epidemics.html#cb466-19" tabindex="-1"></a>  dy_dt[<span class="dv">2</span>] <span class="ot">=</span>  lambda <span class="sc">*</span> y[<span class="dv">1</span>]  <span class="sc">-</span> (<span class="fl">1.0</span><span class="sc">/</span>TE <span class="sc">+</span> mu) <span class="sc">*</span> y[<span class="dv">2</span>];</span>
+<span id="cb466-20"><a href="seasonality-and-measles-epidemics.html#cb466-20" tabindex="-1"></a>  dy_dt[<span class="dv">3</span>] <span class="ot">=</span> (<span class="fl">1.0</span><span class="sc">/</span>TE) <span class="sc">*</span> y[<span class="dv">2</span>] <span class="sc">-</span> (<span class="fl">1.0</span><span class="sc">/</span>TI <span class="sc">+</span> mu) <span class="sc">*</span> y[<span class="dv">3</span>];</span>
+<span id="cb466-21"><a href="seasonality-and-measles-epidemics.html#cb466-21" tabindex="-1"></a>  dy_dt[<span class="dv">4</span>] <span class="ot">=</span> (<span class="fl">1.0</span><span class="sc">/</span>TI)<span class="sc">*</span>y[<span class="dv">3</span>] <span class="sc">-</span> mu<span class="sc">*</span>y[<span class="dv">4</span>];</span>
+<span id="cb466-22"><a href="seasonality-and-measles-epidemics.html#cb466-22" tabindex="-1"></a>  </span>
+<span id="cb466-23"><a href="seasonality-and-measles-epidemics.html#cb466-23" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(dy_dt))</span>
+<span id="cb466-24"><a href="seasonality-and-measles-epidemics.html#cb466-24" tabindex="-1"></a>}</span>
+<span id="cb466-25"><a href="seasonality-and-measles-epidemics.html#cb466-25" tabindex="-1"></a></span>
+<span id="cb466-26"><a href="seasonality-and-measles-epidemics.html#cb466-26" tabindex="-1"></a>det_SEIR_exp <span class="ot">&lt;-</span><span class="cf">function</span>(N0,R0,TE,TI,mu,alpha,burnin,prevacc,postvacc,vacc)</span>
+<span id="cb466-27"><a href="seasonality-and-measles-epidemics.html#cb466-27" tabindex="-1"></a>{</span>
+<span id="cb466-28"><a href="seasonality-and-measles-epidemics.html#cb466-28" tabindex="-1"></a>  </span>
+<span id="cb466-29"><a href="seasonality-and-measles-epidemics.html#cb466-29" tabindex="-1"></a>  theta <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">7</span>)</span>
+<span id="cb466-30"><a href="seasonality-and-measles-epidemics.html#cb466-30" tabindex="-1"></a>  </span>
+<span id="cb466-31"><a href="seasonality-and-measles-epidemics.html#cb466-31" tabindex="-1"></a>  <span class="co"># Set initial conditions to endemic fixed points</span></span>
+<span id="cb466-32"><a href="seasonality-and-measles-epidemics.html#cb466-32" tabindex="-1"></a>  </span>
+<span id="cb466-33"><a href="seasonality-and-measles-epidemics.html#cb466-33" tabindex="-1"></a>  beta <span class="ot">=</span> R0<span class="sc">/</span>TI</span>
+<span id="cb466-34"><a href="seasonality-and-measles-epidemics.html#cb466-34" tabindex="-1"></a>  s0 <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>R0</span>
+<span id="cb466-35"><a href="seasonality-and-measles-epidemics.html#cb466-35" tabindex="-1"></a>  e0 <span class="ot">=</span> (TI<span class="sc">*</span>mu<span class="sc">*</span>(mu<span class="sc">+</span><span class="dv">1</span><span class="sc">/</span>TI)<span class="sc">/</span>(beta<span class="sc">/</span>TE))<span class="sc">*</span>(R0<span class="dv">-1</span>)</span>
+<span id="cb466-36"><a href="seasonality-and-measles-epidemics.html#cb466-36" tabindex="-1"></a>  i0 <span class="ot">=</span> (mu<span class="sc">/</span>beta)<span class="sc">*</span>(R0<span class="dv">-1</span>)</span>
+<span id="cb466-37"><a href="seasonality-and-measles-epidemics.html#cb466-37" tabindex="-1"></a>  </span>
+<span id="cb466-38"><a href="seasonality-and-measles-epidemics.html#cb466-38" tabindex="-1"></a>  y0 <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">4</span>);</span>
+<span id="cb466-39"><a href="seasonality-and-measles-epidemics.html#cb466-39" tabindex="-1"></a>  y0[<span class="dv">1</span>] <span class="ot">=</span> s0<span class="sc">*</span>N0;</span>
+<span id="cb466-40"><a href="seasonality-and-measles-epidemics.html#cb466-40" tabindex="-1"></a>  y0[<span class="dv">2</span>] <span class="ot">=</span> e0<span class="sc">*</span>N0;</span>
+<span id="cb466-41"><a href="seasonality-and-measles-epidemics.html#cb466-41" tabindex="-1"></a>  y0[<span class="dv">3</span>] <span class="ot">=</span> i0<span class="sc">*</span>N0;</span>
+<span id="cb466-42"><a href="seasonality-and-measles-epidemics.html#cb466-42" tabindex="-1"></a>  y0[<span class="dv">4</span>] <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>s0<span class="sc">-</span>e0<span class="sc">-</span>i0)<span class="sc">*</span>N0;</span>
+<span id="cb466-43"><a href="seasonality-and-measles-epidemics.html#cb466-43" tabindex="-1"></a>  </span>
+<span id="cb466-44"><a href="seasonality-and-measles-epidemics.html#cb466-44" tabindex="-1"></a>  </span>
+<span id="cb466-45"><a href="seasonality-and-measles-epidemics.html#cb466-45" tabindex="-1"></a>  theta[<span class="dv">1</span>] <span class="ot">=</span> beta;</span>
+<span id="cb466-46"><a href="seasonality-and-measles-epidemics.html#cb466-46" tabindex="-1"></a>  theta[<span class="dv">2</span>] <span class="ot">=</span> TE;</span>
+<span id="cb466-47"><a href="seasonality-and-measles-epidemics.html#cb466-47" tabindex="-1"></a>  theta[<span class="dv">3</span>] <span class="ot">=</span> TI;</span>
+<span id="cb466-48"><a href="seasonality-and-measles-epidemics.html#cb466-48" tabindex="-1"></a>  theta[<span class="dv">4</span>] <span class="ot">=</span> alpha</span>
+<span id="cb466-49"><a href="seasonality-and-measles-epidemics.html#cb466-49" tabindex="-1"></a>  theta[<span class="dv">5</span>] <span class="ot">=</span> mu</span>
+<span id="cb466-50"><a href="seasonality-and-measles-epidemics.html#cb466-50" tabindex="-1"></a></span>
+<span id="cb466-51"><a href="seasonality-and-measles-epidemics.html#cb466-51" tabindex="-1"></a>  <span class="co"># Run for burnin years and use final state</span></span>
+<span id="cb466-52"><a href="seasonality-and-measles-epidemics.html#cb466-52" tabindex="-1"></a>  <span class="co"># as initial condition</span></span>
+<span id="cb466-53"><a href="seasonality-and-measles-epidemics.html#cb466-53" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">lsoda</span>(y0,<span class="fu">seq</span>(<span class="dv">0</span>,burnin<span class="sc">*</span><span class="dv">364</span>,<span class="dv">1</span>),SEIR_exp,theta)</span>
+<span id="cb466-54"><a href="seasonality-and-measles-epidemics.html#cb466-54" tabindex="-1"></a>  y0 <span class="ot">=</span> y[<span class="fu">dim</span>(y)[<span class="dv">1</span>],<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb466-55"><a href="seasonality-and-measles-epidemics.html#cb466-55" tabindex="-1"></a>  <span class="co"># Run for prevacc years</span></span>
+<span id="cb466-56"><a href="seasonality-and-measles-epidemics.html#cb466-56" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">lsoda</span>(y0,<span class="fu">seq</span>(<span class="dv">0</span>,prevacc<span class="sc">*</span><span class="dv">364</span>,<span class="dv">1</span>),SEIR_exp,theta)</span>
+<span id="cb466-57"><a href="seasonality-and-measles-epidemics.html#cb466-57" tabindex="-1"></a>  <span class="co"># store time (in years) and numbers in each compartment</span></span>
+<span id="cb466-58"><a href="seasonality-and-measles-epidemics.html#cb466-58" tabindex="-1"></a>  output <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">time=</span>y[,<span class="dv">1</span>]<span class="sc">/</span><span class="dv">364</span>,<span class="at">S=</span>y[,<span class="dv">2</span>],<span class="at">E=</span>y[,<span class="dv">3</span>],<span class="at">I=</span>y[,<span class="dv">4</span>],<span class="at">R=</span>y[,<span class="dv">5</span>])</span>
+<span id="cb466-59"><a href="seasonality-and-measles-epidemics.html#cb466-59" tabindex="-1"></a>  <span class="co"># Reduce birth rate by vaccination proportion</span></span>
+<span id="cb466-60"><a href="seasonality-and-measles-epidemics.html#cb466-60" tabindex="-1"></a>  theta[<span class="dv">5</span>] <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>vacc)<span class="sc">*</span>mu</span>
+<span id="cb466-61"><a href="seasonality-and-measles-epidemics.html#cb466-61" tabindex="-1"></a>  <span class="co"># Run for postvacc years</span></span>
+<span id="cb466-62"><a href="seasonality-and-measles-epidemics.html#cb466-62" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">lsoda</span>(y0,<span class="fu">seq</span>(<span class="dv">0</span>,postvacc<span class="sc">*</span><span class="dv">364</span>,<span class="dv">1</span>),SEIR_exp,theta)</span>
+<span id="cb466-63"><a href="seasonality-and-measles-epidemics.html#cb466-63" tabindex="-1"></a>  output <span class="ot">&lt;-</span> output <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">time=</span>prevacc<span class="sc">+</span>y[,<span class="dv">1</span>]<span class="sc">/</span><span class="dv">364</span>,<span class="at">S=</span>y[,<span class="dv">2</span>],<span class="at">E=</span>y[,<span class="dv">3</span>],<span class="at">I=</span>y[,<span class="dv">4</span>],<span class="at">R=</span>y[,<span class="dv">5</span>]))</span>
+<span id="cb466-64"><a href="seasonality-and-measles-epidemics.html#cb466-64" tabindex="-1"></a>  </span>
+<span id="cb466-65"><a href="seasonality-and-measles-epidemics.html#cb466-65" tabindex="-1"></a>  </span>
+<span id="cb466-66"><a href="seasonality-and-measles-epidemics.html#cb466-66" tabindex="-1"></a>  <span class="fu">return</span>(output)</span>
+<span id="cb466-67"><a href="seasonality-and-measles-epidemics.html#cb466-67" tabindex="-1"></a>  </span>
+<span id="cb466-68"><a href="seasonality-and-measles-epidemics.html#cb466-68" tabindex="-1"></a>}</span></code></pre></div>
+<p>Using the suggested parameter values you should find that a seasonal forcing of <span class="math inline">\(\alpha = 0.19\)</span> gives a reasonable qualitative fit to the two year cycle of measles outbreaks seen in London after 1950:</p>
+<div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb467-1"><a href="seasonality-and-measles-epidemics.html#cb467-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">17</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.0</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb467-2"><a href="seasonality-and-measles-epidemics.html#cb467-2" tabindex="-1"></a></span>
+<span id="cb467-3"><a href="seasonality-and-measles-epidemics.html#cb467-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb467-4"><a href="seasonality-and-measles-epidemics.html#cb467-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.0, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1410-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb468-1"><a href="seasonality-and-measles-epidemics.html#cb468-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">17</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.045</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb468-2"><a href="seasonality-and-measles-epidemics.html#cb468-2" tabindex="-1"></a></span>
+<span id="cb468-3"><a href="seasonality-and-measles-epidemics.html#cb468-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb468-4"><a href="seasonality-and-measles-epidemics.html#cb468-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.045, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1410-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb469"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb469-1"><a href="seasonality-and-measles-epidemics.html#cb469-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">17</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.19</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb469-2"><a href="seasonality-and-measles-epidemics.html#cb469-2" tabindex="-1"></a></span>
+<span id="cb469-3"><a href="seasonality-and-measles-epidemics.html#cb469-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb469-4"><a href="seasonality-and-measles-epidemics.html#cb469-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.19, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1410-3.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb470"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb470-1"><a href="seasonality-and-measles-epidemics.html#cb470-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">17</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.20</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb470-2"><a href="seasonality-and-measles-epidemics.html#cb470-2" tabindex="-1"></a></span>
+<span id="cb470-3"><a href="seasonality-and-measles-epidemics.html#cb470-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb470-4"><a href="seasonality-and-measles-epidemics.html#cb470-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.20, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1410-4.png" width="480" style="display: block; margin: auto;" /></p>
+<p>For sinusoidal forcing the bifurcation to two-yearly cycles occurs for a very small amount of seasonal forcing (<span class="math inline">\(\alpha \sim 0.02\)</span>) with the amplitude of the two-year cycle increasing with increasing <span class="math inline">\(\alpha\)</span> before further bifurcations to three, four and irregular multiannual cycles.</p>
+<p>If we now examine the effect of increasing vaccination coverage we see that at low coverage vaccination progressively increases the time between outbreaks—shifting cycles to 3, 4 and higher (irregular cycles). However, the incidence between outbreaks now falls to unrealistically low levels (nano-scale number of infectives!)—highlighting the likely increased importance of stochastic effects after the introduction of vaccination.</p>
+<div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb471-1"><a href="seasonality-and-measles-epidemics.html#cb471-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">17</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.19</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.0</span>)</span>
+<span id="cb471-2"><a href="seasonality-and-measles-epidemics.html#cb471-2" tabindex="-1"></a></span>
+<span id="cb471-3"><a href="seasonality-and-measles-epidemics.html#cb471-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb471-4"><a href="seasonality-and-measles-epidemics.html#cb471-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.19, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1411-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb472"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb472-1"><a href="seasonality-and-measles-epidemics.html#cb472-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">17</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.19</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.3</span>)</span>
+<span id="cb472-2"><a href="seasonality-and-measles-epidemics.html#cb472-2" tabindex="-1"></a></span>
+<span id="cb472-3"><a href="seasonality-and-measles-epidemics.html#cb472-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb472-4"><a href="seasonality-and-measles-epidemics.html#cb472-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.19, vacc = 0.3&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1411-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb473-1"><a href="seasonality-and-measles-epidemics.html#cb473-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">17</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.19</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.4</span>)</span>
+<span id="cb473-2"><a href="seasonality-and-measles-epidemics.html#cb473-2" tabindex="-1"></a></span>
+<span id="cb473-3"><a href="seasonality-and-measles-epidemics.html#cb473-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb473-4"><a href="seasonality-and-measles-epidemics.html#cb473-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.19, vacc = 0.4&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1411-3.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb474-1"><a href="seasonality-and-measles-epidemics.html#cb474-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">17</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.19</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.6</span>)</span>
+<span id="cb474-2"><a href="seasonality-and-measles-epidemics.html#cb474-2" tabindex="-1"></a></span>
+<span id="cb474-3"><a href="seasonality-and-measles-epidemics.html#cb474-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb474-4"><a href="seasonality-and-measles-epidemics.html#cb474-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.19, vacc = 0.6&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1411-4.png" width="480" style="display: block; margin: auto;" /></p>
+<p>These types of models can be very sensitive to both initial conditions and numerical errors meaning that more sophisticated numerical methods (such as AUTO) need to be used to map out the full range of dynamical behaviours accurately.</p>
+</div>
+</div>
+</div>
+<p><infobutton id="displayTextunnamed-chunk-445" onclick="javascript:toggle('unnamed-chunk-445');">Show: Standard <span class="math inline">\(SEIR\)</span> (exponential) with term-time forcing</infobutton></p>
+<div id="toggleTextunnamed-chunk-445" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>We now adapt the previous code to use a term-time forcing function and run the same model scenarios:</p>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="seasonality-and-measles-epidemics.html#cb475-1" tabindex="-1"></a>SEIR_exp <span class="ot">&lt;-</span> <span class="cf">function</span>(t,y,theta) {</span>
+<span id="cb475-2"><a href="seasonality-and-measles-epidemics.html#cb475-2" tabindex="-1"></a>  </span>
+<span id="cb475-3"><a href="seasonality-and-measles-epidemics.html#cb475-3" tabindex="-1"></a>  beta <span class="ot">=</span> theta[<span class="dv">1</span>];</span>
+<span id="cb475-4"><a href="seasonality-and-measles-epidemics.html#cb475-4" tabindex="-1"></a>  TE <span class="ot">=</span> theta[<span class="dv">2</span>];</span>
+<span id="cb475-5"><a href="seasonality-and-measles-epidemics.html#cb475-5" tabindex="-1"></a>  TI <span class="ot">=</span> theta[<span class="dv">3</span>];</span>
+<span id="cb475-6"><a href="seasonality-and-measles-epidemics.html#cb475-6" tabindex="-1"></a>  alpha <span class="ot">=</span> theta[<span class="dv">4</span>];</span>
+<span id="cb475-7"><a href="seasonality-and-measles-epidemics.html#cb475-7" tabindex="-1"></a>  mu    <span class="ot">=</span> theta[<span class="dv">5</span>]</span>
+<span id="cb475-8"><a href="seasonality-and-measles-epidemics.html#cb475-8" tabindex="-1"></a>  </span>
+<span id="cb475-9"><a href="seasonality-and-measles-epidemics.html#cb475-9" tabindex="-1"></a>  I_tot<span class="ot">=</span>y[<span class="dv">3</span>];</span>
+<span id="cb475-10"><a href="seasonality-and-measles-epidemics.html#cb475-10" tabindex="-1"></a>  N_tot<span class="ot">=</span><span class="dv">0</span>;</span>
+<span id="cb475-11"><a href="seasonality-and-measles-epidemics.html#cb475-11" tabindex="-1"></a>  </span>
+<span id="cb475-12"><a href="seasonality-and-measles-epidemics.html#cb475-12" tabindex="-1"></a>  dy_dt <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">4</span>);</span>
+<span id="cb475-13"><a href="seasonality-and-measles-epidemics.html#cb475-13" tabindex="-1"></a>  </span>
+<span id="cb475-14"><a href="seasonality-and-measles-epidemics.html#cb475-14" tabindex="-1"></a>  N_tot <span class="ot">=</span> <span class="fu">sum</span>(y)</span>
+<span id="cb475-15"><a href="seasonality-and-measles-epidemics.html#cb475-15" tabindex="-1"></a>  </span>
+<span id="cb475-16"><a href="seasonality-and-measles-epidemics.html#cb475-16" tabindex="-1"></a>  terms <span class="ot">=</span> <span class="fu">mk_terms</span>(beta,alpha)</span>
+<span id="cb475-17"><a href="seasonality-and-measles-epidemics.html#cb475-17" tabindex="-1"></a>  lambda <span class="ot">=</span> terms[<span class="dv">1</span> <span class="sc">+</span> t <span class="sc">%%</span> <span class="dv">364</span>]<span class="sc">*</span>beta<span class="sc">*</span>I_tot<span class="sc">/</span>N_tot</span>
+<span id="cb475-18"><a href="seasonality-and-measles-epidemics.html#cb475-18" tabindex="-1"></a>  </span>
+<span id="cb475-19"><a href="seasonality-and-measles-epidemics.html#cb475-19" tabindex="-1"></a>  dy_dt[<span class="dv">1</span>] <span class="ot">=</span> mu<span class="sc">*</span>N_tot <span class="sc">-</span> (lambda  <span class="sc">+</span> mu) <span class="sc">*</span> y[<span class="dv">1</span>];</span>
+<span id="cb475-20"><a href="seasonality-and-measles-epidemics.html#cb475-20" tabindex="-1"></a>  dy_dt[<span class="dv">2</span>] <span class="ot">=</span>  lambda <span class="sc">*</span> y[<span class="dv">1</span>]  <span class="sc">-</span> (<span class="fl">1.0</span><span class="sc">/</span>TE <span class="sc">+</span> mu) <span class="sc">*</span> y[<span class="dv">2</span>];</span>
+<span id="cb475-21"><a href="seasonality-and-measles-epidemics.html#cb475-21" tabindex="-1"></a>  dy_dt[<span class="dv">3</span>] <span class="ot">=</span> (<span class="fl">1.0</span><span class="sc">/</span>TE) <span class="sc">*</span> y[<span class="dv">2</span>] <span class="sc">-</span> (<span class="fl">1.0</span><span class="sc">/</span>TI <span class="sc">+</span> mu) <span class="sc">*</span> y[<span class="dv">3</span>];</span>
+<span id="cb475-22"><a href="seasonality-and-measles-epidemics.html#cb475-22" tabindex="-1"></a>  dy_dt[<span class="dv">4</span>] <span class="ot">=</span> (<span class="fl">1.0</span><span class="sc">/</span>TI)<span class="sc">*</span>y[<span class="dv">3</span>] <span class="sc">-</span> mu<span class="sc">*</span>y[<span class="dv">4</span>];</span>
+<span id="cb475-23"><a href="seasonality-and-measles-epidemics.html#cb475-23" tabindex="-1"></a>  </span>
+<span id="cb475-24"><a href="seasonality-and-measles-epidemics.html#cb475-24" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(dy_dt))</span>
+<span id="cb475-25"><a href="seasonality-and-measles-epidemics.html#cb475-25" tabindex="-1"></a>}</span></code></pre></div>
+<p>The term-time forcing function leads to a very different (and richer) bifurcation structure. Indeed, if you tried this form of the model you likely could not find values of <span class="math inline">\(\alpha\)</span> that gave a reasonable match to the London time-series for the assumed parameter values. Reducing the assumed value of <span class="math inline">\(R_{0}\)</span> to 12 you can achieve a comparable fit (arguably better with respect to the qualitative shape of the attractor).</p>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="seasonality-and-measles-epidemics.html#cb476-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.05</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb476-2"><a href="seasonality-and-measles-epidemics.html#cb476-2" tabindex="-1"></a></span>
+<span id="cb476-3"><a href="seasonality-and-measles-epidemics.html#cb476-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb476-4"><a href="seasonality-and-measles-epidemics.html#cb476-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.05, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1418-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb477-1"><a href="seasonality-and-measles-epidemics.html#cb477-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb477-2"><a href="seasonality-and-measles-epidemics.html#cb477-2" tabindex="-1"></a></span>
+<span id="cb477-3"><a href="seasonality-and-measles-epidemics.html#cb477-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb477-4"><a href="seasonality-and-measles-epidemics.html#cb477-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1418-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb478-1"><a href="seasonality-and-measles-epidemics.html#cb478-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.40</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb478-2"><a href="seasonality-and-measles-epidemics.html#cb478-2" tabindex="-1"></a></span>
+<span id="cb478-3"><a href="seasonality-and-measles-epidemics.html#cb478-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb478-4"><a href="seasonality-and-measles-epidemics.html#cb478-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.4, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1418-3.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb479-1"><a href="seasonality-and-measles-epidemics.html#cb479-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.5</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb479-2"><a href="seasonality-and-measles-epidemics.html#cb479-2" tabindex="-1"></a></span>
+<span id="cb479-3"><a href="seasonality-and-measles-epidemics.html#cb479-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb479-4"><a href="seasonality-and-measles-epidemics.html#cb479-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.5, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1418-4.png" width="480" style="display: block; margin: auto;" /></p>
+<p>We see the same qualiative impact of vaccination as before, but note that the higher troughs in prevalence between major outbreaks predicted by the term-time forcing model mean that stable (and plausible in terms of depth of trough between outbreaks) dynamics are seen for a wider range of birth/vaccination rates:</p>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="seasonality-and-measles-epidemics.html#cb480-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.0</span>)</span>
+<span id="cb480-2"><a href="seasonality-and-measles-epidemics.html#cb480-2" tabindex="-1"></a></span>
+<span id="cb480-3"><a href="seasonality-and-measles-epidemics.html#cb480-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb480-4"><a href="seasonality-and-measles-epidemics.html#cb480-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1419-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="seasonality-and-measles-epidemics.html#cb481-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.3</span>)</span>
+<span id="cb481-2"><a href="seasonality-and-measles-epidemics.html#cb481-2" tabindex="-1"></a></span>
+<span id="cb481-3"><a href="seasonality-and-measles-epidemics.html#cb481-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb481-4"><a href="seasonality-and-measles-epidemics.html#cb481-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.3&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1419-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="seasonality-and-measles-epidemics.html#cb482-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.4</span>)</span>
+<span id="cb482-2"><a href="seasonality-and-measles-epidemics.html#cb482-2" tabindex="-1"></a></span>
+<span id="cb482-3"><a href="seasonality-and-measles-epidemics.html#cb482-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb482-4"><a href="seasonality-and-measles-epidemics.html#cb482-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.4&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1419-3.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb483-1"><a href="seasonality-and-measles-epidemics.html#cb483-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_exp</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.6</span>)</span>
+<span id="cb483-2"><a href="seasonality-and-measles-epidemics.html#cb483-2" tabindex="-1"></a></span>
+<span id="cb483-3"><a href="seasonality-and-measles-epidemics.html#cb483-3" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb483-4"><a href="seasonality-and-measles-epidemics.html#cb483-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.6&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1419-4.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<p><infobutton id="displayTextunnamed-chunk-446" onclick="javascript:toggle('unnamed-chunk-446');">Show: Gamma <span class="math inline">\(SEIR\)</span> with term-time forcing</infobutton></p>
+<div id="toggleTextunnamed-chunk-446" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>Finally, we present an implementation of the term-time forcing model with realistic (gamma) distributed latent and infectious periods. The Gamma-<span class="math inline">\(SEIR\)</span> model is much more sensitive to changes in the forcing amplitude <span class="math inline">\(\alpha\)</span> requiring lower amplitudes to generate the same qualitative dynamics as the (less biologically accurate) standard model with constant rates. These models are even more difficult to work with numerically and presented here purely for completeness and a cautionary note on the extent to which these model assumptions impact on the range of model parameters that will be consistent with real data. This sensitivity, and strong trade-offs between transmission rates, birth rates and distributional assumptions makes this type of model particular problematic (and therefore particularly interesting) to perform inference with.</p>
+<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="seasonality-and-measles-epidemics.html#cb484-1" tabindex="-1"></a>SEIR_gamma <span class="ot">&lt;-</span> <span class="cf">function</span>(t,y,theta) {</span>
+<span id="cb484-2"><a href="seasonality-and-measles-epidemics.html#cb484-2" tabindex="-1"></a>  </span>
+<span id="cb484-3"><a href="seasonality-and-measles-epidemics.html#cb484-3" tabindex="-1"></a>  x_i <span class="ot">=</span> <span class="fu">integer</span>(<span class="dv">2</span>);</span>
+<span id="cb484-4"><a href="seasonality-and-measles-epidemics.html#cb484-4" tabindex="-1"></a>  beta <span class="ot">=</span> theta[<span class="dv">1</span>];</span>
+<span id="cb484-5"><a href="seasonality-and-measles-epidemics.html#cb484-5" tabindex="-1"></a>  TE <span class="ot">=</span> theta[<span class="dv">2</span>];</span>
+<span id="cb484-6"><a href="seasonality-and-measles-epidemics.html#cb484-6" tabindex="-1"></a>  TI <span class="ot">=</span> theta[<span class="dv">3</span>];</span>
+<span id="cb484-7"><a href="seasonality-and-measles-epidemics.html#cb484-7" tabindex="-1"></a>  alpha <span class="ot">=</span> theta[<span class="dv">4</span>];</span>
+<span id="cb484-8"><a href="seasonality-and-measles-epidemics.html#cb484-8" tabindex="-1"></a>  mu    <span class="ot">=</span> theta[<span class="dv">5</span>]</span>
+<span id="cb484-9"><a href="seasonality-and-measles-epidemics.html#cb484-9" tabindex="-1"></a>  x_i[<span class="dv">1</span>] <span class="ot">=</span> theta[<span class="dv">6</span>];</span>
+<span id="cb484-10"><a href="seasonality-and-measles-epidemics.html#cb484-10" tabindex="-1"></a>  x_i[<span class="dv">2</span>] <span class="ot">=</span> theta[<span class="dv">7</span>];</span>
+<span id="cb484-11"><a href="seasonality-and-measles-epidemics.html#cb484-11" tabindex="-1"></a>  </span>
+<span id="cb484-12"><a href="seasonality-and-measles-epidemics.html#cb484-12" tabindex="-1"></a>  I_tot<span class="ot">=</span><span class="dv">0</span>;</span>
+<span id="cb484-13"><a href="seasonality-and-measles-epidemics.html#cb484-13" tabindex="-1"></a>  N_tot<span class="ot">=</span><span class="dv">0</span>;</span>
+<span id="cb484-14"><a href="seasonality-and-measles-epidemics.html#cb484-14" tabindex="-1"></a>  </span>
+<span id="cb484-15"><a href="seasonality-and-measles-epidemics.html#cb484-15" tabindex="-1"></a>  dy_dt <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">2</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>]);</span>
+<span id="cb484-16"><a href="seasonality-and-measles-epidemics.html#cb484-16" tabindex="-1"></a>  </span>
+<span id="cb484-17"><a href="seasonality-and-measles-epidemics.html#cb484-17" tabindex="-1"></a>  <span class="cf">for</span>(k <span class="cf">in</span> (<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>])){I_tot <span class="ot">=</span> I_tot <span class="sc">+</span> y[k];}</span>
+<span id="cb484-18"><a href="seasonality-and-measles-epidemics.html#cb484-18" tabindex="-1"></a>  <span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="dv">2</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>])){N_tot <span class="ot">=</span> N_tot <span class="sc">+</span> y[k];}</span>
+<span id="cb484-19"><a href="seasonality-and-measles-epidemics.html#cb484-19" tabindex="-1"></a>  </span>
+<span id="cb484-20"><a href="seasonality-and-measles-epidemics.html#cb484-20" tabindex="-1"></a>  terms <span class="ot">=</span> <span class="fu">mk_terms</span>(beta,alpha)</span>
+<span id="cb484-21"><a href="seasonality-and-measles-epidemics.html#cb484-21" tabindex="-1"></a>  lambda <span class="ot">=</span> terms[<span class="dv">1</span> <span class="sc">+</span> t <span class="sc">%%</span> <span class="dv">364</span>]<span class="sc">*</span>beta<span class="sc">*</span>I_tot<span class="sc">/</span>N_tot</span>
+<span id="cb484-22"><a href="seasonality-and-measles-epidemics.html#cb484-22" tabindex="-1"></a>  </span>
+<span id="cb484-23"><a href="seasonality-and-measles-epidemics.html#cb484-23" tabindex="-1"></a>  <span class="co">#Susceptibles      </span></span>
+<span id="cb484-24"><a href="seasonality-and-measles-epidemics.html#cb484-24" tabindex="-1"></a>  dy_dt[<span class="dv">1</span>] <span class="ot">=</span> mu<span class="sc">*</span>N_tot <span class="sc">-</span> (lambda  <span class="sc">+</span> mu) <span class="sc">*</span> y[<span class="dv">1</span>];</span>
+<span id="cb484-25"><a href="seasonality-and-measles-epidemics.html#cb484-25" tabindex="-1"></a>  <span class="co">#First stage of Exposed (but not yet infectious)</span></span>
+<span id="cb484-26"><a href="seasonality-and-measles-epidemics.html#cb484-26" tabindex="-1"></a>  dy_dt[<span class="dv">2</span>] <span class="ot">=</span>  lambda <span class="sc">*</span> y[<span class="dv">1</span>]  <span class="sc">-</span> (x_i[<span class="dv">1</span>]<span class="sc">/</span>TE <span class="sc">+</span> mu) <span class="sc">*</span> y[<span class="dv">2</span>];</span>
+<span id="cb484-27"><a href="seasonality-and-measles-epidemics.html#cb484-27" tabindex="-1"></a>  </span>
+<span id="cb484-28"><a href="seasonality-and-measles-epidemics.html#cb484-28" tabindex="-1"></a>  <span class="co">#If shape parameter &gt; 1 update internal exposed stages</span></span>
+<span id="cb484-29"><a href="seasonality-and-measles-epidemics.html#cb484-29" tabindex="-1"></a>  <span class="cf">if</span>(x_i[<span class="dv">1</span>]<span class="sc">&gt;</span><span class="dv">1</span>){</span>
+<span id="cb484-30"><a href="seasonality-and-measles-epidemics.html#cb484-30" tabindex="-1"></a>    <span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">3</span><span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]))</span>
+<span id="cb484-31"><a href="seasonality-and-measles-epidemics.html#cb484-31" tabindex="-1"></a>    {dy_dt[k] <span class="ot">=</span> (x_i[<span class="dv">1</span>]<span class="sc">/</span>TE) <span class="sc">*</span> y[k<span class="dv">-1</span>] <span class="sc">-</span> (x_i[<span class="dv">1</span>]<span class="sc">/</span>TE <span class="sc">+</span> mu) <span class="sc">*</span> y[k];}</span>
+<span id="cb484-32"><a href="seasonality-and-measles-epidemics.html#cb484-32" tabindex="-1"></a>    }</span>
+<span id="cb484-33"><a href="seasonality-and-measles-epidemics.html#cb484-33" tabindex="-1"></a>  <span class="co">#First infectious stage</span></span>
+<span id="cb484-34"><a href="seasonality-and-measles-epidemics.html#cb484-34" tabindex="-1"></a>  dy_dt[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>)] <span class="ot">=</span> (x_i[<span class="dv">1</span>]<span class="sc">/</span>TE)<span class="sc">*</span>y[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>])] <span class="sc">-</span> (x_i[<span class="dv">2</span>]<span class="sc">/</span>TI <span class="sc">+</span> mu)<span class="sc">*</span>y[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>)];</span>
+<span id="cb484-35"><a href="seasonality-and-measles-epidemics.html#cb484-35" tabindex="-1"></a>  <span class="co">#If more than one infectious stage, run through internal stages</span></span>
+<span id="cb484-36"><a href="seasonality-and-measles-epidemics.html#cb484-36" tabindex="-1"></a>    <span class="cf">if</span>(x_i[<span class="dv">2</span>]<span class="sc">&gt;</span><span class="dv">1</span>)</span>
+<span id="cb484-37"><a href="seasonality-and-measles-epidemics.html#cb484-37" tabindex="-1"></a>    {</span>
+<span id="cb484-38"><a href="seasonality-and-measles-epidemics.html#cb484-38" tabindex="-1"></a>      <span class="cf">for</span>(k <span class="cf">in</span> (<span class="dv">3</span><span class="sc">+</span>x_i[<span class="dv">1</span>])<span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>]))</span>
+<span id="cb484-39"><a href="seasonality-and-measles-epidemics.html#cb484-39" tabindex="-1"></a>      {dy_dt[k] <span class="ot">=</span> (x_i[<span class="dv">2</span>]<span class="sc">/</span>TI) <span class="sc">*</span> y[k<span class="dv">-1</span>] <span class="sc">-</span> (x_i[<span class="dv">2</span>]<span class="sc">/</span>TI <span class="sc">+</span> mu) <span class="sc">*</span> y[k];}</span>
+<span id="cb484-40"><a href="seasonality-and-measles-epidemics.html#cb484-40" tabindex="-1"></a>    }</span>
+<span id="cb484-41"><a href="seasonality-and-measles-epidemics.html#cb484-41" tabindex="-1"></a>  </span>
+<span id="cb484-42"><a href="seasonality-and-measles-epidemics.html#cb484-42" tabindex="-1"></a>    <span class="co"># Final absorbing recovered stage</span></span>
+<span id="cb484-43"><a href="seasonality-and-measles-epidemics.html#cb484-43" tabindex="-1"></a>    dy_dt[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>]<span class="sc">+</span><span class="dv">1</span>)] <span class="ot">=</span> (x_i[<span class="dv">2</span>]<span class="sc">/</span>TI)<span class="sc">*</span>y[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>])] <span class="sc">-</span> mu<span class="sc">*</span>y[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>]<span class="sc">+</span><span class="dv">1</span>)];</span>
+<span id="cb484-44"><a href="seasonality-and-measles-epidemics.html#cb484-44" tabindex="-1"></a>    </span>
+<span id="cb484-45"><a href="seasonality-and-measles-epidemics.html#cb484-45" tabindex="-1"></a>  </span>
+<span id="cb484-46"><a href="seasonality-and-measles-epidemics.html#cb484-46" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(dy_dt))</span>
+<span id="cb484-47"><a href="seasonality-and-measles-epidemics.html#cb484-47" tabindex="-1"></a>}</span>
+<span id="cb484-48"><a href="seasonality-and-measles-epidemics.html#cb484-48" tabindex="-1"></a></span>
+<span id="cb484-49"><a href="seasonality-and-measles-epidemics.html#cb484-49" tabindex="-1"></a>det_SEIR_gamma <span class="ot">&lt;-</span><span class="cf">function</span>(N0,R0,TE,TI,shape_E,shape_I,mu,alpha,burnin,prevacc,postvacc,vacc)</span>
+<span id="cb484-50"><a href="seasonality-and-measles-epidemics.html#cb484-50" tabindex="-1"></a>{</span>
+<span id="cb484-51"><a href="seasonality-and-measles-epidemics.html#cb484-51" tabindex="-1"></a></span>
+<span id="cb484-52"><a href="seasonality-and-measles-epidemics.html#cb484-52" tabindex="-1"></a>  theta <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">7</span>)</span>
+<span id="cb484-53"><a href="seasonality-and-measles-epidemics.html#cb484-53" tabindex="-1"></a>  </span>
+<span id="cb484-54"><a href="seasonality-and-measles-epidemics.html#cb484-54" tabindex="-1"></a>  <span class="co"># Use fixed points of exponential model to approximate initial conditions</span></span>
+<span id="cb484-55"><a href="seasonality-and-measles-epidemics.html#cb484-55" tabindex="-1"></a>  <span class="co"># (Need to run burn in period anyway)</span></span>
+<span id="cb484-56"><a href="seasonality-and-measles-epidemics.html#cb484-56" tabindex="-1"></a>  </span>
+<span id="cb484-57"><a href="seasonality-and-measles-epidemics.html#cb484-57" tabindex="-1"></a>  beta <span class="ot">=</span> R0<span class="sc">/</span>TI</span>
+<span id="cb484-58"><a href="seasonality-and-measles-epidemics.html#cb484-58" tabindex="-1"></a>  s0 <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>R0</span>
+<span id="cb484-59"><a href="seasonality-and-measles-epidemics.html#cb484-59" tabindex="-1"></a>  e0 <span class="ot">=</span> (TI<span class="sc">*</span>mu<span class="sc">*</span>(mu<span class="sc">+</span><span class="dv">1</span><span class="sc">/</span>TI)<span class="sc">/</span>(beta<span class="sc">/</span>TE))<span class="sc">*</span>(R0<span class="dv">-1</span>)</span>
+<span id="cb484-60"><a href="seasonality-and-measles-epidemics.html#cb484-60" tabindex="-1"></a>  i0 <span class="ot">=</span> (mu<span class="sc">/</span>beta)<span class="sc">*</span>(R0<span class="dv">-1</span>)</span>
+<span id="cb484-61"><a href="seasonality-and-measles-epidemics.html#cb484-61" tabindex="-1"></a>  </span>
+<span id="cb484-62"><a href="seasonality-and-measles-epidemics.html#cb484-62" tabindex="-1"></a>  y0 <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I);</span>
+<span id="cb484-63"><a href="seasonality-and-measles-epidemics.html#cb484-63" tabindex="-1"></a>  y0[<span class="dv">1</span>] <span class="ot">=</span> s0<span class="sc">*</span>N0;</span>
+<span id="cb484-64"><a href="seasonality-and-measles-epidemics.html#cb484-64" tabindex="-1"></a>  </span>
+<span id="cb484-65"><a href="seasonality-and-measles-epidemics.html#cb484-65" tabindex="-1"></a>  <span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>shape_E)){y0[k]<span class="ot">=</span>e0<span class="sc">*</span>N0<span class="sc">/</span>shape_E;}</span>
+<span id="cb484-66"><a href="seasonality-and-measles-epidemics.html#cb484-66" tabindex="-1"></a>  <span class="cf">for</span>(k <span class="cf">in</span> (<span class="dv">2</span><span class="sc">+</span>shape_E)<span class="sc">:</span>(<span class="dv">2</span><span class="sc">+</span>shape_E <span class="sc">+</span> shape_I)){y0[k]<span class="ot">=</span>i0<span class="sc">*</span>N0<span class="sc">/</span>shape_I;}</span>
+<span id="cb484-67"><a href="seasonality-and-measles-epidemics.html#cb484-67" tabindex="-1"></a>  </span>
+<span id="cb484-68"><a href="seasonality-and-measles-epidemics.html#cb484-68" tabindex="-1"></a>  y0[<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I] <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>s0<span class="sc">-</span>e0<span class="sc">-</span>i0)<span class="sc">*</span>N0</span>
+<span id="cb484-69"><a href="seasonality-and-measles-epidemics.html#cb484-69" tabindex="-1"></a>    </span>
+<span id="cb484-70"><a href="seasonality-and-measles-epidemics.html#cb484-70" tabindex="-1"></a>  theta[<span class="dv">1</span>] <span class="ot">=</span> beta;</span>
+<span id="cb484-71"><a href="seasonality-and-measles-epidemics.html#cb484-71" tabindex="-1"></a>  theta[<span class="dv">2</span>] <span class="ot">=</span> TE;</span>
+<span id="cb484-72"><a href="seasonality-and-measles-epidemics.html#cb484-72" tabindex="-1"></a>  theta[<span class="dv">3</span>] <span class="ot">=</span> TI;</span>
+<span id="cb484-73"><a href="seasonality-and-measles-epidemics.html#cb484-73" tabindex="-1"></a>  theta[<span class="dv">4</span>] <span class="ot">=</span> alpha</span>
+<span id="cb484-74"><a href="seasonality-and-measles-epidemics.html#cb484-74" tabindex="-1"></a>  theta[<span class="dv">5</span>] <span class="ot">=</span> mu</span>
+<span id="cb484-75"><a href="seasonality-and-measles-epidemics.html#cb484-75" tabindex="-1"></a>  theta[<span class="dv">6</span>] <span class="ot">=</span> shape_E</span>
+<span id="cb484-76"><a href="seasonality-and-measles-epidemics.html#cb484-76" tabindex="-1"></a>  theta[<span class="dv">7</span>] <span class="ot">=</span> shape_I</span>
+<span id="cb484-77"><a href="seasonality-and-measles-epidemics.html#cb484-77" tabindex="-1"></a>  </span>
+<span id="cb484-78"><a href="seasonality-and-measles-epidemics.html#cb484-78" tabindex="-1"></a>  <span class="co"># Run for burnin years and use final state</span></span>
+<span id="cb484-79"><a href="seasonality-and-measles-epidemics.html#cb484-79" tabindex="-1"></a>  <span class="co"># as initial condition</span></span>
+<span id="cb484-80"><a href="seasonality-and-measles-epidemics.html#cb484-80" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">lsoda</span>(y0,<span class="fu">seq</span>(<span class="dv">0</span>,burnin<span class="sc">*</span><span class="dv">364</span>,<span class="dv">1</span>),SEIR_gamma,theta)</span>
+<span id="cb484-81"><a href="seasonality-and-measles-epidemics.html#cb484-81" tabindex="-1"></a>  y0 <span class="ot">=</span> y[<span class="fu">dim</span>(y)[<span class="dv">1</span>],<span class="dv">2</span><span class="sc">:</span>(<span class="dv">3</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I)]</span>
+<span id="cb484-82"><a href="seasonality-and-measles-epidemics.html#cb484-82" tabindex="-1"></a>  <span class="co"># Run for prevacc years</span></span>
+<span id="cb484-83"><a href="seasonality-and-measles-epidemics.html#cb484-83" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">lsoda</span>(y0,<span class="fu">seq</span>(<span class="dv">0</span>,prevacc<span class="sc">*</span><span class="dv">364</span>,<span class="dv">1</span>),SEIR_gamma,theta)</span>
+<span id="cb484-84"><a href="seasonality-and-measles-epidemics.html#cb484-84" tabindex="-1"></a>   <span class="co"># store time (in years) and total infected numbers</span></span>
+<span id="cb484-85"><a href="seasonality-and-measles-epidemics.html#cb484-85" tabindex="-1"></a>  output <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">time=</span>y[,<span class="dv">1</span>]<span class="sc">/</span><span class="dv">364</span>,<span class="at">I=</span><span class="fu">rowSums</span>(y[,(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I)]))</span>
+<span id="cb484-86"><a href="seasonality-and-measles-epidemics.html#cb484-86" tabindex="-1"></a>  y0 <span class="ot">=</span> y[<span class="fu">dim</span>(y)[<span class="dv">1</span>],<span class="dv">2</span><span class="sc">:</span>(<span class="dv">3</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I)]</span>
+<span id="cb484-87"><a href="seasonality-and-measles-epidemics.html#cb484-87" tabindex="-1"></a>   <span class="co"># Reduce birth rate by vaccination proportion</span></span>
+<span id="cb484-88"><a href="seasonality-and-measles-epidemics.html#cb484-88" tabindex="-1"></a>  theta[<span class="dv">5</span>] <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>vacc)<span class="sc">*</span>mu</span>
+<span id="cb484-89"><a href="seasonality-and-measles-epidemics.html#cb484-89" tabindex="-1"></a>  <span class="co"># Run for postvacc years</span></span>
+<span id="cb484-90"><a href="seasonality-and-measles-epidemics.html#cb484-90" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">lsoda</span>(y0,<span class="fu">seq</span>(<span class="dv">0</span>,postvacc<span class="sc">*</span><span class="dv">364</span>,<span class="dv">1</span>),SEIR_gamma,theta)</span>
+<span id="cb484-91"><a href="seasonality-and-measles-epidemics.html#cb484-91" tabindex="-1"></a>   output <span class="ot">&lt;-</span> output <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">time=</span>prevacc<span class="sc">+</span>y[,<span class="dv">1</span>]<span class="sc">/</span><span class="dv">364</span>,<span class="at">I=</span><span class="fu">rowSums</span>(y[,(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I)])))</span>
+<span id="cb484-92"><a href="seasonality-and-measles-epidemics.html#cb484-92" tabindex="-1"></a>  infected <span class="ot">=</span> <span class="fu">rowSums</span>(y[,(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I)])<span class="sc">/</span>N0</span>
+<span id="cb484-93"><a href="seasonality-and-measles-epidemics.html#cb484-93" tabindex="-1"></a>  </span>
+<span id="cb484-94"><a href="seasonality-and-measles-epidemics.html#cb484-94" tabindex="-1"></a>  <span class="fu">return</span>(output)</span>
+<span id="cb484-95"><a href="seasonality-and-measles-epidemics.html#cb484-95" tabindex="-1"></a>  </span>
+<span id="cb484-96"><a href="seasonality-and-measles-epidemics.html#cb484-96" tabindex="-1"></a>  </span>
+<span id="cb484-97"><a href="seasonality-and-measles-epidemics.html#cb484-97" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb485-1"><a href="seasonality-and-measles-epidemics.html#cb485-1" tabindex="-1"></a><span class="co"># The extra compartments in gamma-distributed models can cause memory problems</span></span>
+<span id="cb485-2"><a href="seasonality-and-measles-epidemics.html#cb485-2" tabindex="-1"></a><span class="co"># Here we run the garbage collection function manually to try and head off any crashes </span></span>
+<span id="cb485-3"><a href="seasonality-and-measles-epidemics.html#cb485-3" tabindex="-1"></a></span>
+<span id="cb485-4"><a href="seasonality-and-measles-epidemics.html#cb485-4" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb485-5"><a href="seasonality-and-measles-epidemics.html#cb485-5" tabindex="-1"></a></span>
+<span id="cb485-6"><a href="seasonality-and-measles-epidemics.html#cb485-6" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_gamma</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.05</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb485-7"><a href="seasonality-and-measles-epidemics.html#cb485-7" tabindex="-1"></a></span>
+<span id="cb485-8"><a href="seasonality-and-measles-epidemics.html#cb485-8" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb485-9"><a href="seasonality-and-measles-epidemics.html#cb485-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.05, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1426-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="seasonality-and-measles-epidemics.html#cb486-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_gamma</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.2</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb486-2"><a href="seasonality-and-measles-epidemics.html#cb486-2" tabindex="-1"></a></span>
+<span id="cb486-3"><a href="seasonality-and-measles-epidemics.html#cb486-3" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb486-4"><a href="seasonality-and-measles-epidemics.html#cb486-4" tabindex="-1"></a></span>
+<span id="cb486-5"><a href="seasonality-and-measles-epidemics.html#cb486-5" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb486-6"><a href="seasonality-and-measles-epidemics.html#cb486-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.2, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1426-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb487-1"><a href="seasonality-and-measles-epidemics.html#cb487-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_gamma</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb487-2"><a href="seasonality-and-measles-epidemics.html#cb487-2" tabindex="-1"></a></span>
+<span id="cb487-3"><a href="seasonality-and-measles-epidemics.html#cb487-3" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb487-4"><a href="seasonality-and-measles-epidemics.html#cb487-4" tabindex="-1"></a></span>
+<span id="cb487-5"><a href="seasonality-and-measles-epidemics.html#cb487-5" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb487-6"><a href="seasonality-and-measles-epidemics.html#cb487-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1426-3.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb488-1"><a href="seasonality-and-measles-epidemics.html#cb488-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_gamma</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.4</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb488-2"><a href="seasonality-and-measles-epidemics.html#cb488-2" tabindex="-1"></a></span>
+<span id="cb488-3"><a href="seasonality-and-measles-epidemics.html#cb488-3" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb488-4"><a href="seasonality-and-measles-epidemics.html#cb488-4" tabindex="-1"></a></span>
+<span id="cb488-5"><a href="seasonality-and-measles-epidemics.html#cb488-5" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb488-6"><a href="seasonality-and-measles-epidemics.html#cb488-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.4, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">10000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1426-4.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb489-1"><a href="seasonality-and-measles-epidemics.html#cb489-1" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb489-2"><a href="seasonality-and-measles-epidemics.html#cb489-2" tabindex="-1"></a></span>
+<span id="cb489-3"><a href="seasonality-and-measles-epidemics.html#cb489-3" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_gamma</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.0</span>)</span>
+<span id="cb489-4"><a href="seasonality-and-measles-epidemics.html#cb489-4" tabindex="-1"></a></span>
+<span id="cb489-5"><a href="seasonality-and-measles-epidemics.html#cb489-5" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb489-6"><a href="seasonality-and-measles-epidemics.html#cb489-6" tabindex="-1"></a></span>
+<span id="cb489-7"><a href="seasonality-and-measles-epidemics.html#cb489-7" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb489-8"><a href="seasonality-and-measles-epidemics.html#cb489-8" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.0&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1427-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb490-1"><a href="seasonality-and-measles-epidemics.html#cb490-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_gamma</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.3</span>)</span>
+<span id="cb490-2"><a href="seasonality-and-measles-epidemics.html#cb490-2" tabindex="-1"></a></span>
+<span id="cb490-3"><a href="seasonality-and-measles-epidemics.html#cb490-3" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb490-4"><a href="seasonality-and-measles-epidemics.html#cb490-4" tabindex="-1"></a></span>
+<span id="cb490-5"><a href="seasonality-and-measles-epidemics.html#cb490-5" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb490-6"><a href="seasonality-and-measles-epidemics.html#cb490-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.3&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1427-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="seasonality-and-measles-epidemics.html#cb491-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_gamma</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.4</span>)</span>
+<span id="cb491-2"><a href="seasonality-and-measles-epidemics.html#cb491-2" tabindex="-1"></a></span>
+<span id="cb491-3"><a href="seasonality-and-measles-epidemics.html#cb491-3" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb491-4"><a href="seasonality-and-measles-epidemics.html#cb491-4" tabindex="-1"></a></span>
+<span id="cb491-5"><a href="seasonality-and-measles-epidemics.html#cb491-5" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb491-6"><a href="seasonality-and-measles-epidemics.html#cb491-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.4&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1427-3.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb492-1"><a href="seasonality-and-measles-epidemics.html#cb492-1" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">det_SEIR_gamma</span>(<span class="fl">3.3e6</span>,<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">20</span><span class="sc">/</span>(<span class="dv">1000</span><span class="sc">*</span><span class="dv">364</span>),<span class="fl">0.21</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">30</span>,<span class="fl">0.6</span>)</span>
+<span id="cb492-2"><a href="seasonality-and-measles-epidemics.html#cb492-2" tabindex="-1"></a></span>
+<span id="cb492-3"><a href="seasonality-and-measles-epidemics.html#cb492-3" tabindex="-1"></a><span class="co"># gc()</span></span>
+<span id="cb492-4"><a href="seasonality-and-measles-epidemics.html#cb492-4" tabindex="-1"></a></span>
+<span id="cb492-5"><a href="seasonality-and-measles-epidemics.html#cb492-5" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I<span class="sc">*</span>(<span class="dv">1</span><span class="sc">/</span><span class="fl">0.4</span>)<span class="sc">*</span>(<span class="dv">5</span><span class="sc">/</span><span class="dv">7</span>))) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Years&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Cases&#39;</span>) <span class="sc">+</span></span>
+<span id="cb492-6"><a href="seasonality-and-measles-epidemics.html#cb492-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;alpha = 0.21, vacc = 0.6&quot;</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">8000</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1427-4.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="estimating-r_0.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="outbreak-of-influenza-in-a-boarding-school.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

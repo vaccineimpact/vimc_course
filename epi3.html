@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>8 Epidemic models—Practical 3 | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="8 Epidemic models—Practical 3 | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="8 Epidemic models—Practical 3 | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="8 Epidemic models—Practical 3 | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="8 Epidemic models—Practical 3 | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="8 Epidemic models—Practical 3 | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="epi2.html"/>
+<link rel="next" href="estimating-r_0-using-catalytic-models.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="epi3" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">8</span> Epidemic models—Practical 3<a href="epi3.html#epi3" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="matt-castle-mdc31cam.ac.uk-and-andrew-conlan-ajkc2cam.ac.uk" class="section level2 unlisted unnumbered hasAnchor">
+<h2>Matt Castle (<a href="mailto:mdc31@cam.ac.uk">mdc31@cam.ac.uk</a>) and Andrew Conlan (<a href="mailto:ajkc2@cam.ac.uk">ajkc2@cam.ac.uk</a>)<a href="epi3.html#matt-castle-mdc31cam.ac.uk-and-andrew-conlan-ajkc2cam.ac.uk" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="stochastic-models" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Stochastic models<a href="epi3.html#stochastic-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><em>Aim</em>: To explore the effects of stochasticity on simple <span class="math inline">\(SI\)</span> and <span class="math inline">\(SIR\)</span> models and contrast their behaviour with previous deterministic results.</p>
+<p><em>Goals</em>:</p>
+<p>By the end of this practical participants should be able to achieve the following:</p>
+<ul>
+<li>Code up a simple stochastic <span class="math inline">\(SI\)</span> model in R using the <code>SimInf</code> package.</li>
+<li>Code up a simple stochastic <span class="math inline">\(SIR\)</span> model in R using the <code>SimInf</code> package.</li>
+<li>Run both single and multiple realisations and visualise the results.</li>
+<li>Explore extensions to both <span class="math inline">\(SI\)</span> and <span class="math inline">\(SIR\)</span> models:
+<ul>
+<li>Expand the <span class="math inline">\(SI\)</span> model to include additional transitions.</li>
+<li>Understand the impact of R0 values on stochastic extinction.</li>
+</ul></li>
+</ul>
+<p><em>Background</em>: This practical follows on from the Stochastic Epidemic Models Lecture and echoes the content presented there.</p>
+</div>
+<div id="coding-a-simple-si-model" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Coding a simple <span class="math inline">\(SI\)</span> model<a href="epi3.html#coding-a-simple-si-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will first implement a slight modification to the code that has been presented to you in the previous Stochastic Epidemic Lecture. The key difference between the code presented in the lecture and the code shown here is that we are putting the code into a function (called <code>StocSI.dyn</code>) rather than just running a series of commands.</p>
+<ul>
+<li>Open Rstudio.</li>
+<li>Open a new blank script file.</li>
+<li>Save it as <code>Stoch_SI.R</code>.</li>
+</ul>
+<p><strong>In the script window type the following commands</strong>:</p>
+<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb306-1"><a href="epi3.html#cb306-1" tabindex="-1"></a><span class="fu">library</span>(SimInf)</span>
+<span id="cb306-2"><a href="epi3.html#cb306-2" tabindex="-1"></a></span>
+<span id="cb306-3"><a href="epi3.html#cb306-3" tabindex="-1"></a>create.StocSI <span class="ot">&lt;-</span> <span class="cf">function</span>(N, I0, beta, f_time) {</span>
+<span id="cb306-4"><a href="epi3.html#cb306-4" tabindex="-1"></a>    </span>
+<span id="cb306-5"><a href="epi3.html#cb306-5" tabindex="-1"></a>    initial_state <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">S =</span> N<span class="sc">-</span>I0 , <span class="at">I =</span> I0)</span>
+<span id="cb306-6"><a href="epi3.html#cb306-6" tabindex="-1"></a>    compartments <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>, <span class="st">&quot;I&quot;</span>)</span>
+<span id="cb306-7"><a href="epi3.html#cb306-7" tabindex="-1"></a>    transitions <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S -&gt; beta*S*I/(S+I) -&gt; I&quot;</span>)</span>
+<span id="cb306-8"><a href="epi3.html#cb306-8" tabindex="-1"></a>    tspan <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> f_time, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb306-9"><a href="epi3.html#cb306-9" tabindex="-1"></a>    </span>
+<span id="cb306-10"><a href="epi3.html#cb306-10" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">mparse</span>(<span class="at">transitions =</span> transitions, <span class="at">compartments =</span> compartments, </span>
+<span id="cb306-11"><a href="epi3.html#cb306-11" tabindex="-1"></a>        <span class="at">gdata =</span> <span class="fu">c</span>(<span class="at">beta =</span> beta), <span class="at">u0 =</span> initial_state, <span class="at">tspan =</span> tspan)</span>
+<span id="cb306-12"><a href="epi3.html#cb306-12" tabindex="-1"></a>    </span>
+<span id="cb306-13"><a href="epi3.html#cb306-13" tabindex="-1"></a>    <span class="fu">return</span>(model)</span>
+<span id="cb306-14"><a href="epi3.html#cb306-14" tabindex="-1"></a>}</span></code></pre></div>
+<p>Make sure you save your file and that your working directory is the same as the folder you have saved this into (Choose from menu Session &gt; Set Working Directory &gt; To Source File Location).</p>
+<p>This code creates a function that creates a single stochastic <span class="math inline">\(SI\)</span> model. We’ll dissect/explain the code in the next section.</p>
+<p>Open a new blank script file.</p>
+<p>Save it as <code>Epi_P3.R</code></p>
+<p>We’ll use this script to record all of the steps in this practical (unless otherwise indicated).</p>
+<p>In the script window type the following commands and then run (select and press run button in RStudio):</p>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="epi3.html#cb307-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;Stoch_SI.R&#39;</span>)</span>
+<span id="cb307-2"><a href="epi3.html#cb307-2" tabindex="-1"></a>SImodel <span class="ot">&lt;-</span> <span class="fu">create.StocSI</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="fl">0.5</span>, <span class="dv">30</span>)</span>
+<span id="cb307-3"><a href="epi3.html#cb307-3" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SImodel)</span>
+<span id="cb307-4"><a href="epi3.html#cb307-4" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
+<p>You should see a graph that looks similar to this:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-278-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Here we can see the two trajectories for an <span class="math inline">\(SI\)</span> epidemic. The susceptible curve (red) starts at 499 and stochastically decreases down whilst the infected curve (blue) starts at 1 and mirrors the S curve increasing stochastically.</p>
+</div>
+<div id="dissecting-the-stochastic-si-code" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Dissecting the stochastic <span class="math inline">\(SI\)</span> code<a href="epi3.html#dissecting-the-stochastic-si-code" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The function we have just created is a wrapper that takes the basic parameters that define the <span class="math inline">\(SI\)</span> model for a particular population and creates a R object that the <code>SimInf</code> package can use to simulate the model. Our function <code>create.StocSI</code> takes four inputs:</p>
+<ul>
+<li>Total population size: <code>N</code></li>
+<li>Initial number of infected: <code>I0</code></li>
+<li>Infection rate: <code>beta</code></li>
+<li>Time to simulate for: <code>f_time</code></li>
+</ul>
+<p>Inside the function we combine this information to create four R objects that when passed to the <code>SimInf</code> function <code>mparse</code>. The output from the <code>mparse</code> function is returned as the output to our <code>create.StocSI</code> function.</p>
+<p>Here we will break down what we have just written and explain what is required for the <code>mparse</code> function.</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+The <code>SimInf</code> package includes its own function that defines <span class="math inline">\(SIR\)</span>, <span class="math inline">\(SEIR\)</span> and <span class="math inline">\(SIS\)</span> models (of which the <span class="math inline">\(SI\)</span> model is a special case). The <code>mparse</code> function can define any generic compartmental model so it is worth learning about.
+</div>
+</div>
+<p>The <code>mparse</code> function requires that you specify the following information:</p>
+<ul>
+<li>the list of all compartments of the system</li>
+<li>the initial states (or compartments) of the system</li>
+<li>the events (or transitions) of the system</li>
+<li>the values of any parameters</li>
+<li>the time points where the value of each state is to be recorded for each simulation</li>
+</ul>
+<p>An <span class="math inline">\(SI\)</span> model is described by the following system of <em>differential</em> equations:</p>
+<p><span class="math display">\[\begin{align}
+    \frac{dS}{dt} &amp;= -\beta\frac{SI}{N}\\
+    \frac{dI}{dt} &amp;= \beta\frac{SI}{N}
+\end{align}\]</span></p>
+<p>And from these equations we can derive a transition diagram from the system:</p>
+<p><span class="math display">\[
+    S \rightarrow \beta\frac{SI}{N} \rightarrow I
+\]</span></p>
+<ul>
+<li><p>From this diagram we can see that there are two states for this system: susceptible and infected (S &amp; I). We define all of the compartments of the model using a vector:</p>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="epi3.html#cb308-1" tabindex="-1"></a>compartments <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>,<span class="st">&quot;I&quot;</span>)</span></code></pre></div></li>
+<li><p>In order to begin the simulation, we need to specify the initial values of each compartment. We specify these using a data frame with a single row and column for each compartment specified above:</p>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="epi3.html#cb309-1" tabindex="-1"></a>initial_state <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">S =</span> N<span class="sc">-</span>I0, <span class="at">I =</span> I0)</span></code></pre></div>
+<p>where <code>N</code> (the total population number) and <code>I0</code> (the initial number of infected) have been specified by the user.</p></li>
+<li><p>There is one event (or transition): infection.</p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="epi3.html#cb310-1" tabindex="-1"></a>transitions <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S -&gt; beta*S*I/(S+I) -&gt; I&quot;</span>)</span></code></pre></div>
+<p>where the effect is to move one susceptible into the infected compartment at a rate <span class="math inline">\(\beta \frac{SI}{N}\)</span> where <span class="math inline">\(N=S+I\)</span> and beta must be specified by the user. The syntax we use here should be self-explanatory (hopefully) but the idea is that we have the following syntax “A <span class="math inline">\(\rightarrow\)</span> rate <span class="math inline">\(\rightarrow\)</span> B” where A is the name of the starting compartment, B is the name of the ending compartment and rate explains how to calculate the rate.</p></li>
+<li><p>We must tell algorithm how long we want it to run for before stopping and at what points we wish to record the value of the compartments. We use the user specified variable <code>f_time</code> to specify a sequence of daily output values up to a maximum value of <code>f_time</code>.</p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="epi3.html#cb311-1" tabindex="-1"></a>tspan <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> f_time, <span class="at">by =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+<code>SimInf</code> was designed to work with real epidemiological data and as such the minimum output timestep size is 1 (corresponding to 1 day).
+</div>
+</div></li>
+<li><p>The <code>mparse</code> function takes the arguments we’ve just created, processes (<em>‘parses’</em>) them into a low-level computer language and compiles the resulting program into machine code. This machine code is considerably (orders of magnitude) faster than the equivalent R code. We assign the output of this function to the object <code>SImodel</code> (an object in R is a special data type that combines functions with data).</p></li>
+<li><p>Objects can be used as arguments to functions in the same way as normal data types. In this case we can use the <code>run()</code> function to run a stochastic simulation of the <code>SImodel</code>:</p>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="epi3.html#cb312-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SImodel, <span class="at">threads =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>The threads argument is optional here, but this argument would allow us to parallelise our code (if our setup allows it).</p></li>
+<li><p>The run function implements (and runs) the stochastic simulation algorithm for any stochastic model defined by the <code>mparse</code> function and returns a new object which contains the output of the simulation (which we’ve called out).</p></li>
+<li><p>The <code>SimInf</code> package provides a special plot function for this output</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="epi3.html#cb313-1" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div></li>
+</ul>
+<p>This explains the code you’ve produced so far, but there are limitations. We would like to plot multiple stochastic realisations onto a single plot and investigate their aggregated properties. To do this we will need to modify our code somewhat.</p>
+</div>
+<div id="performing-multiple-simulations" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> Performing multiple simulations<a href="epi3.html#performing-multiple-simulations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s update our <code>create.StocSI</code> function in the (<code>Stoch_SI.R</code> file) to create a model with multiple copies of the same population. This is the simplest possible meta-population model where there is no interaction between patches, and a neat hack to run multiple replicate simulations at the same time.</p>
+<p><strong>Edit <code>Stoch_SI.R</code> to update the definition of the <code>create.StocSI</code> as follows:</strong></p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="epi3.html#cb314-1" tabindex="-1"></a>create.StocSI <span class="ot">&lt;-</span> <span class="cf">function</span>(N, I0, beta, f_time, <span class="at">reps =</span> <span class="dv">1</span>) {</span>
+<span id="cb314-2"><a href="epi3.html#cb314-2" tabindex="-1"></a>    </span>
+<span id="cb314-3"><a href="epi3.html#cb314-3" tabindex="-1"></a>    initial_state <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">S =</span> <span class="fu">rep</span>(N<span class="sc">-</span>I0, reps) , <span class="at">I =</span> <span class="fu">rep</span>(I0, reps))</span>
+<span id="cb314-4"><a href="epi3.html#cb314-4" tabindex="-1"></a>    compartments <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>, <span class="st">&quot;I&quot;</span>)</span>
+<span id="cb314-5"><a href="epi3.html#cb314-5" tabindex="-1"></a>    transitions <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S -&gt; beta*S*I/(S+I) -&gt; I&quot;</span>)</span>
+<span id="cb314-6"><a href="epi3.html#cb314-6" tabindex="-1"></a>    tspan <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> f_time, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb314-7"><a href="epi3.html#cb314-7" tabindex="-1"></a>    </span>
+<span id="cb314-8"><a href="epi3.html#cb314-8" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">mparse</span>(<span class="at">transitions =</span> transitions, <span class="at">compartments =</span> compartments, </span>
+<span id="cb314-9"><a href="epi3.html#cb314-9" tabindex="-1"></a>        <span class="at">gdata =</span> <span class="fu">c</span>(<span class="at">beta =</span> beta), <span class="at">u0 =</span> initial_state, <span class="at">tspan =</span> tspan)</span>
+<span id="cb314-10"><a href="epi3.html#cb314-10" tabindex="-1"></a>    <span class="fu">return</span>(model)</span>
+<span id="cb314-11"><a href="epi3.html#cb314-11" tabindex="-1"></a>}</span></code></pre></div>
+<p>The only two things we’ve changed here are:</p>
+<ol style="list-style-type: decimal">
+<li><p>We’ve created a new argument call <code>reps</code> which we’re using to specify the number of simulations that we want the code to run.</p></li>
+<li><p>We’ve changed how we specify the <code>initial_state</code> dataframe. This is now a dataframe that has <code>reps</code> number of rows and 2 columns. The first column contains the starting number of susceptible individuals in each of our simulations, and the second column contains the number of initial infected individuals.</p></li>
+</ol>
+<p>Again, remember to <strong>save</strong> your file.</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+We have added a new argument to <code>create.StocSI</code> which has a default value <code>reps = 1</code>. By adding the argument in this way we ensure that any code we wrote earlier assuming only one replicate would still work with no modifications.
+</div>
+</div>
+<p>Type in the following code into <code>Epi_P3.R</code> and run:</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="epi3.html#cb315-1" tabindex="-1"></a><span class="co">#Multiple replicates</span></span>
+<span id="cb315-2"><a href="epi3.html#cb315-2" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;Stoch_SI.R&#39;</span>)</span>
+<span id="cb315-3"><a href="epi3.html#cb315-3" tabindex="-1"></a>SImodel <span class="ot">&lt;-</span> <span class="fu">create.StocSI</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="fl">0.5</span>, <span class="dv">30</span>, <span class="dv">20</span>)</span>
+<span id="cb315-4"><a href="epi3.html#cb315-4" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SImodel)</span>
+<span id="cb315-5"><a href="epi3.html#cb315-5" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
+<p>This should produce a plot that looks similar to the following:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-290-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>By default the plot command will always:</p>
+<ol style="list-style-type: decimal">
+<li><p>plot the curves for all states on the same graph (so we can see both <span class="math inline">\(S\)</span> and <span class="math inline">\(I\)</span> curves here)</p></li>
+<li><p>use a step function to plot the curves (which is why it’s a bit, um, step-y)</p></li>
+<li><p>show the average and interquartile range as a transparent envelope when multiple simulations have been run.</p></li>
+</ol>
+<p>If we want to actually see individual realisations, we need to use some of the other arguments to the plot function. <strong>Try typing this in:</strong></p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="epi3.html#cb316-1" tabindex="-1"></a><span class="fu">plot</span>(out , <span class="st">&#39;I&#39;</span>, <span class="at">range =</span> <span class="cn">FALSE</span> , <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
+<p>This should produce a plot that look similar to the following:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-292-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>the second argument is a character vector specifying which compartments we want to see. Here we’ve asked to only see the curves for the infected <span class="math inline">\(I\)</span> compartment</li>
+<li>the named argument <code>range</code> is used to specify the shaded quantile on the plot. By specifying <code>FALSE</code>, we’ve turned it off and forced R to plot the individual trajectories instead. If we’d specified a numeric value between 0 and 1 then we would see the equivalent shaded range plotted instead (i.e. <code>range = 0.5</code> corresponds to plotting the interquartile range and <code>range = 0.95</code> corresponds to plotting the wider 95% quantiles)</li>
+<li>we can use the standard <code>type</code> argument from the base R plot function to specify the type of curve we want. The default is <code>type = 's'</code> for steps, but here we’re asking for the smoother <code>type = 'l'</code> lines option.</li>
+</ul>
+<div id="adding-the-deterministic-solution-curve" class="section level3 hasAnchor" number="8.4.1">
+<h3><span class="header-section-number">8.4.1</span> Adding the deterministic solution curve<a href="epi3.html#adding-the-deterministic-solution-curve" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Download an R script file called <a href="https://vaccineimpact.github.io/vimc_course/Materials/Epidemic_models/Functions/Det_SI.R"><code>Det_SI.R</code></a>. It contains the code for a deterministic <span class="math inline">\(SI\)</span> model based upon the code you encountered in the first epidemic models practical. It is specifically designed to use the same parameters as have been used in the stochastic <span class="math inline">\(SI\)</span> code written above and will add a deterministic trajectory to your plot.</p>
+<p><strong>Type in the following:</strong></p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="epi3.html#cb317-1" tabindex="-1"></a><span class="co"># adding a deterministic trajectory</span></span>
+<span id="cb317-2"><a href="epi3.html#cb317-2" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;Det_SI.R&#39;</span>)</span>
+<span id="cb317-3"><a href="epi3.html#cb317-3" tabindex="-1"></a>det.sol <span class="ot">&lt;-</span> <span class="fu">DetSI.dyn</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="fl">0.5</span>, <span class="dv">30</span>)</span>
+<span id="cb317-4"><a href="epi3.html#cb317-4" tabindex="-1"></a></span>
+<span id="cb317-5"><a href="epi3.html#cb317-5" tabindex="-1"></a>det.t <span class="ot">&lt;-</span> det.sol[,<span class="dv">1</span>]</span>
+<span id="cb317-6"><a href="epi3.html#cb317-6" tabindex="-1"></a>det.I <span class="ot">&lt;-</span> det.sol[,<span class="dv">3</span>]</span>
+<span id="cb317-7"><a href="epi3.html#cb317-7" tabindex="-1"></a></span>
+<span id="cb317-8"><a href="epi3.html#cb317-8" tabindex="-1"></a><span class="fu">lines</span>(det.t, det.I, <span class="at">lwd=</span><span class="dv">3</span> , <span class="at">col=</span><span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-294-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="exploring-the-effects-of-stochasticity" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Exploring the effects of stochasticity<a href="epi3.html#exploring-the-effects-of-stochasticity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Modify the above code to explore the effects of different initial conditions (<span class="math inline">\(I_{0} = 1, 5, 10, 50, 100\)</span>) on the stochastic replicates. Keep the total population size constant (<span class="math inline">\(N = 500\)</span>).</p>
+<strong>Qualitatively what effect does this have on the variability between replicates?</strong>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-296" onclick="javascript:toggle(&#39;unnamed-chunk-296&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-296" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>As the initial number of infectives increases the variability between replicates decreases.</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb318-1"><a href="epi3.html#cb318-1" tabindex="-1"></a>ninf <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">100</span>)</span>
+<span id="cb318-2"><a href="epi3.html#cb318-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb318-3"><a href="epi3.html#cb318-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> ninf) {</span>
+<span id="cb318-4"><a href="epi3.html#cb318-4" tabindex="-1"></a>    SImodel <span class="ot">&lt;-</span> <span class="fu">create.StocSI</span>(<span class="dv">500</span>, i, <span class="fl">0.5</span>, <span class="dv">30</span>, <span class="dv">20</span>)</span>
+<span id="cb318-5"><a href="epi3.html#cb318-5" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SImodel)</span>
+<span id="cb318-6"><a href="epi3.html#cb318-6" tabindex="-1"></a>    <span class="fu">plot</span>(out, <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;I0 = &quot;</span>, i))</span>
+<span id="cb318-7"><a href="epi3.html#cb318-7" tabindex="-1"></a>}</span>
+<span id="cb318-8"><a href="epi3.html#cb318-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1027-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Now vary the population size (<span class="math inline">\(N = 50, 500, 5000\)</span>) with <span class="math inline">\(I_{0} = 1\)</span>.</p>
+<strong>Qualitatively what effect does this have on the variability between replicates?</strong>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-298" onclick="javascript:toggle(&#39;unnamed-chunk-298&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-298" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>In contrast to varying the initial number of infectives, the host population size has little to no impact on the variability between replicates of the <span class="math inline">\(SI\)</span> model. The relevant “large population” limit for the <span class="math inline">\(SI\)</span> model is the number of infectives not the size of the host population.</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="epi3.html#cb319-1" tabindex="-1"></a>npop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">500</span>, <span class="dv">5000</span>)</span>
+<span id="cb319-2"><a href="epi3.html#cb319-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb319-3"><a href="epi3.html#cb319-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> npop) {</span>
+<span id="cb319-4"><a href="epi3.html#cb319-4" tabindex="-1"></a>    SImodel <span class="ot">&lt;-</span> <span class="fu">create.StocSI</span>(i, <span class="dv">1</span>, <span class="fl">0.5</span>, <span class="dv">30</span>, <span class="dv">20</span>)</span>
+<span id="cb319-5"><a href="epi3.html#cb319-5" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SImodel)</span>
+<span id="cb319-6"><a href="epi3.html#cb319-6" tabindex="-1"></a>    <span class="fu">plot</span>(out, <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;N = &quot;</span>, i))</span>
+<span id="cb319-7"><a href="epi3.html#cb319-7" tabindex="-1"></a>}</span>
+<span id="cb319-8"><a href="epi3.html#cb319-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1033-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Now vary the infection rate (<span class="math inline">\(\beta = 0.1, 0.5, 1\)</span>).</p>
+<strong>Qualitatively what effect does this have on the variability between replicates?</strong>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-300" onclick="javascript:toggle(&#39;unnamed-chunk-300&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-300" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>As discussed in lectures, increasing the transmission rate reduces the impact of stochasticity and the variability between replicates.</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="epi3.html#cb320-1" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)</span>
+<span id="cb320-2"><a href="epi3.html#cb320-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb320-3"><a href="epi3.html#cb320-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> beta) {</span>
+<span id="cb320-4"><a href="epi3.html#cb320-4" tabindex="-1"></a>    SImodel <span class="ot">&lt;-</span> <span class="fu">create.StocSI</span>(<span class="dv">500</span>, <span class="dv">1</span>, i, <span class="dv">30</span>, <span class="dv">20</span>)</span>
+<span id="cb320-5"><a href="epi3.html#cb320-5" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SImodel)</span>
+<span id="cb320-6"><a href="epi3.html#cb320-6" tabindex="-1"></a>    <span class="fu">plot</span>(out, <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;beta = &quot;</span>, i))</span>
+<span id="cb320-7"><a href="epi3.html#cb320-7" tabindex="-1"></a>}</span>
+<span id="cb320-8"><a href="epi3.html#cb320-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1039-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="the-delay-time" class="section level2 hasAnchor" number="8.6">
+<h2><span class="header-section-number">8.6</span> The delay time<a href="epi3.html#the-delay-time" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Graphical exploration of model output is a good way to orientate yourself and understand the qualitative impact of changing parameters, but in practice we do need to explore various summary statistics. In this section we will compare the time it takes for a stochastic epidemic to infect half of the total population, <span class="math inline">\(t_{\frac{1}{2}}\)</span>, with the time a deterministic epidemic takes. This difference is the delay time, <span class="math inline">\(\delta t\)</span> (see the figure below).</p>
+<p><img src="Materials/Epidemic_models/Plots/plot_1.JPG" style="display: block; margin: auto;" /></p>
+<p>We will repeat this for many stochastic replicates and plot a distribution of the delay times.</p>
+<div id="the-deterministic-half-time" class="section level3 hasAnchor" number="8.6.1">
+<h3><span class="header-section-number">8.6.1</span> The deterministic half-time<a href="epi3.html#the-deterministic-half-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The deterministic model predicts a constant value of <span class="math inline">\(t_{\frac{1}{2}}\)</span> given by the expression:</p>
+<p><span class="math display">\[
+    t_{\frac{1}{2}} = -\frac{1}{\beta}\ln\left(\frac{I_{0}}{N-I_{0}}\right)
+\]</span></p>
+<p>(This can be derived exactly from the analytic solution to the system of differential equations for the <span class="math inline">\(SI\)</span> system. This isn’t going to be possible for more complex models.)</p>
+</div>
+<div id="the-stochastic-half-time" class="section level3 hasAnchor" number="8.6.2">
+<h3><span class="header-section-number">8.6.2</span> The stochastic half-time<a href="epi3.html#the-stochastic-half-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We must now construct a function that calculates the value of <span class="math inline">\(t_{\frac{1}{2}}\)</span> for a set of stochastic simulations and the corresponding delay times:</p>
+<p>Open a new script file and save as <code>Half_time.R</code> with the following content:</p>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="epi3.html#cb321-1" tabindex="-1"></a><span class="co"># Deterministic Halftime Function</span></span>
+<span id="cb321-2"><a href="epi3.html#cb321-2" tabindex="-1"></a>det_halftime <span class="ot">&lt;-</span> <span class="cf">function</span>(N, I0, beta) {</span>
+<span id="cb321-3"><a href="epi3.html#cb321-3" tabindex="-1"></a>    </span>
+<span id="cb321-4"><a href="epi3.html#cb321-4" tabindex="-1"></a>    <span class="co"># calculate deterministic half life</span></span>
+<span id="cb321-5"><a href="epi3.html#cb321-5" tabindex="-1"></a>    <span class="fu">return</span>((<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>beta)<span class="sc">*</span><span class="fu">log</span>(I0<span class="sc">/</span>(N<span class="sc">-</span>I0)))</span>
+<span id="cb321-6"><a href="epi3.html#cb321-6" tabindex="-1"></a>}</span>
+<span id="cb321-7"><a href="epi3.html#cb321-7" tabindex="-1"></a></span>
+<span id="cb321-8"><a href="epi3.html#cb321-8" tabindex="-1"></a><span class="co"># Stochastic Halftime Function</span></span>
+<span id="cb321-9"><a href="epi3.html#cb321-9" tabindex="-1"></a>stoc_halftime <span class="ot">&lt;-</span> <span class="cf">function</span>(model) {</span>
+<span id="cb321-10"><a href="epi3.html#cb321-10" tabindex="-1"></a>    </span>
+<span id="cb321-11"><a href="epi3.html#cb321-11" tabindex="-1"></a>    no_runs <span class="ot">=</span> <span class="fu">n_nodes</span>(model)</span>
+<span id="cb321-12"><a href="epi3.html#cb321-12" tabindex="-1"></a>    N <span class="ot">=</span> <span class="fu">sum</span>(model<span class="sc">@</span>u0[,<span class="dv">1</span>])</span>
+<span id="cb321-13"><a href="epi3.html#cb321-13" tabindex="-1"></a>    </span>
+<span id="cb321-14"><a href="epi3.html#cb321-14" tabindex="-1"></a>    <span class="co"># create storage vector for stochastic half lives</span></span>
+<span id="cb321-15"><a href="epi3.html#cb321-15" tabindex="-1"></a>    thalf <span class="ot">&lt;-</span> <span class="fu">numeric</span>(no_runs)</span>
+<span id="cb321-16"><a href="epi3.html#cb321-16" tabindex="-1"></a>    </span>
+<span id="cb321-17"><a href="epi3.html#cb321-17" tabindex="-1"></a>    <span class="co"># loop over number of replicates</span></span>
+<span id="cb321-18"><a href="epi3.html#cb321-18" tabindex="-1"></a>    <span class="cf">for</span> (iSim <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_runs) {</span>
+<span id="cb321-19"><a href="epi3.html#cb321-19" tabindex="-1"></a>        <span class="co"># extract the infected time series for each simulation</span></span>
+<span id="cb321-20"><a href="epi3.html#cb321-20" tabindex="-1"></a>        output <span class="ot">&lt;-</span> <span class="fu">trajectory</span>(out, <span class="st">&quot;I&quot;</span>, iSim)</span>
+<span id="cb321-21"><a href="epi3.html#cb321-21" tabindex="-1"></a>        </span>
+<span id="cb321-22"><a href="epi3.html#cb321-22" tabindex="-1"></a>        <span class="co"># find the first time when the infected population is at least half the total population</span></span>
+<span id="cb321-23"><a href="epi3.html#cb321-23" tabindex="-1"></a>        ind <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="fu">which</span>(output<span class="sc">$</span>I<span class="sc">&gt;=</span>(N<span class="sc">/</span><span class="dv">2</span>)))</span>
+<span id="cb321-24"><a href="epi3.html#cb321-24" tabindex="-1"></a>        thalf[iSim] <span class="ot">&lt;-</span> output<span class="sc">$</span>time[ind]</span>
+<span id="cb321-25"><a href="epi3.html#cb321-25" tabindex="-1"></a>    }</span>
+<span id="cb321-26"><a href="epi3.html#cb321-26" tabindex="-1"></a>    </span>
+<span id="cb321-27"><a href="epi3.html#cb321-27" tabindex="-1"></a>    <span class="fu">return</span>(thalf)</span>
+<span id="cb321-28"><a href="epi3.html#cb321-28" tabindex="-1"></a>}</span></code></pre></div>
+<p>The function <code>det_halftime</code> takes three arguments:</p>
+<ul>
+<li>The total host population <code>N</code></li>
+<li>The initial number of infected <code>I0</code></li>
+<li>The infection rate <code>beta</code></li>
+</ul>
+<p>and returns the deterministic value of the time to half-height.</p>
+<p>The function <code>stoc_halftime</code> takes a SimInf model object as its input and returns a vector with the time to half height of each model simulation (to nearest day).</p>
+<p>We then plot a probability density plot for these delay times using the in-built function <code>density</code>.</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="epi3.html#cb322-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;Half_time.R&#39;</span>)</span>
+<span id="cb322-2"><a href="epi3.html#cb322-2" tabindex="-1"></a>SImodel <span class="ot">&lt;-</span> <span class="fu">create.StocSI</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="fl">0.5</span>, <span class="dv">30</span>, <span class="dv">100</span>)</span>
+<span id="cb322-3"><a href="epi3.html#cb322-3" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SImodel)</span>
+<span id="cb322-4"><a href="epi3.html#cb322-4" tabindex="-1"></a></span>
+<span id="cb322-5"><a href="epi3.html#cb322-5" tabindex="-1"></a>delay_times <span class="ot">&lt;-</span> <span class="fu">stoc_halftime</span>(out) <span class="sc">-</span> <span class="fu">det_halftime</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb322-6"><a href="epi3.html#cb322-6" tabindex="-1"></a></span>
+<span id="cb322-7"><a href="epi3.html#cb322-7" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(delay_times), <span class="at">main =</span> <span class="st">&#39;&#39;</span>)</span></code></pre></div>
+<p><code>density</code> produces smoothed estimates of the frequency distributions of a set of samples (essentially a smooth line through the top of a histogram). This will produce a figure similar to the one below:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-304-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Can the distribution of delay-times be used to quantify the appropriateness of the deterministic approximation for a given set of parameters? In particular, in what limits will the deterministic model produce useful predictions for the time-scale of an <span class="math inline">\(SI\)</span> epidemic? You may wish to revisit the impact of changing the host-population size N, initial number of infectives <span class="math inline">\(I_{0}\)</span> and infection rate. Produce plots to justify your reasoning and discuss them with a demonstrator.
+</div>
+</div>
+</div>
+</div>
+<div id="coding-a-simple-sir-model" class="section level2 hasAnchor" number="8.7">
+<h2><span class="header-section-number">8.7</span> Coding a simple <span class="math inline">\(SIR\)</span> model<a href="epi3.html#coding-a-simple-sir-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Using the results from the earlier section on <span class="math inline">\(SI\)</span> models as a starting point we will construct a stochastic <span class="math inline">\(SIR\)</span> model. The deterministic <span class="math inline">\(SIR\)</span> model equations are given by</p>
+<p><span class="math display">\[
+    \frac{dS}{dt} = -\beta\frac{SI}{N}
+\]</span>
+<span class="math display">\[
+    \frac{dI}{dt} = \beta\frac{SI}{N}-\mu I
+\]</span>
+<span class="math display">\[
+    \frac{dR}{dt} = \mu I
+\]</span></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+
+<ol style="list-style-type: decimal">
+<li>Using these equations construct a transition diagram for the system</li>
+<li>What are the states/compartments for this system?</li>
+<li>What are the transitions events and what are the rates associated with each event?</li>
+<li>What is the initial state of the system (i.e. how many individuals should be in each compartment initially)?
+</div>
+</div></li>
+</ol>
+<p>Open a new script in RStudio.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Using the functions developed in the previous sections as a template construct a <code>create.StocSIR</code> function that takes five arguments:</p>
+<ul>
+<li><code>N</code>: the total population size</li>
+<li><code>I0</code>: the initial number of infected individuals</li>
+<li><code>beta</code>: the infection rate</li>
+<li><code>mu</code>: the recovery rate</li>
+<li><code>f_time</code>: the time the simulation will run for (daily steps)</li>
+<li><code>reps</code>: the number of replicate simulations to run</li>
+</ul>
+<p>The skeleton function below can serve as a starting point.</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="epi3.html#cb323-1" tabindex="-1"></a>create.StocSIR <span class="ot">&lt;-</span> <span class="cf">function</span>(N, I0, beta, mu, f_time, <span class="at">reps =</span> <span class="dv">1</span>) {</span>
+<span id="cb323-2"><a href="epi3.html#cb323-2" tabindex="-1"></a>    initial_state <span class="ot">&lt;-</span></span>
+<span id="cb323-3"><a href="epi3.html#cb323-3" tabindex="-1"></a>    compartments <span class="ot">&lt;-</span></span>
+<span id="cb323-4"><a href="epi3.html#cb323-4" tabindex="-1"></a>    transitions <span class="ot">&lt;-</span></span>
+<span id="cb323-5"><a href="epi3.html#cb323-5" tabindex="-1"></a>    tspan <span class="ot">&lt;-</span></span>
+<span id="cb323-6"><a href="epi3.html#cb323-6" tabindex="-1"></a>    </span>
+<span id="cb323-7"><a href="epi3.html#cb323-7" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">mparse</span>(<span class="at">transitions =</span> transitions,</span>
+<span id="cb323-8"><a href="epi3.html#cb323-8" tabindex="-1"></a>                    <span class="at">compartments =</span> compartments,</span>
+<span id="cb323-9"><a href="epi3.html#cb323-9" tabindex="-1"></a>                    <span class="at">gdata =</span> <span class="fu">c</span>(<span class="at">beta =</span> beta, <span class="at">mu =</span> mu),</span>
+<span id="cb323-10"><a href="epi3.html#cb323-10" tabindex="-1"></a>                    <span class="at">u0 =</span> initial_state,</span>
+<span id="cb323-11"><a href="epi3.html#cb323-11" tabindex="-1"></a>                    <span class="at">tspan =</span> tspan)</span>
+<span id="cb323-12"><a href="epi3.html#cb323-12" tabindex="-1"></a>    </span>
+<span id="cb323-13"><a href="epi3.html#cb323-13" tabindex="-1"></a>    <span class="fu">return</span>(model)</span>
+<span id="cb323-14"><a href="epi3.html#cb323-14" tabindex="-1"></a>}</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Hint
+</div>
+<div class="panel-body">
+<p>To specify multiple transitions in the <code>SimInf</code> algorithm you will need a transitions vector with two elements to it like this:</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="epi3.html#cb324-1" tabindex="-1"></a>transitions <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;S -&gt; ?? -&gt; I&#39;</span>, <span class="st">&#39;I -&gt; ?? -&gt; R&#39;</span>)</span></code></pre></div>
+where I have deliberately replaced the relevant transition rates with <code>??</code>. You will need to replace the <code>??</code> with the correct rate equations.
+</div>
+</div>
+<p>Using your function run the following code:</p>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="epi3.html#cb325-1" tabindex="-1"></a>SIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIR</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.25</span>, <span class="dv">50</span>)</span>
+<span id="cb325-2"><a href="epi3.html#cb325-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SIRmodel)</span>
+<span id="cb325-3"><a href="epi3.html#cb325-3" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-308" onclick="javascript:toggle(&#39;unnamed-chunk-308&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-308" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="epi3.html#cb326-1" tabindex="-1"></a>create.StocSIR <span class="ot">&lt;-</span> <span class="cf">function</span>(N, I0, beta, mu, f_time, <span class="at">reps =</span> <span class="dv">1</span>) {</span>
+<span id="cb326-2"><a href="epi3.html#cb326-2" tabindex="-1"></a>    initial_state <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">S =</span> <span class="fu">rep</span>(N<span class="sc">-</span>I0, reps), <span class="at">I =</span> <span class="fu">rep</span>(I0, reps), <span class="at">R =</span> <span class="fu">rep</span>(<span class="dv">0</span>, reps))</span>
+<span id="cb326-3"><a href="epi3.html#cb326-3" tabindex="-1"></a>    compartments <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>, <span class="st">&quot;I&quot;</span>, <span class="st">&quot;R&quot;</span>)</span>
+<span id="cb326-4"><a href="epi3.html#cb326-4" tabindex="-1"></a>    transitions <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S -&gt; beta*S*I/(S+I+R) -&gt; I&quot;</span>, <span class="st">&quot;I -&gt; mu*I -&gt; R&quot;</span>)</span>
+<span id="cb326-5"><a href="epi3.html#cb326-5" tabindex="-1"></a>    tspan <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> f_time, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb326-6"><a href="epi3.html#cb326-6" tabindex="-1"></a>    </span>
+<span id="cb326-7"><a href="epi3.html#cb326-7" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">mparse</span>(<span class="at">transitions =</span> transitions,</span>
+<span id="cb326-8"><a href="epi3.html#cb326-8" tabindex="-1"></a>                    <span class="at">compartments =</span> compartments,</span>
+<span id="cb326-9"><a href="epi3.html#cb326-9" tabindex="-1"></a>                    <span class="at">gdata =</span> <span class="fu">c</span>(<span class="at">beta =</span> beta, <span class="at">mu =</span> mu),</span>
+<span id="cb326-10"><a href="epi3.html#cb326-10" tabindex="-1"></a>                    <span class="at">u0 =</span> initial_state,</span>
+<span id="cb326-11"><a href="epi3.html#cb326-11" tabindex="-1"></a>                    <span class="at">tspan =</span> tspan)</span>
+<span id="cb326-12"><a href="epi3.html#cb326-12" tabindex="-1"></a>    </span>
+<span id="cb326-13"><a href="epi3.html#cb326-13" tabindex="-1"></a>    <span class="fu">return</span>(model)</span>
+<span id="cb326-14"><a href="epi3.html#cb326-14" tabindex="-1"></a>}</span>
+<span id="cb326-15"><a href="epi3.html#cb326-15" tabindex="-1"></a>SIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIR</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.25</span>, <span class="dv">50</span>)</span>
+<span id="cb326-16"><a href="epi3.html#cb326-16" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SIRmodel)</span>
+<span id="cb326-17"><a href="epi3.html#cb326-17" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>This should produce a graph that looks like this:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-309-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>However, some of you will see a very different graph. (If you do get something like this plot then try re-running the model and plotting it several times until you see something different.)</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+Why might this be the case?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-311" onclick="javascript:toggle(&#39;unnamed-chunk-311&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-311" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+For some replicates the initial infected individual will recover before transmitting, the disease will go extinct and there will be no epidemic.
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Use this function to plot 20 replicates of the infection curves (use the code in the previous <span class="math inline">\(SI\)</span> section as a guide).
+</div>
+</div>
+<button id="displayTextunnamed-chunk-313" onclick="javascript:toggle(&#39;unnamed-chunk-313&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-313" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="epi3.html#cb327-1" tabindex="-1"></a>SIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIR</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.25</span>, <span class="dv">50</span>, <span class="dv">20</span>)</span>
+<span id="cb327-2"><a href="epi3.html#cb327-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SIRmodel)</span>
+<span id="cb327-3"><a href="epi3.html#cb327-3" tabindex="-1"></a><span class="fu">plot</span>(out , <span class="st">&#39;I&#39;</span>, <span class="at">range=</span><span class="cn">FALSE</span> , <span class="at">type =</span> <span class="st">&#39;l&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">300</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1078-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Load the R script called <a href="https://vaccineimpact.github.io/vimc_course/Materials/Epidemic_models/Functions/Det_SIR.R"><code>Det_SIR.R</code></a> and adapting your code from the previous section make a plot that overlays the deterministic solution with the output of the stochastic model.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-315" onclick="javascript:toggle(&#39;unnamed-chunk-315&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-315" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="epi3.html#cb328-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;Materials/Epidemic_models/Functions/Det_SIR.R&#39;</span>)</span>
+<span id="cb328-2"><a href="epi3.html#cb328-2" tabindex="-1"></a>det.sol <span class="ot">&lt;-</span> <span class="fu">DetSIR.dyn</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.25</span>, <span class="dv">50</span>)</span>
+<span id="cb328-3"><a href="epi3.html#cb328-3" tabindex="-1"></a>det.t <span class="ot">&lt;-</span> det.sol[,<span class="dv">1</span>]</span>
+<span id="cb328-4"><a href="epi3.html#cb328-4" tabindex="-1"></a>det.I <span class="ot">&lt;-</span> det.sol[,<span class="dv">3</span>]</span>
+<span id="cb328-5"><a href="epi3.html#cb328-5" tabindex="-1"></a><span class="fu">lines</span>(det.t, det.I, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1086-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="sis-extension-adding-recovery-from-infection" class="section level2 hasAnchor" number="8.8">
+<h2><span class="header-section-number">8.8</span> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection<a href="epi3.html#sis-extension-adding-recovery-from-infection" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Consider a system where individuals recover from infection with a fixed rate <span class="math inline">\(\alpha\)</span> and return to the susceptible class. This <span class="math inline">\(SIS\)</span> system is described by the following system of equations:</p>
+<p><span class="math display">\[
+    \begin{aligned}
+        \frac{dS}{dt} &amp;= \alpha I - \beta\frac{SI}{N} \\
+        \frac{dI}{dt} &amp;= \beta\frac{SI}{N} - \alpha I
+    \end{aligned}
+\]</span></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+
+<ol style="list-style-type: decimal">
+<li><p>Draw the transition diagram for this system.</p></li>
+<li><p>For each transition write down the rate at which it occurs.</p></li>
+<li><p>What are the parameters required for this model?</p></li>
+<li><p>Write a new function <code>create.StocSIS</code> based upon the <code>create.StocSI</code> function and add to the <code>Stoch_SI.R</code> file and repeat the above analysis. Use these initial values for the parameters:</p></li>
+</ol>
+<ul>
+<li><span class="math inline">\(\alpha = 0.1\)</span></li>
+<li><span class="math inline">\(\beta = 0.5\)</span>
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-317" onclick="javascript:toggle(&#39;unnamed-chunk-317&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-317" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="epi3.html#cb329-1" tabindex="-1"></a>create.StocSIS <span class="ot">&lt;-</span> <span class="cf">function</span>(N, I0, alpha, beta, f_time, <span class="at">reps =</span> <span class="dv">1</span>) {</span>
+<span id="cb329-2"><a href="epi3.html#cb329-2" tabindex="-1"></a>    initial_state <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">S =</span> <span class="fu">rep</span>(N<span class="sc">-</span>I0, reps), <span class="at">I =</span> <span class="fu">rep</span>(I0, reps))</span>
+<span id="cb329-3"><a href="epi3.html#cb329-3" tabindex="-1"></a>    compartments <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>, <span class="st">&quot;I&quot;</span>)</span>
+<span id="cb329-4"><a href="epi3.html#cb329-4" tabindex="-1"></a>    transitions <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S -&gt; beta*S*I/(S+I) -&gt; I&quot;</span>, <span class="st">&quot;I -&gt; alpha*I -&gt; S&quot;</span>)</span>
+<span id="cb329-5"><a href="epi3.html#cb329-5" tabindex="-1"></a>    tspan <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> f_time, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb329-6"><a href="epi3.html#cb329-6" tabindex="-1"></a></span>
+<span id="cb329-7"><a href="epi3.html#cb329-7" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">mparse</span>(<span class="at">transitions =</span> transitions,</span>
+<span id="cb329-8"><a href="epi3.html#cb329-8" tabindex="-1"></a>                    <span class="at">compartments =</span> compartments,</span>
+<span id="cb329-9"><a href="epi3.html#cb329-9" tabindex="-1"></a>                    <span class="at">gdata =</span> <span class="fu">c</span>(<span class="at">alpha =</span> alpha, <span class="at">beta =</span> beta),</span>
+<span id="cb329-10"><a href="epi3.html#cb329-10" tabindex="-1"></a>                    <span class="at">u0 =</span> initial_state,</span>
+<span id="cb329-11"><a href="epi3.html#cb329-11" tabindex="-1"></a>                    <span class="at">tspan =</span> tspan)</span>
+<span id="cb329-12"><a href="epi3.html#cb329-12" tabindex="-1"></a></span>
+<span id="cb329-13"><a href="epi3.html#cb329-13" tabindex="-1"></a>    <span class="fu">return</span>(model)</span>
+<span id="cb329-14"><a href="epi3.html#cb329-14" tabindex="-1"></a>}</span>
+<span id="cb329-15"><a href="epi3.html#cb329-15" tabindex="-1"></a>SISmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIS</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">30</span>, <span class="dv">20</span>)</span>
+<span id="cb329-16"><a href="epi3.html#cb329-16" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SISmodel)</span>
+<span id="cb329-17"><a href="epi3.html#cb329-17" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1094-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="epi3.html#cb330-1" tabindex="-1"></a><span class="fu">plot</span>(out , <span class="st">&#39;I&#39;</span>, <span class="at">range =</span> <span class="cn">FALSE</span> , <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1094-2.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="sis-extension-adding-host-demography" class="section level2 hasAnchor" number="8.9">
+<h2><span class="header-section-number">8.9</span> <span class="math inline">\(SIS\)</span> Extension: Adding host demography<a href="epi3.html#sis-extension-adding-host-demography" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Consider an <span class="math inline">\(SI\)</span> model with host demography. The system has constant birth rate <span class="math inline">\(\Lambda\)</span> into the susceptible class and fixed per capita mortality rate <span class="math inline">\(\mu\)</span> from both the susceptible and infectious classes and is governed by the following equations:</p>
+<p><span class="math display">\[
+    \frac{dS}{dt} = \Lambda - \beta\frac{SI}{N} - \mu S
+\]</span>
+<span class="math display">\[
+    \frac{dI}{dt} = \beta\frac{SI}{N}-\mu I
+\]</span></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Repeat the previous steps for this model and create a <code>create.StocSI_demo</code> function in <code>Stoch_SI.R</code> and then explore its dynamics.</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Hint
+</div>
+<div class="panel-body">
+<p>To specify a birth (or death) event then we use the <code>@</code> symbol to represent the “empty” compartment from which births appear (or to which deaths end up). So a birth event into the susceptible compartment would have the following transition string:</p>
+<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="epi3.html#cb331-1" tabindex="-1"></a><span class="sc">@</span> <span class="ot">-&gt;</span> ?? <span class="ot">-&gt;</span> S</span></code></pre></div>
+<p>Use these initial values for the parameters:</p>
+<ul>
+<li><span class="math inline">\(\mu = 0.1\)</span></li>
+<li><span class="math inline">\(\beta = 0.5\)</span></li>
+<li><span class="math inline">\(\lambda = 100\)</span>
+</div>
+</div>
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-319" onclick="javascript:toggle(&#39;unnamed-chunk-319&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-319" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb332-1"><a href="epi3.html#cb332-1" tabindex="-1"></a>create.StocSI_demo <span class="ot">&lt;-</span> <span class="cf">function</span>(N, I0, mu, beta, lambda, f_time, <span class="at">reps =</span> <span class="dv">1</span>) {</span>
+<span id="cb332-2"><a href="epi3.html#cb332-2" tabindex="-1"></a>    initial_state <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">S =</span> <span class="fu">rep</span>(N<span class="sc">-</span>I0, reps), <span class="at">I =</span> <span class="fu">rep</span>(I0, reps))</span>
+<span id="cb332-3"><a href="epi3.html#cb332-3" tabindex="-1"></a>    compartments <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>, <span class="st">&quot;I&quot;</span>)</span>
+<span id="cb332-4"><a href="epi3.html#cb332-4" tabindex="-1"></a>    transitions <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb332-5"><a href="epi3.html#cb332-5" tabindex="-1"></a>        <span class="st">&quot;@ -&gt; lambda -&gt; S&quot;</span>,</span>
+<span id="cb332-6"><a href="epi3.html#cb332-6" tabindex="-1"></a>        <span class="st">&quot;S -&gt; beta*S*I/(S+I) -&gt; I&quot;</span>,</span>
+<span id="cb332-7"><a href="epi3.html#cb332-7" tabindex="-1"></a>        <span class="st">&quot;S -&gt; mu*S -&gt; @&quot;</span>,</span>
+<span id="cb332-8"><a href="epi3.html#cb332-8" tabindex="-1"></a>        <span class="st">&quot;I -&gt; mu*I -&gt; @&quot;</span></span>
+<span id="cb332-9"><a href="epi3.html#cb332-9" tabindex="-1"></a>    )</span>
+<span id="cb332-10"><a href="epi3.html#cb332-10" tabindex="-1"></a>    tspan <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> f_time, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb332-11"><a href="epi3.html#cb332-11" tabindex="-1"></a></span>
+<span id="cb332-12"><a href="epi3.html#cb332-12" tabindex="-1"></a>    model <span class="ot">&lt;-</span> <span class="fu">mparse</span>(<span class="at">transitions =</span> transitions,</span>
+<span id="cb332-13"><a href="epi3.html#cb332-13" tabindex="-1"></a>                    <span class="at">compartments =</span> compartments,</span>
+<span id="cb332-14"><a href="epi3.html#cb332-14" tabindex="-1"></a>                    <span class="at">gdata =</span> <span class="fu">c</span>(<span class="at">mu =</span> mu, <span class="at">beta =</span> beta, <span class="at">lambda =</span> lambda),</span>
+<span id="cb332-15"><a href="epi3.html#cb332-15" tabindex="-1"></a>                    <span class="at">u0 =</span> initial_state,</span>
+<span id="cb332-16"><a href="epi3.html#cb332-16" tabindex="-1"></a>                    <span class="at">tspan =</span> tspan)</span>
+<span id="cb332-17"><a href="epi3.html#cb332-17" tabindex="-1"></a></span>
+<span id="cb332-18"><a href="epi3.html#cb332-18" tabindex="-1"></a>    <span class="fu">return</span>(model)</span>
+<span id="cb332-19"><a href="epi3.html#cb332-19" tabindex="-1"></a>}</span>
+<span id="cb332-20"><a href="epi3.html#cb332-20" tabindex="-1"></a>SI_demo_model <span class="ot">&lt;-</span> <span class="fu">create.StocSI_demo</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">100</span>, <span class="dv">30</span>, <span class="dv">20</span>)</span>
+<span id="cb332-21"><a href="epi3.html#cb332-21" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SI_demo_model)</span>
+<span id="cb332-22"><a href="epi3.html#cb332-22" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1111-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="epi3.html#cb333-1" tabindex="-1"></a><span class="fu">plot</span>(out, <span class="st">&#39;I&#39;</span>, <span class="at">range =</span> <span class="cn">FALSE</span> , <span class="at">type =</span> <span class="st">&#39;l&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1111-2.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="sir-extension-the-final-epidemic-size" class="section level2 hasAnchor" number="8.10">
+<h2><span class="header-section-number">8.10</span> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size<a href="epi3.html#sir-extension-the-final-epidemic-size" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In order to further explore the effects of stochasticity in the <span class="math inline">\(SIR\)</span> model we are going to explore the how the final size of an epidemic varies between realisations.</p>
+<ul>
+<li>What is the final size of an epidemic?</li>
+<li>What does it mean?</li>
+<li>Which state variable do we need to consider in order to calculate the final epidemic size?</li>
+</ul>
+<p>For stochastic simulations the final epidemic size will vary between realisations of the epidemic which will mean that we need to think about a <em>distribution</em> of final epidemic sizes.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Write code to calculate the final epidemic size from a <code>SimInf</code> output object. Use <span class="math inline">\(\beta = 1\)</span> and <span class="math inline">\(\mu = 0.25\)</span> as before, running the outbreak for 50 days.</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Hint
+</div>
+<div class="panel-body">
+
+<ul>
+<li>What value should the final time for the simulations be set to (roughly)?</li>
+<li>As we’ve seen before, the function <code>trajectory</code> can be used to extract the actual values of the different compartments at each time point.</li>
+<li>Look at the code we used in the previous practical for calculating the halftime values for a single simulation and modify that logic accordingly.
+</div>
+</div>
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-321" onclick="javascript:toggle(&#39;unnamed-chunk-321&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-321" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>Here we will extract the number of removals at time <span class="math inline">\(t = 50\)</span> as an approximation of the final epidemic size.</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb334-1"><a href="epi3.html#cb334-1" tabindex="-1"></a><span class="do">## check for a single simulation</span></span>
+<span id="cb334-2"><a href="epi3.html#cb334-2" tabindex="-1"></a>SIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIR</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.25</span>, <span class="dv">50</span>)</span>
+<span id="cb334-3"><a href="epi3.html#cb334-3" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SIRmodel)</span>
+<span id="cb334-4"><a href="epi3.html#cb334-4" tabindex="-1"></a></span>
+<span id="cb334-5"><a href="epi3.html#cb334-5" tabindex="-1"></a><span class="do">## extract states</span></span>
+<span id="cb334-6"><a href="epi3.html#cb334-6" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">trajectory</span>(out)</span>
+<span id="cb334-7"><a href="epi3.html#cb334-7" tabindex="-1"></a></span>
+<span id="cb334-8"><a href="epi3.html#cb334-8" tabindex="-1"></a><span class="do">## find approximate final epidemic size</span></span>
+<span id="cb334-9"><a href="epi3.html#cb334-9" tabindex="-1"></a>finalsize <span class="ot">&lt;-</span> u<span class="sc">$</span>R[u<span class="sc">$</span>time <span class="sc">==</span> <span class="dv">50</span>]</span>
+<span id="cb334-10"><a href="epi3.html#cb334-10" tabindex="-1"></a>finalsize</span></code></pre></div>
+<pre><code>## [1] 491</code></pre>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Run 100 realisations, extract the final epidemic size from each one and then produce a histogram of the final sizes. It should look something similar to the figure below:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-1132-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Hint
+</div>
+<div class="panel-body">
+<ul>
+<li>You’ll probably want to use a loop to extract the final size for each simulation</li>
+<li>Set the histogram to use 500 bins
+</div>
+</div></li>
+</ul>
+<strong>Why does the histogram have a bimodal distribution?</strong>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-323" onclick="javascript:toggle(&#39;unnamed-chunk-323&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-323" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="epi3.html#cb336-1" tabindex="-1"></a><span class="do">## run 100 replicates</span></span>
+<span id="cb336-2"><a href="epi3.html#cb336-2" tabindex="-1"></a>SIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIR</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.25</span>, <span class="dv">50</span>, <span class="dv">100</span>)</span>
+<span id="cb336-3"><a href="epi3.html#cb336-3" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SIRmodel)</span>
+<span id="cb336-4"><a href="epi3.html#cb336-4" tabindex="-1"></a></span>
+<span id="cb336-5"><a href="epi3.html#cb336-5" tabindex="-1"></a><span class="do">## extract states</span></span>
+<span id="cb336-6"><a href="epi3.html#cb336-6" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">trajectory</span>(out)</span>
+<span id="cb336-7"><a href="epi3.html#cb336-7" tabindex="-1"></a></span>
+<span id="cb336-8"><a href="epi3.html#cb336-8" tabindex="-1"></a><span class="do">## find approximate final epidemic size for each replicate</span></span>
+<span id="cb336-9"><a href="epi3.html#cb336-9" tabindex="-1"></a>finalsize <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">100</span>)</span>
+<span id="cb336-10"><a href="epi3.html#cb336-10" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb336-11"><a href="epi3.html#cb336-11" tabindex="-1"></a>    finalsize[i] <span class="ot">&lt;-</span> u<span class="sc">$</span>R[u<span class="sc">$</span>node <span class="sc">==</span> i <span class="sc">&amp;</span> u<span class="sc">$</span>time <span class="sc">==</span> <span class="dv">50</span>]</span>
+<span id="cb336-12"><a href="epi3.html#cb336-12" tabindex="-1"></a>}</span>
+<span id="cb336-13"><a href="epi3.html#cb336-13" tabindex="-1"></a><span class="fu">hist</span>(finalsize, <span class="at">breaks =</span> <span class="dv">500</span>)</span></code></pre></div>
+This has a bimodal distribution because as before, with a small number of initial infectious individuals there is a non-zero probability that these early infections will recover before they infect anyone else. If an epidemic does take off then the final sizes tend to cluster around the deterministic final size (<span class="math inline">\(\approx N = 500\)</span> here).
+</div>
+</div>
+</div>
+<p>Recall that the final epidemic size for the deterministic <span class="math inline">\(SIR\)</span> model showed strong dependency on the value of the basic reproductive number, <span class="math inline">\(R_{0}\)</span>.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+
+<ul>
+<li>Write down an expression for <span class="math inline">\(R_{0}\)</span> for this system as a function of the parameters <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\mu\)</span>.</li>
+<li>Does this help explain the bimodal result?
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-325" onclick="javascript:toggle(&#39;unnamed-chunk-325&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-325" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p><span class="math display">\[
+    R_0 = \frac{\beta}{\gamma} = \frac{1}{0.25} = 4.
+\]</span>
+From the lecture notes we have that the probability of early extinction is <span class="math inline">\(P(E) \approx \frac{1}{R_0} = 0.25\)</span>. We can produce an approximation of the early extinction probabilities by counting the proportion of realisations that die out early. Based on the final size graph above, given the two very distinct modes, if we define early extinction as being any realisation with a final size <span class="math inline">\(&lt;250\)</span> say, then we can generate an estimate for <span class="math inline">\(P(E)\)</span> as:</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="epi3.html#cb337-1" tabindex="-1"></a>PE <span class="ot">&lt;-</span> <span class="fu">sum</span>(finalsize <span class="sc">&lt;</span> <span class="dv">250</span>) <span class="sc">/</span> <span class="fu">length</span>(finalsize)</span>
+<span id="cb337-2"><a href="epi3.html#cb337-2" tabindex="-1"></a>PE</span></code></pre></div>
+<pre><code>## [1] 0.2</code></pre>
+We can see that this closely aligns to our theoretical approximation.
+</div>
+</div>
+</div>
+<p>For this section, we shall vary the value of <span class="math inline">\(R_{0}\)</span> by varying the transmission rate, <span class="math inline">\(\beta\)</span>, whilst keeping the recovery rate, <span class="math inline">\(\mu\)</span>, at a fixed value.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Explore how the final size distribution varies with <span class="math inline">\(R_0\)</span> by producing histograms of the final size distribution as per the above figure for values of <span class="math inline">\(R_0 = 20.0, 5.0, 2.0, 1.2, 1.0, 0.9, 0.5\)</span>.</p>
+Can you always identify the two modes of the distribution?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-327" onclick="javascript:toggle(&#39;unnamed-chunk-327&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-327" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="epi3.html#cb339-1" tabindex="-1"></a><span class="do">## set vector of R0 values</span></span>
+<span id="cb339-2"><a href="epi3.html#cb339-2" tabindex="-1"></a>R0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="fl">1.2</span>, <span class="fl">1.0</span>, <span class="fl">0.9</span>, <span class="fl">0.5</span>)</span>
+<span id="cb339-3"><a href="epi3.html#cb339-3" tabindex="-1"></a></span>
+<span id="cb339-4"><a href="epi3.html#cb339-4" tabindex="-1"></a><span class="do">## set mu</span></span>
+<span id="cb339-5"><a href="epi3.html#cb339-5" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb339-6"><a href="epi3.html#cb339-6" tabindex="-1"></a></span>
+<span id="cb339-7"><a href="epi3.html#cb339-7" tabindex="-1"></a><span class="do">## set plot layout</span></span>
+<span id="cb339-8"><a href="epi3.html#cb339-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb339-9"><a href="epi3.html#cb339-9" tabindex="-1"></a></span>
+<span id="cb339-10"><a href="epi3.html#cb339-10" tabindex="-1"></a><span class="do">## loop over R0 values</span></span>
+<span id="cb339-11"><a href="epi3.html#cb339-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(R0)) {</span>
+<span id="cb339-12"><a href="epi3.html#cb339-12" tabindex="-1"></a>    </span>
+<span id="cb339-13"><a href="epi3.html#cb339-13" tabindex="-1"></a>    <span class="do">## calculate beta for fixed mu and R0</span></span>
+<span id="cb339-14"><a href="epi3.html#cb339-14" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> R0[i] <span class="sc">*</span> mu</span>
+<span id="cb339-15"><a href="epi3.html#cb339-15" tabindex="-1"></a>    </span>
+<span id="cb339-16"><a href="epi3.html#cb339-16" tabindex="-1"></a>    <span class="do">## set up and run model</span></span>
+<span id="cb339-17"><a href="epi3.html#cb339-17" tabindex="-1"></a>    SIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIR</span>(<span class="dv">500</span>, <span class="dv">1</span>, beta, mu, <span class="dv">50</span>, <span class="dv">100</span>)</span>
+<span id="cb339-18"><a href="epi3.html#cb339-18" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SIRmodel)</span>
+<span id="cb339-19"><a href="epi3.html#cb339-19" tabindex="-1"></a>    </span>
+<span id="cb339-20"><a href="epi3.html#cb339-20" tabindex="-1"></a>    <span class="do">## extract states</span></span>
+<span id="cb339-21"><a href="epi3.html#cb339-21" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">trajectory</span>(out)</span>
+<span id="cb339-22"><a href="epi3.html#cb339-22" tabindex="-1"></a>    </span>
+<span id="cb339-23"><a href="epi3.html#cb339-23" tabindex="-1"></a>    <span class="do">## find final epidemic size for each replicate</span></span>
+<span id="cb339-24"><a href="epi3.html#cb339-24" tabindex="-1"></a>    finalsize <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">100</span>)</span>
+<span id="cb339-25"><a href="epi3.html#cb339-25" tabindex="-1"></a>    <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb339-26"><a href="epi3.html#cb339-26" tabindex="-1"></a>        finalsize[j] <span class="ot">&lt;-</span> u<span class="sc">$</span>R[u<span class="sc">$</span>node <span class="sc">==</span> j <span class="sc">&amp;</span> u<span class="sc">$</span>time <span class="sc">==</span> <span class="dv">50</span>]</span>
+<span id="cb339-27"><a href="epi3.html#cb339-27" tabindex="-1"></a>    }</span>
+<span id="cb339-28"><a href="epi3.html#cb339-28" tabindex="-1"></a>    <span class="fu">hist</span>(finalsize, <span class="at">breaks =</span> <span class="dv">500</span>, <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;R0 = &quot;</span>, R0[i]))</span>
+<span id="cb339-29"><a href="epi3.html#cb339-29" tabindex="-1"></a>}</span>
+<span id="cb339-30"><a href="epi3.html#cb339-30" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1151-1.png" width="672" style="display: block; margin: auto;" /></p>
+For intermediate values of <span class="math inline">\(R_0\)</span> the two modes will merge together.
+</div>
+</div>
+</div>
+</div>
+<div id="sir-extension-stochastic-extinction" class="section level2 hasAnchor" number="8.11">
+<h2><span class="header-section-number">8.11</span> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction<a href="epi3.html#sir-extension-stochastic-extinction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the primary differences between the deterministic and stochastic formulations of the <span class="math inline">\(SIR\)</span> model is that in the stochastic formulation the epidemic becomes extinct within a finite time, the so-called extinction time. The extinction time varies between realisations and in this section we are going to explore this distribution.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+Which state variable do we need to consider in order to calculate the time to epidemic extinction and what is the value of this state variable at extinction?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-329" onclick="javascript:toggle(&#39;unnamed-chunk-329&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-329" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+We should monitor the first time at which the number of infectious individuals, <span class="math inline">\(I\)</span>, equals 0.
+</div>
+</div>
+</div>
+<p>As with the final epidemic size, the extinction time will vary over realisations of the epidemic which will result in a distribution of extinction times, which we are now going to explore.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Adapt your previous code to calculate the extinction time for each realisation.</p>
+<ul>
+<li>Run 100 realisations in order to produce a histogram of the time to extinction, as per the figure below:</li>
+</ul>
+<p><img src="_main_files/figure-html/unnamed-chunk-1160-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>Explore the distribution of extinction times for several values of <span class="math inline">\(R_{0} = 20.0, 5.0, 2.0, 1.2, 1.0, 0.9, 0.5\)</span>.</p></li>
+<li><p>What do you notice about the distribution as <span class="math inline">\(R_{0}\)</span> gets close to 1?</p>
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-331" onclick="javascript:toggle(&#39;unnamed-chunk-331&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-331" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>To generate the first figure, consider:</p>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="epi3.html#cb340-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">126</span>)</span>
+<span id="cb340-2"><a href="epi3.html#cb340-2" tabindex="-1"></a><span class="do">## run 100 replicates</span></span>
+<span id="cb340-3"><a href="epi3.html#cb340-3" tabindex="-1"></a>SIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIR</span>(<span class="dv">500</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">0.25</span>, <span class="dv">50</span>, <span class="dv">100</span>)</span>
+<span id="cb340-4"><a href="epi3.html#cb340-4" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SIRmodel)</span>
+<span id="cb340-5"><a href="epi3.html#cb340-5" tabindex="-1"></a></span>
+<span id="cb340-6"><a href="epi3.html#cb340-6" tabindex="-1"></a><span class="do">## extract states</span></span>
+<span id="cb340-7"><a href="epi3.html#cb340-7" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">trajectory</span>(out)</span>
+<span id="cb340-8"><a href="epi3.html#cb340-8" tabindex="-1"></a></span>
+<span id="cb340-9"><a href="epi3.html#cb340-9" tabindex="-1"></a><span class="do">## find extinction time for each replicate</span></span>
+<span id="cb340-10"><a href="epi3.html#cb340-10" tabindex="-1"></a>finaltime <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">100</span>)</span>
+<span id="cb340-11"><a href="epi3.html#cb340-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb340-12"><a href="epi3.html#cb340-12" tabindex="-1"></a>    <span class="do">## note that this will return an NA if the epidemic hasn&#39;t ended</span></span>
+<span id="cb340-13"><a href="epi3.html#cb340-13" tabindex="-1"></a>    finaltime[i] <span class="ot">&lt;-</span> u<span class="sc">$</span>time[u<span class="sc">$</span>node <span class="sc">==</span> i <span class="sc">&amp;</span> u<span class="sc">$</span>I <span class="sc">==</span> <span class="dv">0</span>][<span class="dv">1</span>]</span>
+<span id="cb340-14"><a href="epi3.html#cb340-14" tabindex="-1"></a>}</span>
+<span id="cb340-15"><a href="epi3.html#cb340-15" tabindex="-1"></a><span class="fu">hist</span>(finaltime)</span></code></pre></div>
+<p>To then explore how this distribution changes for different values of <span class="math inline">\(R_0\)</span>, consider:</p>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb341-1"><a href="epi3.html#cb341-1" tabindex="-1"></a><span class="do">## set vector of R0 values</span></span>
+<span id="cb341-2"><a href="epi3.html#cb341-2" tabindex="-1"></a>R0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">5</span>, <span class="dv">2</span>, <span class="fl">1.2</span>, <span class="fl">1.0</span>, <span class="fl">0.9</span>, <span class="fl">0.5</span>)</span>
+<span id="cb341-3"><a href="epi3.html#cb341-3" tabindex="-1"></a></span>
+<span id="cb341-4"><a href="epi3.html#cb341-4" tabindex="-1"></a><span class="do">## set mu</span></span>
+<span id="cb341-5"><a href="epi3.html#cb341-5" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb341-6"><a href="epi3.html#cb341-6" tabindex="-1"></a></span>
+<span id="cb341-7"><a href="epi3.html#cb341-7" tabindex="-1"></a><span class="do">## set plot layout</span></span>
+<span id="cb341-8"><a href="epi3.html#cb341-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb341-9"><a href="epi3.html#cb341-9" tabindex="-1"></a></span>
+<span id="cb341-10"><a href="epi3.html#cb341-10" tabindex="-1"></a><span class="do">## loop over R0 values</span></span>
+<span id="cb341-11"><a href="epi3.html#cb341-11" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(R0)) {</span>
+<span id="cb341-12"><a href="epi3.html#cb341-12" tabindex="-1"></a>    </span>
+<span id="cb341-13"><a href="epi3.html#cb341-13" tabindex="-1"></a>    <span class="do">## calculate beta for fixed mu and R0</span></span>
+<span id="cb341-14"><a href="epi3.html#cb341-14" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> R0[i] <span class="sc">*</span> mu</span>
+<span id="cb341-15"><a href="epi3.html#cb341-15" tabindex="-1"></a>    </span>
+<span id="cb341-16"><a href="epi3.html#cb341-16" tabindex="-1"></a>    <span class="do">## set up and run model</span></span>
+<span id="cb341-17"><a href="epi3.html#cb341-17" tabindex="-1"></a>    SIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSIR</span>(<span class="dv">500</span>, <span class="dv">1</span>, beta, mu, <span class="dv">50</span>, <span class="dv">100</span>)</span>
+<span id="cb341-18"><a href="epi3.html#cb341-18" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model =</span> SIRmodel)</span>
+<span id="cb341-19"><a href="epi3.html#cb341-19" tabindex="-1"></a>    </span>
+<span id="cb341-20"><a href="epi3.html#cb341-20" tabindex="-1"></a>    <span class="do">## extract states</span></span>
+<span id="cb341-21"><a href="epi3.html#cb341-21" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">trajectory</span>(out)</span>
+<span id="cb341-22"><a href="epi3.html#cb341-22" tabindex="-1"></a>    </span>
+<span id="cb341-23"><a href="epi3.html#cb341-23" tabindex="-1"></a>    <span class="do">## find extinction time for each replicate</span></span>
+<span id="cb341-24"><a href="epi3.html#cb341-24" tabindex="-1"></a>    finaltime <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">100</span>)</span>
+<span id="cb341-25"><a href="epi3.html#cb341-25" tabindex="-1"></a>    <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb341-26"><a href="epi3.html#cb341-26" tabindex="-1"></a>        <span class="do">## note that this will return an NA if the epidemic hasn&#39;t ended</span></span>
+<span id="cb341-27"><a href="epi3.html#cb341-27" tabindex="-1"></a>        finaltime[j] <span class="ot">&lt;-</span> u<span class="sc">$</span>time[u<span class="sc">$</span>node <span class="sc">==</span> j <span class="sc">&amp;</span> u<span class="sc">$</span>I <span class="sc">==</span> <span class="dv">0</span>][<span class="dv">1</span>]</span>
+<span id="cb341-28"><a href="epi3.html#cb341-28" tabindex="-1"></a>    }</span>
+<span id="cb341-29"><a href="epi3.html#cb341-29" tabindex="-1"></a>    <span class="fu">hist</span>(finaltime, <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;R0 = &quot;</span>, R0[i]))</span>
+<span id="cb341-30"><a href="epi3.html#cb341-30" tabindex="-1"></a>}</span>
+<span id="cb341-31"><a href="epi3.html#cb341-31" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1165-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>As <span class="math inline">\(R_0\)</span> gets closer to one, the extinction time distribution loses the upper mode and moves far closer to zero.</p>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="epi2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="estimating-r_0-using-catalytic-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

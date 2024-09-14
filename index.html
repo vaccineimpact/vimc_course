@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Inference in infectious disease systems practicals</title>
+  <meta name="description" content="Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="structure-of-this-workshop.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Inference in infectious disease systems practicals</h1>
+</div>
+<div id="acknowledgements" class="section level1 unnumbered hasAnchor">
+<h1>Acknowledgements<a href="index.html#acknowledgements" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The materials, practicals and examples for this course were originally developed for the short course “Mathematical Models for Infectious Disease Dynamics” organised and run by the Wellcome Trust Advanced Courses Program between 2010–2020. A number of instructors, in addition to those involved in the current iteration, have contributed and adapted these materials over the years as the course has evolved. We would like to thank and acknowledge the contribution of all of these course alumni:</p>
+<p>Dr Olivier Restif <a href="https://www.vet.cam.ac.uk/directory/or226%40cam.ac.uk">(Department of Veterinary Medicine, University of Cambridge)</a></p>
+<p>Dr Andrew Conlan <a href="https://www.vet.cam.ac.uk/directory/ajkc2%40cam.ac.uk">(Department of Veterinary Medicine, University of Cambridge)</a></p>
+<p>Dr TJ McKinley <a href="https://medicine.exeter.ac.uk/people/profile/index.php?web_id=TJ_McKinley">(Medical School, University of Exeter)</a></p>
+<p>Dr Cerian Webb <a href="https://www.plantsci.cam.ac.uk/directory/cerian-webb">(Department of Plant Sciences, University of Cambridge)</a></p>
+<p>Dr Ken Eames (Church of England Research and Statistics unit)</p>
+<p>Dr Nik Cunniffe <a href="https://www.plantsci.cam.ac.uk/directory/cunniffe-nik">(Department of Plant Sciences, University of Cambridge)</a></p>
+<p>Dr Matt Castle <a href="https://www.c2d3.cam.ac.uk/directory/2311/dr-matt-castle">(Cambridge Centre for Data-Driven Discovery, University of Cambridge)</a></p>
+<p>Dr Ellen Brooks Pollock <a href="https://www.bristol.ac.uk/people/person/Ellen-Brooks%20Pollock-9ffd9ff9-0949-49c4-97f7-bae51aa23d51/">(School of Social and Community Medicine, University of Bristol, UK)</a></p>
+<p>Dr Leon Danon <a href="https://www.bristol.ac.uk/people/person/Leon-Danon-fdeec554-b1a0-4e1a-aff4-b05bbccd443f/">(Department of Engineering Mathematics, University of Bristol)</a></p>
+<p>Dr Katy Gaythorpe <a href="https://www.imperial.ac.uk/people/k.gaythorpe">(Faculty of Medicine, School of Public Health, Imperial College)</a></p>
+<p>Dr Roberto Sainz (Facultad de Ciencias, Universidad de Colima)</p>
+<p>Dr Joshua Ross <a href="http://www.maths.adelaide.edu.au/joshua.ross/">(School of Computer and Mathematical Sciences, University of Adelaide)</a></p>
+<p>Dr Robin Thompson <a href="https://www.maths.ox.ac.uk/people/robin.thompson">(Mathematical Institute, University of Oxford)</a></p>
+<p>Dr Sophie Ip</p>
+<p>Dr Johann von Kirchbach</p>
+<p>Dr James Cox</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="structure-of-this-workshop.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

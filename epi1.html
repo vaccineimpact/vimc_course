@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>6 Epidemic models—Practical 1 | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="6 Epidemic models—Practical 1 | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="6 Epidemic models—Practical 1 | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="6 Epidemic models—Practical 1 | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="6 Epidemic models—Practical 1 | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="6 Epidemic models—Practical 1 | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="dynamic-modelspractical.html"/>
+<link rel="next" href="epi2.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="epi1" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">6</span> Epidemic models—Practical 1<a href="epi1.html#epi1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="katy-gaythorpe-k.gaythorpeimperial.ac.uk-1" class="section level2 unlisted unnumbered hasAnchor">
+<h2>Katy Gaythorpe (<a href="mailto:k.gaythorpe@imperial.ac.uk">k.gaythorpe@imperial.ac.uk</a>)<a href="epi1.html#katy-gaythorpe-k.gaythorpeimperial.ac.uk-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="the-basic-sir-model" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> The basic <span class="math inline">\(SIR\)</span> model<a href="epi1.html#the-basic-sir-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Write down the equations of a frequency-dependent <span class="math inline">\(SIR\)</span> model with no births or deaths and transmission rate <span class="math inline">\(\beta\)</span> and recovery rate <span class="math inline">\(\gamma\)</span>.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-215" onclick="javascript:toggle(&#39;unnamed-chunk-215&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-215" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<span class="math display">\[
+    \begin{aligned} \frac{dS}{dt} &amp;= \frac{-\beta SI}{N} \\
+    \frac{dI}{dt} &amp;= \frac{\beta SI}{N} - \gamma I \\
+    \frac{dR}{dt} &amp;= \gamma I\end{aligned}
+\]</span>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Show that for this model the population size remains constant, i.e. that <span class="math inline">\(dN/dt=0\)</span>.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-217" onclick="javascript:toggle(&#39;unnamed-chunk-217&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-217" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<span class="math display">\[
+    \begin{aligned} \frac{dN}{dt} &amp;= \frac{dS}{dt} + \frac{dI}{dt} + \frac{dR}{dt} \\
+    &amp;= \frac{-\beta SI}{N} + \frac{\beta SI}{N} - \gamma I + \gamma I \\
+    &amp;= 0 \end{aligned}
+\]</span>
+</div>
+</div>
+</div>
+</div>
+<div id="coding-the-model" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Coding the model<a href="epi1.html#coding-the-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We’ll follow the template for <code>deSolve</code> that we used in the previous practical, starting with the core function that calculates <span class="math inline">\(dS/dt\)</span>, <span class="math inline">\(dI/dt\)</span> and <span class="math inline">\(dR/dt\)</span>. Open R, create a new text files and type in:</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="epi1.html#cb277-1" tabindex="-1"></a><span class="co"># SIR Epidemic model - Practical 1</span></span>
+<span id="cb277-2"><a href="epi1.html#cb277-2" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
+<span id="cb277-3"><a href="epi1.html#cb277-3" tabindex="-1"></a></span>
+<span id="cb277-4"><a href="epi1.html#cb277-4" tabindex="-1"></a>SIR_dyn <span class="ot">&lt;-</span> <span class="cf">function</span>(t,var,par) {</span>
+<span id="cb277-5"><a href="epi1.html#cb277-5" tabindex="-1"></a>    <span class="co"># Rename the variables and parameters</span></span>
+<span id="cb277-6"><a href="epi1.html#cb277-6" tabindex="-1"></a>    S <span class="ot">&lt;-</span> var[<span class="dv">1</span>]</span>
+<span id="cb277-7"><a href="epi1.html#cb277-7" tabindex="-1"></a>    I <span class="ot">&lt;-</span> var[<span class="dv">2</span>]</span>
+<span id="cb277-8"><a href="epi1.html#cb277-8" tabindex="-1"></a>    R <span class="ot">&lt;-</span> var[<span class="dv">3</span>]</span>
+<span id="cb277-9"><a href="epi1.html#cb277-9" tabindex="-1"></a>    N <span class="ot">&lt;-</span> S<span class="sc">+</span>I<span class="sc">+</span>R</span>
+<span id="cb277-10"><a href="epi1.html#cb277-10" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> par[<span class="dv">1</span>]</span>
+<span id="cb277-11"><a href="epi1.html#cb277-11" tabindex="-1"></a>    gamma <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
+<span id="cb277-12"><a href="epi1.html#cb277-12" tabindex="-1"></a>    </span>
+<span id="cb277-13"><a href="epi1.html#cb277-13" tabindex="-1"></a>    <span class="co"># Derivatives</span></span>
+<span id="cb277-14"><a href="epi1.html#cb277-14" tabindex="-1"></a>    dS <span class="ot">&lt;-</span> <span class="sc">-</span>beta<span class="sc">*</span>S<span class="sc">*</span>I<span class="sc">/</span>N</span>
+<span id="cb277-15"><a href="epi1.html#cb277-15" tabindex="-1"></a>    dI <span class="ot">&lt;-</span> beta<span class="sc">*</span>S<span class="sc">*</span>I<span class="sc">/</span>N<span class="sc">-</span>gamma<span class="sc">*</span>I</span>
+<span id="cb277-16"><a href="epi1.html#cb277-16" tabindex="-1"></a>    dR <span class="ot">&lt;-</span> gamma<span class="sc">*</span>I</span>
+<span id="cb277-17"><a href="epi1.html#cb277-17" tabindex="-1"></a>    </span>
+<span id="cb277-18"><a href="epi1.html#cb277-18" tabindex="-1"></a>    <span class="co"># Return the 3 values</span></span>
+<span id="cb277-19"><a href="epi1.html#cb277-19" tabindex="-1"></a>    <span class="fu">list</span>(<span class="fu">c</span>(dS,dI,dR))</span>
+<span id="cb277-20"><a href="epi1.html#cb277-20" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>REMEMBER TO SAVE YOUR FILE REGULARLY</strong></p>
+<p>Note that in this model, the total number of individuals <span class="math inline">\(S + I + R\)</span> remains constant, so we would actually only need to define 2 variables (say <span class="math inline">\(S\)</span> and <span class="math inline">\(I\)</span>) and calculate 2 derivatives. I’ve included the 3 variables for clarity only. Then define parameter values, initial variables values and the vector of time values:</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="epi1.html#cb278-1" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb278-2"><a href="epi1.html#cb278-2" tabindex="-1"></a>gamma <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb278-3"><a href="epi1.html#cb278-3" tabindex="-1"></a>SIR_par <span class="ot">&lt;-</span> <span class="fu">c</span>(beta,gamma)</span>
+<span id="cb278-4"><a href="epi1.html#cb278-4" tabindex="-1"></a>SIR_init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">99</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb278-5"><a href="epi1.html#cb278-5" tabindex="-1"></a>SIR_t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">30</span>,<span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb278-6"><a href="epi1.html#cb278-6" tabindex="-1"></a></span>
+<span id="cb278-7"><a href="epi1.html#cb278-7" tabindex="-1"></a><span class="co"># The numerical solution is given by</span></span>
+<span id="cb278-8"><a href="epi1.html#cb278-8" tabindex="-1"></a>SIR_sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(SIR_init,</span>
+<span id="cb278-9"><a href="epi1.html#cb278-9" tabindex="-1"></a>                 SIR_t,</span>
+<span id="cb278-10"><a href="epi1.html#cb278-10" tabindex="-1"></a>                 SIR_dyn,</span>
+<span id="cb278-11"><a href="epi1.html#cb278-11" tabindex="-1"></a>                 SIR_par)</span></code></pre></div>
+<p>If you like, you can relabel your variables so that they are easier to use:</p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="epi1.html#cb279-1" tabindex="-1"></a>TIME <span class="ot">&lt;-</span> SIR_sol[,<span class="dv">1</span>]</span>
+<span id="cb279-2"><a href="epi1.html#cb279-2" tabindex="-1"></a>S <span class="ot">&lt;-</span> SIR_sol[,<span class="dv">2</span>]</span>
+<span id="cb279-3"><a href="epi1.html#cb279-3" tabindex="-1"></a>I <span class="ot">&lt;-</span> SIR_sol[,<span class="dv">3</span>]</span>
+<span id="cb279-4"><a href="epi1.html#cb279-4" tabindex="-1"></a>R <span class="ot">&lt;-</span> SIR_sol[,<span class="dv">4</span>]</span>
+<span id="cb279-5"><a href="epi1.html#cb279-5" tabindex="-1"></a>N <span class="ot">&lt;-</span> S <span class="sc">+</span> I <span class="sc">+</span> R</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+You cannot label time as <code>time</code> in lower case letters because it is an inbuilt function in R.
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Plot <span class="math inline">\(S(t)\)</span>, <span class="math inline">\(I(t)\)</span> and <span class="math inline">\(R(t)\)</span> together on a graph, using the commands <code>plot()</code>, <code>lines()</code> and <code>legend()</code>.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-223" onclick="javascript:toggle(&#39;unnamed-chunk-223&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-223" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="epi1.html#cb280-1" tabindex="-1"></a><span class="fu">plot</span>(TIME, S, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;S, I, R&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time&quot;</span>)</span>
+<span id="cb280-2"><a href="epi1.html#cb280-2" tabindex="-1"></a><span class="fu">lines</span>(TIME, I, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb280-3"><a href="epi1.html#cb280-3" tabindex="-1"></a><span class="fu">lines</span>(TIME, R, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>)</span>
+<span id="cb280-4"><a href="epi1.html#cb280-4" tabindex="-1"></a></span>
+<span id="cb280-5"><a href="epi1.html#cb280-5" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;Susceptible&quot;</span>, <span class="st">&quot;Infected&quot;</span>, <span class="st">&quot;Recovered&quot;</span>),</span>
+<span id="cb280-6"><a href="epi1.html#cb280-6" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;darkgreen&quot;</span>),</span>
+<span id="cb280-7"><a href="epi1.html#cb280-7" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="st">&quot;-&quot;</span>,<span class="st">&quot;-&quot;</span>, <span class="st">&quot;-&quot;</span>) )</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-866-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<p>You don’t have to always plot things against time, it can also be useful to plot variables against each other. Try plotting <span class="math inline">\(S\)</span> against <span class="math inline">\(I\)</span>:</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="epi1.html#cb281-1" tabindex="-1"></a><span class="fu">plot</span>(S<span class="sc">/</span>N, I<span class="sc">/</span>N, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-224-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>It can be difficult to read this graph at first. Find where <span class="math inline">\(\text{TIME} = 1\)</span> (at the start <span class="math inline">\(S/N \approx 1\)</span> and <span class="math inline">\(I \approx 0\)</span>) and label it on the graph.</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="epi1.html#cb282-1" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">which</span>(TIME <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb282-2"><a href="epi1.html#cb282-2" tabindex="-1"></a></span>
+<span id="cb282-3"><a href="epi1.html#cb282-3" tabindex="-1"></a><span class="fu">text</span>(S[index]<span class="sc">/</span>N[index],I[index]<span class="sc">/</span>N[index],<span class="st">&quot;t=1&quot;</span>,<span class="at">pos=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-226-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Also label <span class="math inline">\(t=2\)</span>, <span class="math inline">\(t=5\)</span>, <span class="math inline">\(t=10\)</span> and <span class="math inline">\(t=15\)</span>. What is happening to time in this plot?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-228" onclick="javascript:toggle(&#39;unnamed-chunk-228&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-228" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+Approaching the steady state.
+</div>
+</div>
+</div>
+</div>
+<div id="some-properties-of-the-model" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Some properties of the model<a href="epi1.html#some-properties-of-the-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An important question is when does the epidemic reach its peak? A common misconception based on graphs similar to the one above is “<span class="math inline">\(I(t)\)</span> reaches its maximum when <span class="math inline">\(S(t) = R(t)\)</span>”.</p>
+<p>By now you know that “<span class="math inline">\(I(t)\)</span> reaches its maximum when <span class="math inline">\(dI/dt=0\)</span>”.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<ul>
+<li>Given that <span class="math inline">\(dI/dt=\beta SI/N-\gamma I\)</span>, when <span class="math inline">\(I\)</span> is maximum we get <span class="math inline">\(S/N=\gamma /\beta\)</span>.</li>
+<li>Check this relationship using the graph of <span class="math inline">\(S/N\)</span> plotted against <span class="math inline">\(I/N\)</span>. You might want to use <code>which.max()</code> which gives the position of the largest element in a vector.</li>
+</ul>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Tip
+</div>
+<div class="panel-body">
+<p>You can use <code>abline</code> to mark on the plot where <span class="math inline">\(I/N\)</span> reaches its maximum.</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="epi1.html#cb283-1" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>S[<span class="fu">which.max</span>(I)]<span class="sc">/</span>N[<span class="fu">which.max</span>(I)], <span class="at">col =</span><span class="st">&quot;black&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Next, let’s look at the effects of <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span> on the dynamics of the system. In practice, <span class="math inline">\(\beta\)</span> is usually not known before an epidemic, so its estimated in the early stages of an epidemic using the average infectious period <span class="math inline">\((1/\gamma)\)</span> and <span class="math inline">\(R_{0}\)</span>. Instead of calculating and plotting a series of dynamics manually, we’ll use a loop to plot 6 graphs in a single window.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<table style="width:100%;">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Disease</th>
+<th><span class="math inline">\(R_{0}\)</span></th>
+<th>Infectious period, <span class="math inline">\(1/\gamma\)</span> (days)</th>
+<th><span class="math inline">\(\beta\)</span></th>
+<th>Peak size</th>
+<th>Peak time</th>
+<th>Epidemic size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Flu (H1N1p)</td>
+<td>1.2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Flu</td>
+<td>1.5</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>SARS</td>
+<td>2.0</td>
+<td>28</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Smallpox</td>
+<td>5.0</td>
+<td>5</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Measles</td>
+<td>17.0</td>
+<td>7</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Pertussis</td>
+<td>17.0</td>
+<td>14</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Fill in the blanks and execute the following instructions:</p>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="epi1.html#cb284-1" tabindex="-1"></a><span class="co"># set up a 2 by 3 grid for the plots:</span></span>
+<span id="cb284-2"><a href="epi1.html#cb284-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">xaxs=</span><span class="st">&#39;i&#39;</span>, <span class="at">yaxs=</span><span class="st">&#39;i&#39;</span>)</span>
+<span id="cb284-3"><a href="epi1.html#cb284-3" tabindex="-1"></a><span class="co"># define the parameters:</span></span>
+<span id="cb284-4"><a href="epi1.html#cb284-4" tabindex="-1"></a>infperiod <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">28</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">14</span>)</span>
+<span id="cb284-5"><a href="epi1.html#cb284-5" tabindex="-1"></a>Rzero <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.2</span>,<span class="fl">1.5</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">17</span>,<span class="dv">17</span>)</span>
+<span id="cb284-6"><a href="epi1.html#cb284-6" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) {</span>
+<span id="cb284-7"><a href="epi1.html#cb284-7" tabindex="-1"></a>    gamma <span class="ot">=</span> <span class="fu">signif</span>(<span class="dv">1</span><span class="sc">/</span>infperiod[i],<span class="dv">2</span>)</span>
+<span id="cb284-8"><a href="epi1.html#cb284-8" tabindex="-1"></a>    beta <span class="ot">=</span> <span class="fu">signif</span>(Rzero[i]<span class="sc">*</span>gamma,<span class="dv">2</span>)</span>
+<span id="cb284-9"><a href="epi1.html#cb284-9" tabindex="-1"></a>    SIR_par <span class="ot">&lt;-</span> <span class="fu">c</span>(beta,gamma)</span>
+<span id="cb284-10"><a href="epi1.html#cb284-10" tabindex="-1"></a>    SIR_sol<span class="ot">&lt;-</span><span class="fu">lsoda</span>(SIR_init,</span>
+<span id="cb284-11"><a href="epi1.html#cb284-11" tabindex="-1"></a>                   SIR_t,</span>
+<span id="cb284-12"><a href="epi1.html#cb284-12" tabindex="-1"></a>                   SIR_dyn,</span>
+<span id="cb284-13"><a href="epi1.html#cb284-13" tabindex="-1"></a>                   SIR_par)</span>
+<span id="cb284-14"><a href="epi1.html#cb284-14" tabindex="-1"></a>    <span class="fu">plot</span>(....., <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">type=</span><span class="st">&quot;l&quot;</span>, <span class="at">main=</span><span class="fu">paste0</span>(<span class="st">&quot;beta = &quot;</span>,beta,<span class="st">&quot;gamma = &quot;</span>,gamma))</span>
+<span id="cb284-15"><a href="epi1.html#cb284-15" tabindex="-1"></a>    <span class="fu">lines</span>(.....) <span class="co"># I(t)</span></span>
+<span id="cb284-16"><a href="epi1.html#cb284-16" tabindex="-1"></a>    <span class="fu">lines</span>(.....) <span class="co"># R(t)</span></span>
+<span id="cb284-17"><a href="epi1.html#cb284-17" tabindex="-1"></a>}</span>
+<span id="cb284-18"><a href="epi1.html#cb284-18" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-231" onclick="javascript:toggle(&#39;unnamed-chunk-231&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-231" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="epi1.html#cb285-1" tabindex="-1"></a><span class="co"># set up a 2 by 3 grid for the plots:</span></span>
+<span id="cb285-2"><a href="epi1.html#cb285-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">xaxs=</span><span class="st">&#39;i&#39;</span>, <span class="at">yaxs=</span><span class="st">&#39;i&#39;</span>)</span>
+<span id="cb285-3"><a href="epi1.html#cb285-3" tabindex="-1"></a><span class="co"># define the parameters:</span></span>
+<span id="cb285-4"><a href="epi1.html#cb285-4" tabindex="-1"></a>infperiod <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">28</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">14</span>)</span>
+<span id="cb285-5"><a href="epi1.html#cb285-5" tabindex="-1"></a>Rzero <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.2</span>,<span class="fl">1.5</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">17</span>,<span class="dv">17</span>)</span>
+<span id="cb285-6"><a href="epi1.html#cb285-6" tabindex="-1"></a>SIR.t <span class="ot">=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">500</span>, <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb285-7"><a href="epi1.html#cb285-7" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) {</span>
+<span id="cb285-8"><a href="epi1.html#cb285-8" tabindex="-1"></a>    gamma <span class="ot">=</span> <span class="fu">signif</span>(<span class="dv">1</span><span class="sc">/</span>infperiod[i],<span class="dv">2</span>)</span>
+<span id="cb285-9"><a href="epi1.html#cb285-9" tabindex="-1"></a>    beta <span class="ot">=</span> <span class="fu">signif</span>(Rzero[i]<span class="sc">*</span>gamma,<span class="dv">2</span>)</span>
+<span id="cb285-10"><a href="epi1.html#cb285-10" tabindex="-1"></a>    SIR_par <span class="ot">&lt;-</span> <span class="fu">c</span>(beta,gamma)</span>
+<span id="cb285-11"><a href="epi1.html#cb285-11" tabindex="-1"></a>    SIR.sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(SIR_init,SIR_t,SIR_dyn,SIR_par)</span>
+<span id="cb285-12"><a href="epi1.html#cb285-12" tabindex="-1"></a>    TIME <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">1</span>]</span>
+<span id="cb285-13"><a href="epi1.html#cb285-13" tabindex="-1"></a>    S <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">2</span>]</span>
+<span id="cb285-14"><a href="epi1.html#cb285-14" tabindex="-1"></a>    I <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">3</span>]</span>
+<span id="cb285-15"><a href="epi1.html#cb285-15" tabindex="-1"></a>    R <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">4</span>]</span>
+<span id="cb285-16"><a href="epi1.html#cb285-16" tabindex="-1"></a>    N <span class="ot">&lt;-</span> S <span class="sc">+</span> I <span class="sc">+</span> R</span>
+<span id="cb285-17"><a href="epi1.html#cb285-17" tabindex="-1"></a>    <span class="fu">plot</span>(TIME,S<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&#39;blue&#39;</span>, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </span>
+<span id="cb285-18"><a href="epi1.html#cb285-18" tabindex="-1"></a>         <span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;beta = &quot;</span>,beta,<span class="st">&quot;gamma = &quot;</span>,gamma))</span>
+<span id="cb285-19"><a href="epi1.html#cb285-19" tabindex="-1"></a>    <span class="fu">lines</span>(TIME,I<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb285-20"><a href="epi1.html#cb285-20" tabindex="-1"></a>    <span class="fu">lines</span>(TIME,R<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&quot;green&quot;</span>)</span>
+<span id="cb285-21"><a href="epi1.html#cb285-21" tabindex="-1"></a>    <span class="fu">legend</span>(<span class="st">&quot;right&quot;</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;red&quot;</span>,<span class="st">&quot;green&quot;</span>),<span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>,<span class="st">&quot;I&quot;</span>,<span class="st">&quot;R&quot;</span>), <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb285-22"><a href="epi1.html#cb285-22" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;peak size = &quot;</span>,<span class="fu">max</span>(I<span class="sc">/</span>N)))</span>
+<span id="cb285-23"><a href="epi1.html#cb285-23" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;peak time = &quot;</span>,TIME[<span class="fu">which.max</span>(I<span class="sc">/</span>N)]) )</span>
+<span id="cb285-24"><a href="epi1.html#cb285-24" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Epidemic size = &quot;</span>,<span class="fu">max</span>(R<span class="sc">/</span>N)))</span>
+<span id="cb285-25"><a href="epi1.html#cb285-25" tabindex="-1"></a>}</span>
+<span id="cb285-26"><a href="epi1.html#cb285-26" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;peak size =  0.0231066389917149&quot;
+## [1] &quot;peak time =  8.1&quot;
+## [1] &quot;Epidemic size =  0.344611420022074&quot;
+## [1] &quot;peak size =  0.0697227613470483&quot;
+## [1] &quot;peak time =  6.5&quot;
+## [1] &quot;Epidemic size =  0.593574217769393&quot;
+## [1] &quot;peak size =  0.0278724769684512&quot;
+## [1] &quot;peak time =  30&quot;
+## [1] &quot;Epidemic size =  0.0189539739504256&quot;
+## [1] &quot;peak size =  0.480101096709578&quot;
+## [1] &quot;peak time =  7.7&quot;
+## [1] &quot;Epidemic size =  0.982652741440976&quot;
+## [1] &quot;peak size =  0.776354567432811&quot;
+## [1] &quot;peak time =  3.3&quot;
+## [1] &quot;Epidemic size =  0.979907643827461&quot;
+## [1] &quot;peak size =  0.774111948146292&quot;
+## [1] &quot;peak time =  6.7&quot;
+## [1] &quot;Epidemic size =  0.840041300875431&quot;</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-892-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<p>For each combination of parameter values, write down <span class="math inline">\(\beta\)</span> and read off the approximate values of the height and time of the epidemic peak and the final epidemic size (the total number of individuals that were infected). (<strong>Hint:</strong> you may have to extend the time period!)</p>
+<p>You can also use the functions <code>max()</code> and <code>which.max()</code>.</p>
+<p>Remember from the lecture that <span class="math inline">\(R_{0}=\beta / \gamma\)</span>, therefore <span class="math inline">\(\beta = \gamma R_{0}\)</span>.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Which of the last 3 quantities appear linked to <span class="math inline">\(R_{0}\)</span>?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-233" onclick="javascript:toggle(&#39;unnamed-chunk-233&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-233" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+Peak size and epidemic size.
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note:
+</div>
+<div class="panel-body">
+<p>It can be shown mathematically that the epidemic size and the height of the epidemic peak are functions of <span class="math inline">\(R_{0}\)</span> only, although this requires some clever manipulation of the ODEs (see <a href="epi1.html#appepi">Appendix</a> at the end of this practical if you’re interested).</p>
+<p>The time to the epidemic peak cannot be directly expressed from the equations, but it is linked to the initial rate of spread of the epidemic. The variations in the number of infected individuals are given by:
+<span class="math display">\[
+    dI/dt = I(\beta S/N-\gamma)
+\]</span></p>
+<p>At the very beginning of the outbreak, <span class="math inline">\(I(t) \ll S(t) \approx N\)</span>. So we can approximate the ODE above as <span class="math inline">\(dI/dt = (\beta - \gamma )I\)</span>, which can be solved as:
+<span class="math display">\[
+    I(t) = I_{0} \exp([\beta - \gamma]t)
+\]</span></p>
+So the number of infected individuals initially follows an exponential growth with rate
+<span class="math display">\[
+    \beta N - \gamma = \gamma (R_{0} - 1)
+\]</span>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Plot <span class="math inline">\(\log(I(t))\)</span> for <span class="math inline">\(t\)</span> in <span class="math inline">\([0,4]\)</span> for the same parameter combinations above and check that the initial gradient is equal to <span class="math inline">\(\beta - \gamma\)</span>.</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Tip
+</div>
+<div class="panel-body">
+You can use <code>abline</code> again, this time to impose a straight line <span class="math inline">\((y = bx + c)\)</span>.
+</div>
+</div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-236" onclick="javascript:toggle(&#39;unnamed-chunk-236&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-236" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="epi1.html#cb287-1" tabindex="-1"></a><span class="co">#checking initial gradient</span></span>
+<span id="cb287-2"><a href="epi1.html#cb287-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb287-3"><a href="epi1.html#cb287-3" tabindex="-1"></a><span class="co"># define the parameters:</span></span>
+<span id="cb287-4"><a href="epi1.html#cb287-4" tabindex="-1"></a>infperiod <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">28</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">14</span>)</span>
+<span id="cb287-5"><a href="epi1.html#cb287-5" tabindex="-1"></a>Rzero <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.2</span>,<span class="fl">1.5</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">17</span>,<span class="dv">17</span>)</span>
+<span id="cb287-6"><a href="epi1.html#cb287-6" tabindex="-1"></a>SIR.t <span class="ot">=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">500</span>, <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb287-7"><a href="epi1.html#cb287-7" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) {</span>
+<span id="cb287-8"><a href="epi1.html#cb287-8" tabindex="-1"></a>    gamma <span class="ot">=</span> <span class="fu">signif</span>(<span class="dv">1</span><span class="sc">/</span>infperiod[i],<span class="dv">2</span>)</span>
+<span id="cb287-9"><a href="epi1.html#cb287-9" tabindex="-1"></a>    beta <span class="ot">=</span> <span class="fu">signif</span>(Rzero[i]<span class="sc">*</span>gamma,<span class="dv">2</span>)</span>
+<span id="cb287-10"><a href="epi1.html#cb287-10" tabindex="-1"></a>    SIR_par <span class="ot">&lt;-</span> <span class="fu">c</span>(beta,gamma)</span>
+<span id="cb287-11"><a href="epi1.html#cb287-11" tabindex="-1"></a>    SIR.sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(SIR_init,SIR_t,SIR_dyn,SIR_par)</span>
+<span id="cb287-12"><a href="epi1.html#cb287-12" tabindex="-1"></a>    TIME <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">1</span>]</span>
+<span id="cb287-13"><a href="epi1.html#cb287-13" tabindex="-1"></a>    S <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">2</span>]</span>
+<span id="cb287-14"><a href="epi1.html#cb287-14" tabindex="-1"></a>    I <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">3</span>]</span>
+<span id="cb287-15"><a href="epi1.html#cb287-15" tabindex="-1"></a>    R <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">4</span>]</span>
+<span id="cb287-16"><a href="epi1.html#cb287-16" tabindex="-1"></a>    N <span class="ot">&lt;-</span> S <span class="sc">+</span> I <span class="sc">+</span> R</span>
+<span id="cb287-17"><a href="epi1.html#cb287-17" tabindex="-1"></a>    <span class="fu">plot</span>(TIME[<span class="dv">1</span><span class="sc">:</span><span class="dv">41</span>],<span class="fu">log</span>( I[<span class="dv">1</span><span class="sc">:</span><span class="dv">41</span>]<span class="sc">/</span>N[<span class="dv">1</span><span class="sc">:</span><span class="dv">41</span>] ),<span class="at">col=</span><span class="st">&#39;red&#39;</span>, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, </span>
+<span id="cb287-18"><a href="epi1.html#cb287-18" tabindex="-1"></a>         <span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;beta = &quot;</span>,beta,<span class="st">&quot;gamma = &quot;</span>,gamma))</span>
+<span id="cb287-19"><a href="epi1.html#cb287-19" tabindex="-1"></a>    <span class="fu">abline</span>(<span class="at">a =</span> <span class="fu">log</span>( I[<span class="dv">1</span>]<span class="sc">/</span>N[<span class="dv">1</span>] ), <span class="at">b =</span> beta<span class="sc">-</span>gamma, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb287-20"><a href="epi1.html#cb287-20" tabindex="-1"></a>}</span>
+<span id="cb287-21"><a href="epi1.html#cb287-21" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-907-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+What dynamics do you expect with <span class="math inline">\(R_{0} = 1\)</span>? Plot the graph for <span class="math inline">\(\beta = 1\)</span>, <span class="math inline">\(\gamma = 1\)</span>. Why does <span class="math inline">\(I(t)\)</span> decrease?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-238" onclick="javascript:toggle(&#39;unnamed-chunk-238&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-238" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+As our initial conditions are with <span class="math inline">\(99\)</span> susceptible people, and <span class="math inline">\(R_{0}=1\)</span> this renders the <strong>effective reproduction number</strong> less than <span class="math inline">\(1\)</span> so <span class="math inline">\(I(t)\)</span> decreases.
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Explore the behaviour of the system around <span class="math inline">\(R_{0} \approx 1\)</span> using the loop you wrote before. Try changing <span class="math inline">\(0.9 &lt; R_{0} &lt; 1.1\)</span> and altering the initial number of individuals infected.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-240" onclick="javascript:toggle(&#39;unnamed-chunk-240&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-240" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="epi1.html#cb288-1" tabindex="-1"></a><span class="do">### looking around R0 = 1</span></span>
+<span id="cb288-2"><a href="epi1.html#cb288-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb288-3"><a href="epi1.html#cb288-3" tabindex="-1"></a><span class="co"># define the parameters:</span></span>
+<span id="cb288-4"><a href="epi1.html#cb288-4" tabindex="-1"></a>SIR.init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">99</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span>
+<span id="cb288-5"><a href="epi1.html#cb288-5" tabindex="-1"></a>infperiod <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">2</span>,<span class="dv">6</span>)</span>
+<span id="cb288-6"><a href="epi1.html#cb288-6" tabindex="-1"></a>Rzero <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.9</span>,<span class="fl">0.95</span>,<span class="dv">1</span>,<span class="fl">1.05</span>,<span class="fl">1.1</span>, <span class="fl">1.15</span>)</span>
+<span id="cb288-7"><a href="epi1.html#cb288-7" tabindex="-1"></a>SIR.t <span class="ot">=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>, <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb288-8"><a href="epi1.html#cb288-8" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) {</span>
+<span id="cb288-9"><a href="epi1.html#cb288-9" tabindex="-1"></a>    gamma<span class="ot">&lt;-</span> <span class="fu">signif</span>(<span class="dv">1</span><span class="sc">/</span>infperiod[i],<span class="dv">2</span>)</span>
+<span id="cb288-10"><a href="epi1.html#cb288-10" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> <span class="fu">signif</span>(Rzero[i]<span class="sc">*</span>gamma,<span class="dv">2</span>)</span>
+<span id="cb288-11"><a href="epi1.html#cb288-11" tabindex="-1"></a>    SIR_par <span class="ot">&lt;-</span> <span class="fu">c</span>(beta,gamma)</span>
+<span id="cb288-12"><a href="epi1.html#cb288-12" tabindex="-1"></a>    SIR.sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(SIR_init,SIR_t,SIR_dyn,SIR_par)</span>
+<span id="cb288-13"><a href="epi1.html#cb288-13" tabindex="-1"></a>    TIME <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">1</span>]</span>
+<span id="cb288-14"><a href="epi1.html#cb288-14" tabindex="-1"></a>    S <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">2</span>]</span>
+<span id="cb288-15"><a href="epi1.html#cb288-15" tabindex="-1"></a>    I <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">3</span>]</span>
+<span id="cb288-16"><a href="epi1.html#cb288-16" tabindex="-1"></a>    R <span class="ot">&lt;-</span> SIR.sol[,<span class="dv">4</span>]</span>
+<span id="cb288-17"><a href="epi1.html#cb288-17" tabindex="-1"></a>    N <span class="ot">&lt;-</span> S <span class="sc">+</span> I <span class="sc">+</span> R</span>
+<span id="cb288-18"><a href="epi1.html#cb288-18" tabindex="-1"></a>    <span class="fu">plot</span>(TIME, I<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&#39;red&#39;</span>, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.03</span>),</span>
+<span id="cb288-19"><a href="epi1.html#cb288-19" tabindex="-1"></a><span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;R0 = &quot;</span>,Rzero[i]))</span>
+<span id="cb288-20"><a href="epi1.html#cb288-20" tabindex="-1"></a>}</span>
+<span id="cb288-21"><a href="epi1.html#cb288-21" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-917-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="calculating-the-infectious-period" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Calculating the infectious period<a href="epi1.html#calculating-the-infectious-period" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+If the recovery rate of a disease is <span class="math inline">\(\gamma = 0.2\)</span> days<span class="math inline">\(^{-1}\)</span>, what is the average infectious period?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-242" onclick="javascript:toggle(&#39;unnamed-chunk-242&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-242" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+The average infectious period is <span class="math inline">\(1 / \gamma = 5\)</span> days.
+</div>
+</div>
+</div>
+<ul>
+<li><p>For a given constant recovery rate of <span class="math inline">\(\gamma = 0.2\)</span> days<span class="math inline">\(^{-1}\)</span> we can plot the proportion of individuals still infected over time.</p>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="epi1.html#cb289-1" tabindex="-1"></a><span class="co"># set up a vector of times:</span></span>
+<span id="cb289-2"><a href="epi1.html#cb289-2" tabindex="-1"></a>x<span class="ot">=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">30</span>,<span class="fl">0.1</span>)</span>
+<span id="cb289-3"><a href="epi1.html#cb289-3" tabindex="-1"></a></span>
+<span id="cb289-4"><a href="epi1.html#cb289-4" tabindex="-1"></a><span class="co"># define the recovery rate, gamma:</span></span>
+<span id="cb289-5"><a href="epi1.html#cb289-5" tabindex="-1"></a>gamma<span class="ot">=</span><span class="fl">0.2</span></span>
+<span id="cb289-6"><a href="epi1.html#cb289-6" tabindex="-1"></a></span>
+<span id="cb289-7"><a href="epi1.html#cb289-7" tabindex="-1"></a><span class="co"># define the exponential function:</span></span>
+<span id="cb289-8"><a href="epi1.html#cb289-8" tabindex="-1"></a>fx<span class="ot">=</span><span class="fu">exp</span>(<span class="sc">-</span>gamma<span class="sc">*</span>x)</span>
+<span id="cb289-9"><a href="epi1.html#cb289-9" tabindex="-1"></a></span>
+<span id="cb289-10"><a href="epi1.html#cb289-10" tabindex="-1"></a><span class="co"># plot:</span></span>
+<span id="cb289-11"><a href="epi1.html#cb289-11" tabindex="-1"></a><span class="fu">plot</span>(x,fx,<span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div></li>
+<li><p>We can also calculate the average infectious period using the function defined above.</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="epi1.html#cb290-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sum</span>(fx<span class="sc">*</span>x)<span class="sc">/</span><span class="fu">sum</span>(fx))</span></code></pre></div></li>
+</ul>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+How do your two answers compare?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-246" onclick="javascript:toggle(&#39;unnamed-chunk-246&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-246" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+Not quite the same but perhaps will have a better approximation as you use more points.
+</div>
+</div>
+</div>
+</div>
+<div id="optional-sectionextending-sir-to-other-compartments" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments<a href="epi1.html#optional-sectionextending-sir-to-other-compartments" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As we saw in the lecture, the <span class="math inline">\(SIR\)</span> framework is only a crude representation of the real natural history of a disease. Think of another formulation and see how the results compare to a standard <span class="math inline">\(SIR\)</span> model. Some suggestions:</p>
+<ul>
+<li>Include loss of immunity, so that Recovered individuals become Susceptible again after a certain period of time.</li>
+<li>Include a latent state post-infection but before an individual becomes infectious (this type of model is often called an <span class="math inline">\(SEIR\)</span> model, where <span class="math inline">\(E\)</span> stands for the Exposed class).</li>
+<li>Include treatment in the model, allowing Infected individuals to recover more quickly.</li>
+<li>Sketch a diagram of your model, showing the compartments and the flows between them.</li>
+<li>Write down the equations that govern your model</li>
+<li>Write a function, such as <code>SEIR_dyn()</code> that calculates the derivatives of your model for use with <code>lsoda()</code>.</li>
+<li>Plot the epidemic curve, <span class="math inline">\(I(t)\)</span>. How does this compare to an equivalent <span class="math inline">\(SIR\)</span> model?</li>
+</ul>
+<button id="displayTextunnamed-chunk-247" onclick="javascript:toggle(&#39;unnamed-chunk-247&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-247" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="epi1.html#cb291-1" tabindex="-1"></a><span class="do">#### Extra exercise</span></span>
+<span id="cb291-2"><a href="epi1.html#cb291-2" tabindex="-1"></a><span class="co"># I am putting everything in at once</span></span>
+<span id="cb291-3"><a href="epi1.html#cb291-3" tabindex="-1"></a></span>
+<span id="cb291-4"><a href="epi1.html#cb291-4" tabindex="-1"></a>SEITRS.dyn <span class="ot">&lt;-</span> <span class="cf">function</span>(t, var, par) {</span>
+<span id="cb291-5"><a href="epi1.html#cb291-5" tabindex="-1"></a>    <span class="co"># Rename the variables and parameters</span></span>
+<span id="cb291-6"><a href="epi1.html#cb291-6" tabindex="-1"></a>    S <span class="ot">&lt;-</span> var[<span class="dv">1</span>]</span>
+<span id="cb291-7"><a href="epi1.html#cb291-7" tabindex="-1"></a>    E <span class="ot">&lt;-</span> var[<span class="dv">2</span>]</span>
+<span id="cb291-8"><a href="epi1.html#cb291-8" tabindex="-1"></a>    I <span class="ot">&lt;-</span> var[<span class="dv">3</span>]</span>
+<span id="cb291-9"><a href="epi1.html#cb291-9" tabindex="-1"></a>    tr <span class="ot">&lt;-</span> var[<span class="dv">4</span>]</span>
+<span id="cb291-10"><a href="epi1.html#cb291-10" tabindex="-1"></a>    R <span class="ot">&lt;-</span> var[<span class="dv">5</span>]</span>
+<span id="cb291-11"><a href="epi1.html#cb291-11" tabindex="-1"></a>    N <span class="ot">&lt;-</span> S <span class="sc">+</span> E <span class="sc">+</span> I <span class="sc">+</span> tr <span class="sc">+</span> R</span>
+<span id="cb291-12"><a href="epi1.html#cb291-12" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> par[<span class="dv">1</span>]</span>
+<span id="cb291-13"><a href="epi1.html#cb291-13" tabindex="-1"></a>    gamma <span class="ot">&lt;-</span>par[<span class="dv">2</span>]</span>
+<span id="cb291-14"><a href="epi1.html#cb291-14" tabindex="-1"></a>    epsilon <span class="ot">&lt;-</span> par[<span class="dv">3</span>] <span class="co">#rate of latency loss</span></span>
+<span id="cb291-15"><a href="epi1.html#cb291-15" tabindex="-1"></a>    tau <span class="ot">&lt;-</span> par[<span class="dv">4</span>] <span class="co">#treatment rate</span></span>
+<span id="cb291-16"><a href="epi1.html#cb291-16" tabindex="-1"></a>    omega <span class="ot">&lt;-</span> par[<span class="dv">5</span>] <span class="co">#recovery rate for treated people</span></span>
+<span id="cb291-17"><a href="epi1.html#cb291-17" tabindex="-1"></a>    </span>
+<span id="cb291-18"><a href="epi1.html#cb291-18" tabindex="-1"></a>    <span class="co"># Derivatives</span></span>
+<span id="cb291-19"><a href="epi1.html#cb291-19" tabindex="-1"></a>    dS <span class="ot">&lt;-</span> <span class="sc">-</span>beta<span class="sc">*</span>S<span class="sc">*</span>I<span class="sc">/</span>N</span>
+<span id="cb291-20"><a href="epi1.html#cb291-20" tabindex="-1"></a>    dE <span class="ot">&lt;-</span> beta<span class="sc">*</span>S<span class="sc">*</span>I<span class="sc">/</span>N <span class="sc">-</span> epsilon<span class="sc">*</span>E</span>
+<span id="cb291-21"><a href="epi1.html#cb291-21" tabindex="-1"></a>    dI <span class="ot">&lt;-</span> epsilon<span class="sc">*</span>E <span class="sc">-</span> gamma<span class="sc">*</span>I <span class="sc">-</span> tau<span class="sc">*</span>I</span>
+<span id="cb291-22"><a href="epi1.html#cb291-22" tabindex="-1"></a>    dT <span class="ot">&lt;-</span> tau<span class="sc">*</span>I <span class="sc">-</span> omega<span class="sc">*</span>tr</span>
+<span id="cb291-23"><a href="epi1.html#cb291-23" tabindex="-1"></a>    dR <span class="ot">&lt;-</span> gamma<span class="sc">*</span>I <span class="sc">+</span> omega<span class="sc">*</span>tr</span>
+<span id="cb291-24"><a href="epi1.html#cb291-24" tabindex="-1"></a>    <span class="co"># Return the 5 values</span></span>
+<span id="cb291-25"><a href="epi1.html#cb291-25" tabindex="-1"></a>    <span class="fu">list</span>(<span class="fu">c</span>(dS, dE, dI, dT, dR))</span>
+<span id="cb291-26"><a href="epi1.html#cb291-26" tabindex="-1"></a>}</span>
+<span id="cb291-27"><a href="epi1.html#cb291-27" tabindex="-1"></a></span>
+<span id="cb291-28"><a href="epi1.html#cb291-28" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb291-29"><a href="epi1.html#cb291-29" tabindex="-1"></a>gamma <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb291-30"><a href="epi1.html#cb291-30" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb291-31"><a href="epi1.html#cb291-31" tabindex="-1"></a>tau <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb291-32"><a href="epi1.html#cb291-32" tabindex="-1"></a>omega <span class="ot">&lt;-</span> gamma<span class="sc">*</span><span class="dv">2</span></span>
+<span id="cb291-33"><a href="epi1.html#cb291-33" tabindex="-1"></a></span>
+<span id="cb291-34"><a href="epi1.html#cb291-34" tabindex="-1"></a>SEITRS.par <span class="ot">&lt;-</span> <span class="fu">c</span>(beta,gamma,epsilon,tau,omega)</span>
+<span id="cb291-35"><a href="epi1.html#cb291-35" tabindex="-1"></a>SEITRS.init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">99</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb291-36"><a href="epi1.html#cb291-36" tabindex="-1"></a>SEITRS.t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">30</span>,<span class="at">by=</span><span class="fl">0.1</span>)</span>
+<span id="cb291-37"><a href="epi1.html#cb291-37" tabindex="-1"></a></span>
+<span id="cb291-38"><a href="epi1.html#cb291-38" tabindex="-1"></a>SEITRS.sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(SEITRS.init,SEITRS.t,SEITRS.dyn,SEITRS.par)</span>
+<span id="cb291-39"><a href="epi1.html#cb291-39" tabindex="-1"></a></span>
+<span id="cb291-40"><a href="epi1.html#cb291-40" tabindex="-1"></a>TIME <span class="ot">&lt;-</span> SEITRS.sol[,<span class="dv">1</span>]</span>
+<span id="cb291-41"><a href="epi1.html#cb291-41" tabindex="-1"></a>S <span class="ot">&lt;-</span> SEITRS.sol[,<span class="dv">2</span>]</span>
+<span id="cb291-42"><a href="epi1.html#cb291-42" tabindex="-1"></a>E <span class="ot">&lt;-</span> SEITRS.sol[,<span class="dv">3</span>]</span>
+<span id="cb291-43"><a href="epi1.html#cb291-43" tabindex="-1"></a>I <span class="ot">&lt;-</span> SEITRS.sol[,<span class="dv">4</span>]</span>
+<span id="cb291-44"><a href="epi1.html#cb291-44" tabindex="-1"></a>tr <span class="ot">&lt;-</span> SEITRS.sol[,<span class="dv">5</span>]</span>
+<span id="cb291-45"><a href="epi1.html#cb291-45" tabindex="-1"></a>R <span class="ot">&lt;-</span> SEITRS.sol[,<span class="dv">6</span>]</span>
+<span id="cb291-46"><a href="epi1.html#cb291-46" tabindex="-1"></a></span>
+<span id="cb291-47"><a href="epi1.html#cb291-47" tabindex="-1"></a>N <span class="ot">&lt;-</span> S <span class="sc">+</span> E <span class="sc">+</span> I <span class="sc">+</span> tr <span class="sc">+</span> R</span>
+<span id="cb291-48"><a href="epi1.html#cb291-48" tabindex="-1"></a></span>
+<span id="cb291-49"><a href="epi1.html#cb291-49" tabindex="-1"></a><span class="fu">plot</span>(TIME,S<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&#39;blue&#39;</span>, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb291-50"><a href="epi1.html#cb291-50" tabindex="-1"></a><span class="fu">lines</span>(TIME,E<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span>
+<span id="cb291-51"><a href="epi1.html#cb291-51" tabindex="-1"></a><span class="fu">lines</span>(TIME,I<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb291-52"><a href="epi1.html#cb291-52" tabindex="-1"></a><span class="fu">lines</span>(TIME,tr<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&quot;cyan&quot;</span>)</span>
+<span id="cb291-53"><a href="epi1.html#cb291-53" tabindex="-1"></a><span class="fu">lines</span>(TIME,R<span class="sc">/</span>N,<span class="at">col=</span><span class="st">&quot;green&quot;</span>)</span>
+<span id="cb291-54"><a href="epi1.html#cb291-54" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;right&quot;</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;orange&quot;</span>, <span class="st">&quot;red&quot;</span>,<span class="st">&quot;cyan&quot;</span>,<span class="st">&quot;green&quot;</span>), <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>,<span class="st">&quot;E&quot;</span>,<span class="st">&quot;I&quot;</span>,<span class="st">&quot;T&quot;</span>,<span class="st">&quot;R&quot;</span>), <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-931-1.png" width="480" style="display: block; margin: auto;" /></p>
+Plenty to note on the different dynamics as you experiment with the above- one thing to examine is that we now have multiple infected states and this can make calculating <span class="math inline">\(R_{0}\)</span> more complicated as we need to use the next generation matrix approach, shown later in the course.
+</div>
+</div>
+</div>
+</div>
+<div id="appepi" class="section level2 hasAnchor" number="6.6">
+<h2><span class="header-section-number">6.6</span> Appendix—Epidemic peak and final epidemic size<a href="epi1.html#appepi" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Although it is not possible to solve the differential equations of the <span class="math inline">\(SIR\)</span> system analytically to obtain expressions for <span class="math inline">\(S(t)\)</span>, <span class="math inline">\(I(t)\)</span> and <span class="math inline">\(R(t)\)</span>, we can obtain an implicit solution in the <span class="math inline">\((S,I)\)</span> phase plane. In other words, we can obtain a mathematical relationship between the values of <span class="math inline">\(S\)</span> and <span class="math inline">\(I\)</span> at any time point. The trick is to re-write the system</p>
+<p><span class="math display">\[
+    \begin{aligned}
+        \frac{dS}{dt} &amp;= -\beta SI/N \\
+        \frac{dI}{dt} &amp;= \beta SI/N - \gamma I
+    \end{aligned}
+\]</span></p>
+<p>as a single differential equation for <span class="math inline">\(I\)</span> as a function of <span class="math inline">\(S\)</span>. Under certain mathematical conditions that we won’t discuss here, the variations of <span class="math inline">\(I\)</span> with respect to <span class="math inline">\(S\)</span> can conveniently be written as:</p>
+<p><span class="math display">\[
+    \frac{dI}{dS} = \frac{dI/dt}{dS/dt} = \frac{\beta SI/N - \gamma I}{-\beta SI/N} = \frac{\gamma N}{\beta S} - 1
+\]</span></p>
+<p>Using the integration rules from the maths lectures, we can actually solve this ODE:</p>
+<p>So, given the initial conditions, we can deduce the value of <span class="math inline">\(I(t)\)</span> from the value of <span class="math inline">\(S(t)\)</span> at any time point. How is that helpful? First consider the question of the height of the epidemic peak. We know that <span class="math inline">\(I(t)\)</span> reaches its maximum when <span class="math inline">\(S(t) = \gamma/\beta\)</span>. Hence the height of the epidemic peak:</p>
+<p><span class="math display">\[
+    I_{\mathrm{max}} = I_{0} + \frac{\gamma}{\beta} \log \left(\frac{\gamma}{\beta S_{0}}\right) + S_{0} - \frac{\gamma}{\beta}
+\]</span></p>
+<p>Assuming that <span class="math inline">\(I(0) \ll S(0) \approx N\)</span>, then we can write <span class="math inline">\(R_{0}\approx\beta S(0)/\gamma\)</span>, hence:</p>
+<p><span class="math display">\[
+    I_{\mathrm{max}}/N \approx 1-(1+\log R_{0})/R_{0}
+\]</span></p>
+<p>You can check it on the graphs from section 2 above. Next, the final epidemic size is given by the final value of <span class="math inline">\(S(0) - S(t)\)</span>, i.e. taking <span class="math inline">\(t \rightarrow \infty\)</span>. Under the same assumptions as above, and letting <span class="math inline">\(x = S(0) - S(\infty)\)</span> be the proportion of the <span class="math inline">\(N\)</span> population that gets infected over the whole epidemic, we get the following equation: <span class="math inline">\(x + \log(1 - x)\)</span>, which can only be solved numerically.</p>
+<p>R does not have a built-in numerical solver for nonlinear equation, but it has a function called <code>optimize()</code> that searches for the minimum of a numerical function. The trick is to notice that solving an equation of the form <span class="math inline">\(f(x) = 0\)</span> is equivalent to finding the minimum of <span class="math inline">\(f^{2}(x)\)</span>, the square of <span class="math inline">\(f(x)\)</span>. If you’re not convinced, sketch a graph of an arbitrary function that crosses the x-axis, then sketch the square of that function.</p>
+<p>We can therefore estimate the epidemic size for any value of R0 using the following code:</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="epi1.html#cb292-1" tabindex="-1"></a>my_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x,R0) {</span>
+<span id="cb292-2"><a href="epi1.html#cb292-2" tabindex="-1"></a>    (x<span class="sc">+</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>x)<span class="sc">/</span>R0)ˆ2</span>
+<span id="cb292-3"><a href="epi1.html#cb292-3" tabindex="-1"></a>}</span>
+<span id="cb292-4"><a href="epi1.html#cb292-4" tabindex="-1"></a><span class="fu">optimize</span>(my_fun, <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">R0=</span><span class="dv">2</span>)</span></code></pre></div>
+<p>where the three arguments of <code>optimize</code> are:</p>
+<ul>
+<li>the function to minimize with respect to its first argument (in this case <span class="math inline">\(x\)</span>),</li>
+<li>the interval over which to search for a solution</li>
+<li>the numerical values of any other argument of <code>my_fun</code> (in this case <span class="math inline">\(R_{0}\)</span>).</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="dynamic-modelspractical.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="epi2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

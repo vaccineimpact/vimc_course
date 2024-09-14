@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 Programming—Practical 2 | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="4 Programming—Practical 2 | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 Programming—Practical 2 | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="4 Programming—Practical 2 | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 Programming—Practical 2 | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="4 Programming—Practical 2 | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="programmingpractical-1.html"/>
+<link rel="next" href="dynamic-modelspractical.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="programmingpractical-2" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> Programming—Practical 2<a href="programmingpractical-2.html#programmingpractical-2" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="matt-castle-mdc31cam.ac.uk" class="section level2 unlisted unnumbered hasAnchor">
+<h2>Matt Castle (<a href="mailto:mdc31@cam.ac.uk">mdc31@cam.ac.uk</a>)<a href="programmingpractical-2.html#matt-castle-mdc31cam.ac.uk" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="random-variables" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Random variables<a href="programmingpractical-2.html#random-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A random variable can be thought of as the outcome of an experiment or a measurement i.e. something that can change each time you look at it.</p>
+<p>Examples:</p>
+<ul>
+<li>The number of heads you obtain when tossing a coin 10 times</li>
+<li>The number of emails you received in one hour</li>
+<li>The lifetime of a light-bulb</li>
+<li>The length of time an individual is infected for before recovering</li>
+</ul>
+</div>
+<div id="probability-distributions" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Probability distributions<a href="programmingpractical-2.html#probability-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A probability distribution will tell us the probability of a random variable taking a specific value.</p>
+<p>A binomial distribution will be able to give us the probability of obtaining <span class="math inline">\(x\)</span> heads if we toss a coin 10 times (where <span class="math inline">\(x\)</span> is any number).</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="programmingpractical-2.html#cb230-1" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb230-2"><a href="programmingpractical-2.html#cb230-2" tabindex="-1"></a>  <span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb230-3"><a href="programmingpractical-2.html#cb230-3" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="at">prob =</span> <span class="fl">0.5</span>),</span>
+<span id="cb230-4"><a href="programmingpractical-2.html#cb230-4" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;h&quot;</span>,</span>
+<span id="cb230-5"><a href="programmingpractical-2.html#cb230-5" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Binomial Probability </span><span class="sc">\n</span><span class="st">Mass Function&quot;</span>,</span>
+<span id="cb230-6"><a href="programmingpractical-2.html#cb230-6" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Number of Heads&quot;</span>,</span>
+<span id="cb230-7"><a href="programmingpractical-2.html#cb230-7" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Probability&quot;</span></span>
+<span id="cb230-8"><a href="programmingpractical-2.html#cb230-8" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-165-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>This is an example of a discrete random variables, and so the distribution is called <strong>probability mass function</strong>.</p>
+<p>For continuous random variables we can only calculate the probability of being in an interval.</p>
+<p>A normal distribution gives us the probability of measurement errors, <span class="math inline">\(x\)</span>, being a certain size.</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="programmingpractical-2.html#cb231-1" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb231-2"><a href="programmingpractical-2.html#cb231-2" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">length =</span> <span class="dv">100</span>),</span>
+<span id="cb231-3"><a href="programmingpractical-2.html#cb231-3" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">dnorm</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">length =</span> <span class="dv">100</span>), <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>),</span>
+<span id="cb231-4"><a href="programmingpractical-2.html#cb231-4" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;l&quot;</span>,</span>
+<span id="cb231-5"><a href="programmingpractical-2.html#cb231-5" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Normal Probability </span><span class="sc">\n</span><span class="st">Density Function&quot;</span>,</span>
+<span id="cb231-6"><a href="programmingpractical-2.html#cb231-6" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>,</span>
+<span id="cb231-7"><a href="programmingpractical-2.html#cb231-7" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Probability Density&quot;</span></span>
+<span id="cb231-8"><a href="programmingpractical-2.html#cb231-8" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-166-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>This is an example of a continuous random variable, and so the distribution is called a <strong>probability density function</strong>.</p>
+</div>
+<div id="using-probability-distributions-in-rtypes" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Using probability distributions in R—types<a href="programmingpractical-2.html#using-probability-distributions-in-rtypes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>R has a large number of inbuilt probability distributions.</p>
+<p>Discrete distributions:</p>
+<ul>
+<li>Binomial</li>
+<li>Geometric</li>
+<li>Poisson</li>
+<li>Negative Binomial</li>
+<li>Hypergeometric</li>
+<li>Multinomial</li>
+</ul>
+<p>Continuous distributions:</p>
+<ul>
+<li>Normal</li>
+<li>Uniform</li>
+<li>T (T-test)</li>
+<li>F (F-test)</li>
+<li>Exponential</li>
+<li>Cauchy</li>
+<li>Beta</li>
+<li>Gamma</li>
+<li>Weibull</li>
+<li>Chi-squared</li>
+<li>Logistic</li>
+</ul>
+<p>R deals with them all in essentially the same way. Each inbuilt distribution in R is referred to by its abbreviation.</p>
+<ul>
+<li>Binomial: <code>binom</code></li>
+<li>Poisson: <code>pois</code></li>
+<li>Geometric: <code>geom</code></li>
+<li>Normal: <code>norm</code></li>
+<li>Uniform: <code>unif</code></li>
+<li>Exponential: <code>exp</code></li>
+<li><span class="math inline">\(\dots\)</span></li>
+</ul>
+<p>Each inbuilt distribution in R has the same four generic functions associated with it.</p>
+<p>For a distribution with abbreviation <code>dist</code>:</p>
+<ul>
+<li><code>ddist()</code>: density/mass function</li>
+<li><code>pdist()</code>: cumulative density/mass function</li>
+<li><code>rdist()</code>: random number generator function</li>
+<li><code>qdist()</code>: quantile function</li>
+</ul>
+<div id="ddist" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> <code>ddist()</code><a href="programmingpractical-2.html#ddist" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a distribution type <code>dist</code>, the function <code>ddist(x,...)</code> returns:</p>
+<ul>
+<li>The probability <span class="math inline">\(P(X=x)\)</span> (for discrete variables) or</li>
+<li>The probability density at <span class="math inline">\(x\)</span> (for continuous variables)</li>
+</ul>
+<p>This can be used to calculate actual probabilities for discrete distributions.</p>
+<div id="dbinomdiscrete-distribution" class="section level4 hasAnchor" number="4.3.1.1">
+<h4><span class="header-section-number">4.3.1.1</span> <code>dbinom()</code>—discrete distribution<a href="programmingpractical-2.html#dbinomdiscrete-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Consider a binomial distribution with 10 trials, each with a probability of success of 0.5. The R function <code>dbinom()</code> describes the distribution of the probability of success.</p>
+<p>It takes the following arguments:</p>
+<ul>
+<li><code>x</code>: the number of successful trials</li>
+<li><code>size</code>: the total number of trials</li>
+<li><code>prob</code>: the probability of success</li>
+</ul>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="programmingpractical-2.html#cb232-1" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">4</span>, <span class="dv">10</span>, <span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>## [1] 0.2050781</code></pre>
+<p>Or to plot the distribution itself.</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="programmingpractical-2.html#cb234-1" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>##  [1] 0.0009765625 0.0097656250 0.0439453125 0.1171875000 0.2050781250
+##  [6] 0.2460937500 0.2050781250 0.1171875000 0.0439453125 0.0097656250
+## [11] 0.0009765625</code></pre>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="programmingpractical-2.html#cb236-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">0.5</span>), <span class="at">type =</span> <span class="st">&quot;h&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Probability Mass&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-168-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dnormcontinuous-distribution" class="section level4 hasAnchor" number="4.3.1.2">
+<h4><span class="header-section-number">4.3.1.2</span> <code>dnorm()</code>—continuous distribution<a href="programmingpractical-2.html#dnormcontinuous-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Consider a normal distribution with mean 0 and standard deviation 1.</p>
+<p>The R function <code>dnorm()</code> gives the probability density at a given value of <span class="math inline">\(x\)</span>.</p>
+<p>It takes the following arguments:</p>
+<ul>
+<li><code>x</code></li>
+<li><code>mean</code></li>
+<li><code>sd</code>: standard deviation</li>
+</ul>
+<p>The function <code>dnorm(x, mean, sd)</code> isn’t useful in itself but is useful for plotting.</p>
+<p>With a continuous distribution we have to choose the <span class="math inline">\(x\)</span> coordinates close enough together to approximate a smooth curve.</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="programmingpractical-2.html#cb237-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>)</span>
+<span id="cb237-2"><a href="programmingpractical-2.html#cb237-2" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="fu">dnorm</span>(x, <span class="dv">0</span>, <span class="dv">1</span>), <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Probability Density&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-169-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="pdist" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> <code>pdist()</code><a href="programmingpractical-2.html#pdist" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a distribution dist <code>pdist(x, ...)</code> returns the probability <span class="math inline">\(P(X\le x)\)</span> (which in a continuous function is an actual probability).</p>
+<div id="pnormprobability-calculations" class="section level4 hasAnchor" number="4.3.2.1">
+<h4><span class="header-section-number">4.3.2.1</span> <code>pnorm()</code>—probability calculations<a href="programmingpractical-2.html#pnormprobability-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If we want to find the probability of having a value below <span class="math inline">\(-1\)</span> from a normal distribution we use <code>pnorm()</code>.</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="programmingpractical-2.html#cb238-1" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] 0.1586553</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-171-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>If we want to find the probability of having a value between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1.5\)</span> from a normal distribution we use <code>pnorm()</code>.</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="programmingpractical-2.html#cb240-1" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="fl">1.5</span>, <span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] 0.7745375</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-173-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="rdist" class="section level3 hasAnchor" number="4.3.3">
+<h3><span class="header-section-number">4.3.3</span> <code>rdist()</code><a href="programmingpractical-2.html#rdist" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a distribution dist <code>rdist()</code> returns <span class="math inline">\(n\)</span> random numbers drawn from that distribution.</p>
+<p>This function is of great use when trying to run stochastic models. The ability to draw random numbers from many different types of distribution is incredibly useful.</p>
+<div id="rnormnormal-distribution" class="section level4 hasAnchor" number="4.3.3.1">
+<h4><span class="header-section-number">4.3.3.1</span> <code>rnorm()</code>—normal distribution<a href="programmingpractical-2.html#rnormnormal-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Consider a normal distribution with mean and standard deviation.</p>
+<p>The R function <code>rnorm()</code> returns random numbers drawn from this distribution.</p>
+<p>It takes the following arguments:</p>
+<ul>
+<li><code>n</code>: number of random numbers to return</li>
+<li><code>mean</code></li>
+<li><code>sd</code>: standard deviation</li>
+</ul>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="programmingpractical-2.html#cb242-1" tabindex="-1"></a>norm.dat <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb242-2"><a href="programmingpractical-2.html#cb242-2" tabindex="-1"></a><span class="fu">print</span>(norm.dat)</span></code></pre></div>
+<pre><code>## [1] -1.43599249 -0.06877164 -1.47607343 -0.89465623  1.62928503</code></pre>
+<p>Consider a normal distribution with mean 0 and variable 1. We will draw thousands of random numbers from this distribution and plot a histogram of them. This should then look like the theoretical normal distribution curve we produce with <code>dnorm()</code>.</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="programmingpractical-2.html#cb244-1" tabindex="-1"></a>norm.dat <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50000</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb244-2"><a href="programmingpractical-2.html#cb244-2" tabindex="-1"></a><span class="fu">hist</span>(norm.dat, <span class="at">prob =</span> <span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">50</span>, <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>)</span>
+<span id="cb244-3"><a href="programmingpractical-2.html#cb244-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">0.01</span>)</span>
+<span id="cb244-4"><a href="programmingpractical-2.html#cb244-4" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">dnorm</span>(x, <span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-175-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="exampleusing-probabilities-for-simulation" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Example—using probabilities for simulation<a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Consider tossing a biased coin. There are two outcomes: Heads or Tails.</p>
+<p><span class="math inline">\(P(H) = \frac{1}{3}\)</span> &amp; <span class="math inline">\(P(T) = \frac{2}{3}\)</span></p>
+<p>How can we use probability distributions in R to simulate this?</p>
+<div id="binomial-distribution" class="section level3 hasAnchor" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Binomial distribution<a href="programmingpractical-2.html#binomial-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using the binomial distribution:</p>
+<ul>
+<li>1 observation</li>
+<li>1 trial</li>
+<li>Probability of success (H) is <span class="math inline">\(\frac{1}{3}\)</span></li>
+</ul>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="programmingpractical-2.html#cb245-1" tabindex="-1"></a><span class="fu">rbinom</span>(</span>
+<span id="cb245-2"><a href="programmingpractical-2.html#cb245-2" tabindex="-1"></a>  <span class="dv">1</span>,  <span class="co"># number of observations</span></span>
+<span id="cb245-3"><a href="programmingpractical-2.html#cb245-3" tabindex="-1"></a>  <span class="dv">1</span>,  <span class="co"># number of binomial trials</span></span>
+<span id="cb245-4"><a href="programmingpractical-2.html#cb245-4" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span> <span class="co"># binomial probability of success</span></span>
+<span id="cb245-5"><a href="programmingpractical-2.html#cb245-5" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<p><code>rbinom()</code> returns the number of successes from our 1 observation of tossing a biased coin once.</p>
+<ul>
+<li>0: <span class="math inline">\(\frac{2}{3}\)</span> of the time</li>
+<li>1: <span class="math inline">\(\frac{1}{3}\)</span> of the time</li>
+</ul>
+<p>We can check this by getting R to do many observations at once…</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="programmingpractical-2.html#cb247-1" tabindex="-1"></a><span class="fu">rbinom</span>(<span class="dv">15</span>, <span class="dv">1</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##  [1] 1 0 1 0 1 1 0 0 1 0 0 1 1 0 0</code></pre>
+</div>
+<div id="uniform-distribution" class="section level3 hasAnchor" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> Uniform distribution<a href="programmingpractical-2.html#uniform-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using the uniform distribution:</p>
+<p>Generate single number uniformly between 0 and 1.</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="programmingpractical-2.html#cb249-1" tabindex="-1"></a>rand <span class="ot">&lt;-</span> <span class="fu">runif</span>(</span>
+<span id="cb249-2"><a href="programmingpractical-2.html#cb249-2" tabindex="-1"></a>  <span class="dv">1</span>,  <span class="co"># number of observation</span></span>
+<span id="cb249-3"><a href="programmingpractical-2.html#cb249-3" tabindex="-1"></a>  <span class="dv">0</span>,  <span class="co"># minimum</span></span>
+<span id="cb249-4"><a href="programmingpractical-2.html#cb249-4" tabindex="-1"></a>  <span class="dv">1</span>   <span class="co"># maximum</span></span>
+<span id="cb249-5"><a href="programmingpractical-2.html#cb249-5" tabindex="-1"></a>)</span>
+<span id="cb249-6"><a href="programmingpractical-2.html#cb249-6" tabindex="-1"></a><span class="cf">if</span> (rand <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>) {</span>
+<span id="cb249-7"><a href="programmingpractical-2.html#cb249-7" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Heads&quot;</span>)</span>
+<span id="cb249-8"><a href="programmingpractical-2.html#cb249-8" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb249-9"><a href="programmingpractical-2.html#cb249-9" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Tails&quot;</span>)</span>
+<span id="cb249-10"><a href="programmingpractical-2.html#cb249-10" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;Tails&quot;</code></pre>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="programmingpractical-2.html#cb251-1" tabindex="-1"></a><span class="fu">print</span>(rand) <span class="co"># confirm by printing rand</span></span></code></pre></div>
+<pre><code>## [1] 0.6701847</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-179-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>The shaded area corresponds to the probability of drawing Heads.</p>
+</div>
+</div>
+<div id="examplemultiple-choices" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Example—multiple choices<a href="programmingpractical-2.html#examplemultiple-choices" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Consider tossing a very thick biased coin. There are three outcomes: Heads, Tails, or edge.</p>
+<ul>
+<li><span class="math inline">\(P(H) = \frac{3}{10}\)</span></li>
+<li><span class="math inline">\(P(T) = \frac{6}{10}\)</span></li>
+<li><span class="math inline">\(P(E) = \frac{1}{10}\)</span></li>
+</ul>
+<p>How can we use probability distributions in R to simulate this?</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="programmingpractical-2.html#cb253-1" tabindex="-1"></a>rand <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb253-2"><a href="programmingpractical-2.html#cb253-2" tabindex="-1"></a><span class="cf">if</span> (rand <span class="sc">&lt;</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">10</span>) {</span>
+<span id="cb253-3"><a href="programmingpractical-2.html#cb253-3" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Heads&quot;</span>) </span>
+<span id="cb253-4"><a href="programmingpractical-2.html#cb253-4" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (rand <span class="sc">&lt;</span> <span class="dv">9</span><span class="sc">/</span><span class="dv">10</span>) {</span>
+<span id="cb253-5"><a href="programmingpractical-2.html#cb253-5" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Tails&quot;</span>)</span>
+<span id="cb253-6"><a href="programmingpractical-2.html#cb253-6" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb253-7"><a href="programmingpractical-2.html#cb253-7" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Edge&quot;</span>)</span>
+<span id="cb253-8"><a href="programmingpractical-2.html#cb253-8" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;Heads&quot;</code></pre>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="programmingpractical-2.html#cb255-1" tabindex="-1"></a><span class="fu">print</span>(rand) <span class="co"># confirm by printing rand</span></span></code></pre></div>
+<pre><code>## [1] 0.1476562</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-181-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>The blue shaded area corresponds to the probability of drawing Heads. The red shaded area corresponds to the probability of drawing Tails. The unshaded area corresponds to the probability of drawing Edge.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Consider a regular six-sided die. How could we simulate a single throw of a die in R?</p>
+<ul>
+<li>What are the possible outcomes?</li>
+<li>Use <code>runif()</code>.</li>
+<li>Use (lots of) <code>if else</code> statements.
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-183" onclick="javascript:toggle(&#39;unnamed-chunk-183&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-183" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="programmingpractical-2.html#cb257-1" tabindex="-1"></a>rand <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb257-2"><a href="programmingpractical-2.html#cb257-2" tabindex="-1"></a><span class="cf">if</span> (rand <span class="sc">&lt;</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>) {</span>
+<span id="cb257-3"><a href="programmingpractical-2.html#cb257-3" tabindex="-1"></a>    <span class="fu">print</span>(<span class="dv">1</span>)</span>
+<span id="cb257-4"><a href="programmingpractical-2.html#cb257-4" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (rand <span class="sc">&lt;</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">6</span>) {</span>
+<span id="cb257-5"><a href="programmingpractical-2.html#cb257-5" tabindex="-1"></a>    <span class="fu">print</span>(<span class="dv">2</span>)</span>
+<span id="cb257-6"><a href="programmingpractical-2.html#cb257-6" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (rand <span class="sc">&lt;</span> <span class="dv">3</span><span class="sc">/</span><span class="dv">6</span>) {</span>
+<span id="cb257-7"><a href="programmingpractical-2.html#cb257-7" tabindex="-1"></a>    <span class="fu">print</span>(<span class="dv">3</span>)</span>
+<span id="cb257-8"><a href="programmingpractical-2.html#cb257-8" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (rand <span class="sc">&lt;</span> <span class="dv">4</span><span class="sc">/</span><span class="dv">6</span>) {</span>
+<span id="cb257-9"><a href="programmingpractical-2.html#cb257-9" tabindex="-1"></a>    <span class="fu">print</span>(<span class="dv">4</span>)</span>
+<span id="cb257-10"><a href="programmingpractical-2.html#cb257-10" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (rand <span class="sc">&lt;</span> <span class="dv">5</span><span class="sc">/</span><span class="dv">6</span>) {</span>
+<span id="cb257-11"><a href="programmingpractical-2.html#cb257-11" tabindex="-1"></a>    <span class="fu">print</span>(<span class="dv">5</span>)</span>
+<span id="cb257-12"><a href="programmingpractical-2.html#cb257-12" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb257-13"><a href="programmingpractical-2.html#cb257-13" tabindex="-1"></a>    <span class="fu">print</span>(<span class="dv">6</span>)</span>
+<span id="cb257-14"><a href="programmingpractical-2.html#cb257-14" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] 6</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="exampleusing-r-to-model-a-death-process-stochastically" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Example—using R to model a death process stochastically<a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Consider a population of animals. Every year each animal has a fixed probability of dying (depressing I know!), independently of each other and how old they are. There are no new animals born.</p>
+<p>How could we model this?</p>
+<ul>
+<li>Need a program that keeps track of number of live animals.</li>
+<li>At each time step, we need to ‘roll a die’ to see if each live animal survives.</li>
+<li>We update the numbers of live animals and keep going until everything dies!</li>
+</ul>
+<p>This is easy to do in R.</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="programmingpractical-2.html#cb259-1" tabindex="-1"></a>nAlive <span class="ot">&lt;-</span> <span class="dv">100</span>                       <span class="co"># current number of live animals</span></span>
+<span id="cb259-2"><a href="programmingpractical-2.html#cb259-2" tabindex="-1"></a>max.time <span class="ot">&lt;-</span> <span class="dv">200</span>                     <span class="co"># keep going for up to 200 steps</span></span>
+<span id="cb259-3"><a href="programmingpractical-2.html#cb259-3" tabindex="-1"></a>nAliveStore <span class="ot">&lt;-</span> <span class="fu">numeric</span>(max.time<span class="sc">+</span><span class="dv">1</span>)  <span class="co"># vector to store how many were alive at each step</span></span>
+<span id="cb259-4"><a href="programmingpractical-2.html#cb259-4" tabindex="-1"></a>nAliveStore[<span class="dv">1</span>] <span class="ot">&lt;-</span> nAlive            <span class="co"># store how many were alive at the start</span></span>
+<span id="cb259-5"><a href="programmingpractical-2.html#cb259-5" tabindex="-1"></a><span class="cf">for</span> (iTim <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max.time) {          <span class="co"># loop over all time steps</span></span>
+<span id="cb259-6"><a href="programmingpractical-2.html#cb259-6" tabindex="-1"></a>    pr <span class="ot">&lt;-</span> <span class="fu">runif</span>(nAlive, <span class="dv">0</span>, <span class="dv">1</span>)       <span class="co"># probability of dying for all currently live animals</span></span>
+<span id="cb259-7"><a href="programmingpractical-2.html#cb259-7" tabindex="-1"></a>    died <span class="ot">&lt;-</span> <span class="fu">which</span>(pr <span class="sc">&lt;</span> <span class="fl">0.05</span>)        <span class="co"># find out which animals have died</span></span>
+<span id="cb259-8"><a href="programmingpractical-2.html#cb259-8" tabindex="-1"></a>    nDead <span class="ot">&lt;-</span> <span class="fu">length</span>(died)           <span class="co"># count up how many animals have died</span></span>
+<span id="cb259-9"><a href="programmingpractical-2.html#cb259-9" tabindex="-1"></a>    nAlive <span class="ot">&lt;-</span> nAlive <span class="sc">-</span> nDead        <span class="co"># update the number of currently living animals</span></span>
+<span id="cb259-10"><a href="programmingpractical-2.html#cb259-10" tabindex="-1"></a>    nAliveStore[iTim <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> nAlive <span class="co"># store the number of living animals</span></span>
+<span id="cb259-11"><a href="programmingpractical-2.html#cb259-11" tabindex="-1"></a>    <span class="cf">if</span> (nAlive <span class="sc">&lt;=</span> <span class="dv">0</span>) {<span class="cf">break</span>}        <span class="co"># stop process when all animals are dead</span></span>
+<span id="cb259-12"><a href="programmingpractical-2.html#cb259-12" tabindex="-1"></a>}</span>
+<span id="cb259-13"><a href="programmingpractical-2.html#cb259-13" tabindex="-1"></a></span>
+<span id="cb259-14"><a href="programmingpractical-2.html#cb259-14" tabindex="-1"></a><span class="fu">plot</span>(nAliveStore, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Time&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Number alive&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-184-1.png" width="480" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="programmingpractical-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="dynamic-modelspractical.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

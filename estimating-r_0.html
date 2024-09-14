@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>11 Estimating \(R_{0}\) | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="11 Estimating \(R_{0}\) | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="11 Estimating \(R_{0}\) | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="11 Estimating \(R_{0}\) | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="11 Estimating \(R_{0}\) | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="11 Estimating \(R_{0}\) | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="particle-mcmc.html"/>
+<link rel="next" href="seasonality-and-measles-epidemics.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="estimating-r_0" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">11</span> Estimating <span class="math inline">\(R_{0}\)</span><a href="estimating-r_0.html#estimating-r_0" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="andrew-conlan-ajkc2cam.ac.uk" class="section level2 unlisted unnumbered hasAnchor">
+<h2>Andrew Conlan (<a href="mailto:ajkc2@cam.ac.uk">ajkc2@cam.ac.uk</a>)<a href="estimating-r_0.html#andrew-conlan-ajkc2cam.ac.uk" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><em>Aim</em>: To compare final size and exponential growth estimators for <span class="math inline">\(R_{0}\)</span> using simulated data.</p>
+<p><em>Outline</em>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Introduction: models and data sets</p></li>
+<li><p>Final size method</p></li>
+<li><p>Regression method</p></li>
+<li><p>RECON <code>earlyR</code> method</p></li>
+</ol>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Important
+</div>
+<div class="panel-body">
+All required data and script files can be downloaded <a href="https://vaccineimpact.github.io/vimc_course/Materials/BYOM/R0_files.zip">here</a>. Please download this ZIP file and extract the files to your working directory.
+</div>
+</div>
+</div>
+<div id="introduction-models-and-data-sets" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> Introduction: models and data sets<a href="estimating-r_0.html#introduction-models-and-data-sets" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In Epidemic Practicals <a href="epi1.html#epi1">1</a>, <a href="epi2.html#epi2">2</a> &amp; <a href="epi3.html#epi3">3</a> you wrote functions to numerically solve and simulate the deterministic and stochastic SIR models. For this practical we have extended these functions to add a latent class and implement the SEIR epidemic model introduced in lectures. If you have time at the end of this practical you can use these functions to simulate your own “Outfluenza” and “Biggles” data and explore the performance of the final size and linear regression methods.</p>
+<p>However, so we all get the same results, we have provided simulated epidemics of “Outfluenza” and “Biggles” from which we will estimate <span class="math inline">\(R_{0}\)</span> using the final size, (log)-linear regression and the <code>earlyR</code> method from the <strong>R</strong> <strong>E</strong>pidemics <strong>Con</strong>sortium (RECON, <a href="https://www.repidemicsconsortium.org/">https://www.repidemicsconsortium.org/</a>).</p>
+<p>The simulated outbreaks are provided as <strong>line lists</strong>, a common instrument used to collect data on individual cases during an outbreak where the date of infection (or rather the notification of a case) is recorded along with other relevant epidemiological information. For our purposes, the date of notification is sufficient to reconstruct the epidemic curve and test our different estimators of <span class="math inline">\(R_{0}\)</span>.</p>
+<p>Begin by reading in the line lists and converting the dates (stored as character strings) to date objects:</p>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="estimating-r_0.html#cb417-1" tabindex="-1"></a><span class="fu">require</span>(chron)</span>
+<span id="cb417-2"><a href="estimating-r_0.html#cb417-2" tabindex="-1"></a><span class="fu">require</span>(incidence)</span>
+<span id="cb417-3"><a href="estimating-r_0.html#cb417-3" tabindex="-1"></a><span class="co"># Load line lists of cases for simulated outbreaks</span></span>
+<span id="cb417-4"><a href="estimating-r_0.html#cb417-4" tabindex="-1"></a>outfluenza1 <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&#39;Outfluenza1_cases.dat&#39;</span>)</span>
+<span id="cb417-5"><a href="estimating-r_0.html#cb417-5" tabindex="-1"></a>outfluenza1<span class="sc">$</span>x <span class="ot">=</span> <span class="fu">as.Date</span>(outfluenza1<span class="sc">$</span>x)</span>
+<span id="cb417-6"><a href="estimating-r_0.html#cb417-6" tabindex="-1"></a></span>
+<span id="cb417-7"><a href="estimating-r_0.html#cb417-7" tabindex="-1"></a>outfluenza2 <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&#39;Outfluenza2_cases.dat&#39;</span>)</span>
+<span id="cb417-8"><a href="estimating-r_0.html#cb417-8" tabindex="-1"></a>outfluenza2<span class="sc">$</span>x <span class="ot">=</span> <span class="fu">as.Date</span>(outfluenza2<span class="sc">$</span>x)</span>
+<span id="cb417-9"><a href="estimating-r_0.html#cb417-9" tabindex="-1"></a></span>
+<span id="cb417-10"><a href="estimating-r_0.html#cb417-10" tabindex="-1"></a>biggles <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&#39;biggles_cases.dat&#39;</span>)</span>
+<span id="cb417-11"><a href="estimating-r_0.html#cb417-11" tabindex="-1"></a>biggles<span class="sc">$</span>x <span class="ot">=</span> <span class="fu">as.Date</span>(biggles<span class="sc">$</span>x)</span></code></pre></div>
+<p>We are going to use the <code>incidence</code> package from RECON which has been written to simplify computing, visualising and modelling incidence of infectious disease from dated event data such as line lists.</p>
+<p>To illustrate the key functions and concepts we will use <code>incidence</code> to construct daily incidence and cumulative incidence curves for the first outfluenza outbreak.</p>
+<p>The main workhorse function is called <code>incidence</code> which converts a list of dates into an <code>incidence</code> object that bins cases into a given interval:</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="estimating-r_0.html#cb418-1" tabindex="-1"></a>outfluenza1.i <span class="ot">=</span> <span class="fu">incidence</span>(outfluenza1<span class="sc">$</span>x,<span class="at">interval=</span><span class="dv">1</span>)</span></code></pre></div>
+<p>We can see a summary of the incidence object by simply typing the name of the variable:</p>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="estimating-r_0.html#cb419-1" tabindex="-1"></a>outfluenza1.i</span></code></pre></div>
+<pre><code>## &lt;incidence object&gt;
+## [1183 cases from days 2019-02-24 to 2019-04-29]
+## 
+## $counts: matrix with 65 rows and 1 columns
+## $n: 1183 cases in total
+## $dates: 65 dates marking the left-side of bins
+## $interval: 1 day
+## $timespan: 65 days
+## $cumulative: FALSE</code></pre>
+<p>So, the outfluenza1 outbreak consists of 1183 cases over the course of 65 days. We have chosen to bin cases on a daily interval (which is also the default so we could have simply left out this argument and will do so from now on).</p>
+<p>The <code>incidence</code> package provides custom plot functions for <code>incidence</code> objects:</p>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="estimating-r_0.html#cb421-1" tabindex="-1"></a><span class="fu">plot</span>(outfluenza1.i)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-395-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Which should be familiar from the lectures.</p>
+<p>You can try experimenting with different intervals to see how this affects the shape of the epidemic curve:</p>
+<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="estimating-r_0.html#cb422-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">incidence</span>(outfluenza1<span class="sc">$</span>x,<span class="at">interval=</span><span class="dv">7</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-396-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><code>incidence</code> also allows you to subset curves between start and end dates:</p>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="estimating-r_0.html#cb423-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">subset</span>(outfluenza1.i,<span class="at">from=</span>outfluenza1<span class="sc">$</span>x[<span class="dv">1</span>],<span class="at">to=</span>outfluenza1<span class="sc">$</span>x[<span class="dv">100</span>]))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-397-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+What is the significance of choosing the dates to subset in this way?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-399" onclick="javascript:toggle(&#39;unnamed-chunk-399&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-399" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+We have limited the graph to only plot the first 100 cases. We achieved this by using the date of the 100<span class="math inline">\(^{th}\)</span> entry of the line list (<code>outfluenza1$x</code>) to set the upper limit.
+</div>
+</div>
+</div>
+<p>The <code>cumulate()</code> function returns a the cumulative incidence curve:</p>
+<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="estimating-r_0.html#cb424-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">cumulate</span>(outfluenza1.i))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-400-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Finally, you can convert an <code>incidence</code> object to a data frame by using the cast function <code>data.frame()</code>:</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="estimating-r_0.html#cb425-1" tabindex="-1"></a>outfluenza1.df <span class="ot">=</span> <span class="fu">data.frame</span>(outfluenza1.i)</span>
+<span id="cb425-2"><a href="estimating-r_0.html#cb425-2" tabindex="-1"></a><span class="fu">head</span>(outfluenza1.df)</span></code></pre></div>
+<pre><code>##        dates counts
+## 1 2019-02-24      1
+## 2 2019-02-25      0
+## 3 2019-02-26      0
+## 4 2019-02-27      0
+## 5 2019-02-28      1
+## 6 2019-03-01      2</code></pre>
+</div>
+<div id="final-size-method" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> Final size method<a href="estimating-r_0.html#final-size-method" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Final size methods for <span class="math inline">\(R_{0}\)</span> are in themselves a whole field of research. In this practical we will consider the utility of the basic deterministic “first estimate” also known as the final size formula:</p>
+<p><span class="math display" id="eq:1">\[\begin{equation}
+    \tag{11.1}
+R_{0} = -\frac{\ln(1-z_{f})}{z_{f}}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(z_{f}\)</span> is the total fraction of the population infected at the end of an epidemic in a closed population.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Write a function <code>R0final</code> that returns the value of <span class="math inline">\(R_{0}\)</span> for a given value of <span class="math inline">\(z_{f}\)</span>. Is there any restriction on the values that <span class="math inline">\(z_{f}\)</span> can take for the final size equation to be valid? Your function should check that <span class="math inline">\(z_{f}\)</span> takes a valid value and return a missing value (NA) when the final size equation is not defined.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-403" onclick="javascript:toggle(&#39;unnamed-chunk-403&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-403" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="estimating-r_0.html#cb427-1" tabindex="-1"></a>R0final <span class="ot">&lt;-</span> <span class="cf">function</span>(zf) {</span>
+<span id="cb427-2"><a href="estimating-r_0.html#cb427-2" tabindex="-1"></a>    <span class="co"># zf must be proportion between 0 and 1</span></span>
+<span id="cb427-3"><a href="estimating-r_0.html#cb427-3" tabindex="-1"></a>    <span class="co"># Trap for division by zero(zf=0.0)</span></span>
+<span id="cb427-4"><a href="estimating-r_0.html#cb427-4" tabindex="-1"></a>    <span class="co"># Trap for log(1) (-Inf)</span></span>
+<span id="cb427-5"><a href="estimating-r_0.html#cb427-5" tabindex="-1"></a>    <span class="cf">if</span>(zf<span class="sc">&lt;=</span><span class="dv">0</span> <span class="sc">||</span> zf<span class="sc">&gt;=</span><span class="fl">1.0</span>) {</span>
+<span id="cb427-6"><a href="estimating-r_0.html#cb427-6" tabindex="-1"></a>        <span class="fu">return</span>(<span class="cn">NA</span>)</span>
+<span id="cb427-7"><a href="estimating-r_0.html#cb427-7" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb427-8"><a href="estimating-r_0.html#cb427-8" tabindex="-1"></a>        <span class="fu">return</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>zf)<span class="sc">/</span>zf)</span>
+<span id="cb427-9"><a href="estimating-r_0.html#cb427-9" tabindex="-1"></a>    }</span>
+<span id="cb427-10"><a href="estimating-r_0.html#cb427-10" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>This formula is more commonly used to predict the final size (<span class="math inline">\(z_{f}\)</span>) of an epidemic once we have an independent estimate of <span class="math inline">\(R_{0}\)</span>. This is less straightforward as we cannot solve equation <a href="estimating-r_0.html#eq:1">(11.1)</a> explicitly for <span class="math inline">\(z_{f}\)</span>. We can progress by rewriting <a href="estimating-r_0.html#eq:1">(11.1)</a> into a problem we can solve numerically:</p>
+<p><span class="math display" id="eq:2">\[\begin{equation}
+    \tag{11.2}
+R_{0} + \frac{\ln(1-z_{f})}{z_{f}} = 0
+\end{equation}\]</span></p>
+<p>We can find the final size (<span class="math inline">\(z_{f}\)</span>) corresponding to a given value of <span class="math inline">\(R_{0}\)</span>, by solving for the value(s) of <span class="math inline">\(z_{f}\)</span> for which <a href="estimating-r_0.html#eq:2">(11.2)</a> is equal to zero. Finding the roots of a function is a common problem, so it should not surprise you that there is a R function to do the job. <code>uniroot</code> uses an numerical procedure to estimate the roots of an arbitrary function <code>f</code> within a fixed <code>interval=c(lower,upper)</code>. We can use <code>uniroot</code> to write a function that returns the predicted final size for a given value of <span class="math inline">\(R_{0}\)</span>:</p>
+<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="estimating-r_0.html#cb428-1" tabindex="-1"></a>FinalSize <span class="ot">&lt;-</span> <span class="cf">function</span>(R0) {</span>
+<span id="cb428-2"><a href="estimating-r_0.html#cb428-2" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">uniroot</span>(<span class="cf">function</span>(zf)</span>
+<span id="cb428-3"><a href="estimating-r_0.html#cb428-3" tabindex="-1"></a>        {R0<span class="sc">+</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>zf)<span class="sc">/</span>zf},</span>
+<span id="cb428-4"><a href="estimating-r_0.html#cb428-4" tabindex="-1"></a>        <span class="at">interval=</span><span class="fu">c</span>(.Machine<span class="sc">$</span>double.xmin,<span class="fl">1.0</span>))<span class="sc">$</span>root)</span>
+<span id="cb428-5"><a href="estimating-r_0.html#cb428-5" tabindex="-1"></a>}</span></code></pre></div>
+<p>Check this function works by trying these test values on the R terminal:</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="estimating-r_0.html#cb429-1" tabindex="-1"></a><span class="fu">FinalSize</span>(<span class="fl">1.2</span>)</span></code></pre></div>
+<pre><code>## [1] 0.3136976</code></pre>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="estimating-r_0.html#cb431-1" tabindex="-1"></a><span class="fu">FinalSize</span>(<span class="fl">1.0</span>)</span></code></pre></div>
+<pre><code>## [1] 6.103516e-05</code></pre>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="estimating-r_0.html#cb433-1" tabindex="-1"></a><span class="fu">FinalSize</span>(<span class="fl">0.9</span>)</span></code></pre></div>
+<pre><code>## [1] 6.103516e-05</code></pre>
+<p>The exact values may differ slightly between versions of R on different machines.</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+Numerical methods are only accurate up to a specified precision or <strong>tolerance</strong>. This is fundamentally limited by the precision with which real numbers can be represented on a computer (that naturally works with integer or binary numbers). <code>.Machine$double.xmin</code> is the smallest number (or difference between two numbers) that can be stored in a given version of R. This value may change between versions and on different computer platforms (Windows, Mac OS, Linux…)
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Use the auxiliary functions of the incidence package and these new functions you have just written to estimate <span class="math inline">\(R_{0}\)</span> for the exemplar outfluenza and biggles outbreaks. (Remember the school size for all of these outbreaks was 1300 children.)
+</div>
+</div>
+<button id="displayTextunnamed-chunk-408" onclick="javascript:toggle(&#39;unnamed-chunk-408&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-408" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="estimating-r_0.html#cb435-1" tabindex="-1"></a><span class="fu">R0final</span>(<span class="fu">incidence</span>(outfluenza1<span class="sc">$</span>x)<span class="sc">$</span>n<span class="sc">/</span><span class="dv">1300</span>)</span></code></pre></div>
+<pre><code>## [1] 2.646094</code></pre>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="estimating-r_0.html#cb437-1" tabindex="-1"></a><span class="fu">R0final</span>(<span class="fu">incidence</span>(outfluenza2<span class="sc">$</span>x)<span class="sc">$</span>n<span class="sc">/</span><span class="dv">1300</span>)</span></code></pre></div>
+<pre><code>## [1] 2.378981</code></pre>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="estimating-r_0.html#cb439-1" tabindex="-1"></a><span class="fu">R0final</span>(<span class="fu">incidence</span>(biggles<span class="sc">$</span>x)<span class="sc">$</span>n<span class="sc">/</span><span class="dv">1300</span>)</span></code></pre></div>
+<pre><code>## [1] 2.463143</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="regression-method" class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> Regression method<a href="estimating-r_0.html#regression-method" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the lectures we discussed how the early phase of an epidemic can be approximately modelled by an exponential growth model:</p>
+<p><span class="math display" id="eq:3">\[\begin{equation}
+    \tag{11.3}
+I(t) = I(0)e^{\Lambda t}
+\end{equation}\]</span></p>
+<p>where the exponential rate can be related to <span class="math inline">\(R_{0}\)</span> with the functional form depending on the structure of the epidemic model (in particular with respect to the distribution of latent and infectious periods). If we take logs of both sides of equation <a href="estimating-r_0.html#eq:3">(11.3)</a> and rearrange we get the equation of a straight line:</p>
+<p><span class="math display" id="eq:4">\[\begin{equation}
+    \tag{11.4}
+\log(I(t)) = \Lambda t + \log(I(0))
+\end{equation}\]</span></p>
+<p>with y-intercept given by the constant <span class="math inline">\(\log(I(0)\)</span> and slope <span class="math inline">\(\Lambda\)</span>. So, we can therefore obtain a first approximation to <span class="math inline">\(R_{0}\)</span> simply by estimating the slope of the (logged) epidemic curve.</p>
+<p>In principle, estimating <span class="math inline">\(R_{0}\)</span> using this method could be as straightforward as plotting the incidence or cumulative incidence curve on logarithmic graph paper and fitting a “best-fit” line, or using the Solver in Excel. We can be a little more sophisticated and use the linear regression model (<code>lm</code>) function in R. <code>lm()</code> uses a least squares method, effectively optimising the fit of the straight line to minimise the squared error between the line and the data.</p>
+<p>As the exponential approximation is only valid early in the epidemic, including data from the full epidemic curve would bias our estimate of <span class="math inline">\(R_{0}\)</span>. As discussed in the lecture we will use the first 100 cases. For a given simulation we need to select all the data-points up to the 100<span class="math inline">\(^{th}\)</span> case. We can achieve this by sub setting the incidence object as before:</p>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="estimating-r_0.html#cb441-1" tabindex="-1"></a>outflu1.sub<span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">subset</span>(outfluenza1.i,<span class="at">from=</span>outfluenza1<span class="sc">$</span>x[<span class="dv">1</span>],<span class="at">to=</span>outfluenza1<span class="sc">$</span>x[<span class="dv">100</span>]))</span></code></pre></div>
+<p>We fit a linear model (best straight line fit) to find the slope of the log cumulative cases as described in the lectures:</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="estimating-r_0.html#cb442-1" tabindex="-1"></a><span class="co"># Fit straight line to plot of biggles$t (time) and log of the cumulative cases (C)</span></span>
+<span id="cb442-2"><a href="estimating-r_0.html#cb442-2" tabindex="-1"></a>outflu1.fit <span class="ot">=</span> <span class="fu">lm</span>(<span class="fu">log</span>(<span class="dv">1</span><span class="sc">+</span>counts) <span class="sc">~</span> dates, <span class="at">data=</span>outflu1.sub)</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note:
+</div>
+<div class="panel-body">
+We add 1 to counts to handle any zero cases (this should not affect the estimated slope).
+</div>
+</div>
+<p>We can see the result of the regression by using the <code>summary</code> function:</p>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="estimating-r_0.html#cb443-1" tabindex="-1"></a><span class="fu">summary</span>(outflu1.fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = log(1 + counts) ~ dates, data = outflu1.sub)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.7081 -0.3553 -0.1211  0.3675  0.9870 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -5.996e+03  7.855e+02  -7.633 1.77e-05 ***
+## dates        3.340e-01  4.374e-02   7.635 1.77e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.5231 on 10 degrees of freedom
+## Multiple R-squared:  0.8536, Adjusted R-squared:  0.8389 
+## F-statistic:  58.3 on 1 and 10 DF,  p-value: 1.768e-05</code></pre>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+The <code>summary()</code> function provides a lot of detailed information on the statistical fit of the regression line – for the purpose of estimating <span class="math inline">\(R_{0}\)</span> the key value is the estimated slope highlighted in bold above. Using the expression for the SIR model presented in the lectures calculate the <span class="math inline">\(R_{0}\)</span> of outfluenza using this slope:
+</div>
+</div>
+<button id="displayTextunnamed-chunk-414" onclick="javascript:toggle(&#39;unnamed-chunk-414&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-414" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<span class="math inline">\(R_{0} = 1 + 0.335 \times 5 = 2.67\)</span>
+</div>
+</div>
+</div>
+<p>We can estimate the uncertainty in our estimate of <span class="math inline">\(R_{0}\)</span> from the uncertainty in our estimate of the slope from the linear regression. The R function <code>confint()</code> will calculate 95% confidence intervals for our regression model:</p>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="estimating-r_0.html#cb445-1" tabindex="-1"></a><span class="fu">confint</span>(outflu1.fit)</span></code></pre></div>
+<pre><code>##                     2.5 %        97.5 %
+## (Intercept) -7745.8850733 -4245.5519457
+## dates           0.2365213     0.4314554</code></pre>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Use these confidence intervals to calculate a 95% confidence interval for your estimate of <span class="math inline">\(R_{0}\)</span>.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-417" onclick="javascript:toggle(&#39;unnamed-chunk-417&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-417" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<span class="math inline">\(R_{0} = 2.67\)</span> (95% CI, 2.1–3.1)
+</div>
+</div>
+</div>
+<p>The incidence package has built in functions that simplify estimating the exponential growth rate. The base function is <code>fit</code> returns an <code>incidence_fit</code> object which returns details of the fit including the estimated exponential growth rate <span class="math inline">\(r\)</span> and the confidence interval:</p>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="estimating-r_0.html#cb447-1" tabindex="-1"></a>outflu1.fit2 <span class="ot">&lt;-</span> <span class="fu">fit</span>(outfluenza1.i)</span>
+<span id="cb447-2"><a href="estimating-r_0.html#cb447-2" tabindex="-1"></a>outflu1.fit2</span></code></pre></div>
+<pre><code>## &lt;incidence_fit object&gt;
+## 
+## $model: regression of log-incidence over time
+## 
+## $info: list containing the following items:
+##   $r (daily growth rate):
+## [1] -0.0504102
+## 
+##   $r.conf (confidence interval):
+##            2.5 %      97.5 %
+## [1,] -0.06954703 -0.03127338
+## 
+##   $halving (halving time in days):
+## [1] 13.75014
+## 
+##   $halving.conf (confidence interval):
+##         2.5 %   97.5 %
+## [1,] 9.966597 22.16413
+## 
+##   $pred: data.frame of incidence predictions (57 rows, 5 columns)</code></pre>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+Why does <code>fit</code> ignore dates with 0 incidence?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-420" onclick="javascript:toggle(&#39;unnamed-chunk-420&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-420" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+We are fitting a log-linear relationship and <span class="math inline">\(\log(0)\)</span> is undefined.
+</div>
+</div>
+</div>
+<p>The estimated <span class="math inline">\(r\)</span> is much lower than we obtained by our manual estimate. To see what has happened we can add the obtained fit to a plot of the incidence:</p>
+<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="estimating-r_0.html#cb449-1" tabindex="-1"></a><span class="fu">plot</span>(outfluenza1.i, <span class="at">fit=</span> outflu1.fit2)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-421-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We can use the <code>subset</code> function to limit our fit to the first 100 cases as before:</p>
+<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb450-1"><a href="estimating-r_0.html#cb450-1" tabindex="-1"></a>outflu1.sub <span class="ot">=</span> <span class="fu">subset</span>(outfluenza1.i,<span class="at">from=</span>outfluenza1<span class="sc">$</span>x[<span class="dv">1</span>],<span class="at">to=</span>outfluenza1<span class="sc">$</span>x[<span class="dv">100</span>])</span>
+<span id="cb450-2"><a href="estimating-r_0.html#cb450-2" tabindex="-1"></a></span>
+<span id="cb450-3"><a href="estimating-r_0.html#cb450-3" tabindex="-1"></a>outflu1.fit3 <span class="ot">=</span> <span class="fu">fit</span>(outflu1.sub)</span>
+<span id="cb450-4"><a href="estimating-r_0.html#cb450-4" tabindex="-1"></a></span>
+<span id="cb450-5"><a href="estimating-r_0.html#cb450-5" tabindex="-1"></a><span class="fu">plot</span>(outflu1.sub,<span class="at">fit=</span>outflu1.fit3)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-422-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+How do the estimates from the incidence package and our manual estimate compare to each other and why (what’s different)?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-424" onclick="javascript:toggle(&#39;unnamed-chunk-424&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-424" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+<code>outflu1.fit2</code> is clearly a poor fit to the exponential growth rate as we have not subsetted the data to the exponential phase. The point estimates from the incidence package and our manual estimate are pretty comparable, however the confidence intervals from our manual estimate are smaller (0.2–0.4 compared to 0.2–0.5) reflecting the effective <strong>smoothing</strong> we applied to the data by using the cumulative case counts instead of raw incidence. We could similarly smooth the time series by increasing the time interval to sum up incidence - this runs the risk of introducing <strong>artifacts</strong> to the data or giving us false confidence in our estimates.
+</div>
+</div>
+</div>
+<p>The <code>incidence</code> package provides a method for automatically sub setting the data by finding the optimum fit of two log-linear models (minimising the squared error of both):</p>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="estimating-r_0.html#cb451-1" tabindex="-1"></a>outflu1.fit5 <span class="ot">=</span> <span class="fu">fit_optim_split</span>(outfluenza1.i)</span>
+<span id="cb451-2"><a href="estimating-r_0.html#cb451-2" tabindex="-1"></a><span class="fu">plot</span>(outfluenza1.i,<span class="at">fit=</span>outflu1.fit5<span class="sc">$</span>fit)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-425-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+The output of <code>fit_optim_split</code> now continues information on the two log-linear model fits, the first for the attack of the epidemic, the second describing the decay after the epidemic peak (which is also estimated as the <strong>changepoint</strong> between the two models).
+</div>
+</div>
+<p>Examine the output by entering into the R console:</p>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="estimating-r_0.html#cb452-1" tabindex="-1"></a>outflu1.fit5</span></code></pre></div>
+<p>Which should also generate a plot of the mean r-squared error (<span class="math inline">\(R^2\)</span>) of the two log-linear models against different dates for the changepoint:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-428-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="recon-earlyr-method" class="section level2 hasAnchor" number="11.4">
+<h2><span class="header-section-number">11.4</span> RECON <code>earlyR</code> method<a href="estimating-r_0.html#recon-earlyr-method" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Finally we will use the <code>earlyR</code> package implementation of the Teunis and Wallinga method to estimate <span class="math inline">\(R_{0}\)</span> and compare to the other methods. The key function of the <code>earlyR</code> package is the <code>get_R</code> function that returns an estimate of <span class="math inline">\(R_{0}\)</span> when passed an incidence object and a serial interval distribution. The serial interval can be specified manually, but we will use the default gamma distribution which is parameterised by the mean (<code>si_mean</code>) and standard deviation (<code>si_sd</code>). For outfluenza, the serial interval distribution is exponentially distributed with mean equal to the variance (<code>si_mean = 5</code>, <code>si_sd = 5</code>).</p>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="estimating-r_0.html#cb453-1" tabindex="-1"></a><span class="fu">library</span>(earlyR)</span>
+<span id="cb453-2"><a href="estimating-r_0.html#cb453-2" tabindex="-1"></a>estR <span class="ot">=</span> <span class="fu">get_R</span>(outfluenza1.i,<span class="at">si_mean=</span><span class="dv">5</span>,<span class="at">si_sd=</span><span class="dv">5</span>)</span>
+<span id="cb453-3"><a href="estimating-r_0.html#cb453-3" tabindex="-1"></a>estR</span></code></pre></div>
+<pre><code>## 
+## /// Early estimate of reproduction number (R) //
+##  // class: earlyR, list
+## 
+##  // Maximum-Likelihood estimate of R ($R_ml):
+## [1] 1.001001
+## 
+## 
+##  // $lambda:
+##   NA 0.1812692 0.1484107 0.1215084 0.09948267 0.2627188...
+## 
+##  // $dates:
+## [1] &quot;2019-02-24&quot; &quot;2019-02-25&quot; &quot;2019-02-26&quot; &quot;2019-02-27&quot; &quot;2019-02-28&quot;
+## [6] &quot;2019-03-01&quot;
+## ...
+## 
+##  // $si (serial interval):
+## A discrete distribution
+##   name: gamma
+##   parameters:
+##     shape: 1
+##     scale: 5</code></pre>
+<p>Once again we have obtained a much lower estimate of <span class="math inline">\(R\)</span> (<span class="math inline">\(R_{0} = 1.0\)</span>) than expected as the <code>earlyR</code> method is only valid during the exponential phase of the epidemic. If we subset again using the first 100 cases you should obtain a more consistent estimate of <span class="math inline">\(R_{0}\)</span> of 2.43.</p>
+<p>We can calculated a boostrapped 95% confidence interval for the estimate using the <code>sample_R</code> function:</p>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="estimating-r_0.html#cb455-1" tabindex="-1"></a><span class="fu">quantile</span>(<span class="fu">sample_R</span>(estR), <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<pre><code>##      2.5%     97.5% 
+## 0.9557057 1.0663163</code></pre>
+<p>So our <code>earlyR</code> estimate of <span class="math inline">\(R_{0} = 2.43\)</span> (2.0–3.0, 95% CI).</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Now we have introduced all of the methods, let’s compare the estimates (and confidence intervals where possible) of <span class="math inline">\(R_{0}\)</span> for our three exemplar outbreaks. Complete the following table by adapting the code you have used in the practical.</p>
+<p>Remember that for Outfluenza the mean serial interval is 5 days (standard deviation 5 days). For Biggles the latent period is 5 days, the exposed period is 5 days. As discussed in lectures, adding two exponentially distributed variables together gives a gamma distributed variable. So the serial interval for Biggles will be gamma distributed with a scale parameter of 10 days and a shape parameter of 2, giving a mean serial interval of 10 and standard deviation of <span class="math inline">\(5\sqrt{2}\)</span>. <em>(Ask your instructor for more details if interested!)</em></p>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outbreak</th>
+<th>Regression r</th>
+<th>Regression <span class="math inline">\(R_{0}\)</span></th>
+<th>Final Size <span class="math inline">\(R_{0}\)</span></th>
+<th>earlyR <span class="math inline">\(R_{0}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Outfluenza1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Outfluenza2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Biggles</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Compare your estimates from the three methods of estimation. Are you surprised by the variability in estimates of <span class="math inline">\(R_{0}\)</span> that you have obtained compared to the size of the 95% confidence intervals of the estimates?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-433" onclick="javascript:toggle(&#39;unnamed-chunk-433&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-433" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+The confidence intervals from our regression model capture the variability (scatter) in the model output around the best-fit line for this particular realisation of the epidemic model. Stochastic effects will generate far greater variability between realisations, which our linear model contains no information about. The uncertainty in the estimate of the slope will therefore typically underestimate the true variability in the epidemic model. The Likelihood function for the <code>earlyR</code> method includes more information on the variability of the serial interval derived from an epidemic model and better represents the true <strong>uncertainty</strong> in our estimates.
+</div>
+</div>
+</div>
+</div>
+<div id="appendix" class="section level2 hasAnchor" number="11.5">
+<h2><span class="header-section-number">11.5</span> Appendix<a href="estimating-r_0.html#appendix" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You might be interested now in explore how well the final size and regression estimators perform on different stochastic replicates of the SIR or SEIR models.</p>
+<p><code>SIRmodels.R</code> and <code>SEIRmodels.R</code> files provide functions to allow you to generate your own simulated epidemics of Biggles and Outfluenza.</p>
+<p>To load the functions into the R workspace using the following R code:</p>
+<div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb457-1"><a href="estimating-r_0.html#cb457-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;SIRmodels.R&#39;</span>)</span>
+<span id="cb457-2"><a href="estimating-r_0.html#cb457-2" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;SEIRmodels.R&#39;</span>)</span>
+<span id="cb457-3"><a href="estimating-r_0.html#cb457-3" tabindex="-1"></a></span>
+<span id="cb457-4"><a href="estimating-r_0.html#cb457-4" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">1300</span></span></code></pre></div>
+<p><code>SIRmodels.R</code> provides two familiar functions:</p>
+<ul>
+<li><p><code>DetSIR.dyn</code></p>
+<p>Uses the internal R function <code>lsoda()</code> to numerically solve the <strong>deterministic</strong> SIR model given 5 parameters:</p>
+<ul>
+<li><code>N</code>: Population size</li>
+<li><code>I0</code>: Initial infected</li>
+<li><code>B</code>: transmission rate</li>
+<li><code>M</code>: “recovery” rate = <span class="math inline">\(1/T_{I}\)</span> corresponding to average infectious period of <span class="math inline">\(T_{I}\)</span></li>
+<li><code>f_time</code>: run time for numerical solution</li>
+</ul></li>
+<li><p><code>create.StocSIR</code> defines an stochastic SIR model to use with the SimInf package and takes 6 arguments:</p>
+<ul>
+<li><code>N</code>: Population size</li>
+<li><code>I0</code>: Initial infected</li>
+<li><code>beta</code>: transmission rate</li>
+<li><code>m</code>: “recovery” rate = <span class="math inline">\(1/T_{I}\)</span> corresponding to average infectious period of <span class="math inline">\(T_{I}\)</span></li>
+<li><code>f_time</code>: run time for numerical solution</li>
+<li><code>reps</code>: number of replicates to simulate</li>
+</ul></li>
+</ul>
+<p><code>SEIRmodels.R</code> provides equivalent functions <code>DetSEIR.dyn</code> and <code>StocSEIR.dyn</code> that implement the deterministic and stochastic SEIR epidemic model respectively.</p>
+<p>Both of these functions implementing the SEIR model take 7 parameters in the order that follows:</p>
+<ul>
+<li><code>N</code>: Population size</li>
+<li><code>I0</code>: Initial infected</li>
+<li><code>E0</code>: Initial exposed</li>
+<li><code>B</code>: transmission rate</li>
+<li><code>G</code>: “progression” rate = <span class="math inline">\(1/T_{E}\)</span>, with average exposed period of <span class="math inline">\(T_{E}\)</span></li>
+<li><code>M</code>: “recovery” rate = <span class="math inline">\(1/T_{I}\)</span> corresponding to average infectious period of <span class="math inline">\(T_{I}\)</span></li>
+<li><code>f_time</code>: run time for numerical solution</li>
+</ul>
+<p>The deterministic equations for the SEIR are then:</p>
+<p><span class="math display">\[
+    \begin{aligned} \frac{dS}{dt} &amp;= -\frac{\beta SI}{N} \\
+        \frac{dE}{dt} &amp;= \frac{\beta SI}{N} - gE \\
+        \frac{dI}{dt} &amp;= gE -mI \\
+        \frac{dR}{dt} &amp;= mI
+    \end{aligned}
+\]</span></p>
+<p>You can check this new code for the deterministic <span class="math inline">\(SEIR\)</span> model by simulating an epidemic using the Biggles parameters from the lecture and comparing to the figures in the lecture notes:</p>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb458-1"><a href="estimating-r_0.html#cb458-1" tabindex="-1"></a><span class="co"># Biggles Examplar Epidemic</span></span>
+<span id="cb458-2"><a href="estimating-r_0.html#cb458-2" tabindex="-1"></a>det.sol<span class="ot">&lt;-</span><span class="fu">DetSEIR.dyn</span>(<span class="dv">1300</span>, <span class="dv">1</span>,<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span><span class="sc">/</span><span class="fl">5.0</span>, <span class="fl">1.0</span><span class="sc">/</span><span class="fl">5.0</span>, <span class="dv">150</span>)</span>
+<span id="cb458-3"><a href="estimating-r_0.html#cb458-3" tabindex="-1"></a><span class="fu">matplot</span>(det.sol[,<span class="dv">1</span>],det.sol[,<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>],<span class="at">type=</span><span class="st">&#39;l&#39;</span>,<span class="at">xlab=</span><span class="st">&#39;Days&#39;</span>,<span class="at">ylab=</span><span class="st">&#39;Population&#39;</span>,<span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-436-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Checking the stochastic model is more difficult as the output will be different every time we run it! As a first sanity check we can compare stochastic simulations to the deterministic epidemic, checking that they (roughly) scatter evenly around the “mean” behaviour:</p>
+<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb459-1"><a href="estimating-r_0.html#cb459-1" tabindex="-1"></a>SEIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSEIR</span>(<span class="dv">1300</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span><span class="sc">/</span><span class="fl">5.0</span>, <span class="dv">1</span><span class="sc">/</span><span class="fl">5.0</span>, <span class="dv">150</span>,<span class="dv">1</span>)</span>
+<span id="cb459-2"><a href="estimating-r_0.html#cb459-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model=</span>SEIRmodel)</span>
+<span id="cb459-3"><a href="estimating-r_0.html#cb459-3" tabindex="-1"></a><span class="fu">plot</span>(out)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-438-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>To simplify working with the incidence package we also provide a wrapper function <code>line_list()</code> that takes a <code>SimInf</code> object (out) as argument, along with a numeric value (node) and returns a line list of dates of cases for specified node:</p>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb460-1"><a href="estimating-r_0.html#cb460-1" tabindex="-1"></a>SEIRmodel <span class="ot">&lt;-</span> <span class="fu">create.StocSEIR</span>(<span class="dv">1300</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span><span class="sc">/</span><span class="fl">5.0</span>, <span class="dv">1</span><span class="sc">/</span><span class="fl">5.0</span>, <span class="dv">150</span>,<span class="dv">100</span>)</span>
+<span id="cb460-2"><a href="estimating-r_0.html#cb460-2" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">run</span>(<span class="at">model=</span>SEIRmodel)</span>
+<span id="cb460-3"><a href="estimating-r_0.html#cb460-3" tabindex="-1"></a><span class="fu">line_list</span>(out,<span class="dv">1</span>)</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="particle-mcmc.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="seasonality-and-measles-epidemics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

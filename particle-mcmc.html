@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>10 Particle MCMC | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="10 Particle MCMC | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="10 Particle MCMC | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="10 Particle MCMC | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="10 Particle MCMC | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="10 Particle MCMC | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="estimating-r_0-using-catalytic-models.html"/>
+<link rel="next" href="estimating-r_0.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="particle-mcmc" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">10</span> Particle MCMC<a href="particle-mcmc.html#particle-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="t.-j.-mckinley-t.mckinleyexeter.ac.uk" class="section level2 unlisted unnumbered hasAnchor">
+<h2>T. J. McKinley (<a href="mailto:t.mckinley@exeter.ac.uk">t.mckinley@exeter.ac.uk</a>)<a href="particle-mcmc.html#t.-j.-mckinley-t.mckinleyexeter.ac.uk" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here we use a simple model to illustrate how we can use particle Markov chain Monte Carlo (PMCMC) routine <span class="citation">(<a href="#ref-andrieuetal:2010">Andrieu, Doucet, and Holenstein 2010</a>)</span> with a bootstrap particle filter <span class="citation">(<a href="#ref-gordonetal:1993">Gordon, Salmond, and Smith 1993</a>)</span> as a way of fitting compartmental models to partially observed data, as described in the lectures.</p>
+<p>Note that PMCMC is extremely computationally intensive, and the only real way to make it tractable for many problems is to code both the simulation code and the MCMC code in a low-level language such as C/C++. We could use e.g. the <code>pomp</code> package to fit this model using the same PMCMC routine described here, but the syntax is different to the <code>SimInf</code> style. So instead we will use the <code>SimBIID</code> package, which provides a function <code>PMCMC()</code> that runs this algorithm. You must pass a <code>SimBIID_model</code> object (see <a href="particle-mcmc.html#sec:model">here</a>) to this function, and then it will automatically compile in the correct manner.</p>
+<p>Please note that an alternative frequentist approach, using maximum likelihood via iterated filtering (MIF) framework of <span class="citation">Ionides, Bretó, and King (<a href="#ref-ionidesetal:2006">2006</a>)</span>, and implemented in the <code>pomp</code> package, can be found <a href="https://kingaa.github.io/sbied/">here</a>.</p>
+</div>
+<div id="case-study" class="section level2 hasAnchor" number="10.1">
+<h2><span class="header-section-number">10.1</span> Case Study<a href="particle-mcmc.html#case-study" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To illustrate some of these ideas we will use a case study of influenza in a boarding school. These data are from a paper in the BMJ in 1978 <span class="citation">(<a href="#ref-anonymous:1978">Anonymous 1978</a>)</span> and provided in the <a href="http://www.repidemicsconsortium.org/outbreaks/index.html"><code>outbreaks</code></a> R package. We use a simple <span class="math inline">\(SIRR_1\)</span> model with two removal classes, <span class="math inline">\(R\)</span> and <span class="math inline">\(R_1\)</span>. We will assume that the bed-rest counts in the data correspond to the number of individuals in the <span class="math inline">\(R\)</span> class, and will ignore the other time-series for the time being. This has been used various times in the literature, including <span class="citation">Murray (<a href="#ref-murray:2003">2003</a>)</span>, <span class="citation">de Vries et al. (<a href="#ref-devriesetal:2006">2006</a>)</span> and in some of the <code>pomp</code> tutorials. The stochastic model we will use has event probabilities:
+<span class="math display">\[\begin{align*}
+    P\left[S_{t + \delta t} = S_t - 1, I_{t + \delta t} = I_t + 1\right] &amp;\approx \beta S I / N\\
+    P\left[I_{t + \delta t} = I_t - 1, R_{t + \delta t} = R_t + 1\right] &amp;\approx \gamma I\\
+    P\left[R_{t + \delta t} = R_t - 1, R_{1, t + \delta t} = R_{1,t} + 1\right] &amp;\approx \gamma_1 R
+\end{align*}\]</span>
+The initial population size is 763 pupils, and we assume an initial introduction of infection of a single individual at day 0.</p>
+<p>First, we load the data and the <code>SimBIID</code> package:</p>
+<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="particle-mcmc.html#cb383-1" tabindex="-1"></a><span class="do">## load libraries</span></span>
+<span id="cb383-2"><a href="particle-mcmc.html#cb383-2" tabindex="-1"></a><span class="fu">library</span>(outbreaks)</span>
+<span id="cb383-3"><a href="particle-mcmc.html#cb383-3" tabindex="-1"></a><span class="fu">library</span>(SimBIID)</span>
+<span id="cb383-4"><a href="particle-mcmc.html#cb383-4" tabindex="-1"></a></span>
+<span id="cb383-5"><a href="particle-mcmc.html#cb383-5" tabindex="-1"></a><span class="do">## set up data</span></span>
+<span id="cb383-6"><a href="particle-mcmc.html#cb383-6" tabindex="-1"></a>flu <span class="ot">&lt;-</span> influenza_england_1978_school</span>
+<span id="cb383-7"><a href="particle-mcmc.html#cb383-7" tabindex="-1"></a>flu<span class="sc">$</span>day <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(flu)</span></code></pre></div>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="particle-mcmc.html#cb384-1" tabindex="-1"></a><span class="do">## plot data</span></span>
+<span id="cb384-2"><a href="particle-mcmc.html#cb384-2" tabindex="-1"></a><span class="fu">plot</span>(flu<span class="sc">$</span>day, flu<span class="sc">$</span>in_bed, <span class="at">xlab =</span> <span class="st">&quot;Day&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Number in bed-rest&quot;</span>, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/plot-BS-1.png" width="336" style="display: block; margin: auto;" /></p>
+</div>
+<div id="arguments-for-pmcmc-function" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> Arguments for <code>PMCMC()</code> function<a href="particle-mcmc.html#arguments-for-pmcmc-function" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>If you look at the help file for the <code>PMCMC()</code> function (e.g. <code>?PMCMC</code>), you will see the main arguments to the <code>PMCMC()</code> function , which are summarised below:</p>
+<ul>
+<li><code>x</code>: a <code>data.frame</code> containing time series count data, with the first column called <code>t</code>, followed by columns of time-series counts. The time-series counts columns must be in the order of the <code>counts</code> object in the <code>func</code> function (see below).</li>
+<li><code>priors</code>: a <code>data.frame</code> containing columns: <code>parnames</code>, <code>dist</code>, <code>p1</code> and <code>p2</code>, with number of rows equal to the number of parameters. The column <code>parname</code> simply gives names to each parameter for plotting and summarising. Each entry in the <code>dist</code> column must contain one of <code>c("unif", "norm", "gamma")</code>, and the corresponding <code>p1</code> and <code>p2</code> entries relate to the hyperparameters (lower and upper bounds in the uniform case; mean and standard deviation in the normal case; and shape and rate in the gamma case).</li>
+<li><code>func</code>: a <code>SimBIID_model</code> object (which can be created using <code>mparseRcpp()</code>). This must have a stochastic observation process specified—see Section <a href="particle-mcmc.html#obsprocess">10.2.2</a>.</li>
+<li><code>u</code>: a named vector of initial states.</li>
+<li><code>npart</code>: an integer specifying the number of particles for the bootstrap particle filter.</li>
+<li><code>iniPars</code>: a named vector of initial values for the parameters of the model. If left unspecified, then these are sampled from the prior distribution(s).</li>
+<li><code>niter</code>: an integer specifying the number of iterations to run the MCMC.</li>
+</ul>
+<div id="data" class="section level3 hasAnchor" number="10.2.1">
+<h3><span class="header-section-number">10.2.1</span> Data<a href="particle-mcmc.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <code>x</code> argument that we will pass to the <code>PMCMC()</code> function will be a <code>data.frame</code> with the first column corresponding to <code>t</code> and the second corresponding to the <em>observed</em> <span class="math inline">\(R\)</span> curve. Here we set up a <code>data.frame</code> called <code>flu_dat</code> that is in the correct format:</p>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="particle-mcmc.html#cb385-1" tabindex="-1"></a><span class="do">## set up data to pass to PMCMC</span></span>
+<span id="cb385-2"><a href="particle-mcmc.html#cb385-2" tabindex="-1"></a>flu_dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">t =</span> flu<span class="sc">$</span>day, <span class="at">Robs =</span> flu<span class="sc">$</span>in_bed)</span>
+<span id="cb385-3"><a href="particle-mcmc.html#cb385-3" tabindex="-1"></a><span class="fu">head</span>(flu_dat)</span></code></pre></div>
+<pre><code>##   t Robs
+## 1 1    3
+## 2 2    8
+## 3 3   26
+## 4 4   76
+## 5 5  225
+## 6 6  298</code></pre>
+</div>
+<div id="obsprocess" class="section level3 hasAnchor" number="10.2.2">
+<h3><span class="header-section-number">10.2.2</span> Observation process<a href="particle-mcmc.html#obsprocess" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When we specify our simulation model using <code>mparseRcpp()</code>, we also need to specify a <strong>stochastic</strong> observation process. This is passed as an argument called <code>obsProcess</code> to the <code>mparseRcpp()</code> function. This argument must be a <code>data.frame</code>, with columns in the order: <code>dataNames</code>, <code>dist</code>, <code>p1</code>, <code>p2</code>.</p>
+<ul>
+<li><code>dataNames</code> is a character denoting the observed data (must match a column in the <code>x</code> data frame—see Section <a href="particle-mcmc.html#data">10.2.1</a>);</li>
+<li><code>dist</code> is a character specifying the distribution of the observation process (must be one of <code>"unif"</code>, <code>"pois"</code> or <code>"binom"</code> at the current time);</li>
+<li><code>p1</code> is the first parameter (the lower bound in the case of <code>"unif"</code>, the rate in the case of <code>"pois"</code>, or the size in the case of <code>"binom"</code>);</li>
+<li><code>p2</code> is the second parameter (the upper bound in the case of <code>"unif"</code>, <code>NA</code> in the case of <code>"pois"</code>, and <code>prob</code> in the case of <code>"binom"</code>).</li>
+</ul>
+<p>Here we will place a Poisson observation process around the <span class="math inline">\(R\)</span> curve, such that:
+<span class="math display">\[
+    R_t \sim \mbox{Po}(R^\prime_t + 10^{-6}),
+\]</span>
+where <span class="math inline">\(R_t\)</span> is the <strong>observed</strong> <span class="math inline">\(R\)</span> count at time <span class="math inline">\(t\)</span>, <span class="math inline">\(R^\prime_t\)</span> is the simulated count. We add a small constant (<span class="math inline">\(10^{-6}\)</span> here), which is important to prevent numerical errors, since the simulated counts <span class="math inline">\(R^\prime_t\)</span> could be zero, which would result in the Poisson rate parameter being zero, which violates the conditions of the Poisson distribution and would thus produce non-finite likelihood estimates. The addition of a small constant prevents this from happening.</p>
+<p><infobutton id="displayTextunnamed-chunk-379" onclick="javascript:toggle('unnamed-chunk-379');">Show: Note on Poisson assumptions</infobutton></p>
+<div id="toggleTextunnamed-chunk-379" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>The idea of putting some form of Poisson noise on the parameters of time-series count models has been used various times in the literature <span class="citation">(e.g. <a href="#ref-funketal:2016">Funk et al. 2016</a>)</span>. Often the observation term is placed on the <em>incidence</em> curves (i.e. new infections / removals). The variance of the Poisson distribution is equal to the mean (so a mean of <span class="math inline">\(R^\prime_t\)</span> has a variance of <span class="math inline">\(R^\prime_t\)</span> also), and since incidence curves tend to be smaller in magnitude than the counts in each class, then this can result in a tighter match between the simulations and the data. It is often usual that the mean of the Poisson noise is also scaled by some parameter corresponding to an <em>under-reporting</em> rate, meaning that the model assumes that the average observed counts are less than the true values.</p>
+<p>In this example, we do not have <em>incidence</em> curves, so we place a Poisson error around the <span class="math inline">\(R^\prime_t\)</span> counts instead. Note here that there is no strong epidemiological reason for the Poisson term in this case. We can assume that in a closed boarding school population, it would be unlikely that too many ill boys would be missed, and hence the observed counts are likely to be close to the true counts, and thus the amount of variation added by the Poisson noise term here is likely to be larger than we might ideally think is present in the data. In essence the Poisson term is providing an <strong>approximation</strong>, allowing simulations to have a non-negligible weight even if they do not match the observed curves exactly. As such the introduction of this term in this instance is introducing some approximation into the process, but in doing so is allowing us to fit a model in a computationally feasible way. In practice I would want to use a distribution with lower variances however.</p>
+<p>To this end, other options might include putting a Gaussian error around the observed counts, where the variance could be made smaller than the mean (e.g. <span class="math inline">\(R_t \sim N(R^\prime_t, \alpha R^\prime_t + 1)\)</span> for <span class="math inline">\(\alpha \in (0, 1)\)</span>). This would penalise simulations that lie further away from the observed data more than the Poisson model we are using, at the cost of requiring a larger number of particles / a longer run time to evaluate. (Bear in mind also that the Gaussian models <em>continuous</em> random variables, and is unbounded. Hence if you simulate from this observation process then you could get simulated counts that are both non-integer and negative-valued. This type of approximation might help model fitting, but is a good example of where the the biological interpretation of the noise process is not always realistic, but might be “good enough”.)</p>
+Hence, other (better) observation processes could also be used, but this choice allows us to produce some reasonable estimates in a reasonable computational load.
+</div>
+</div>
+</div>
+<p>The observed data, <span class="math inline">\(R_t\)</span>, is coded as the <code>Robs</code> column in the <code>flu_dat</code> data frame—see Section <a href="particle-mcmc.html#data">10.2.1</a>. To set up the observation process defined above, we define a <code>data.frame</code> as follows:</p>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="particle-mcmc.html#cb387-1" tabindex="-1"></a><span class="do">## set up observation process</span></span>
+<span id="cb387-2"><a href="particle-mcmc.html#cb387-2" tabindex="-1"></a>obs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb387-3"><a href="particle-mcmc.html#cb387-3" tabindex="-1"></a>    <span class="at">dataNames =</span> <span class="st">&quot;Robs&quot;</span>,</span>
+<span id="cb387-4"><a href="particle-mcmc.html#cb387-4" tabindex="-1"></a>    <span class="at">dist =</span> <span class="st">&quot;pois&quot;</span>,</span>
+<span id="cb387-5"><a href="particle-mcmc.html#cb387-5" tabindex="-1"></a>    <span class="at">p1 =</span> <span class="st">&quot;R + 1e-5&quot;</span>,</span>
+<span id="cb387-6"><a href="particle-mcmc.html#cb387-6" tabindex="-1"></a>    <span class="at">p2 =</span> <span class="cn">NA</span>,</span>
+<span id="cb387-7"><a href="particle-mcmc.html#cb387-7" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb387-8"><a href="particle-mcmc.html#cb387-8" tabindex="-1"></a>)</span>
+<span id="cb387-9"><a href="particle-mcmc.html#cb387-9" tabindex="-1"></a>obs</span></code></pre></div>
+<pre><code>##   dataNames dist       p1 p2
+## 1      Robs pois R + 1e-5 NA</code></pre>
+</div>
+<div id="sec:model" class="section level3 hasAnchor" number="10.2.3">
+<h3><span class="header-section-number">10.2.3</span> Setting up the model<a href="particle-mcmc.html#sec:model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+<p>We do not dwell on how to use <code>SimBIID</code> to specify simulation models here. If you are interested, then please see the extended documentation available at:</p>
+<p><a href="https://tjmckinley.github.io/SimBIID_tutorial/set-up-simple-simulation-model.html">https://tjmckinley.github.io/SimBIID_tutorial/set-up-simple-simulation-model.html</a></p>
+Hopefully the code below will look similar to <code>SimInf</code>, and you will be able to see how the model is set-up.
+</div>
+</div>
+<p>To specify the above simulation model:</p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="particle-mcmc.html#cb389-1" tabindex="-1"></a><span class="do">## set up model</span></span>
+<span id="cb389-2"><a href="particle-mcmc.html#cb389-2" tabindex="-1"></a>transitions <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb389-3"><a href="particle-mcmc.html#cb389-3" tabindex="-1"></a>    <span class="st">&quot;S -&gt; beta * S * I / (S + I + R + R1) -&gt; I&quot;</span>, </span>
+<span id="cb389-4"><a href="particle-mcmc.html#cb389-4" tabindex="-1"></a>    <span class="st">&quot;I -&gt; gamma * I -&gt; R&quot;</span>,</span>
+<span id="cb389-5"><a href="particle-mcmc.html#cb389-5" tabindex="-1"></a>    <span class="st">&quot;R -&gt; gamma1 * R -&gt; R1&quot;</span></span>
+<span id="cb389-6"><a href="particle-mcmc.html#cb389-6" tabindex="-1"></a>)</span>
+<span id="cb389-7"><a href="particle-mcmc.html#cb389-7" tabindex="-1"></a>compartments <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;S&quot;</span>, <span class="st">&quot;I&quot;</span>, <span class="st">&quot;R&quot;</span>, <span class="st">&quot;R1&quot;</span>)</span>
+<span id="cb389-8"><a href="particle-mcmc.html#cb389-8" tabindex="-1"></a>pars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;gamma&quot;</span>, <span class="st">&quot;gamma1&quot;</span>)</span>
+<span id="cb389-9"><a href="particle-mcmc.html#cb389-9" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">mparseRcpp</span>(</span>
+<span id="cb389-10"><a href="particle-mcmc.html#cb389-10" tabindex="-1"></a>    <span class="at">transitions =</span> transitions, </span>
+<span id="cb389-11"><a href="particle-mcmc.html#cb389-11" tabindex="-1"></a>    <span class="at">compartments =</span> compartments,</span>
+<span id="cb389-12"><a href="particle-mcmc.html#cb389-12" tabindex="-1"></a>    <span class="at">pars =</span> pars,</span>
+<span id="cb389-13"><a href="particle-mcmc.html#cb389-13" tabindex="-1"></a>    <span class="at">obsProcess =</span> obs</span>
+<span id="cb389-14"><a href="particle-mcmc.html#cb389-14" tabindex="-1"></a>)</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+<code>SimBIID</code> has an option to pre-compile models, but we do <strong>not</strong> do this here. The <code>PMCMC()</code> function will do this for us. This is because we need to compile as an object to run from C rather than R, so the <code>PMCMC()</code> function deals with this automatically.
+</div>
+</div>
+</div>
+</div>
+<div id="running-the-pmcmc-algorithm" class="section level2 hasAnchor" number="10.3">
+<h2><span class="header-section-number">10.3</span> Running the PMCMC algorithm<a href="particle-mcmc.html#running-the-pmcmc-algorithm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now we run the PMCMC algorithm for 5,000 iterations, using 25 particles. We pass the a set of initial states, and use <span class="math inline">\(U(0, 5)\)</span> priors for each of the three parameters. We print summaries to the screen every 1,000 iterations (<code>nprintsum = 1000</code>):</p>
+<div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb390-1"><a href="particle-mcmc.html#cb390-1" tabindex="-1"></a><span class="do">## set priors</span></span>
+<span id="cb390-2"><a href="particle-mcmc.html#cb390-2" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb390-3"><a href="particle-mcmc.html#cb390-3" tabindex="-1"></a>    <span class="at">parnames =</span> <span class="fu">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;gamma&quot;</span>, <span class="st">&quot;gamma1&quot;</span>), </span>
+<span id="cb390-4"><a href="particle-mcmc.html#cb390-4" tabindex="-1"></a>    <span class="at">dist =</span> <span class="fu">rep</span>(<span class="st">&quot;unif&quot;</span>, <span class="dv">3</span>), </span>
+<span id="cb390-5"><a href="particle-mcmc.html#cb390-5" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb390-6"><a href="particle-mcmc.html#cb390-6" tabindex="-1"></a>priors<span class="sc">$</span>p1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb390-7"><a href="particle-mcmc.html#cb390-7" tabindex="-1"></a>priors<span class="sc">$</span>p2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb390-8"><a href="particle-mcmc.html#cb390-8" tabindex="-1"></a></span>
+<span id="cb390-9"><a href="particle-mcmc.html#cb390-9" tabindex="-1"></a><span class="do">## define initial states</span></span>
+<span id="cb390-10"><a href="particle-mcmc.html#cb390-10" tabindex="-1"></a>iniStates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">S =</span> <span class="dv">762</span>, <span class="at">I =</span> <span class="dv">1</span>, <span class="at">R =</span> <span class="dv">0</span>, <span class="at">R1 =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="particle-mcmc.html#cb391-1" tabindex="-1"></a><span class="do">## run PMCMC algorithm</span></span>
+<span id="cb391-2"><a href="particle-mcmc.html#cb391-2" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">PMCMC</span>(</span>
+<span id="cb391-3"><a href="particle-mcmc.html#cb391-3" tabindex="-1"></a>    <span class="at">x =</span> flu_dat, </span>
+<span id="cb391-4"><a href="particle-mcmc.html#cb391-4" tabindex="-1"></a>    <span class="at">priors =</span> priors, </span>
+<span id="cb391-5"><a href="particle-mcmc.html#cb391-5" tabindex="-1"></a>    <span class="at">func =</span> model, </span>
+<span id="cb391-6"><a href="particle-mcmc.html#cb391-6" tabindex="-1"></a>    <span class="at">u =</span> iniStates,</span>
+<span id="cb391-7"><a href="particle-mcmc.html#cb391-7" tabindex="-1"></a>    <span class="at">npart =</span> <span class="dv">25</span>,</span>
+<span id="cb391-8"><a href="particle-mcmc.html#cb391-8" tabindex="-1"></a>    <span class="at">niter =</span> <span class="dv">5000</span>, </span>
+<span id="cb391-9"><a href="particle-mcmc.html#cb391-9" tabindex="-1"></a>    <span class="at">nprintsum =</span> <span class="dv">1000</span></span>
+<span id="cb391-10"><a href="particle-mcmc.html#cb391-10" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Number of iterations: 5000
+## Number of particles: 25
+## Mixing proportion for proposal: 0.05
+## Start adaptive proposal at iteration: 100
+## 
+## Number of parameters: 3
+## 
+## Priors:
+## beta ~ U(lower = 0, upper = 5)
+## gamma ~ U(lower = 0, upper = 5)
+## gamma1 ~ U(lower = 0, upper = 5)
+## 
+## Number of classes: 4
+## 
+## Initial states:
+## state[0] = 762
+## state[1] = 1
+## state[2] = 0
+## state[3] = 0
+## 
+## Initialising system...
+## Initialisation complete!
+## 
+## Initial parameter values:
+## 
+## beta = 2.73907
+## gamma = 1.0908
+## gamma1 = 0.17482
+## 
+## Starting runs...
+## i = 1000 acc = 0.07 time = 6.16 secs 
+## i = 2000 acc = 0.06 time = 6.42 secs 
+## i = 3000 acc = 0.05 time = 6.19 secs 
+## i = 4000 acc = 0.02 time = 5.44 secs 
+## i = 5000 acc = 0.03 time = 5.27 secs 
+## Final time = 29.49 secs</code></pre>
+<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="particle-mcmc.html#cb393-1" tabindex="-1"></a><span class="do">## plot MCMC traces</span></span>
+<span id="cb393-2"><a href="particle-mcmc.html#cb393-2" tabindex="-1"></a><span class="fu">plot</span>(post, <span class="st">&quot;trace&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/boot-trace-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>We can see that the chain looks like it’s converging towards a stationary distribution, but let’s run it for a bit longer. We can do this simply by passing our current <code>PMCMC</code> object back into the <code>PMCMC()</code> function:</p>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="particle-mcmc.html#cb394-1" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">PMCMC</span>(post, <span class="at">niter =</span> <span class="dv">5000</span>, <span class="at">nprintsum =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<p>(I’ve suppressed the output for brevity here…)</p>
+<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb395-1"><a href="particle-mcmc.html#cb395-1" tabindex="-1"></a><span class="fu">plot</span>(post, <span class="st">&quot;trace&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/boot-extrun-plot-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="optimising-the-number-of-particles" class="section level2 hasAnchor" number="10.4">
+<h2><span class="header-section-number">10.4</span> Optimising the number of particles<a href="particle-mcmc.html#optimising-the-number-of-particles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The mixing of the chain and the speed of convergence is related to the number of particles (amongst other things). There is no strong consensus, but a rule-of-thumb is to try to choose the number of particles such that the variance of the log-likelihood estimate at a suitable set of parameters <span class="math inline">\(\theta^\prime\)</span> is between 1–3. Clearly the larger the number of particles, the higher the computational burden, so in practice the additional computational burden of the simulations must be balanced against the improved mixing and faster convergence. This is tricky, so instead here we take a simpler approach.</p>
+<p>Firstly we run the chain for a fixed number of particles until it looks like the chain has converged. Then we choose a set of parameter values <span class="math inline">\(\theta^\prime\)</span> (the posterior medians here). We then generate 500 estimates of the log-likelihood for a range of different numbers of particles, from which we can calculate the variance of these estimates. We then choose the smallest number of particles with a variance of the log-likelihood of less than 3.</p>
+<p>Hence, from the training runs above we can remove some burn-in iterations, and extract the posterior medians:</p>
+<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb396-1"><a href="particle-mcmc.html#cb396-1" tabindex="-1"></a>postMed <span class="ot">&lt;-</span> <span class="fu">window</span>(post, <span class="at">start =</span> <span class="dv">2000</span>)</span>
+<span id="cb396-2"><a href="particle-mcmc.html#cb396-2" tabindex="-1"></a>postMed <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(postMed<span class="sc">$</span>pars)</span>
+<span id="cb396-3"><a href="particle-mcmc.html#cb396-3" tabindex="-1"></a>postMed <span class="ot">&lt;-</span> <span class="fu">apply</span>(postMed, <span class="dv">2</span>, median)</span>
+<span id="cb396-4"><a href="particle-mcmc.html#cb396-4" tabindex="-1"></a>postMed <span class="ot">&lt;-</span> postMed[<span class="sc">-</span><span class="fu">length</span>(postMed)]</span>
+<span id="cb396-5"><a href="particle-mcmc.html#cb396-5" tabindex="-1"></a>postMed</span></code></pre></div>
+<pre><code>##      beta     gamma    gamma1 
+## 3.0804375 1.0818692 0.4504811</code></pre>
+<p>We can produce 500 estimates of the log-likelihood by setting the <code>fixpars = TRUE</code> argument to the <code>PMCMC()</code> function, passing in the <code>postMed</code> estimates above.</p>
+<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="particle-mcmc.html#cb398-1" tabindex="-1"></a>flu_train <span class="ot">&lt;-</span> <span class="fu">PMCMC</span>(</span>
+<span id="cb398-2"><a href="particle-mcmc.html#cb398-2" tabindex="-1"></a>    <span class="at">x =</span> flu_dat, </span>
+<span id="cb398-3"><a href="particle-mcmc.html#cb398-3" tabindex="-1"></a>    <span class="at">priors =</span> priors, </span>
+<span id="cb398-4"><a href="particle-mcmc.html#cb398-4" tabindex="-1"></a>    <span class="at">func =</span> model, </span>
+<span id="cb398-5"><a href="particle-mcmc.html#cb398-5" tabindex="-1"></a>    <span class="at">u =</span> iniStates,</span>
+<span id="cb398-6"><a href="particle-mcmc.html#cb398-6" tabindex="-1"></a>    <span class="at">npart =</span> <span class="dv">25</span>, </span>
+<span id="cb398-7"><a href="particle-mcmc.html#cb398-7" tabindex="-1"></a>    <span class="at">iniPars =</span> postMed,</span>
+<span id="cb398-8"><a href="particle-mcmc.html#cb398-8" tabindex="-1"></a>    <span class="at">niter =</span> <span class="dv">500</span>, </span>
+<span id="cb398-9"><a href="particle-mcmc.html#cb398-9" tabindex="-1"></a>    <span class="at">fixpars =</span> <span class="cn">TRUE</span></span>
+<span id="cb398-10"><a href="particle-mcmc.html#cb398-10" tabindex="-1"></a>)</span></code></pre></div>
+<p>This produces a list where the first element is a matrix of log-likelihood estimates. Hence we can extract this and calculate the sample variance as follows:</p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="particle-mcmc.html#cb399-1" tabindex="-1"></a><span class="do">## calculate the sample variance</span></span>
+<span id="cb399-2"><a href="particle-mcmc.html#cb399-2" tabindex="-1"></a>flu_train <span class="ot">&lt;-</span> <span class="fu">var</span>(flu_train<span class="sc">$</span>output)</span>
+<span id="cb399-3"><a href="particle-mcmc.html#cb399-3" tabindex="-1"></a>flu_train</span></code></pre></div>
+<pre><code>##          [,1]
+## [1,] 59956.58</code></pre>
+<p>Here the variance is <span class="math inline">\(5.9957\times 10^{4}\)</span>, which is larger than 3. Hence let’s try increasing the number of particles and repeating these steps.</p>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="particle-mcmc.html#cb401-1" tabindex="-1"></a><span class="do">## generate numbers of particles to trial</span></span>
+<span id="cb401-2"><a href="particle-mcmc.html#cb401-2" tabindex="-1"></a>npart <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">75</span>, <span class="dv">100</span>, <span class="dv">125</span>)</span>
+<span id="cb401-3"><a href="particle-mcmc.html#cb401-3" tabindex="-1"></a></span>
+<span id="cb401-4"><a href="particle-mcmc.html#cb401-4" tabindex="-1"></a>flu_train <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb401-5"><a href="particle-mcmc.html#cb401-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(npart)){</span>
+<span id="cb401-6"><a href="particle-mcmc.html#cb401-6" tabindex="-1"></a>    flu_train[[i]] <span class="ot">&lt;-</span> <span class="fu">PMCMC</span>(</span>
+<span id="cb401-7"><a href="particle-mcmc.html#cb401-7" tabindex="-1"></a>       <span class="at">x =</span> flu_dat, </span>
+<span id="cb401-8"><a href="particle-mcmc.html#cb401-8" tabindex="-1"></a>       <span class="at">priors =</span> priors, </span>
+<span id="cb401-9"><a href="particle-mcmc.html#cb401-9" tabindex="-1"></a>       <span class="at">func =</span> model, </span>
+<span id="cb401-10"><a href="particle-mcmc.html#cb401-10" tabindex="-1"></a>       <span class="at">u =</span> iniStates, </span>
+<span id="cb401-11"><a href="particle-mcmc.html#cb401-11" tabindex="-1"></a>       <span class="at">npart =</span> npart[i], </span>
+<span id="cb401-12"><a href="particle-mcmc.html#cb401-12" tabindex="-1"></a>       <span class="at">iniPars =</span> postMed,</span>
+<span id="cb401-13"><a href="particle-mcmc.html#cb401-13" tabindex="-1"></a>       <span class="at">niter =</span> <span class="dv">500</span>, </span>
+<span id="cb401-14"><a href="particle-mcmc.html#cb401-14" tabindex="-1"></a>       <span class="at">fixpars =</span> <span class="cn">TRUE</span></span>
+<span id="cb401-15"><a href="particle-mcmc.html#cb401-15" tabindex="-1"></a>    )</span>
+<span id="cb401-16"><a href="particle-mcmc.html#cb401-16" tabindex="-1"></a>    flu_train[[i]] <span class="ot">&lt;-</span> <span class="fu">var</span>(flu_train[[i]]<span class="sc">$</span>output)</span>
+<span id="cb401-17"><a href="particle-mcmc.html#cb401-17" tabindex="-1"></a>}</span>
+<span id="cb401-18"><a href="particle-mcmc.html#cb401-18" tabindex="-1"></a><span class="fu">names</span>(flu_train) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;npart = &quot;</span>, npart)</span>
+<span id="cb401-19"><a href="particle-mcmc.html#cb401-19" tabindex="-1"></a>flu_train <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;c&quot;</span>, flu_train)</span></code></pre></div>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="particle-mcmc.html#cb402-1" tabindex="-1"></a>flu_train</span></code></pre></div>
+<pre><code>##  npart = 50  npart = 75 npart = 100 npart = 125 
+##    6.559770    3.601458    1.751317    1.409048</code></pre>
+<p>Here we will choose the number of particles to be 75 (ideally should be a bit larger—but for the sake of exposition we’ll tone down a touch). We now start a new chain using 75 particles, and with starting values derived from the training runs.</p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="particle-mcmc.html#cb404-1" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">PMCMC</span>(</span>
+<span id="cb404-2"><a href="particle-mcmc.html#cb404-2" tabindex="-1"></a>    <span class="at">x =</span> flu_dat, </span>
+<span id="cb404-3"><a href="particle-mcmc.html#cb404-3" tabindex="-1"></a>    <span class="at">priors =</span> priors, </span>
+<span id="cb404-4"><a href="particle-mcmc.html#cb404-4" tabindex="-1"></a>    <span class="at">func =</span> model, </span>
+<span id="cb404-5"><a href="particle-mcmc.html#cb404-5" tabindex="-1"></a>    <span class="at">npart =</span> <span class="dv">75</span>, </span>
+<span id="cb404-6"><a href="particle-mcmc.html#cb404-6" tabindex="-1"></a>    <span class="at">u =</span> iniStates, </span>
+<span id="cb404-7"><a href="particle-mcmc.html#cb404-7" tabindex="-1"></a>    <span class="at">iniPars =</span> postMed,</span>
+<span id="cb404-8"><a href="particle-mcmc.html#cb404-8" tabindex="-1"></a>    <span class="at">niter =</span> <span class="dv">10000</span>, </span>
+<span id="cb404-9"><a href="particle-mcmc.html#cb404-9" tabindex="-1"></a>    <span class="at">nprintsum =</span> <span class="dv">1000</span></span>
+<span id="cb404-10"><a href="particle-mcmc.html#cb404-10" tabindex="-1"></a>)</span></code></pre></div>
+<p>(Again I have suppressed the output here for brevity…)</p>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="particle-mcmc.html#cb405-1" tabindex="-1"></a><span class="do">## plot and summarise MCMC output</span></span>
+<span id="cb405-2"><a href="particle-mcmc.html#cb405-2" tabindex="-1"></a><span class="fu">plot</span>(post, <span class="st">&quot;trace&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/boot-fullsum-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+We need to run for longer in practice and run multiple chains, but for the sake of time we will proceed with what we have.
+</div>
+</div>
+</div>
+<div id="visualising-and-summarising-the-posterior-distributions" class="section level2 hasAnchor" number="10.5">
+<h2><span class="header-section-number">10.5</span> Visualising and summarising the posterior distributions<a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can visualise the approximate posterior distributions (after removing some burn-in):</p>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="particle-mcmc.html#cb406-1" tabindex="-1"></a><span class="do">## remove burn-in</span></span>
+<span id="cb406-2"><a href="particle-mcmc.html#cb406-2" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">window</span>(post, <span class="at">start =</span> <span class="dv">2000</span>)</span>
+<span id="cb406-3"><a href="particle-mcmc.html#cb406-3" tabindex="-1"></a><span class="do">## plot and summarise outputs</span></span>
+<span id="cb406-4"><a href="particle-mcmc.html#cb406-4" tabindex="-1"></a><span class="fu">plot</span>(post)</span></code></pre></div>
+<p><img src="_main_files/figure-html/boot-fullsum1-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="particle-mcmc.html#cb407-1" tabindex="-1"></a><span class="fu">summary</span>(post)</span></code></pre></div>
+<pre><code>## 
+## Iterations = 1:8001
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 8001 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##             Mean      SD  Naive SE Time-series SE
+## beta      2.9938 0.28385 0.0031733        0.01574
+## gamma     1.0457 0.20216 0.0022601        0.01074
+## gamma1    0.4608 0.02824 0.0003157        0.00157
+## logPost -67.0245 1.68719 0.0188622        0.14081
+## 
+## 2. Quantiles for each variable:
+## 
+##             2.5%      25%      50%      75%    97.5%
+## beta      2.5032   2.7964   2.9512   3.1595   3.6210
+## gamma     0.7229   0.9132   1.0140   1.1655   1.5381
+## gamma1    0.4014   0.4410   0.4614   0.4805   0.5113
+## logPost -70.5725 -68.0913 -66.8836 -65.9348 -63.7634</code></pre>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Produce summaries of the posteriors for <span class="math inline">\(R_0\)</span> and the average length of the infectious period.</p>
+<p><infobutton id="displayTextunnamed-chunk-1304" onclick="javascript:toggle('unnamed-chunk-1304');">Show: Hint</infobutton></p>
+<div id="toggleTextunnamed-chunk-1304" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+Pass a <code>transfunc</code> argument to the <code>summary()</code> function. Take a look at the help file for the <code>summary()</code> method for <code>PMCMC</code> objects i.e. <code>?summary.PMCMC</code>.
+</div>
+</div>
+</div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-384" onclick="javascript:toggle(&#39;unnamed-chunk-384&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-384" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb409-1"><a href="particle-mcmc.html#cb409-1" tabindex="-1"></a><span class="do">## function to calculate R0 and length of</span></span>
+<span id="cb409-2"><a href="particle-mcmc.html#cb409-2" tabindex="-1"></a><span class="do">## infectious periods</span></span>
+<span id="cb409-3"><a href="particle-mcmc.html#cb409-3" tabindex="-1"></a>R0fn <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, gamma) {</span>
+<span id="cb409-4"><a href="particle-mcmc.html#cb409-4" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb409-5"><a href="particle-mcmc.html#cb409-5" tabindex="-1"></a>        <span class="at">R0 =</span> beta <span class="sc">/</span> gamma, </span>
+<span id="cb409-6"><a href="particle-mcmc.html#cb409-6" tabindex="-1"></a>        <span class="at">infperiod =</span> <span class="dv">1</span> <span class="sc">/</span> gamma</span>
+<span id="cb409-7"><a href="particle-mcmc.html#cb409-7" tabindex="-1"></a>    )</span>
+<span id="cb409-8"><a href="particle-mcmc.html#cb409-8" tabindex="-1"></a>}</span>
+<span id="cb409-9"><a href="particle-mcmc.html#cb409-9" tabindex="-1"></a></span>
+<span id="cb409-10"><a href="particle-mcmc.html#cb409-10" tabindex="-1"></a><span class="do">## summarise approximate posterior</span></span>
+<span id="cb409-11"><a href="particle-mcmc.html#cb409-11" tabindex="-1"></a><span class="fu">summary</span>(post, <span class="at">transfunc =</span> R0fn)</span></code></pre></div>
+<pre><code>## 
+## Iterations = 1:8001
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 8001 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##               Mean      SD  Naive SE Time-series SE
+## beta        2.9938 0.28385 0.0031733       0.015745
+## gamma       1.0457 0.20216 0.0022601       0.010738
+## gamma1      0.4608 0.02824 0.0003157       0.001570
+## logPost   -67.0245 1.68719 0.0188622       0.140805
+## R0          2.9411 0.48789 0.0054544       0.027875
+## infperiod   0.9909 0.18449 0.0020626       0.009989
+## 
+## 2. Quantiles for each variable:
+## 
+##               2.5%      25%      50%      75%    97.5%
+## beta        2.5032   2.7964   2.9512   3.1595   3.6210
+## gamma       0.7229   0.9132   1.0140   1.1655   1.5381
+## gamma1      0.4014   0.4410   0.4614   0.4805   0.5113
+## logPost   -70.5725 -68.0913 -66.8836 -65.9348 -63.7634
+## R0          2.1230   2.5953   2.9134   3.2148   3.9640
+## infperiod   0.6502   0.8580   0.9862   1.0950   1.3833</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="predictive-posterior-distributions" class="section level2 hasAnchor" number="10.6">
+<h2><span class="header-section-number">10.6</span> Predictive posterior distributions<a href="particle-mcmc.html#predictive-posterior-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can also use the model to predict the future course of an outbreak (with uncertainties). The <code>SimBIID</code> packages provides a <code>predict()</code> method for <code>PMCMC</code> objects. To produce predictions we first fit a model to the current available data. This produces a set of posterior samples for each of the parameters. Then, for each set of posterior samples we can produce an estimate of the states of the system at the final observed time point. We do this by running a bootstrap particle filter over the observed time points for each parameter set, and then sampling a trajectory from the weighted set of particles. Hence we also obtain a set of posterior samples for the states of the system at the final observed time point.</p>
+<p>Once these have been obtained, we can use the corresponding posterior samples to seed a set of forward simulations into the future up to some pre-determined time point. All of this is done within the <code>predict()</code> function; we just need to pass it a suitable <code>PMCMC</code> object and a <code>tspan</code> argument for the time points we wish to predict to.</p>
+<p>As an example, let’s pretend that we are at day 3 of the outbreak, and let’s fit a model to the observed data up to that time point:</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="particle-mcmc.html#cb411-1" tabindex="-1"></a><span class="do">## run PMCMC algorithm</span></span>
+<span id="cb411-2"><a href="particle-mcmc.html#cb411-2" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">PMCMC</span>(</span>
+<span id="cb411-3"><a href="particle-mcmc.html#cb411-3" tabindex="-1"></a>    <span class="at">x =</span> flu_dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, ], </span>
+<span id="cb411-4"><a href="particle-mcmc.html#cb411-4" tabindex="-1"></a>    <span class="at">priors =</span> priors, </span>
+<span id="cb411-5"><a href="particle-mcmc.html#cb411-5" tabindex="-1"></a>    <span class="at">func =</span> model, </span>
+<span id="cb411-6"><a href="particle-mcmc.html#cb411-6" tabindex="-1"></a>    <span class="at">u =</span> iniStates, </span>
+<span id="cb411-7"><a href="particle-mcmc.html#cb411-7" tabindex="-1"></a>    <span class="at">npart =</span> <span class="dv">75</span>, </span>
+<span id="cb411-8"><a href="particle-mcmc.html#cb411-8" tabindex="-1"></a>    <span class="at">niter =</span> <span class="dv">10000</span>, </span>
+<span id="cb411-9"><a href="particle-mcmc.html#cb411-9" tabindex="-1"></a>    <span class="at">nprintsum =</span> <span class="dv">1000</span></span>
+<span id="cb411-10"><a href="particle-mcmc.html#cb411-10" tabindex="-1"></a>)</span>
+<span id="cb411-11"><a href="particle-mcmc.html#cb411-11" tabindex="-1"></a><span class="do">## plot traces</span></span>
+<span id="cb411-12"><a href="particle-mcmc.html#cb411-12" tabindex="-1"></a><span class="fu">plot</span>(post, <span class="st">&quot;trace&quot;</span>)</span></code></pre></div>
+<p>(Output and trace plots suppressed here for brevity…)</p>
+<p>Now let’s predict forward up to day 14, based on the posterior distributions at day 3. To speed this up we will take 1,000 posterior samples. These can be obtained by using the <code>window()</code> function, to remove the first 2,000 iterations as burn-in, and then thin the remaining 8,000 samples by sub-sampling every 8<sup>th</sup> sample. The <code>predict()</code> function produces a <code>SimBIID_runs</code> object, which we can plot as before. Since <code>obsProcess</code> was specified in the model, the <code>predict()</code> function will also produce predictions that take the <strong>observation</strong> process into account. Here the observation process acts only on the <span class="math inline">\(R\)</span> class, and so this will produce an extra column called <code>Iobs</code> here, which contains predictions assuming a Poisson observation error around the simulated <code>R</code> counts (called <code>Robs</code> here which is specified in the <code>datNames</code> column of the original <code>obsProcess</code> object).</p>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="particle-mcmc.html#cb412-1" tabindex="-1"></a><span class="do">## run predictions forward in time</span></span>
+<span id="cb412-2"><a href="particle-mcmc.html#cb412-2" tabindex="-1"></a>post_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">window</span>(post, <span class="at">start =</span> <span class="dv">2000</span>, <span class="at">thin =</span> <span class="dv">8</span>), <span class="at">tspan =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">14</span>)</span>
+<span id="cb412-3"><a href="particle-mcmc.html#cb412-3" tabindex="-1"></a></span>
+<span id="cb412-4"><a href="particle-mcmc.html#cb412-4" tabindex="-1"></a><span class="do">## plot predictions</span></span>
+<span id="cb412-5"><a href="particle-mcmc.html#cb412-5" tabindex="-1"></a><span class="fu">plot</span>(post_pred, <span class="at">quant =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>, <span class="fl">0.9</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/boot-pred1-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>The uncertainties up to the blue dashed line are derived from the bootstrap particle filter, whereas the uncertainties going forward are from direct simulations from the model. Since the <span class="math inline">\(R\)</span> curve can be compared directly to the observed data, we can add the observed data in as additional arguments to the <code>plot()</code> method here. We just have to add an additional <code>matchData</code> argument to tell the function which columns of the data to plot against which output from the model. In this case we pass the complete data to the function, just so that we can see how close the predictions (estimated from the model fitted at the dashed blue time point) were to the actual data. If you were doing this in real time you would only have the data up to the dashed blue time point.</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+The <code>matchData = c("Robs = R")</code> below tells the <code>plot()</code> function to match the column called <code>Robs</code> in the data set to the <code>R</code> class from the simulations. It might be worth plotting the observations against the <code>Robs</code> output from the simulations also, since the simulated <code>Robs</code> curves include the <strong>observation process</strong>.
+</div>
+</div>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="particle-mcmc.html#cb413-1" tabindex="-1"></a><span class="do">## plot predictions and add observed I curve</span></span>
+<span id="cb413-2"><a href="particle-mcmc.html#cb413-2" tabindex="-1"></a><span class="fu">plot</span>(post_pred, <span class="at">quant =</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>, <span class="fl">0.9</span>), </span>
+<span id="cb413-3"><a href="particle-mcmc.html#cb413-3" tabindex="-1"></a>     <span class="at">data =</span> flu_dat, <span class="at">matchData =</span> <span class="fu">c</span>(<span class="st">&quot;Robs = R&quot;</span>, <span class="st">&quot;Robs = Robs&quot;</span>))</span></code></pre></div>
+<pre><code>## Warning: `cols` is now required when using `unnest()`.
+## ℹ Please use `cols = c(value)`.</code></pre>
+<p><img src="_main_files/figure-html/boot-pred3-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Repeat the above procedure, refitting at days 5, 8 and 11. What happens to the uncertainties in the predictions? Why is this so?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-387" onclick="javascript:toggle(&#39;unnamed-chunk-387&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-387" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>Note that I’ve suppressed the fitting and plotting code for brevity.</p>
+<pre><code>## Warning: `cols` is now required when using `unnest()`.
+## ℹ Please use `cols = c(value)`.
+## `cols` is now required when using `unnest()`.
+## ℹ Please use `cols = c(value)`.
+## `cols` is now required when using `unnest()`.
+## ℹ Please use `cols = c(value)`.</code></pre>
+<p><img src="_main_files/figure-html/boot-solpred1-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="_main_files/figure-html/boot-solpred2-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="_main_files/figure-html/boot-solpred3-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>We can see that the uncertainties reduce as we fit to more data and as the epidemic begins to die out. We can also see that the actual observed outbreak is within the main uncertainty bounds for each of the model fits, as long as we take account for the observation process. Here the observation process acts mostly as a means of modelling <strong>underreporting</strong>, and hence the <strong>observed</strong> counts tend to be less than the <strong>simulated</strong> counts (shown here by adding the observed data line to both the <code>R</code> and <code>Robs</code> plots). We can also see that the uncertainties in the forecasts get smaller the more data we fit to and also as the epidemic begins to die out.</p>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-andrieuetal:2010" class="csl-entry">
+Andrieu, Christophe, Arnaud Doucet, and Roman Holenstein. 2010. <span>“Particle Markov Chain Monte Carlo Methods.”</span> <em>Journal of the Royal Statistical Society, Series B (Methodological)</em> 72 (3): 269–342.
+</div>
+<div id="ref-anonymous:1978" class="csl-entry">
+Anonymous. 1978. <span>“Influenza in a Boarding School.”</span> <em>British Medical Journal</em> 1: 578.
+</div>
+<div id="ref-devriesetal:2006" class="csl-entry">
+de Vries, Gerda, Thomas Hillen, Mark Lewis, Johannes Mueller, and Birgitt Schöenfisch. 2006. <em>A Course in Mathematical Biology: Quantitative Modeling with Mathematical and Computational Methods</em>. Society for Industrial; Applied Mathematics.
+</div>
+<div id="ref-funketal:2016" class="csl-entry">
+Funk, Sebastian, Adam J. Kucharski, Anton Camacho, Rosalind M. Eggo, Laith Yakob &amp; Lawrence M. Murray, and W. John Edmunds. 2016. <span>“Comparative Analysis of Dengue and Zika Outbreaks Reveals Differences by Setting and Virus.”</span> <em>PLoS Neglected Tropical Diseases</em> 10 (12): e0005173.
+</div>
+<div id="ref-gordonetal:1993" class="csl-entry">
+Gordon, N. J., D. J. Salmond, and A. F. M. Smith. 1993. <span>“Novel Approach to Nonlinear/Non-Gaussian Bayesian State Estimation.”</span> <em>Radar and Signal Processing, IEE Proceedings F.</em> 140 (2): 107–13. <a href="https://doi.org/10.1049/ip-f-2.1993.0015">https://doi.org/10.1049/ip-f-2.1993.0015</a>.
+</div>
+<div id="ref-ionidesetal:2006" class="csl-entry">
+Ionides, E. L., C. Bretó, and A. A. King. 2006. <span>“Inference for Nonlinear Dynamical Systems.”</span> <em>Proceedings of the National Academy of Sciences USA</em> 103: 18438–43.
+</div>
+<div id="ref-murray:2003" class="csl-entry">
+Murray, J. D. 2003. <em>Mathematical Biology i - an Introduction</em>. 3rd ed. Springer.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="estimating-r_0-using-catalytic-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="estimating-r_0.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

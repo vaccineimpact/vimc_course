@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 Dynamic models—Practical | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="5 Dynamic models—Practical | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 Dynamic models—Practical | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="5 Dynamic models—Practical | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Dynamic models—Practical | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="5 Dynamic models—Practical | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="programmingpractical-2.html"/>
+<link rel="next" href="epi1.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="dynamic-modelspractical" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> Dynamic models—Practical<a href="dynamic-modelspractical.html#dynamic-modelspractical" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="katy-gaythorpe-k.gaythorpeimperial.ac.uk" class="section level2 unlisted unnumbered hasAnchor">
+<h2>Katy Gaythorpe (<a href="mailto:k.gaythorpe@imperial.ac.uk">k.gaythorpe@imperial.ac.uk</a>)<a href="dynamic-modelspractical.html#katy-gaythorpe-k.gaythorpeimperial.ac.uk" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This practical introduces the <code>deSolve</code> package in R.</p>
+</div>
+<div id="a-bit-of-theory" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> A bit of theory<a href="dynamic-modelspractical.html#a-bit-of-theory" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="rationale" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Rationale:<a href="dynamic-modelspractical.html#rationale" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We have discussed the solutions of two differential equations using the fact that we were able to solve them analytically:</p>
+<p><span class="math display">\[
+    \begin{aligned}
+    \frac{dN}{dt} &amp;= rN \rightarrow N(t) = N_{0}e^{rt}  \\
+    \frac{dN}{dt} &amp;= rN\left(1-\frac{N}{K}\right) \rightarrow N(t) = \frac{K}{1+\frac{K-N_{0}}{N_{0}}e^{-rt}}
+    \end{aligned}
+\]</span></p>
+<p>However, most differential equations cannot be solved analytically. For example, with the predation model presented in Dynamic Models Lecture 2, we cannot obtain a mathematical formula giving the number of bacteria (prey) <span class="math inline">\(N(t)\)</span> and amoeba (predators) <span class="math inline">\(P(t)\)</span> as functions of the parameters and initial conditions. Instead we have to resort to numerical methods to obtain approximate values of <span class="math inline">\(N(t)\)</span> and <span class="math inline">\(P(t)\)</span> for any given set of parameter values. Since this is the case for the vast majority of differential equations of interest in science, such numerical methods have been developed for many years and the advent of computers have made them increasingly popular. Throughout this course we will be using a ready-made package in R called <code>deSolve</code> which can solve numerically virtually any system of ordinary differential equations (ODE).</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+In earlier versions of R, the package was called <code>odesolve</code> but worked in the same way.
+</div>
+</div>
+</div>
+<div id="a-few-notes-on-eulers-method" class="section level3 hasAnchor" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> A few notes on Euler’s method<a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Although we will be using <code>deSolve</code> as a black box, for your information here is a very basic introduction to how differential equation solvers work. The general principle was devised by Swiss mathematician <a href="https://en.wikipedia.org/wiki/Leonhard_Euler">Leonhard Euler (1707–1783)</a>. Among many other things, Euler also came up with the fascinating formula <span class="math inline">\(e^{-i\pi} + 1 = 0\)</span>, but that’s another story.</p>
+<p>Here I illustrate the method with a single differential equation, but it can easily be extended to any number. Consider the logistic growth model with an arbitrary choice of parameter values: <span class="math inline">\(dN/dt = 0.5N(1 - N/100)\)</span> and initial condition <span class="math inline">\(N(0) = 1\)</span>.</p>
+<p>The trick is then to ‘discretise’ this equation, i.e. replace the infinitesimal variations of the differential equation by small ‘discrete’ variations. Remember the formal definition of the derivative of a function:
+<span class="math display">\[
+    \frac{dN}{dt} = \lim_{\delta t\rightarrow 0}\frac{N(t+\delta t)-N(t)}{\delta t}
+\]</span></p>
+<p>We then approximate the variations during a small time step <span class="math inline">\(\delta t\)</span> as follows:</p>
+<p><span class="math display">\[
+    \frac{N(t+\delta t)-N(t)}{\delta t} \approx 0.5N(t)\left( 1-\frac{N(t)}{100}\right)
+\]</span></p>
+<p>So, if we know the value of <span class="math inline">\(N(t)\)</span> at a given time <span class="math inline">\(t\)</span>, we can estimate the value at the next time point:</p>
+<p><span class="math display">\[
+    N(t+\delta t) \approx N(t) + 0.5N(t)\left( 1-\frac{N(t)}{100} \right) \delta t
+\]</span>
+If you know the initial density, say <span class="math inline">\(N(0) = 1\)</span>, and you choose <span class="math inline">\(\delta t = 0.1\)</span>, then you can iteratively calculate approximate values of <span class="math inline">\(N(0.1) \approx 1.0495\)</span>, <span class="math inline">\(N(0.2) \approx 1.1014\)</span>, etc. which eventually enables you to reconstruct the numerical solution <span class="math inline">\(N(t)\)</span>.</p>
+<p>The only problem is that <span class="math inline">\(N(0.2)\)</span> is estimated based on an approximate value of <span class="math inline">\(N(0.1)\)</span>, and so on. So, as you iterate the process, you accumulate errors and you run the risk of seeing your ‘numerical solution’ drift away from the true solution.</p>
+<p>Of course, the smaller <span class="math inline">\(\delta t\)</span>, the more accurate the discretisation. See the graph below, where the solid curve is the true solution of the above differential equation (which, in this case, can be solved analytically) and the dots are two ‘discretised solutions’, using <span class="math inline">\(\delta t = 1\)</span> (discs) and <span class="math inline">\(\delta t = 0.5\)</span> (squares):</p>
+<p><img src="Materials/Dynamic_Models/Plots/plot_1.JPG" width="50%" style="display: block; margin: auto;" /></p>
+<p>So, that’s basically what <code>deSolve</code> or any other software does to generate ‘numerical solutions’ of differential equations. They actually use more sophisticated algorithms (but based on the same ‘discretisation’ principle) in order to reduce the potential ‘drift’ from the (unknown) true solution. Different algorithms will perform better on different classes of models, but they are not 100% accurate. One of the most popular class of algorithms for the kind of ODEs used in population dynamics was designed by German mathematicians Runge &amp; Kutta almost 100 years ago.</p>
+</div>
+</div>
+<div id="the-return-of-the-logistic-model" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> The return of the logistic model<a href="dynamic-modelspractical.html#the-return-of-the-logistic-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="load-the-desolve-package" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Load the <code>deSolve</code> package<a href="dynamic-modelspractical.html#load-the-desolve-package" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>But enough theory for now. Let’s shut the bonnet and sit behind the wheel! We’ll start by re-visiting the logistic growth model to get you acquainted with <code>deSolve</code>.</p>
+<p>Launch RStudio. The first thing to do is check whether the <code>deSolve</code> package is already installed, as it does not come with the R base. In RStudio, click on the “Packages” tab in the bottom-right window to see the list of R packages installed on your computer (those with a checked box are not only installed on the computer but currently loaded in your R session so that you can use them). If <code>deSolve</code> is not in the list, click on Install Packages, this opens a window asking you which package you which to install: type <code>deSolve</code> and click on Install (you may be asked first to choose a “Mirror”: find the mirror closest to where you are currently located, and select it). This will download the package from the internet, which means your computer needs to be connected. You only need to do that once on any computer.</p>
+<p><strong>Note</strong>: Instead of using RStudio’s interface, you can type the following instructions in the console: <code>library()</code> will open a window with the list of installed packages. If <code>deSolve</code> is not there, close the window, return to the R console and type: <code>install.packages('deSolve')</code>.</p>
+<p>Once a package is installed on a computer, you still need to tell R to load the package into the memory every time you start a new session. In RStudio you can do that by checking the box of the package in the Packages window, but if you need to use the package in a script file, it is safer to type the command <code>library(deSolve)</code>.</p>
+<p>We’re now ready to start. Open a new script file for this practical code, write some comments (starting with a <code>#</code>) that will remind you what’s in this file next time you open it, and type the first instruction:</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="dynamic-modelspractical.html#cb260-1" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span></code></pre></div>
+<p><strong>REMEMBER TO SAVE YOUR FILE REGULARLY</strong></p>
+</div>
+<div id="define-the-model" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Define the model<a href="dynamic-modelspractical.html#define-the-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>First, we must define a function <code>logistic_dyn()</code> that returns the value of the derivative <span class="math inline">\(dN/dt\)</span>, in this case <span class="math inline">\(rN(1 - N/K)\)</span>, given the values of <span class="math inline">\(r\)</span>, <span class="math inline">\(K\)</span> and <span class="math inline">\(N\)</span>. This function will be used by the differential equation solver to generate the numerical solution <span class="math inline">\(N(t)\)</span>, so we have to follow specific rules set by the authors of the <code>deSolve</code> package:</p>
+<ul>
+<li>The function that defined the derivative must take three arguments:
+<ul>
+<li>time,</li>
+<li>a vector containing the values of the variables (in this case a single variable <span class="math inline">\(N\)</span>), and</li>
+<li>a vector of parameter values (in this case two parameters <span class="math inline">\(r\)</span> and <span class="math inline">\(K\)</span>).</li>
+</ul></li>
+<li>The function must return a list containing the value(s) of the derivative(s).</li>
+</ul>
+<p>Note that the name of the function, <code>logistic_dyn</code>, is arbitrary; you may call it anything you like. Type the following code in your script file:</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="dynamic-modelspractical.html#cb261-1" tabindex="-1"></a><span class="co">#This function calculates dN/dt for the logistic model</span></span>
+<span id="cb261-2"><a href="dynamic-modelspractical.html#cb261-2" tabindex="-1"></a></span>
+<span id="cb261-3"><a href="dynamic-modelspractical.html#cb261-3" tabindex="-1"></a>logistic_dyn <span class="ot">&lt;-</span> <span class="cf">function</span>(t, N, par){</span>
+<span id="cb261-4"><a href="dynamic-modelspractical.html#cb261-4" tabindex="-1"></a>    <span class="co">#rename the parameters</span></span>
+<span id="cb261-5"><a href="dynamic-modelspractical.html#cb261-5" tabindex="-1"></a>    r <span class="ot">&lt;-</span> par[<span class="dv">1</span>]</span>
+<span id="cb261-6"><a href="dynamic-modelspractical.html#cb261-6" tabindex="-1"></a>    K <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
+<span id="cb261-7"><a href="dynamic-modelspractical.html#cb261-7" tabindex="-1"></a>    <span class="co">#calculate the derivative</span></span>
+<span id="cb261-8"><a href="dynamic-modelspractical.html#cb261-8" tabindex="-1"></a>    dN <span class="ot">&lt;-</span> r<span class="sc">*</span>N<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>N<span class="sc">/</span>K)</span>
+<span id="cb261-9"><a href="dynamic-modelspractical.html#cb261-9" tabindex="-1"></a>    <span class="co">#last instruction: return a list</span></span>
+<span id="cb261-10"><a href="dynamic-modelspractical.html#cb261-10" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(dN))</span>
+<span id="cb261-11"><a href="dynamic-modelspractical.html#cb261-11" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note that before calculating the derivative, I defined a few local variables <span class="math inline">\(r\)</span>, <span class="math inline">\(K\)</span> and <span class="math inline">\(dN\)</span> (which only ‘exist’ inside the function, so they do not appear in the Workspace) for convenience. A shorter version of the function, without local variables, would be:</p>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="dynamic-modelspractical.html#cb262-1" tabindex="-1"></a>logistic_dyn <span class="ot">&lt;-</span> <span class="cf">function</span>(t, N, par) {</span>
+<span id="cb262-2"><a href="dynamic-modelspractical.html#cb262-2" tabindex="-1"></a>    <span class="fu">list</span>(par[<span class="dv">1</span>]<span class="sc">*</span>N<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>N<span class="sc">/</span>par[<span class="dv">2</span>]))</span>
+<span id="cb262-3"><a href="dynamic-modelspractical.html#cb262-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>but you’ll probably agree that it is less easy to read for a human being. The only case when you should favour the latter version is when speed (or memory) is an issue.</p>
+<p>Next, create three variables:</p>
+<ul>
+<li><p>a vector of parameter values (2 values in the order specified in <code>logistic_dyn</code>: <span class="math inline">\(r\)</span> first and <span class="math inline">\(K\)</span> second):</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="dynamic-modelspractical.html#cb263-1" tabindex="-1"></a>logistic_par <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">100</span>)</span></code></pre></div></li>
+<li><p>a vector of time steps at which we want values of <span class="math inline">\(N\)</span> (note that <code>deSolve</code> automatically computes many intermediate time steps as explained in the preamble):</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="dynamic-modelspractical.html#cb264-1" tabindex="-1"></a>logistic_t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="fl">0.1</span>)</span></code></pre></div></li>
+<li><p>the initial state of the system (in this case just the value of <span class="math inline">\(N_{0}\)</span>):</p>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="dynamic-modelspractical.html#cb265-1" tabindex="-1"></a>logistic_init <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div></li>
+</ul>
+<p>We can then feed all that into a function called <code>lsoda()</code>, which is the only function from the <code>deSolve</code> package that we’re going to use, and store the result into a variable:</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="dynamic-modelspractical.html#cb266-1" tabindex="-1"></a>logistic_sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(logistic_init, logistic_t, logistic_dyn, logistic_par)</span></code></pre></div>
+<p>Save your file and run all your code so far (click on Source in the top right corner of the script window). In the Workspace window, you should now see the variables you’ve defined under Values, or your new function <code>logistic_dyn</code>, under Functions. To visualise the contents of the function, click on its name in the Workspace window, or type <code>fix(logistic_dyn)</code> in the Console: this opens a separate window that you must remember to close before you can re-gain access to the command line. You can also look at the contents of the matrix <code>logistic_sol</code> in the same way: the first column is your <code>logistic_t</code> vector (i.e. the time steps) and the second column contains the corresponding values of <span class="math inline">\(N(t)\)</span>.</p>
+</div>
+<div id="namedpars" class="section level3 hasAnchor" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Version with named parameters<a href="dynamic-modelspractical.html#namedpars" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A feature of R that can make your life a bit easier when using <code>lsoda()</code> is the ability to name the elements of a vector. When we defined <code>logistic_par</code> earlier, we had to remember that the first element must be <span class="math inline">\(r\)</span> and the second one <span class="math inline">\(K\)</span>. Not too bad with only two parameters, but it can be more of an issue with higher numbers of variables and parameters, as we’ll see next in the next part.</p>
+<p>Here is an alternative version of the function <code>logistic_dyn</code> which assumes that the third argument, <code>param</code>, is a vector whose elements are named <span class="math inline">\(r\)</span> and <span class="math inline">\(K\)</span>:</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="dynamic-modelspractical.html#cb267-1" tabindex="-1"></a><span class="co"># Calculate the derivative dN/dt using a named vector as its third argument</span></span>
+<span id="cb267-2"><a href="dynamic-modelspractical.html#cb267-2" tabindex="-1"></a>named_logistic_dyn <span class="ot">&lt;-</span> <span class="cf">function</span>(t,N,par) {</span>
+<span id="cb267-3"><a href="dynamic-modelspractical.html#cb267-3" tabindex="-1"></a>    <span class="co"># Tell R to use the names of the elements of par (r and K)</span></span>
+<span id="cb267-4"><a href="dynamic-modelspractical.html#cb267-4" tabindex="-1"></a>    <span class="fu">with</span>(<span class="fu">as.list</span>(par),{</span>
+<span id="cb267-5"><a href="dynamic-modelspractical.html#cb267-5" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">list</span>(r<span class="sc">*</span>N<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>N<span class="sc">/</span>K)))</span>
+<span id="cb267-6"><a href="dynamic-modelspractical.html#cb267-6" tabindex="-1"></a>    })</span>
+<span id="cb267-7"><a href="dynamic-modelspractical.html#cb267-7" tabindex="-1"></a>}</span></code></pre></div>
+<p>The syntax is a bit complicated because we have to tell R that <span class="math inline">\(r\)</span> and <span class="math inline">\(K\)</span> (which are undefined symbols) will actually be defined within <code>par</code>. That’s the role of the <code>with(x,{...})</code> statement. A further complication is that <code>with(x,{...})</code> only works with a named list as its first argument, not a named vector, which is why we wrote <code>with(as.list(par),{...})</code>. As a result, every instruction that comes inside <code>{</code> <code>}</code> in the second argument of <code>with(x,{...})</code> can make use of the names of the elements of <code>par</code>.</p>
+<p>Once the function <code>named_logistic_dyn</code> has been defined, it can only be used with a named vector as a third argument. So, in our case, we must define a new vector:</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="dynamic-modelspractical.html#cb268-1" tabindex="-1"></a>named_logistic_par <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">r=</span><span class="dv">1</span>, <span class="at">K=</span><span class="dv">100</span>)</span></code></pre></div>
+<p>Then you can use <code>lsoda</code> as follows:</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="dynamic-modelspractical.html#cb269-1" tabindex="-1"></a>named_logistic_sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(logistic_init,</span>
+<span id="cb269-2"><a href="dynamic-modelspractical.html#cb269-2" tabindex="-1"></a>                            logistic_t,</span>
+<span id="cb269-3"><a href="dynamic-modelspractical.html#cb269-3" tabindex="-1"></a>                            named_logistic_dyn,</span>
+<span id="cb269-4"><a href="dynamic-modelspractical.html#cb269-4" tabindex="-1"></a>                            named_logistic_par)</span></code></pre></div>
+<p>This will give you exactly the same result as <code>logistic_sol</code> above. So, with this method, you don’t need to remember the order of the parameters in the function that calculated the derivative, but you need to remember their names.</p>
+</div>
+<div id="plot-the-dynamics" class="section level3 hasAnchor" number="5.2.4">
+<h3><span class="header-section-number">5.2.4</span> Plot the dynamics<a href="dynamic-modelspractical.html#plot-the-dynamics" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The next step is to plot the dynamics of <span class="math inline">\(N(t)\)</span> using the contents of <code>logistic_sol</code>:</p>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="dynamic-modelspractical.html#cb270-1" tabindex="-1"></a><span class="fu">plot</span>(logistic_sol[,<span class="dv">1</span>], logistic_sol[,<span class="dv">2</span>], <span class="at">type=</span><span class="st">&#39;l&#39;</span>, </span>
+<span id="cb270-2"><a href="dynamic-modelspractical.html#cb270-2" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&#39;Logistic growth&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;t&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;N&#39;</span>)</span>
+<span id="cb270-3"><a href="dynamic-modelspractical.html#cb270-3" tabindex="-1"></a></span>
+<span id="cb270-4"><a href="dynamic-modelspractical.html#cb270-4" tabindex="-1"></a><span class="co"># Just to check, you can superimpose the graph of the</span></span>
+<span id="cb270-5"><a href="dynamic-modelspractical.html#cb270-5" tabindex="-1"></a><span class="co"># analytical solution of the logistic growth model</span></span>
+<span id="cb270-6"><a href="dynamic-modelspractical.html#cb270-6" tabindex="-1"></a></span>
+<span id="cb270-7"><a href="dynamic-modelspractical.html#cb270-7" tabindex="-1"></a><span class="fu">points</span>(logistic_t, <span class="dv">100</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> (<span class="dv">100</span> <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>logistic_t)), <span class="at">col =</span> <span class="st">&#39;red&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-197-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Now plot a few more graphs with different parameter values (re-define <code>logistic_par</code>) or different initial values (<code>logistic_int</code>).
+</div>
+</div>
+</div>
+</div>
+<div id="the-revenge-of-the-amoeba" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> The revenge of the amoeba<a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="code-the-model" class="section level3 hasAnchor" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Code the model<a href="dynamic-modelspractical.html#code-the-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We’ll follow the template described in the previous section, starting with the core function that calculates <span class="math inline">\(dN/dt\)</span> and <span class="math inline">\(dP/dt\)</span>. The only difference is that we now have 2 variables, so the function must return a list of two derivatives. There are 5 parameters, so you must be extra careful with the order in which you store them in the vector. To be safe, we’ll enter them in alphabetical order:</p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="dynamic-modelspractical.html#cb271-1" tabindex="-1"></a><span class="co"># Definition of the predation model</span></span>
+<span id="cb271-2"><a href="dynamic-modelspractical.html#cb271-2" tabindex="-1"></a>predation_dyn <span class="ot">&lt;-</span> <span class="cf">function</span>(t,var,par) {</span>
+<span id="cb271-3"><a href="dynamic-modelspractical.html#cb271-3" tabindex="-1"></a>    a <span class="ot">&lt;-</span> par[<span class="dv">1</span>]</span>
+<span id="cb271-4"><a href="dynamic-modelspractical.html#cb271-4" tabindex="-1"></a>    b <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
+<span id="cb271-5"><a href="dynamic-modelspractical.html#cb271-5" tabindex="-1"></a>    d <span class="ot">&lt;-</span> par[<span class="dv">3</span>]</span>
+<span id="cb271-6"><a href="dynamic-modelspractical.html#cb271-6" tabindex="-1"></a>    K <span class="ot">&lt;-</span> par[<span class="dv">4</span>]</span>
+<span id="cb271-7"><a href="dynamic-modelspractical.html#cb271-7" tabindex="-1"></a>    r <span class="ot">&lt;-</span> par[<span class="dv">5</span>]</span>
+<span id="cb271-8"><a href="dynamic-modelspractical.html#cb271-8" tabindex="-1"></a>    N <span class="ot">&lt;-</span> var[<span class="dv">1</span>]</span>
+<span id="cb271-9"><a href="dynamic-modelspractical.html#cb271-9" tabindex="-1"></a>    P <span class="ot">&lt;-</span> var[<span class="dv">2</span>]</span>
+<span id="cb271-10"><a href="dynamic-modelspractical.html#cb271-10" tabindex="-1"></a>    <span class="co"># Derivatives</span></span>
+<span id="cb271-11"><a href="dynamic-modelspractical.html#cb271-11" tabindex="-1"></a>    dN <span class="ot">&lt;-</span> r<span class="sc">*</span>N<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>N<span class="sc">/</span>K)<span class="sc">-</span>a<span class="sc">*</span>N<span class="sc">*</span>P</span>
+<span id="cb271-12"><a href="dynamic-modelspractical.html#cb271-12" tabindex="-1"></a>    dP <span class="ot">&lt;-</span> <span class="sc">-</span>d<span class="sc">*</span>P<span class="sc">+</span>b<span class="sc">*</span>N<span class="sc">*</span>P</span>
+<span id="cb271-13"><a href="dynamic-modelspractical.html#cb271-13" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="fu">c</span>(dN,dP)))</span>
+<span id="cb271-14"><a href="dynamic-modelspractical.html#cb271-14" tabindex="-1"></a>}</span>
+<span id="cb271-15"><a href="dynamic-modelspractical.html#cb271-15" tabindex="-1"></a></span>
+<span id="cb271-16"><a href="dynamic-modelspractical.html#cb271-16" tabindex="-1"></a><span class="co"># Parameter values, initial variables values and the vector of time values:</span></span>
+<span id="cb271-17"><a href="dynamic-modelspractical.html#cb271-17" tabindex="-1"></a>predation_par <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a=</span><span class="fl">0.02</span>, <span class="at">b=</span><span class="fl">0.01</span>, <span class="at">d=</span><span class="fl">0.3</span>, <span class="at">K=</span><span class="dv">100</span>, <span class="at">r=</span><span class="dv">1</span>)</span>
+<span id="cb271-18"><a href="dynamic-modelspractical.html#cb271-18" tabindex="-1"></a>predation_init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">N=</span><span class="dv">100</span>, <span class="at">P=</span><span class="dv">1</span>)</span>
+<span id="cb271-19"><a href="dynamic-modelspractical.html#cb271-19" tabindex="-1"></a>predation_t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">40</span>,<span class="fl">0.2</span>)</span>
+<span id="cb271-20"><a href="dynamic-modelspractical.html#cb271-20" tabindex="-1"></a></span>
+<span id="cb271-21"><a href="dynamic-modelspractical.html#cb271-21" tabindex="-1"></a><span class="co"># Numerical solution</span></span>
+<span id="cb271-22"><a href="dynamic-modelspractical.html#cb271-22" tabindex="-1"></a>predation_sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(predation_init,</span>
+<span id="cb271-23"><a href="dynamic-modelspractical.html#cb271-23" tabindex="-1"></a>                       predation_t,</span>
+<span id="cb271-24"><a href="dynamic-modelspractical.html#cb271-24" tabindex="-1"></a>                       predation_dyn,</span>
+<span id="cb271-25"><a href="dynamic-modelspractical.html#cb271-25" tabindex="-1"></a>                       predation_par)</span></code></pre></div>
+<p>The resulting matrix has 3 columns: <code>predation_sol[,1]</code> contains the time points, <code>predation_sol[,2]</code> the values of <span class="math inline">\(N\)</span> and <code>predation_sol[,3]</code> the values of <span class="math inline">\(P\)</span>.</p>
+<p>Once again, we only defined the local variables <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(d\)</span>, etc. to make it easier to read the code and spot any mistakes. But we could write a more concise version using only <code>par[1]</code>, <code>par[2]</code>, etc. instead. Alternatively, you could use <code>with(as.list(c(par,var)),{ ... })</code> as we saw <a href="dynamic-modelspractical.html#namedpars">above</a>.</p>
+</div>
+<div id="plot-some-graphs" class="section level3 hasAnchor" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Plot some graphs<a href="dynamic-modelspractical.html#plot-some-graphs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Since we have two variables in this model, we can generate more diverse graphs. You should now be getting familiar with plotting instructions, so I’ll let you work out how to produce the following graphs.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Plot <span class="math inline">\(N(t)\)</span> and <span class="math inline">\(P(t)\)</span> against time, together on a graph, using <code>plot()</code>, <code>lines()</code> and <code>legend()</code>.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-201" onclick="javascript:toggle(&#39;unnamed-chunk-201&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-201" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="dynamic-modelspractical.html#cb272-1" tabindex="-1"></a><span class="co"># plot the first line using `plot()`</span></span>
+<span id="cb272-2"><a href="dynamic-modelspractical.html#cb272-2" tabindex="-1"></a><span class="fu">plot</span>(predation_sol[,<span class="dv">1</span>], predation_sol[,<span class="dv">2</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">main=</span><span class="st">&#39;Predation model&#39;</span>, </span>
+<span id="cb272-3"><a href="dynamic-modelspractical.html#cb272-3" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&#39;t&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;N.P&#39;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb272-4"><a href="dynamic-modelspractical.html#cb272-4" tabindex="-1"></a></span>
+<span id="cb272-5"><a href="dynamic-modelspractical.html#cb272-5" tabindex="-1"></a><span class="co"># plot the second line using `lines()`</span></span>
+<span id="cb272-6"><a href="dynamic-modelspractical.html#cb272-6" tabindex="-1"></a><span class="fu">lines</span>(predation_sol[,<span class="dv">1</span>], predation_sol[,<span class="dv">3</span>], <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb272-7"><a href="dynamic-modelspractical.html#cb272-7" tabindex="-1"></a></span>
+<span id="cb272-8"><a href="dynamic-modelspractical.html#cb272-8" tabindex="-1"></a><span class="co"># add legend using `legend()`</span></span>
+<span id="cb272-9"><a href="dynamic-modelspractical.html#cb272-9" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">25</span>, <span class="dv">95</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Prey, N&quot;</span>, <span class="st">&quot;Predator, P&quot;</span>),</span>
+<span id="cb272-10"><a href="dynamic-modelspractical.html#cb272-10" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">cex=</span><span class="fl">0.8</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-815-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Plot <span class="math inline">\(N\)</span> and <span class="math inline">\(P\)</span> in the phase plane. Use the notes from Lecture 2 to find the equations of the nullclines, and draw them using <code>abline()</code>. Finally add the equilibrium points.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-203" onclick="javascript:toggle(&#39;unnamed-chunk-203&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-203" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="dynamic-modelspractical.html#cb273-1" tabindex="-1"></a><span class="fu">plot</span>(predation_sol[,<span class="dv">2</span>], predation_sol[,<span class="dv">3</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, </span>
+<span id="cb273-2"><a href="dynamic-modelspractical.html#cb273-2" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&#39;Predation model&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;N&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;P&#39;</span>, </span>
+<span id="cb273-3"><a href="dynamic-modelspractical.html#cb273-3" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">45</span>), <span class="at">col =</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb273-4"><a href="dynamic-modelspractical.html#cb273-4" tabindex="-1"></a></span>
+<span id="cb273-5"><a href="dynamic-modelspractical.html#cb273-5" tabindex="-1"></a><span class="co"># N = 0</span></span>
+<span id="cb273-6"><a href="dynamic-modelspractical.html#cb273-6" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb273-7"><a href="dynamic-modelspractical.html#cb273-7" tabindex="-1"></a></span>
+<span id="cb273-8"><a href="dynamic-modelspractical.html#cb273-8" tabindex="-1"></a><span class="co"># P = 0</span></span>
+<span id="cb273-9"><a href="dynamic-modelspractical.html#cb273-9" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb273-10"><a href="dynamic-modelspractical.html#cb273-10" tabindex="-1"></a></span>
+<span id="cb273-11"><a href="dynamic-modelspractical.html#cb273-11" tabindex="-1"></a><span class="co"># P = (r/a) - (rN/Ka)</span></span>
+<span id="cb273-12"><a href="dynamic-modelspractical.html#cb273-12" tabindex="-1"></a>intercept <span class="ot">=</span> predation_par[<span class="st">&quot;r&quot;</span>]<span class="sc">/</span>predation_par[<span class="st">&quot;a&quot;</span>]</span>
+<span id="cb273-13"><a href="dynamic-modelspractical.html#cb273-13" tabindex="-1"></a>slope <span class="ot">=</span> <span class="sc">-</span>predation_par[<span class="st">&quot;r&quot;</span>]<span class="sc">/</span>(predation_par[<span class="st">&quot;K&quot;</span>]<span class="sc">*</span>predation_par[<span class="st">&quot;a&quot;</span>])</span>
+<span id="cb273-14"><a href="dynamic-modelspractical.html#cb273-14" tabindex="-1"></a></span>
+<span id="cb273-15"><a href="dynamic-modelspractical.html#cb273-15" tabindex="-1"></a><span class="fu">abline</span>(intercept, slope, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb273-16"><a href="dynamic-modelspractical.html#cb273-16" tabindex="-1"></a></span>
+<span id="cb273-17"><a href="dynamic-modelspractical.html#cb273-17" tabindex="-1"></a><span class="co"># equilibrium points</span></span>
+<span id="cb273-18"><a href="dynamic-modelspractical.html#cb273-18" tabindex="-1"></a><span class="fu">points</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">cex =</span> <span class="dv">2</span>)</span>
+<span id="cb273-19"><a href="dynamic-modelspractical.html#cb273-19" tabindex="-1"></a><span class="fu">points</span>(predation_par[<span class="st">&quot;K&quot;</span>], <span class="dv">0</span>, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">cex =</span> <span class="dv">2</span>)</span>
+<span id="cb273-20"><a href="dynamic-modelspractical.html#cb273-20" tabindex="-1"></a><span class="fu">points</span>(</span>
+<span id="cb273-21"><a href="dynamic-modelspractical.html#cb273-21" tabindex="-1"></a>    <span class="at">x =</span> predation_par[<span class="st">&quot;d&quot;</span>]<span class="sc">/</span>predation_par[<span class="st">&quot;b&quot;</span>],</span>
+<span id="cb273-22"><a href="dynamic-modelspractical.html#cb273-22" tabindex="-1"></a>    <span class="at">y =</span> (predation_par[<span class="st">&quot;r&quot;</span>]<span class="sc">/</span>predation_par[<span class="st">&quot;a&quot;</span>]) <span class="sc">-</span></span>
+<span id="cb273-23"><a href="dynamic-modelspractical.html#cb273-23" tabindex="-1"></a>        ((predation_par[<span class="st">&quot;r&quot;</span>]<span class="sc">*</span>predation_par[<span class="st">&quot;d&quot;</span>])<span class="sc">/</span></span>
+<span id="cb273-24"><a href="dynamic-modelspractical.html#cb273-24" tabindex="-1"></a>             (predation_par[<span class="st">&quot;a&quot;</span>]<span class="sc">*</span>predation_par[<span class="st">&quot;b&quot;</span>]<span class="sc">*</span>predation_par[<span class="st">&quot;K&quot;</span>])),</span>
+<span id="cb273-25"><a href="dynamic-modelspractical.html#cb273-25" tabindex="-1"></a>    <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb273-26"><a href="dynamic-modelspractical.html#cb273-26" tabindex="-1"></a>    <span class="at">cex =</span> <span class="dv">2</span></span>
+<span id="cb273-27"><a href="dynamic-modelspractical.html#cb273-27" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-821-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="discussion-and-further-investigations" class="section level3 hasAnchor" number="5.3.3">
+<h3><span class="header-section-number">5.3.3</span> Discussion and further investigations<a href="dynamic-modelspractical.html#discussion-and-further-investigations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>The model has three equilibrium points, determined by the values of the parameters. In the example above, the dynamics converged to the equilibrium point where the prey and predator coexist.</p>
+<ol style="list-style-type: decimal">
+<li>Do you think it would be possible to reach another equilibrium point from different initial conditions?</li>
+<li>What do the dynamics look like if we start from <span class="math inline">\(N(0) = 1\)</span> and <span class="math inline">\(P(0) = 100\)</span>?
+</div>
+</div></li>
+</ol>
+<button id="displayTextunnamed-chunk-205" onclick="javascript:toggle(&#39;unnamed-chunk-205&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-205" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<ol style="list-style-type: decimal">
+<li><p>Only if you started at another equilibrium point, otherwise this equilibrium is globally stable and will attract all trajectories.</p></li>
+<li><div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="dynamic-modelspractical.html#cb274-1" tabindex="-1"></a>predation_init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">N=</span><span class="dv">1</span>, <span class="at">P=</span><span class="dv">100</span>)</span>
+<span id="cb274-2"><a href="dynamic-modelspractical.html#cb274-2" tabindex="-1"></a></span>
+<span id="cb274-3"><a href="dynamic-modelspractical.html#cb274-3" tabindex="-1"></a><span class="co"># Numerical solution</span></span>
+<span id="cb274-4"><a href="dynamic-modelspractical.html#cb274-4" tabindex="-1"></a>predation_sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(predation_init,</span>
+<span id="cb274-5"><a href="dynamic-modelspractical.html#cb274-5" tabindex="-1"></a>                       predation_t,</span>
+<span id="cb274-6"><a href="dynamic-modelspractical.html#cb274-6" tabindex="-1"></a>                       predation_dyn,</span>
+<span id="cb274-7"><a href="dynamic-modelspractical.html#cb274-7" tabindex="-1"></a>                       predation_par)</span>
+<span id="cb274-8"><a href="dynamic-modelspractical.html#cb274-8" tabindex="-1"></a></span>
+<span id="cb274-9"><a href="dynamic-modelspractical.html#cb274-9" tabindex="-1"></a><span class="co"># plot the first line using `plot()`</span></span>
+<span id="cb274-10"><a href="dynamic-modelspractical.html#cb274-10" tabindex="-1"></a><span class="fu">plot</span>(predation_sol[,<span class="dv">1</span>], predation_sol[,<span class="dv">2</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, </span>
+<span id="cb274-11"><a href="dynamic-modelspractical.html#cb274-11" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&#39;Predation model&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;t&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;N.P&#39;</span>, </span>
+<span id="cb274-12"><a href="dynamic-modelspractical.html#cb274-12" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb274-13"><a href="dynamic-modelspractical.html#cb274-13" tabindex="-1"></a></span>
+<span id="cb274-14"><a href="dynamic-modelspractical.html#cb274-14" tabindex="-1"></a><span class="co"># plot the second line using `lines()`</span></span>
+<span id="cb274-15"><a href="dynamic-modelspractical.html#cb274-15" tabindex="-1"></a><span class="fu">lines</span>(predation_sol[,<span class="dv">1</span>], predation_sol[,<span class="dv">3</span>], <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb274-16"><a href="dynamic-modelspractical.html#cb274-16" tabindex="-1"></a></span>
+<span id="cb274-17"><a href="dynamic-modelspractical.html#cb274-17" tabindex="-1"></a><span class="co"># add legend using `legend()`</span></span>
+<span id="cb274-18"><a href="dynamic-modelspractical.html#cb274-18" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">25</span>, <span class="dv">95</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Prey, N&quot;</span>, <span class="st">&quot;Predator, P&quot;</span>),</span>
+<span id="cb274-19"><a href="dynamic-modelspractical.html#cb274-19" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">cex=</span><span class="fl">0.8</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-827-1.png" width="480" style="display: block; margin: auto;" /></p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+Is that what you expected from a biological point of view?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-207" onclick="javascript:toggle(&#39;unnamed-chunk-207&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-207" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+Hopefully! No food for the predators but because this is deterministic, the populations still reach the equilibrium.
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+What limitations of the model does this suggest?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-209" onclick="javascript:toggle(&#39;unnamed-chunk-209&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-209" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+No stochastic die out.
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Observe the effects of changing values of <span class="math inline">\(b\)</span> and <span class="math inline">\(d\)</span> on the equilibrium points and the dynamics. What happens if <span class="math inline">\(d &gt; bK\)</span>?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-211" onclick="javascript:toggle(&#39;unnamed-chunk-211&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-211" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>In the below figure, <span class="math inline">\(b = 0.02\)</span> and <span class="math inline">\(d = 0.01\)</span>. We can see that the prey population essentially dies out. This changes the stability of the equilibrium points so that the stable equilibrium is the one with both populations nead <span class="math inline">\(0\)</span>.</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="dynamic-modelspractical.html#cb275-1" tabindex="-1"></a>predation_par <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a=</span><span class="fl">0.01</span>, <span class="at">b=</span><span class="fl">0.02</span>, <span class="at">d=</span><span class="fl">0.3</span>, <span class="at">K=</span><span class="dv">100</span>, <span class="at">r=</span><span class="dv">1</span>)</span>
+<span id="cb275-2"><a href="dynamic-modelspractical.html#cb275-2" tabindex="-1"></a>predation_init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">N=</span><span class="dv">100</span>, <span class="at">P=</span><span class="dv">1</span>)</span>
+<span id="cb275-3"><a href="dynamic-modelspractical.html#cb275-3" tabindex="-1"></a>predation_t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">40</span>,<span class="fl">0.2</span>)</span>
+<span id="cb275-4"><a href="dynamic-modelspractical.html#cb275-4" tabindex="-1"></a></span>
+<span id="cb275-5"><a href="dynamic-modelspractical.html#cb275-5" tabindex="-1"></a><span class="co"># Numerical solution</span></span>
+<span id="cb275-6"><a href="dynamic-modelspractical.html#cb275-6" tabindex="-1"></a>predation_sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(predation_init,</span>
+<span id="cb275-7"><a href="dynamic-modelspractical.html#cb275-7" tabindex="-1"></a>                       predation_t,</span>
+<span id="cb275-8"><a href="dynamic-modelspractical.html#cb275-8" tabindex="-1"></a>                       predation_dyn,</span>
+<span id="cb275-9"><a href="dynamic-modelspractical.html#cb275-9" tabindex="-1"></a>                       predation_par)</span>
+<span id="cb275-10"><a href="dynamic-modelspractical.html#cb275-10" tabindex="-1"></a></span>
+<span id="cb275-11"><a href="dynamic-modelspractical.html#cb275-11" tabindex="-1"></a><span class="co"># plot the first line using `plot()`</span></span>
+<span id="cb275-12"><a href="dynamic-modelspractical.html#cb275-12" tabindex="-1"></a><span class="fu">plot</span>(predation_sol[,<span class="dv">1</span>], predation_sol[,<span class="dv">3</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, </span>
+<span id="cb275-13"><a href="dynamic-modelspractical.html#cb275-13" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&#39;Predation model&#39;</span>, <span class="at">xlab=</span><span class="st">&#39;t&#39;</span>, <span class="at">ylab=</span><span class="st">&#39;N.P&#39;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb275-14"><a href="dynamic-modelspractical.html#cb275-14" tabindex="-1"></a></span>
+<span id="cb275-15"><a href="dynamic-modelspractical.html#cb275-15" tabindex="-1"></a><span class="co"># plot the second line using `lines()`</span></span>
+<span id="cb275-16"><a href="dynamic-modelspractical.html#cb275-16" tabindex="-1"></a><span class="fu">lines</span>(predation_sol[,<span class="dv">1</span>], predation_sol[,<span class="dv">2</span>], <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb275-17"><a href="dynamic-modelspractical.html#cb275-17" tabindex="-1"></a></span>
+<span id="cb275-18"><a href="dynamic-modelspractical.html#cb275-18" tabindex="-1"></a><span class="co"># add legend using `legend()`</span></span>
+<span id="cb275-19"><a href="dynamic-modelspractical.html#cb275-19" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">25</span>, <span class="dv">160</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;Prey, N&quot;</span>, <span class="st">&quot;Predator, P&quot;</span>),</span>
+<span id="cb275-20"><a href="dynamic-modelspractical.html#cb275-20" tabindex="-1"></a>       <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="at">lty=</span><span class="dv">1</span>, <span class="at">cex=</span><span class="fl">0.8</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-841-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Change the values of <span class="math inline">\(b\)</span> and <span class="math inline">\(d\)</span> simultaneously so that the ratio <span class="math inline">\(b/d\)</span> remains contant. What do you notice?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-213" onclick="javascript:toggle(&#39;unnamed-chunk-213&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-213" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="dynamic-modelspractical.html#cb276-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb276-2"><a href="dynamic-modelspractical.html#cb276-2" tabindex="-1"></a></span>
+<span id="cb276-3"><a href="dynamic-modelspractical.html#cb276-3" tabindex="-1"></a>b_vec <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>)</span>
+<span id="cb276-4"><a href="dynamic-modelspractical.html#cb276-4" tabindex="-1"></a>d_vec <span class="ot">=</span> b_vec<span class="sc">/</span>(<span class="fl">0.01</span><span class="sc">/</span><span class="fl">0.3</span>)</span>
+<span id="cb276-5"><a href="dynamic-modelspractical.html#cb276-5" tabindex="-1"></a></span>
+<span id="cb276-6"><a href="dynamic-modelspractical.html#cb276-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) {</span>
+<span id="cb276-7"><a href="dynamic-modelspractical.html#cb276-7" tabindex="-1"></a>    predation_par <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">a=</span><span class="fl">0.02</span>, <span class="at">b=</span>b_vec[i], <span class="at">d=</span>d_vec[i], <span class="at">K=</span><span class="dv">100</span>, <span class="at">r=</span><span class="dv">1</span>)</span>
+<span id="cb276-8"><a href="dynamic-modelspractical.html#cb276-8" tabindex="-1"></a>    predation_init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">N=</span><span class="dv">100</span>, <span class="at">P=</span><span class="dv">1</span>)</span>
+<span id="cb276-9"><a href="dynamic-modelspractical.html#cb276-9" tabindex="-1"></a>    predation_t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">40</span>,<span class="fl">0.2</span>)</span>
+<span id="cb276-10"><a href="dynamic-modelspractical.html#cb276-10" tabindex="-1"></a>    </span>
+<span id="cb276-11"><a href="dynamic-modelspractical.html#cb276-11" tabindex="-1"></a>    <span class="co"># Numerical solution</span></span>
+<span id="cb276-12"><a href="dynamic-modelspractical.html#cb276-12" tabindex="-1"></a>    predation_sol <span class="ot">&lt;-</span> <span class="fu">lsoda</span>(predation_init,</span>
+<span id="cb276-13"><a href="dynamic-modelspractical.html#cb276-13" tabindex="-1"></a>                           predation_t,</span>
+<span id="cb276-14"><a href="dynamic-modelspractical.html#cb276-14" tabindex="-1"></a>                           predation_dyn,</span>
+<span id="cb276-15"><a href="dynamic-modelspractical.html#cb276-15" tabindex="-1"></a>                           predation_par)</span>
+<span id="cb276-16"><a href="dynamic-modelspractical.html#cb276-16" tabindex="-1"></a>    </span>
+<span id="cb276-17"><a href="dynamic-modelspractical.html#cb276-17" tabindex="-1"></a>    <span class="fu">plot</span>(predation_sol[,<span class="dv">1</span>], predation_sol[,<span class="dv">2</span>], <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, </span>
+<span id="cb276-18"><a href="dynamic-modelspractical.html#cb276-18" tabindex="-1"></a>         <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">&quot;Predation model&quot;</span>, <span class="st">&quot;b =&quot;</span>, b_vec[i], <span class="st">&quot;,d =&quot;</span>, d_vec[i]), </span>
+<span id="cb276-19"><a href="dynamic-modelspractical.html#cb276-19" tabindex="-1"></a>         <span class="at">xlab =</span> <span class="st">&quot;t&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;N.P&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">200</span>))</span>
+<span id="cb276-20"><a href="dynamic-modelspractical.html#cb276-20" tabindex="-1"></a>    </span>
+<span id="cb276-21"><a href="dynamic-modelspractical.html#cb276-21" tabindex="-1"></a>    <span class="fu">lines</span>(predation_sol[,<span class="dv">1</span>], predation_sol[,<span class="dv">3</span>], <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb276-22"><a href="dynamic-modelspractical.html#cb276-22" tabindex="-1"></a>}</span>
+<span id="cb276-23"><a href="dynamic-modelspractical.html#cb276-23" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-847-1.png" width="768" style="display: block; margin: auto;" /></p>
+Similar equilibrium but it takes different times to reach it.
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="programmingpractical-2.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="epi1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

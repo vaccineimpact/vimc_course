@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>13 Outbreak of influenza in a boarding school | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="13 Outbreak of influenza in a boarding school | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="13 Outbreak of influenza in a boarding school | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="13 Outbreak of influenza in a boarding school | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="13 Outbreak of influenza in a boarding school | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="13 Outbreak of influenza in a boarding school | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="seasonality-and-measles-epidemics.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="outbreak-of-influenza-in-a-boarding-school" class="section level1 hasAnchor" number="13">
+<h1><span class="header-section-number">13</span> Outbreak of influenza in a boarding school<a href="outbreak-of-influenza-in-a-boarding-school.html#outbreak-of-influenza-in-a-boarding-school" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="andrew-conlan-ajkc2cam.ac.uk-2" class="section level2 unlisted unnumbered hasAnchor">
+<h2>Andrew Conlan (<a href="mailto:ajkc2@cam.ac.uk">ajkc2@cam.ac.uk</a>)<a href="outbreak-of-influenza-in-a-boarding-school.html#andrew-conlan-ajkc2cam.ac.uk-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="data-summary-and-challenge" class="section level2 hasAnchor" number="13.1">
+<h2><span class="header-section-number">13.1</span> Data summary and challenge<a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this practical you will calibrate a transmission model to describe the outbreak of influenza in a English boarding school.</p>
+<p>For the purposes of this practical assume that the numbers of pupils in bed measure the numbers infectious on each date. Not a great assumption as they are to an extent self-isolating, but also not terrible given the relatively short latent and (effective) infectious period for influenza (<span class="math inline">\(\sim 1\)</span> day).</p>
+<p>Model the likely impact on the outbreak should 80% of the boys have been vaccinated before the start of the outbreak with a vaccine with 50% (direct) protection from infection.</p>
+<div class="panel panel-default">
+<div class="panel-heading panel-heading2">
+Note
+</div>
+<div class="panel-body">
+For a single outbreak it is reasonable to neglect the potential for loss of immunity to reinfection so modelling vaccination in this case only amounts to changing the <strong>initial conditions</strong> of the model (i.e. the number susceptible and recovered when infection is introduced.) We are told to assume an exposed period of 1 hour and an infectious period of 2 days so a standard <span class="math inline">\(SEIR\)</span> compartmental model should be sufficient. You should use a deterministic model for your initial calibration and the explore how the dynamics differ for the corresponding stochastic model.
+</div>
+</div>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb493-1" tabindex="-1"></a><span class="fu">require</span>(outbreaks)</span>
+<span id="cb493-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb493-2" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb493-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb493-3" tabindex="-1"></a><span class="fu">require</span>(deSolve)</span>
+<span id="cb493-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb493-4" tabindex="-1"></a></span>
+<span id="cb493-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb493-5" tabindex="-1"></a><span class="fu">ggplot</span>(influenza_england_1978_school,<span class="fu">aes</span>(<span class="at">x=</span>date,<span class="at">y=</span>in_bed)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Date&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;In Bed (Assumed Infectious)&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-448-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb494-1" tabindex="-1"></a>targetI <span class="ot">&lt;-</span> influenza_england_1978_school<span class="sc">$</span>in_bed</span></code></pre></div>
+<p><infobutton id="displayTextunnamed-chunk-449" onclick="javascript:toggle('unnamed-chunk-449');">Show: Deterministic model</infobutton></p>
+<div id="toggleTextunnamed-chunk-449" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>For the standard <span class="math inline">\(SEIR\)</span> model with constant rates of progression through the exposed and infectious compartments an <span class="math inline">\(R_0\)</span> of <span class="math inline">\(\sim 4.0\)</span> gives a rough calibration to the observed data (black points and lines):</p>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-1" tabindex="-1"></a>SEIR_gamma <span class="ot">&lt;-</span> <span class="cf">function</span>(t,y,theta) {</span>
+<span id="cb495-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-2" tabindex="-1"></a>  </span>
+<span id="cb495-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-3" tabindex="-1"></a>  x_i <span class="ot">=</span> <span class="fu">integer</span>(<span class="dv">2</span>);</span>
+<span id="cb495-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-4" tabindex="-1"></a>  beta <span class="ot">=</span> theta[<span class="dv">1</span>];</span>
+<span id="cb495-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-5" tabindex="-1"></a>  TE <span class="ot">=</span> theta[<span class="dv">2</span>];</span>
+<span id="cb495-6"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-6" tabindex="-1"></a>  TI <span class="ot">=</span> theta[<span class="dv">3</span>];</span>
+<span id="cb495-7"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-7" tabindex="-1"></a>  x_i[<span class="dv">1</span>] <span class="ot">=</span> theta[<span class="dv">4</span>];</span>
+<span id="cb495-8"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-8" tabindex="-1"></a>  x_i[<span class="dv">2</span>] <span class="ot">=</span> theta[<span class="dv">5</span>];</span>
+<span id="cb495-9"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-9" tabindex="-1"></a>  </span>
+<span id="cb495-10"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-10" tabindex="-1"></a>  I_tot<span class="ot">=</span><span class="dv">0</span>;</span>
+<span id="cb495-11"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-11" tabindex="-1"></a>  N_tot<span class="ot">=</span><span class="dv">0</span>;</span>
+<span id="cb495-12"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-12" tabindex="-1"></a>  </span>
+<span id="cb495-13"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-13" tabindex="-1"></a>  dy_dt <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">2</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>]);</span>
+<span id="cb495-14"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-14" tabindex="-1"></a>  </span>
+<span id="cb495-15"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-15" tabindex="-1"></a>  <span class="cf">for</span>(k <span class="cf">in</span> (<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>])){I_tot <span class="ot">=</span> I_tot <span class="sc">+</span> y[k];}</span>
+<span id="cb495-16"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-16" tabindex="-1"></a>  <span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="dv">2</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>])){N_tot <span class="ot">=</span> N_tot <span class="sc">+</span> y[k];}</span>
+<span id="cb495-17"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-17" tabindex="-1"></a>  </span>
+<span id="cb495-18"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-18" tabindex="-1"></a>  lambda <span class="ot">=</span> beta<span class="sc">*</span>I_tot<span class="sc">/</span>N_tot</span>
+<span id="cb495-19"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-19" tabindex="-1"></a>  </span>
+<span id="cb495-20"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-20" tabindex="-1"></a>  <span class="co">#Susceptibles      </span></span>
+<span id="cb495-21"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-21" tabindex="-1"></a>  dy_dt[<span class="dv">1</span>] <span class="ot">=</span>  <span class="sc">-</span> (lambda) <span class="sc">*</span> y[<span class="dv">1</span>];</span>
+<span id="cb495-22"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-22" tabindex="-1"></a>  <span class="co">#First stage of Exposed (but not yet infectious)</span></span>
+<span id="cb495-23"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-23" tabindex="-1"></a>  dy_dt[<span class="dv">2</span>] <span class="ot">=</span>  lambda <span class="sc">*</span> y[<span class="dv">1</span>]  <span class="sc">-</span> (x_i[<span class="dv">1</span>]<span class="sc">/</span>TE) <span class="sc">*</span> y[<span class="dv">2</span>];</span>
+<span id="cb495-24"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-24" tabindex="-1"></a>  </span>
+<span id="cb495-25"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-25" tabindex="-1"></a>  <span class="co">#If shape parameter &gt; 1 update internal exposed stages</span></span>
+<span id="cb495-26"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-26" tabindex="-1"></a>  <span class="cf">if</span>(x_i[<span class="dv">1</span>]<span class="sc">&gt;</span><span class="dv">1</span>){</span>
+<span id="cb495-27"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-27" tabindex="-1"></a>    <span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">3</span><span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]))</span>
+<span id="cb495-28"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-28" tabindex="-1"></a>    {dy_dt[k] <span class="ot">=</span> (x_i[<span class="dv">1</span>]<span class="sc">/</span>TE) <span class="sc">*</span> y[k<span class="dv">-1</span>] <span class="sc">-</span> (x_i[<span class="dv">1</span>]<span class="sc">/</span>TE) <span class="sc">*</span> y[k];}</span>
+<span id="cb495-29"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-29" tabindex="-1"></a>  }</span>
+<span id="cb495-30"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-30" tabindex="-1"></a>  <span class="co">#First infectious stage</span></span>
+<span id="cb495-31"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-31" tabindex="-1"></a>  dy_dt[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>)] <span class="ot">=</span> (x_i[<span class="dv">1</span>]<span class="sc">/</span>TE)<span class="sc">*</span>y[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>])] <span class="sc">-</span> (x_i[<span class="dv">2</span>]<span class="sc">/</span>TI)<span class="sc">*</span>y[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>)];</span>
+<span id="cb495-32"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-32" tabindex="-1"></a>  <span class="co">#If more than one infectious stage, run through internal stages</span></span>
+<span id="cb495-33"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-33" tabindex="-1"></a>  <span class="cf">if</span>(x_i[<span class="dv">2</span>]<span class="sc">&gt;</span><span class="dv">1</span>)</span>
+<span id="cb495-34"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-34" tabindex="-1"></a>  {</span>
+<span id="cb495-35"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-35" tabindex="-1"></a>    <span class="cf">for</span>(k <span class="cf">in</span> (<span class="dv">3</span><span class="sc">+</span>x_i[<span class="dv">1</span>])<span class="sc">:</span>(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>]))</span>
+<span id="cb495-36"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-36" tabindex="-1"></a>    {dy_dt[k] <span class="ot">=</span> (x_i[<span class="dv">2</span>]<span class="sc">/</span>TI) <span class="sc">*</span> y[k<span class="dv">-1</span>] <span class="sc">-</span> (x_i[<span class="dv">2</span>]<span class="sc">/</span>TI) <span class="sc">*</span> y[k];}</span>
+<span id="cb495-37"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-37" tabindex="-1"></a>  }</span>
+<span id="cb495-38"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-38" tabindex="-1"></a>  </span>
+<span id="cb495-39"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-39" tabindex="-1"></a>  <span class="co"># Final absorbing recovered stage</span></span>
+<span id="cb495-40"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-40" tabindex="-1"></a>  dy_dt[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>]<span class="sc">+</span><span class="dv">1</span>)] <span class="ot">=</span> (x_i[<span class="dv">2</span>]<span class="sc">/</span>TI)<span class="sc">*</span>y[(<span class="dv">1</span><span class="sc">+</span>x_i[<span class="dv">1</span>]<span class="sc">+</span>x_i[<span class="dv">2</span>])];</span>
+<span id="cb495-41"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-41" tabindex="-1"></a>  </span>
+<span id="cb495-42"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-42" tabindex="-1"></a>  </span>
+<span id="cb495-43"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-43" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(dy_dt))</span>
+<span id="cb495-44"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-44" tabindex="-1"></a>}</span>
+<span id="cb495-45"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-45" tabindex="-1"></a></span>
+<span id="cb495-46"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-46" tabindex="-1"></a>det_SEIR <span class="ot">&lt;-</span><span class="cf">function</span>(R0,TE,TI,shape_E,shape_I,vacc)</span>
+<span id="cb495-47"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-47" tabindex="-1"></a>{</span>
+<span id="cb495-48"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-48" tabindex="-1"></a>  N0 <span class="ot">=</span> <span class="fl">763.0</span></span>
+<span id="cb495-49"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-49" tabindex="-1"></a>  </span>
+<span id="cb495-50"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-50" tabindex="-1"></a>  theta <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">5</span>)</span>
+<span id="cb495-51"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-51" tabindex="-1"></a>  </span>
+<span id="cb495-52"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-52" tabindex="-1"></a>  beta <span class="ot">=</span> R0<span class="sc">/</span>TI</span>
+<span id="cb495-53"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-53" tabindex="-1"></a>  s0 <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>vacc)<span class="sc">*</span>(N0<span class="dv">-1</span>)</span>
+<span id="cb495-54"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-54" tabindex="-1"></a>  e0 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb495-55"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-55" tabindex="-1"></a>  i0 <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb495-56"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-56" tabindex="-1"></a>  r0 <span class="ot">=</span> vacc<span class="sc">*</span>(N0<span class="dv">-1</span>)</span>
+<span id="cb495-57"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-57" tabindex="-1"></a>  </span>
+<span id="cb495-58"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-58" tabindex="-1"></a>  y0 <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I);</span>
+<span id="cb495-59"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-59" tabindex="-1"></a>  y0[<span class="dv">1</span>] <span class="ot">=</span> s0;</span>
+<span id="cb495-60"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-60" tabindex="-1"></a>  y0[<span class="dv">2</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb495-61"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-61" tabindex="-1"></a>  y0[<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I] <span class="ot">=</span> r0</span>
+<span id="cb495-62"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-62" tabindex="-1"></a>  </span>
+<span id="cb495-63"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-63" tabindex="-1"></a>  theta[<span class="dv">1</span>] <span class="ot">=</span> beta;</span>
+<span id="cb495-64"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-64" tabindex="-1"></a>  theta[<span class="dv">2</span>] <span class="ot">=</span> TE;</span>
+<span id="cb495-65"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-65" tabindex="-1"></a>  theta[<span class="dv">3</span>] <span class="ot">=</span> TI;</span>
+<span id="cb495-66"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-66" tabindex="-1"></a>  theta[<span class="dv">4</span>] <span class="ot">=</span> shape_E</span>
+<span id="cb495-67"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-67" tabindex="-1"></a>  theta[<span class="dv">5</span>] <span class="ot">=</span> shape_I</span>
+<span id="cb495-68"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-68" tabindex="-1"></a>  </span>
+<span id="cb495-69"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-69" tabindex="-1"></a>  y<span class="ot">&lt;-</span><span class="fu">lsoda</span>(y0,<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">30</span>,<span class="dv">1</span>),SEIR_gamma,theta)</span>
+<span id="cb495-70"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-70" tabindex="-1"></a>  <span class="co">#y0 = y[dim(y)[1],2:(3+shape_E+shape_I)]</span></span>
+<span id="cb495-71"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-71" tabindex="-1"></a>  <span class="co">#y&lt;-lsoda(y0,seq(0,prevacc*364,1),SEIR_gamma,theta)</span></span>
+<span id="cb495-72"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-72" tabindex="-1"></a>  </span>
+<span id="cb495-73"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-73" tabindex="-1"></a>  <span class="co"># return total number infected</span></span>
+<span id="cb495-74"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-74" tabindex="-1"></a>  </span>
+<span id="cb495-75"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-75" tabindex="-1"></a>  <span class="cf">if</span>(shape_E<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> shape_I<span class="sc">==</span><span class="dv">1</span>)</span>
+<span id="cb495-76"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-76" tabindex="-1"></a>  {<span class="fu">return</span>(y[,<span class="dv">4</span>])</span>
+<span id="cb495-77"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-77" tabindex="-1"></a>  }<span class="cf">else</span> <span class="cf">if</span>(shape_E<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> shape_I <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb495-78"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-78" tabindex="-1"></a>  {</span>
+<span id="cb495-79"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-79" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">rowSums</span>(y[,(<span class="dv">2</span><span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span><span class="sc">+</span><span class="dv">1</span><span class="sc">+</span>shape_I)]))</span>
+<span id="cb495-80"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-80" tabindex="-1"></a>  }<span class="cf">else</span> <span class="cf">if</span>(shape_E<span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">&amp;</span> shape_I <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb495-81"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-81" tabindex="-1"></a>  {</span>
+<span id="cb495-82"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-82" tabindex="-1"></a>    <span class="fu">return</span>(y[,(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span><span class="dv">1</span>)])</span>
+<span id="cb495-83"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-83" tabindex="-1"></a>  }<span class="cf">else</span></span>
+<span id="cb495-84"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-84" tabindex="-1"></a>  {</span>
+<span id="cb495-85"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-85" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">rowSums</span>(y[,(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span><span class="sc">+</span>shape_E<span class="sc">+</span>shape_I)]))</span>
+<span id="cb495-86"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-86" tabindex="-1"></a>  }</span>
+<span id="cb495-87"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-87" tabindex="-1"></a></span>
+<span id="cb495-88"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb495-88" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-1" tabindex="-1"></a><span class="co"># Standard SEIR model (exponential latent, infectious periods)</span></span>
+<span id="cb496-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-2" tabindex="-1"></a></span>
+<span id="cb496-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-3" tabindex="-1"></a>expI <span class="ot">&lt;-</span> <span class="fu">det_SEIR</span>(<span class="fl">2.0</span>,<span class="fl">0.04</span>,<span class="fl">2.0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="fl">0.0</span>)</span>
+<span id="cb496-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-4" tabindex="-1"></a>det_calibrate <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">time=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,<span class="at">var=</span><span class="st">&#39;R0 = 2&#39;</span>,<span class="at">I=</span>expI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>])</span>
+<span id="cb496-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-5" tabindex="-1"></a></span>
+<span id="cb496-6"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-6" tabindex="-1"></a>expI <span class="ot">&lt;-</span> <span class="fu">det_SEIR</span>(<span class="fl">4.0</span>,<span class="fl">0.04</span>,<span class="fl">2.0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="fl">0.0</span>)</span>
+<span id="cb496-7"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-7" tabindex="-1"></a>det_calibrate <span class="ot">&lt;-</span> det_calibrate <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">time=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,<span class="at">var=</span><span class="st">&#39;R0 = 4&#39;</span>,<span class="at">I=</span>expI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>]))</span>
+<span id="cb496-8"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-8" tabindex="-1"></a></span>
+<span id="cb496-9"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-9" tabindex="-1"></a>expI <span class="ot">&lt;-</span> <span class="fu">det_SEIR</span>(<span class="fl">5.0</span>,<span class="fl">0.04</span>,<span class="fl">2.0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="fl">0.0</span>)</span>
+<span id="cb496-10"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-10" tabindex="-1"></a>det_calibrate <span class="ot">&lt;-</span> det_calibrate <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">time=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,<span class="at">var=</span><span class="st">&#39;R0 = 5&#39;</span>,<span class="at">I=</span>expI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>]))</span>
+<span id="cb496-11"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-11" tabindex="-1"></a></span>
+<span id="cb496-12"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-12" tabindex="-1"></a></span>
+<span id="cb496-13"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-13" tabindex="-1"></a><span class="fu">ggplot</span>(det_calibrate,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I,<span class="at">col=</span>var)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb496-14"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb496-14" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&#39;point&#39;</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,targetI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>]) <span class="sc">+</span> <span class="fu">annotate</span>(<span class="st">&#39;line&#39;</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,targetI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>])</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1437-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>This rough calibration does not hold up if we now vary the distributional assumption for the latent and infectious periods. The supplied code has implemented the <span class="math inline">\(SEIR\)</span> model with gamma distributed (strictly an Erlang distribution were the shape parameter is an integer) latent and infectious periods. If we vary the shape parameters for I and E we see that the peak prevalence and initial rate of exponential growth are very sensitive to changes in the distribution. Less dispersed distributions (i.e. higher shape parameters) have sharper epidemics with higher peak prevalence. The final size (and approximate value of <span class="math inline">\(R_0\)</span>) on the other had are insensitive to these changes. Below we plot a set of three curves below for shape parameters = 10 illustrating that we now require a lower value of <span class="math inline">\(R_{0}\)</span> to (roughly) match the data. The fit is not as good as I deliberately picked the average infectious and latent periods to give a reasonable fit with the exponential model…</p>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-1" tabindex="-1"></a><span class="co"># Standard SEIR model (gamma 10 latent, infectious periods)</span></span>
+<span id="cb497-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-2" tabindex="-1"></a></span>
+<span id="cb497-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-3" tabindex="-1"></a>expI <span class="ot">&lt;-</span> <span class="fu">det_SEIR</span>(<span class="fl">2.5</span>,<span class="fl">0.04</span>,<span class="fl">2.0</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb497-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-4" tabindex="-1"></a>det_calibrate <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">time=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,<span class="at">var=</span><span class="st">&#39;R0 = 2.5&#39;</span>,<span class="at">I=</span>expI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>])</span>
+<span id="cb497-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-5" tabindex="-1"></a></span>
+<span id="cb497-6"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-6" tabindex="-1"></a>expI <span class="ot">&lt;-</span> <span class="fu">det_SEIR</span>(<span class="fl">2.75</span>,<span class="fl">0.04</span>,<span class="fl">2.0</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb497-7"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-7" tabindex="-1"></a>det_calibrate <span class="ot">&lt;-</span> det_calibrate <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">time=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,<span class="at">var=</span><span class="st">&#39;R0 = 2.75&#39;</span>,<span class="at">I=</span>expI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>]))</span>
+<span id="cb497-8"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-8" tabindex="-1"></a></span>
+<span id="cb497-9"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-9" tabindex="-1"></a>expI <span class="ot">&lt;-</span> <span class="fu">det_SEIR</span>(<span class="fl">3.0</span>,<span class="fl">0.04</span>,<span class="fl">2.0</span>,<span class="dv">10</span>,<span class="dv">10</span>,<span class="fl">0.0</span>)</span>
+<span id="cb497-10"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-10" tabindex="-1"></a>det_calibrate <span class="ot">&lt;-</span> det_calibrate <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">time=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,<span class="at">var=</span><span class="st">&#39;R0 = 3&#39;</span>,<span class="at">I=</span>expI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>]))</span>
+<span id="cb497-11"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-11" tabindex="-1"></a></span>
+<span id="cb497-12"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-12" tabindex="-1"></a></span>
+<span id="cb497-13"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-13" tabindex="-1"></a><span class="fu">ggplot</span>(det_calibrate,<span class="fu">aes</span>(<span class="at">x=</span>time,<span class="at">y=</span>I,<span class="at">col=</span>var)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb497-14"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb497-14" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&#39;point&#39;</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,targetI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>]) <span class="sc">+</span> <span class="fu">annotate</span>(<span class="st">&#39;line&#39;</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,targetI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>])</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1438-1.png" width="480" style="display: block; margin: auto;" /></p>
+In practice the latent and infectious period distributions are not identifiable purely from a single epidemic curve. As this very simple comparison demonstrates calibrating our model based on the wrong assumption can lead to a significant under or over estimate of <span class="math inline">\(R_{0}\)</span>.
+</div>
+</div>
+</div>
+<p><infobutton id="displayTextunnamed-chunk-450" onclick="javascript:toggle('unnamed-chunk-450');">Show: Stochastic model</infobutton></p>
+<div id="toggleTextunnamed-chunk-450" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>The rough calibration we identified using the deterministic model mostly holds up for the stochastic model with replicates scattering around the observed numbers. Although the population is small, the transmission rate is relatively high (<span class="math inline">\(R_{0}=4\)</span>) so the deterministic model is a reasonable approximation for the average of the stochastic simulations. If the transmission rate was lower this would not necessarily be the case.</p>
+<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb498-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-1" tabindex="-1"></a>SEIR_rates <span class="ot">&lt;-</span> <span class="cf">function</span>(state,p)</span>
+<span id="cb498-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-2" tabindex="-1"></a>{ </span>
+<span id="cb498-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-3" tabindex="-1"></a>rate <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">2</span>)</span>
+<span id="cb498-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-4" tabindex="-1"></a><span class="co"># Probability of a transmission sum(state) = population size N</span></span>
+<span id="cb498-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-5" tabindex="-1"></a>rate[<span class="dv">1</span>] <span class="ot">&lt;-</span> p[<span class="st">&#39;beta&#39;</span>]<span class="sc">*</span>state[<span class="st">&#39;S&#39;</span>]<span class="sc">*</span>state[<span class="st">&#39;I&#39;</span>]<span class="sc">/</span><span class="fu">sum</span>(state)</span>
+<span id="cb498-6"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-6" tabindex="-1"></a><span class="co"># Probability of emergence from E to I</span></span>
+<span id="cb498-7"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-7" tabindex="-1"></a>rate[<span class="dv">2</span>] <span class="ot">&lt;-</span>p[<span class="st">&#39;sigma&#39;</span>]<span class="sc">*</span>state[<span class="st">&#39;E&#39;</span>]</span>
+<span id="cb498-8"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-8" tabindex="-1"></a><span class="co"># Probability of recovery from I to R</span></span>
+<span id="cb498-9"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-9" tabindex="-1"></a>rate[<span class="dv">3</span>] <span class="ot">&lt;-</span>p[<span class="st">&#39;gamma&#39;</span>]<span class="sc">*</span>state[<span class="st">&#39;I&#39;</span>]</span>
+<span id="cb498-10"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-10" tabindex="-1"></a><span class="fu">return</span>(rate) </span>
+<span id="cb498-11"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-11" tabindex="-1"></a>}</span>
+<span id="cb498-12"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-12" tabindex="-1"></a></span>
+<span id="cb498-13"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-13" tabindex="-1"></a>SEIR_events <span class="ot">&lt;-</span> <span class="cf">function</span>(state,rate)</span>
+<span id="cb498-14"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-14" tabindex="-1"></a>{</span>
+<span id="cb498-15"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-15" tabindex="-1"></a>    total_rate <span class="ot">&lt;-</span> <span class="fu">sum</span>(rate)</span>
+<span id="cb498-16"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-16" tabindex="-1"></a>    <span class="co"># Draw single random variate</span></span>
+<span id="cb498-17"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-17" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb498-18"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-18" tabindex="-1"></a>    <span class="cf">if</span>(x<span class="sc">*</span>total_rate <span class="sc">&lt;</span> rate[<span class="dv">1</span>])</span>
+<span id="cb498-19"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-19" tabindex="-1"></a>    { <span class="co"># Transmission</span></span>
+<span id="cb498-20"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-20" tabindex="-1"></a>      state[<span class="st">&#39;S&#39;</span>] <span class="ot">=</span> state[<span class="st">&#39;S&#39;</span>] <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb498-21"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-21" tabindex="-1"></a>      state[<span class="st">&#39;E&#39;</span>] <span class="ot">=</span> state[<span class="st">&#39;E&#39;</span>] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb498-22"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-22" tabindex="-1"></a>    }<span class="cf">else</span> <span class="cf">if</span>(x<span class="sc">*</span>total_rate <span class="sc">&lt;</span> <span class="fu">sum</span>(rate[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]))</span>
+<span id="cb498-23"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-23" tabindex="-1"></a>    { <span class="co"># Emergence</span></span>
+<span id="cb498-24"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-24" tabindex="-1"></a>      state[<span class="st">&#39;E&#39;</span>] <span class="ot">=</span> state[<span class="st">&#39;E&#39;</span>] <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb498-25"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-25" tabindex="-1"></a>      state[<span class="st">&#39;I&#39;</span>] <span class="ot">=</span> state[<span class="st">&#39;I&#39;</span>] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb498-26"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-26" tabindex="-1"></a>    }<span class="cf">else</span>{</span>
+<span id="cb498-27"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-27" tabindex="-1"></a>      <span class="co"># Recovery</span></span>
+<span id="cb498-28"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-28" tabindex="-1"></a>      state[<span class="st">&#39;I&#39;</span>] <span class="ot">=</span> state[<span class="st">&#39;I&#39;</span>] <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb498-29"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-29" tabindex="-1"></a>      state[<span class="st">&#39;R&#39;</span>] <span class="ot">=</span> state[<span class="st">&#39;R&#39;</span>] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb498-30"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-30" tabindex="-1"></a>    }</span>
+<span id="cb498-31"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-31" tabindex="-1"></a>    <span class="fu">return</span>(state) </span>
+<span id="cb498-32"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-32" tabindex="-1"></a>  }</span>
+<span id="cb498-33"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-33" tabindex="-1"></a></span>
+<span id="cb498-34"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-34" tabindex="-1"></a>stochastic_rep_SEIR <span class="ot">&lt;-</span> <span class="cf">function</span>(R0,TE,TI,vacc,tmax)</span>
+<span id="cb498-35"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-35" tabindex="-1"></a>{</span>
+<span id="cb498-36"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-36" tabindex="-1"></a>n0 <span class="ot">=</span> <span class="fl">763.0</span></span>
+<span id="cb498-37"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-37" tabindex="-1"></a>i0 <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb498-38"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-38" tabindex="-1"></a><span class="co"># State Vector (One variable)</span></span>
+<span id="cb498-39"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-39" tabindex="-1"></a>state <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;S&#39;</span><span class="ot">=</span><span class="fu">round</span>((n0<span class="dv">-1</span>)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>vacc)),<span class="st">&#39;E&#39;</span><span class="ot">=</span><span class="dv">0</span>,<span class="st">&#39;I&#39;</span><span class="ot">=</span>i0,<span class="st">&#39;R&#39;</span><span class="ot">=</span><span class="fu">round</span>(vacc<span class="sc">*</span>(n0<span class="sc">-</span>i0)))</span>
+<span id="cb498-40"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-40" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb498-41"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-41" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;beta&#39;</span><span class="ot">=</span>R0<span class="sc">/</span>TI,<span class="st">&#39;sigma&#39;</span><span class="ot">=</span><span class="dv">1</span><span class="sc">/</span>TE,<span class="st">&#39;gamma&#39;</span><span class="ot">=</span><span class="dv">1</span><span class="sc">/</span>TI)</span>
+<span id="cb498-42"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-42" tabindex="-1"></a></span>
+<span id="cb498-43"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-43" tabindex="-1"></a><span class="co"># Time Variable</span></span>
+<span id="cb498-44"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-44" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fl">0.0</span>;</span>
+<span id="cb498-45"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-45" tabindex="-1"></a><span class="co"># Save I and R only (I to compare to data, R to calculate final size)</span></span>
+<span id="cb498-46"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-46" tabindex="-1"></a><span class="co"># Could record all states but will be more costly in terms if memory use and run time</span></span>
+<span id="cb498-47"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-47" tabindex="-1"></a><span class="co"># so omitted here.</span></span>
+<span id="cb498-48"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-48" tabindex="-1"></a><span class="co"># Subtract off initial number vaccinated so that R counts total cumulative infections</span></span>
+<span id="cb498-49"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-49" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">t=</span><span class="dv">0</span>,<span class="at">I=</span>state[<span class="st">&#39;I&#39;</span>],<span class="at">R=</span>state[<span class="st">&#39;R&#39;</span>]<span class="sc">-</span><span class="fu">round</span>(vacc<span class="sc">*</span>(n0<span class="sc">-</span>i0)))</span>
+<span id="cb498-50"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-50" tabindex="-1"></a></span>
+<span id="cb498-51"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-51" tabindex="-1"></a><span class="co"># Calculate initial rate of events</span></span>
+<span id="cb498-52"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-52" tabindex="-1"></a>rate_vector <span class="ot">&lt;-</span> <span class="fu">SEIR_rates</span>(state,p)</span>
+<span id="cb498-53"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-53" tabindex="-1"></a>total_rate <span class="ot">=</span> <span class="fu">sum</span>(rate_vector)</span>
+<span id="cb498-54"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-54" tabindex="-1"></a><span class="co"># Main Loop</span></span>
+<span id="cb498-55"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-55" tabindex="-1"></a><span class="cf">repeat</span></span>
+<span id="cb498-56"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-56" tabindex="-1"></a>{ </span>
+<span id="cb498-57"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-57" tabindex="-1"></a>  <span class="co"># Update time - sample time increment from from exponential distribution</span></span>
+<span id="cb498-58"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-58" tabindex="-1"></a>  <span class="co"># with rate given by total rate</span></span>
+<span id="cb498-59"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-59" tabindex="-1"></a>  t <span class="ot">=</span> t <span class="sc">+</span> <span class="fu">rexp</span>(<span class="dv">1</span>,total_rate)</span>
+<span id="cb498-60"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-60" tabindex="-1"></a>  <span class="co"># Simulate the event using relative rates in rate_Vector</span></span>
+<span id="cb498-61"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-61" tabindex="-1"></a>  state <span class="ot">&lt;-</span><span class="fu">SEIR_events</span>(state,rate_vector)</span>
+<span id="cb498-62"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-62" tabindex="-1"></a>  <span class="co"># Output</span></span>
+<span id="cb498-63"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-63" tabindex="-1"></a>  output <span class="ot">&lt;-</span> output <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">t=</span>t,<span class="at">I=</span>state[<span class="st">&#39;I&#39;</span>],<span class="at">R=</span>state[<span class="st">&#39;R&#39;</span>]<span class="sc">-</span><span class="fu">round</span>(vacc<span class="sc">*</span>(n0<span class="sc">-</span>i0))))</span>
+<span id="cb498-64"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-64" tabindex="-1"></a>  <span class="co"># Calculate rate of events</span></span>
+<span id="cb498-65"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-65" tabindex="-1"></a>  rate_vector <span class="ot">&lt;-</span> <span class="fu">SEIR_rates</span>(state,p)</span>
+<span id="cb498-66"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-66" tabindex="-1"></a>  total_rate <span class="ot">=</span> <span class="fu">sum</span>(rate_vector)</span>
+<span id="cb498-67"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-67" tabindex="-1"></a>  <span class="cf">if</span>(t <span class="sc">&gt;</span> tmax <span class="sc">||</span> total_rate <span class="sc">==</span> <span class="dv">0</span>){<span class="cf">break</span>}</span>
+<span id="cb498-68"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-68" tabindex="-1"></a>} </span>
+<span id="cb498-69"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-69" tabindex="-1"></a><span class="fu">return</span>(output)</span>
+<span id="cb498-70"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb498-70" tabindex="-1"></a>}  </span></code></pre></div>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb499-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-2" tabindex="-1"></a></span>
+<span id="cb499-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb499-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-4" tabindex="-1"></a>    out <span class="ot">&lt;-</span> out <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">stochastic_rep_SEIR</span>(<span class="fl">4.0</span>,<span class="fl">0.04</span>,<span class="fl">2.0</span>, <span class="fl">0.0</span>, <span class="dv">30</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">rep=</span>i))</span>
+<span id="cb499-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-5" tabindex="-1"></a>}</span>
+<span id="cb499-6"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-6" tabindex="-1"></a></span>
+<span id="cb499-7"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-7" tabindex="-1"></a><span class="fu">ggplot</span>(out,<span class="fu">aes</span>(<span class="at">x=</span>t,<span class="at">y=</span>I,<span class="at">col=</span>rep,<span class="at">group=</span>rep)) <span class="sc">+</span> <span class="fu">geom_path</span>() <span class="sc">+</span> <span class="fu">scale_y_sqrt</span>() <span class="sc">+</span> </span>
+<span id="cb499-8"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-8" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&#39;point&#39;</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,targetI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>]) <span class="sc">+</span> <span class="fu">annotate</span>(<span class="st">&#39;line&#39;</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>,targetI[<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>]) <span class="sc">+</span> </span>
+<span id="cb499-9"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb499-9" tabindex="-1"></a>  <span class="fu">scale_color_fermenter</span>(<span class="at">palette =</span> <span class="st">&quot;Spectral&quot;</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Time&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Infected&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1445-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-1" tabindex="-1"></a>outvacc <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb500-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-2" tabindex="-1"></a></span>
+<span id="cb500-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb500-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-4" tabindex="-1"></a>    outvacc <span class="ot">&lt;-</span> outvacc <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(<span class="fu">stochastic_rep_SEIR</span>(<span class="fl">4.0</span>,<span class="fl">0.04</span>,<span class="fl">2.0</span>, <span class="fl">0.8</span>, <span class="dv">30</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">rep=</span>i))</span>
+<span id="cb500-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-5" tabindex="-1"></a>}</span>
+<span id="cb500-6"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-6" tabindex="-1"></a></span>
+<span id="cb500-7"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-7" tabindex="-1"></a>outagg <span class="ot">&lt;-</span> (out <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">vacc=</span><span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(outvacc <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">vacc=</span><span class="cn">TRUE</span>))</span>
+<span id="cb500-8"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-8" tabindex="-1"></a></span>
+<span id="cb500-9"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-9" tabindex="-1"></a><span class="fu">ggplot</span>(outagg,</span>
+<span id="cb500-10"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb500-10" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>t,<span class="at">y=</span>I,<span class="at">col=</span>vacc)) <span class="sc">+</span> <span class="fu">geom_path</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&#39;Time&#39;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&#39;Infected&#39;</span>) <span class="sc">+</span> <span class="fu">scale_y_sqrt</span>()</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1446-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>The main reason for considering a stochastic model for this question is then to quantify how vaccination changes the chances of seeing an outbreak at all. We can calculate this from our simulated scenarios by calculate the mean number of simulations that have more than one infection ( mean(outbreak) in table below) or compare the final size distribution for the two scenarios.</p>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb501-1" tabindex="-1"></a>outagg <span class="sc">%&gt;%</span> </span>
+<span id="cb501-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb501-2" tabindex="-1"></a>    <span class="fu">group_by</span>(rep,vacc) <span class="sc">%&gt;%</span> </span>
+<span id="cb501-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb501-3" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">outbreak=</span><span class="fu">max</span>(R)<span class="sc">&gt;</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb501-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb501-4" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb501-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb501-5" tabindex="-1"></a>    <span class="fu">group_by</span>(vacc) <span class="sc">%&gt;%</span> </span>
+<span id="cb501-6"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb501-6" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">mean</span>(outbreak))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   vacc  `mean(outbreak)`
+##   &lt;lgl&gt;            &lt;dbl&gt;
+## 1 FALSE             0.75
+## 2 TRUE              0.36</code></pre>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb503-1"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb503-1" tabindex="-1"></a><span class="fu">ggplot</span>(outagg <span class="sc">%&gt;%</span> </span>
+<span id="cb503-2"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb503-2" tabindex="-1"></a>        <span class="fu">group_by</span>(rep,vacc) <span class="sc">%&gt;%</span> </span>
+<span id="cb503-3"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb503-3" tabindex="-1"></a>        <span class="fu">summarise</span>(<span class="at">fsize=</span><span class="fu">max</span>(R)),</span>
+<span id="cb503-4"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb503-4" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>vacc,<span class="at">y=</span>fsize)) <span class="sc">+</span> </span>
+<span id="cb503-5"><a href="outbreak-of-influenza-in-a-boarding-school.html#cb503-5" tabindex="-1"></a>        <span class="fu">stat_summary</span>(<span class="at">fun.data =</span> <span class="st">&quot;mean_cl_boot&quot;</span>)</span></code></pre></div>
+<img src="_main_files/figure-html/unnamed-chunk-1447-1.png" width="480" style="display: block; margin: auto;" />
+</div>
+</div>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="seasonality-and-measles-epidemics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

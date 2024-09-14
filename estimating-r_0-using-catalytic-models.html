@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Estimating \(R_0\) using catalytic models | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="9 Estimating \(R_0\) using catalytic models | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Estimating \(R_0\) using catalytic models | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="9 Estimating \(R_0\) using catalytic models | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Estimating \(R_0\) using catalytic models | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="9 Estimating \(R_0\) using catalytic models | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="epi3.html"/>
+<link rel="next" href="particle-mcmc.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="estimating-r_0-using-catalytic-models" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">9</span> Estimating <span class="math inline">\(R_0\)</span> using catalytic models<a href="estimating-r_0-using-catalytic-models.html#estimating-r_0-using-catalytic-models" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="t.-j.-mckinley-t.mckinleyexeter.ac.uk-and-andrew-conlan-ajkc2cam.ac.uk" class="section level2 unlisted unnumbered hasAnchor">
+<h2>T. J. McKinley (<a href="mailto:t.mckinley@exeter.ac.uk">t.mckinley@exeter.ac.uk</a>) and Andrew Conlan (<a href="mailto:ajkc2@cam.ac.uk">ajkc2@cam.ac.uk</a>)<a href="estimating-r_0-using-catalytic-models.html#t.-j.-mckinley-t.mckinleyexeter.ac.uk-and-andrew-conlan-ajkc2cam.ac.uk" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The aim of this practical is to estimate the age-stratified force-of-infection and basic reproductive ratio from age-stratified serological data for an endemic disease.</p>
+<p>Objectives:</p>
+<ol style="list-style-type: decimal">
+<li>Estimate the age-stratified force-of-infection of rubella from serological data.</li>
+<li>Calculate the next generation matrix and <span class="math inline">\(R_0\)</span> for rubella.</li>
+</ol>
+<p>We approach these two objectives using two alternative methods:</p>
+<ul>
+<li>In Section <a href="estimating-r_0-using-catalytic-models.html#foi">9.1</a> we take the traditional two stage approach of estimating the force-of-infection first and then calculating the next generation matrix from an assumed Who-Aquires-Infection-from-Whom (WAIFW) matrix.<br />
+</li>
+<li>In Section <a href="estimating-r_0-using-catalytic-models.html#ngm">9.2</a>, we take the more elegant approach of estimating the next generation matrix directly using social contact (POLYMOD) data.</li>
+</ul>
+</div>
+<div id="foi" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella<a href="estimating-r_0-using-catalytic-models.html#foi" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this practical we will estimate the force-of-infection of rubella using serological survey data from the UK provided in the book <a href="https://link.springer.com/book/10.1007/978-1-4614-4072-7">“Modelling Infectious Disease Parameters Based on Serological and Social Contact Data”</a> by <span class="citation">Hens et al. (<a href="#ref-hensetal:2012">2012</a>)</span></p>
+<p>You will need a copy of the data (<a href="https://vaccineimpact.github.io/vimc_course/Materials/Statistics/data/Rubella-UK.csv"><code>Rubella-UK.csv</code></a>), which you can download via the link. We will begin by loading and checking the contents of the rubella data table:</p>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="estimating-r_0-using-catalytic-models.html#cb342-1" tabindex="-1"></a>rubella <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Rubella-UK.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb342-2"><a href="estimating-r_0-using-catalytic-models.html#cb342-2" tabindex="-1"></a><span class="fu">head</span>(rubella)</span></code></pre></div>
+<pre><code>##   Age Pos Neg
+## 1   1  31 175
+## 2   2  30 116
+## 3   3  34 134
+## 4   4  57 132
+## 5   5  95 124
+## 6   6 104  91</code></pre>
+<p><code>rubella</code> should be a table with 44 rows and 3 columns. <code>rubella$Age</code> is the endpoint of the age group (annual) from which <code>rubella$Pos + rubella$Neg</code> samples were taken, of which <code>rubella$Pos</code> were positive for rubella antibodies and <code>rubella$Neg</code> were negative.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Estimate the probability of being susceptible (<span class="math inline">\(p_s\)</span>) within each age category and add this as an extra column to the rubella data frame.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-336" onclick="javascript:toggle(&#39;unnamed-chunk-336&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-336" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="estimating-r_0-using-catalytic-models.html#cb344-1" tabindex="-1"></a>rubella<span class="sc">$</span>p_s <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> rubella<span class="sc">$</span>Pos <span class="sc">/</span> (rubella<span class="sc">$</span>Neg <span class="sc">+</span> rubella<span class="sc">$</span>Pos)</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>The force-of-infection (<span class="math inline">\(\lambda\)</span>) is defined as the rate that susceptible individuals acquire infection per unit time. Cross-sectional surveys provide no explicit information on how the risk-of-infection varies with time (which will depend on the epidemic dynamics), but can be used to quantify how the risk of infection depends on covariates such as age. If we assume that the individuals within an age-group experience a constant average force-of-infection then the rate of change of the proportion susceptible with age will be:
+<span class="math display">\[\begin{equation}
+    \frac{dp}{da} = -\lambda p_0
+\end{equation}\]</span>
+with solution:
+<span class="math display">\[\begin{equation}
+    p(a) = p_0 e^{-\lambda a}
+\end{equation}\]</span>
+where <span class="math inline">\(p_0\)</span> is the proportion susceptible at the beginning of the age group.</p>
+<p>The proportion susceptible at the end of an age group, <span class="math inline">\(p_1\)</span>, will then be given by:
+<span class="math display" id="eq:p1">\[\begin{equation}
+    p_1 = p_0e^{-\lambda \Delta a}
+    \tag{9.1}
+\end{equation}\]</span>
+where <span class="math inline">\(\Delta a\)</span> is the width of the age group.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Take logs of both sides of <a href="estimating-r_0-using-catalytic-models.html#eq:p1">(9.1)</a> and solve for <span class="math inline">\(\lambda\)</span> to get a first estimator for the force of the infection in a discrete age group as a function of the proportion susceptible at the beginning and end of the age group.</p>
+<p><infobutton id="displayTextunnamed-chunk-1179" onclick="javascript:toggle('unnamed-chunk-1179');">Show: Hint</infobutton></p>
+<div id="toggleTextunnamed-chunk-1179" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+Remember your log rules, e.g. <span class="math inline">\(\log(xy) = \log(x) + \log(y)\)</span>, <span class="math inline">\(\log\left(\frac{1}{x}\right) = -\log(x)\)</span> and <span class="math inline">\(\log\left(e^x\right) = x\)</span>.
+</div>
+</div>
+</div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-338" onclick="javascript:toggle(&#39;unnamed-chunk-338&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-338" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<span class="math display">\[\begin{align*}
+    &amp;\phantom{\Rightarrow} \log\left(p_1\right) = \log\left(p_0e^{-\lambda \Delta a}\right)\\
+    &amp;\Rightarrow \log\left(p_1\right) = \log\left(p_0\right) - \lambda \Delta a\\
+    &amp;\Rightarrow \lambda \Delta a = \log\left(p_0\right) - \log\left(p_1\right)\\
+    &amp;\Rightarrow \lambda = \frac{1}{\Delta a}\left[\log\left(p_0\right) - \log\left(p_1\right)\right],
+\end{align*}\]</span>
+which can also be written as:
+<span class="math display">\[
+    \lambda = \frac{1}{\Delta a}\log\left(\frac{p_0}{p_1}\right).
+\]</span>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Use the equation derived above to estimate the force-of-infection <span class="math inline">\(\lambda_i\)</span> within each annual age cohort (<span class="math inline">\(i = 1, \dots, N_A\)</span>) and add as another column to the <code>rubella</code> data frame (e.g. <code>rubella$lambda</code>).</p>
+<p><infobutton id="displayTextunnamed-chunk-1186" onclick="javascript:toggle('unnamed-chunk-1186');">Show: Hints</infobutton></p>
+<div id="toggleTextunnamed-chunk-1186" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+
+<ul>
+<li>Assume that all individuals are susceptible at birth (<span class="math inline">\(p_0 = 1\)</span> for first age cohort).<br />
+</li>
+<li>Think carefully about what the estimated force-of-infection for the final age cohort should be.</li>
+<li>You may wish to write a loop, or consider using vectors (e.g. <code>1:(nrow(rubella) - 1)</code>) to access the different elements of <code>rubella$p_s</code>.
+</div>
+</div>
+</div>
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-340" onclick="javascript:toggle(&#39;unnamed-chunk-340&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-340" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>If <span class="math inline">\(\Delta a = 1\)</span> for all age-cohorts, then the equation for <span class="math inline">\(\lambda_i\)</span> can be estimated within each age-cohort as:
+<span class="math display">\[
+    \lambda_i = \log\left(p_{i - 1}\right) - \log\left(p_i\right)
+\]</span>
+for <span class="math inline">\(i = 1, \dots, N_A\)</span> where <span class="math inline">\(p_0 = 1\)</span>. This can be implemented in R using e.g.</p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="estimating-r_0-using-catalytic-models.html#cb345-1" tabindex="-1"></a>rubella<span class="sc">$</span>lambda <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">c</span>(<span class="dv">1</span>, rubella<span class="sc">$</span>p_s[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(rubella) <span class="sc">-</span> <span class="dv">1</span>)])) <span class="sc">-</span> </span>
+<span id="cb345-2"><a href="estimating-r_0-using-catalytic-models.html#cb345-2" tabindex="-1"></a>    <span class="fu">log</span>(rubella<span class="sc">$</span>p_s)</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>To check your calculations and visualise the data generate the following plots:</p>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="estimating-r_0-using-catalytic-models.html#cb346-1" tabindex="-1"></a><span class="do">## size is a vector to scale the size of points according to the </span></span>
+<span id="cb346-2"><a href="estimating-r_0-using-catalytic-models.html#cb346-2" tabindex="-1"></a><span class="do">## sample size within that age group </span></span>
+<span id="cb346-3"><a href="estimating-r_0-using-catalytic-models.html#cb346-3" tabindex="-1"></a>size <span class="ot">&lt;-</span> (rubella<span class="sc">$</span>Pos <span class="sc">+</span> rubella<span class="sc">$</span>Neg) <span class="sc">/</span> <span class="fu">max</span>(rubella<span class="sc">$</span>Pos <span class="sc">+</span> rubella<span class="sc">$</span>Neg) </span>
+<span id="cb346-4"><a href="estimating-r_0-using-catalytic-models.html#cb346-4" tabindex="-1"></a></span>
+<span id="cb346-5"><a href="estimating-r_0-using-catalytic-models.html#cb346-5" tabindex="-1"></a><span class="do">## now produce plots</span></span>
+<span id="cb346-6"><a href="estimating-r_0-using-catalytic-models.html#cb346-6" tabindex="-1"></a><span class="fu">plot</span>(rubella<span class="sc">$</span>Age, rubella<span class="sc">$</span>p_s, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> size<span class="sc">^</span><span class="fl">0.75</span>)</span>
+<span id="cb346-7"><a href="estimating-r_0-using-catalytic-models.html#cb346-7" tabindex="-1"></a><span class="fu">plot</span>(rubella<span class="sc">$</span>Age, rubella<span class="sc">$</span>lambda, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> size<span class="sc">^</span><span class="fl">0.75</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ps"></span>
+<img src="_main_files/figure-html/ps-1.png" alt="Proportion susceptible with respect to age" width="480" />
+<p class="caption">
+Figure 9.1: Proportion susceptible with respect to age
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lambda"></span>
+<img src="_main_files/figure-html/lambda-1.png" alt="First estimate of force-of-infection of rubella" width="480" />
+<p class="caption">
+Figure 9.2: First estimate of force-of-infection of rubella
+</p>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+Are these “first” estimates of the force-of-infection biologically plausible (Figs <a href="estimating-r_0-using-catalytic-models.html#fig:ps">9.1</a> and <a href="estimating-r_0-using-catalytic-models.html#fig:lambda">9.2</a>)? If not, how has this transpired and how can we improve the estimates?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-343" onclick="javascript:toggle(&#39;unnamed-chunk-343&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-343" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+Here some of the estimates of <span class="math inline">\(\lambda\)</span> are <em>negative</em>, which doesn’t make sense biologically. Remember, we are crudely estimating <span class="math inline">\(\lambda\)</span> multiple times using only information in each cohort, whilst putting no constraints on the range of values that the <span class="math inline">\(\lambda\)</span> terms can take. We are also ignoring the fact that the susceptible proportions in each age-class are themselves estimates, and are thus measured with uncertainty. This is not a robust approach for statistical inference!
+</div>
+</div>
+</div>
+<p>Dynamic age-structured epidemic models typically assume that the force-of-infection is constant within coarse age-groups, but can differ between age-groups. For such a coarse-grained models (with age groups of width <span class="math inline">\(a\)</span>, indexed by <span class="math inline">\(i\)</span> as before) we can calculate the piecewise probability of remaining susceptible as introduced in lectures:
+<span class="math display" id="eq:p2">\[\begin{equation}
+    P_s(a) = \left\{\begin{array}{ll}
+        e^{-\lambda_1 a} &amp; \mbox{for}~a_0 &lt; a &lt; a_1\\
+        P_s\left(a_i\right) e^{-\lambda_{i + 1} \left(a - a_i\right)} &amp; \mbox{for}~a_i &lt; a &lt; a_{i + 1},
+    \end{array}\right.
+    \tag{9.2}
+\end{equation}\]</span>
+where <span class="math inline">\(\lambda_i\)</span> is the age-specific force-of-infection in group <span class="math inline">\(i\)</span>.</p>
+<p>The function <code>piecewise_s(a, foi)</code> provided below returns this age-stratified probability of being susceptible at the end of each discrete age groups, specified by the vector of ages <code>a</code> for a given vector of force-of-infections (<code>lambda</code>).</p>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="estimating-r_0-using-catalytic-models.html#cb347-1" tabindex="-1"></a><span class="do">## Calculate proportion of population that remains susceptible</span></span>
+<span id="cb347-2"><a href="estimating-r_0-using-catalytic-models.html#cb347-2" tabindex="-1"></a><span class="do">## by age a for population with force of infection (foi)</span></span>
+<span id="cb347-3"><a href="estimating-r_0-using-catalytic-models.html#cb347-3" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb347-4"><a href="estimating-r_0-using-catalytic-models.html#cb347-4" tabindex="-1"></a><span class="do">## Arguments:</span></span>
+<span id="cb347-5"><a href="estimating-r_0-using-catalytic-models.html#cb347-5" tabindex="-1"></a><span class="do">## a: vector of ages to calculate susceptible proportion</span></span>
+<span id="cb347-6"><a href="estimating-r_0-using-catalytic-models.html#cb347-6" tabindex="-1"></a><span class="do">## lambda: vector of length equal to the maximum assumed age in the population</span></span>
+<span id="cb347-7"><a href="estimating-r_0-using-catalytic-models.html#cb347-7" tabindex="-1"></a><span class="do">## with a specified force of infection for each annual cohort.  </span></span>
+<span id="cb347-8"><a href="estimating-r_0-using-catalytic-models.html#cb347-8" tabindex="-1"></a>piecewise_s <span class="ot">&lt;-</span> <span class="cf">function</span>(a, lambda) {</span>
+<span id="cb347-9"><a href="estimating-r_0-using-catalytic-models.html#cb347-9" tabindex="-1"></a>    </span>
+<span id="cb347-10"><a href="estimating-r_0-using-catalytic-models.html#cb347-10" tabindex="-1"></a>    <span class="do">## extract information on age-classes </span></span>
+<span id="cb347-11"><a href="estimating-r_0-using-catalytic-models.html#cb347-11" tabindex="-1"></a>    max_age <span class="ot">&lt;-</span> <span class="fu">length</span>(lambda)</span>
+<span id="cb347-12"><a href="estimating-r_0-using-catalytic-models.html#cb347-12" tabindex="-1"></a>    breaks <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>max_age</span>
+<span id="cb347-13"><a href="estimating-r_0-using-catalytic-models.html#cb347-13" tabindex="-1"></a>    widths <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, max_age)</span>
+<span id="cb347-14"><a href="estimating-r_0-using-catalytic-models.html#cb347-14" tabindex="-1"></a>    </span>
+<span id="cb347-15"><a href="estimating-r_0-using-catalytic-models.html#cb347-15" tabindex="-1"></a>    <span class="do">## set up output vector</span></span>
+<span id="cb347-16"><a href="estimating-r_0-using-catalytic-models.html#cb347-16" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(a))</span>
+<span id="cb347-17"><a href="estimating-r_0-using-catalytic-models.html#cb347-17" tabindex="-1"></a>    </span>
+<span id="cb347-18"><a href="estimating-r_0-using-catalytic-models.html#cb347-18" tabindex="-1"></a>    <span class="do">## loop over age-classes</span></span>
+<span id="cb347-19"><a href="estimating-r_0-using-catalytic-models.html#cb347-19" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(a)) {</span>
+<span id="cb347-20"><a href="estimating-r_0-using-catalytic-models.html#cb347-20" tabindex="-1"></a>        <span class="cf">if</span>(a[i] <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb347-21"><a href="estimating-r_0-using-catalytic-models.html#cb347-21" tabindex="-1"></a>            s[i] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb347-22"><a href="estimating-r_0-using-catalytic-models.html#cb347-22" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb347-23"><a href="estimating-r_0-using-catalytic-models.html#cb347-23" tabindex="-1"></a>            <span class="do">## which age class does current value of a lie within</span></span>
+<span id="cb347-24"><a href="estimating-r_0-using-catalytic-models.html#cb347-24" tabindex="-1"></a>            age_class <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">which</span>(a[i] <span class="sc">&gt;</span> breaks))</span>
+<span id="cb347-25"><a href="estimating-r_0-using-catalytic-models.html#cb347-25" tabindex="-1"></a>            sg <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb347-26"><a href="estimating-r_0-using-catalytic-models.html#cb347-26" tabindex="-1"></a>            <span class="cf">if</span>(age_class <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
+<span id="cb347-27"><a href="estimating-r_0-using-catalytic-models.html#cb347-27" tabindex="-1"></a>                <span class="do">## iterate over previous age groups calculate susceptibles</span></span>
+<span id="cb347-28"><a href="estimating-r_0-using-catalytic-models.html#cb347-28" tabindex="-1"></a>                <span class="do">## at beginning of age group</span></span>
+<span id="cb347-29"><a href="estimating-r_0-using-catalytic-models.html#cb347-29" tabindex="-1"></a>                <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(age_class <span class="sc">-</span> <span class="dv">1</span>)) {</span>
+<span id="cb347-30"><a href="estimating-r_0-using-catalytic-models.html#cb347-30" tabindex="-1"></a>                    sg <span class="ot">&lt;-</span> sg <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>lambda[j] <span class="sc">*</span> widths[j])</span>
+<span id="cb347-31"><a href="estimating-r_0-using-catalytic-models.html#cb347-31" tabindex="-1"></a>                }</span>
+<span id="cb347-32"><a href="estimating-r_0-using-catalytic-models.html#cb347-32" tabindex="-1"></a>            }</span>
+<span id="cb347-33"><a href="estimating-r_0-using-catalytic-models.html#cb347-33" tabindex="-1"></a>            <span class="do">## calculate susceptible proportion at age a within final</span></span>
+<span id="cb347-34"><a href="estimating-r_0-using-catalytic-models.html#cb347-34" tabindex="-1"></a>            <span class="do">## age group</span></span>
+<span id="cb347-35"><a href="estimating-r_0-using-catalytic-models.html#cb347-35" tabindex="-1"></a>            s[i] <span class="ot">&lt;-</span> sg <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>lambda[age_class] <span class="sc">*</span> (a[i] <span class="sc">-</span> breaks[age_class]))</span>
+<span id="cb347-36"><a href="estimating-r_0-using-catalytic-models.html#cb347-36" tabindex="-1"></a>        }</span>
+<span id="cb347-37"><a href="estimating-r_0-using-catalytic-models.html#cb347-37" tabindex="-1"></a>    }</span>
+<span id="cb347-38"><a href="estimating-r_0-using-catalytic-models.html#cb347-38" tabindex="-1"></a>    <span class="do">## return vector of probabilities</span></span>
+<span id="cb347-39"><a href="estimating-r_0-using-catalytic-models.html#cb347-39" tabindex="-1"></a>    <span class="fu">return</span>(s)</span>
+<span id="cb347-40"><a href="estimating-r_0-using-catalytic-models.html#cb347-40" tabindex="-1"></a>}</span></code></pre></div>
+<p>The function <code>FOI_loglik(x, foi_key, sero_data)</code> defined below uses <code>piecewise_s()</code> to calculate the (binomial) likelihood of observing a given number of positive/negative samples for each age-group given in the table <code>sero_data</code>, for a piecewise continuous force-of-infection defined by vectors <code>x</code> and <code>foi_key</code>.</p>
+<p>As individuals can only take two possible values, positive or negative, the likelihood of a given force-of-infection (FOI) can be written in terms of a binomial trial depending on the number of positive samples in each group (<span class="math inline">\(X_a\)</span>), number of samples (<span class="math inline">\(N_a\)</span>) and the predicted probability of infection within that age group (<span class="math inline">\(p_a(K)\)</span>). Hence the log-likelihood can be written as:
+<span class="math display">\[\begin{equation}
+    l(K) = \sum_{a} \log{N_a \choose X_a} + X_a\log\left[p_a(K)\right] + \left({N_a - X_a}\right)\log\left(1 - p_a(K)\right).
+\end{equation}\]</span></p>
+<p>We can code this in R using the following function:</p>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="estimating-r_0-using-catalytic-models.html#cb348-1" tabindex="-1"></a><span class="do">## Calculate (Binomial) likelihood of observing given number of </span></span>
+<span id="cb348-2"><a href="estimating-r_0-using-catalytic-models.html#cb348-2" tabindex="-1"></a><span class="do">## positive/negative samples (provided in table sero_data) for each </span></span>
+<span id="cb348-3"><a href="estimating-r_0-using-catalytic-models.html#cb348-3" tabindex="-1"></a><span class="do">## age group and specified by a piecewise continuous force of </span></span>
+<span id="cb348-4"><a href="estimating-r_0-using-catalytic-models.html#cb348-4" tabindex="-1"></a><span class="do">## infection model defined by foi_key</span></span>
+<span id="cb348-5"><a href="estimating-r_0-using-catalytic-models.html#cb348-5" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb348-6"><a href="estimating-r_0-using-catalytic-models.html#cb348-6" tabindex="-1"></a><span class="do">## Arguments:</span></span>
+<span id="cb348-7"><a href="estimating-r_0-using-catalytic-models.html#cb348-7" tabindex="-1"></a><span class="do">## x: vector of unique force-of-infection values</span></span>
+<span id="cb348-8"><a href="estimating-r_0-using-catalytic-models.html#cb348-8" tabindex="-1"></a><span class="do">## foi_key: pattern vector of length equal to the maximum assumed age</span></span>
+<span id="cb348-9"><a href="estimating-r_0-using-catalytic-models.html#cb348-9" tabindex="-1"></a><span class="do">## in population (or data set) that specifies which unique value of x</span></span>
+<span id="cb348-10"><a href="estimating-r_0-using-catalytic-models.html#cb348-10" tabindex="-1"></a><span class="do">## corresponds to each annual cohort in population.</span></span>
+<span id="cb348-11"><a href="estimating-r_0-using-catalytic-models.html#cb348-11" tabindex="-1"></a><span class="do">## sero_data: data frame with columns</span></span>
+<span id="cb348-12"><a href="estimating-r_0-using-catalytic-models.html#cb348-12" tabindex="-1"></a><span class="do">##     sero_data$Pos: positive samples</span></span>
+<span id="cb348-13"><a href="estimating-r_0-using-catalytic-models.html#cb348-13" tabindex="-1"></a><span class="do">##     sero_data$Neg: negative samples</span></span>
+<span id="cb348-14"><a href="estimating-r_0-using-catalytic-models.html#cb348-14" tabindex="-1"></a></span>
+<span id="cb348-15"><a href="estimating-r_0-using-catalytic-models.html#cb348-15" tabindex="-1"></a>FOI_loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(x, foi_key, sero_data) {</span>
+<span id="cb348-16"><a href="estimating-r_0-using-catalytic-models.html#cb348-16" tabindex="-1"></a>    </span>
+<span id="cb348-17"><a href="estimating-r_0-using-catalytic-models.html#cb348-17" tabindex="-1"></a>    <span class="do">## set up age classes</span></span>
+<span id="cb348-18"><a href="estimating-r_0-using-catalytic-models.html#cb348-18" tabindex="-1"></a>    breaks <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">length</span>(foi_key)</span>
+<span id="cb348-19"><a href="estimating-r_0-using-catalytic-models.html#cb348-19" tabindex="-1"></a>    </span>
+<span id="cb348-20"><a href="estimating-r_0-using-catalytic-models.html#cb348-20" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">any</span>(x <span class="sc">&lt;=</span> <span class="dv">0</span>)) {</span>
+<span id="cb348-21"><a href="estimating-r_0-using-catalytic-models.html#cb348-21" tabindex="-1"></a>        <span class="do">## if any proposed lambdas are negative, then</span></span>
+<span id="cb348-22"><a href="estimating-r_0-using-catalytic-models.html#cb348-22" tabindex="-1"></a>        <span class="do">## return zero likelihood (so log-likelihood = -Inf)</span></span>
+<span id="cb348-23"><a href="estimating-r_0-using-catalytic-models.html#cb348-23" tabindex="-1"></a>        <span class="fu">return</span>(<span class="sc">-</span><span class="cn">Inf</span>)</span>
+<span id="cb348-24"><a href="estimating-r_0-using-catalytic-models.html#cb348-24" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb348-25"><a href="estimating-r_0-using-catalytic-models.html#cb348-25" tabindex="-1"></a>        <span class="do">## extract relevant FOI for each age-cohort</span></span>
+<span id="cb348-26"><a href="estimating-r_0-using-catalytic-models.html#cb348-26" tabindex="-1"></a>        lambda <span class="ot">&lt;-</span> x[foi_key]</span>
+<span id="cb348-27"><a href="estimating-r_0-using-catalytic-models.html#cb348-27" tabindex="-1"></a>        </span>
+<span id="cb348-28"><a href="estimating-r_0-using-catalytic-models.html#cb348-28" tabindex="-1"></a>        <span class="do">## calculate log-likelihood</span></span>
+<span id="cb348-29"><a href="estimating-r_0-using-catalytic-models.html#cb348-29" tabindex="-1"></a>        loglik <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb348-30"><a href="estimating-r_0-using-catalytic-models.html#cb348-30" tabindex="-1"></a>        <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(sero_data)) {</span>
+<span id="cb348-31"><a href="estimating-r_0-using-catalytic-models.html#cb348-31" tabindex="-1"></a>            <span class="do">## which age class does observation lie in </span></span>
+<span id="cb348-32"><a href="estimating-r_0-using-catalytic-models.html#cb348-32" tabindex="-1"></a>            age_class <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">which</span>(sero_data<span class="sc">$</span>Age[i] <span class="sc">&gt;</span> breaks))</span>
+<span id="cb348-33"><a href="estimating-r_0-using-catalytic-models.html#cb348-33" tabindex="-1"></a>            </span>
+<span id="cb348-34"><a href="estimating-r_0-using-catalytic-models.html#cb348-34" tabindex="-1"></a>            <span class="do">## calculate proportion of susceptibles at given age class</span></span>
+<span id="cb348-35"><a href="estimating-r_0-using-catalytic-models.html#cb348-35" tabindex="-1"></a>            sg <span class="ot">&lt;-</span> <span class="fu">piecewise_s</span>(breaks[age_class], lambda)</span>
+<span id="cb348-36"><a href="estimating-r_0-using-catalytic-models.html#cb348-36" tabindex="-1"></a>            </span>
+<span id="cb348-37"><a href="estimating-r_0-using-catalytic-models.html#cb348-37" tabindex="-1"></a>            <span class="do">## log-likelihood contribution</span></span>
+<span id="cb348-38"><a href="estimating-r_0-using-catalytic-models.html#cb348-38" tabindex="-1"></a>            loglik <span class="ot">&lt;-</span> loglik <span class="sc">+</span> <span class="fu">dbinom</span>(</span>
+<span id="cb348-39"><a href="estimating-r_0-using-catalytic-models.html#cb348-39" tabindex="-1"></a>                sero_data<span class="sc">$</span>Pos[i],</span>
+<span id="cb348-40"><a href="estimating-r_0-using-catalytic-models.html#cb348-40" tabindex="-1"></a>                sero_data<span class="sc">$</span>Pos[i] <span class="sc">+</span> sero_data<span class="sc">$</span>Neg[i],</span>
+<span id="cb348-41"><a href="estimating-r_0-using-catalytic-models.html#cb348-41" tabindex="-1"></a>                <span class="at">prob =</span> <span class="dv">1</span> <span class="sc">-</span> sg <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>lambda[i] <span class="sc">*</span> (sero_data<span class="sc">$</span>Age[i] <span class="sc">-</span> breaks[age_class])), </span>
+<span id="cb348-42"><a href="estimating-r_0-using-catalytic-models.html#cb348-42" tabindex="-1"></a>                <span class="at">log =</span> <span class="cn">TRUE</span></span>
+<span id="cb348-43"><a href="estimating-r_0-using-catalytic-models.html#cb348-43" tabindex="-1"></a>            )</span>
+<span id="cb348-44"><a href="estimating-r_0-using-catalytic-models.html#cb348-44" tabindex="-1"></a>        }</span>
+<span id="cb348-45"><a href="estimating-r_0-using-catalytic-models.html#cb348-45" tabindex="-1"></a>        <span class="do">## return log-likelihood</span></span>
+<span id="cb348-46"><a href="estimating-r_0-using-catalytic-models.html#cb348-46" tabindex="-1"></a>        <span class="fu">return</span>(loglik)</span>
+<span id="cb348-47"><a href="estimating-r_0-using-catalytic-models.html#cb348-47" tabindex="-1"></a>    }</span>
+<span id="cb348-48"><a href="estimating-r_0-using-catalytic-models.html#cb348-48" tabindex="-1"></a>}</span></code></pre></div>
+<p>We will assume there are two mixing groups and two unique forces-of-infection, one corresponding to children <span class="math inline">\(&lt;15\)</span> years and one for adults 15–45. We wish to estimate two parameters, <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span>, and we specify which parameter corresponds to which age cohort using a vector <code>two_groups</code> defined as:</p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="estimating-r_0-using-catalytic-models.html#cb349-1" tabindex="-1"></a>two_groups <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(rubella<span class="sc">$</span>Age) <span class="sc">&gt;=</span> <span class="dv">15</span>) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb349-2"><a href="estimating-r_0-using-catalytic-models.html#cb349-2" tabindex="-1"></a>two_groups</span></code></pre></div>
+<pre><code>##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [39] 2 2 2 2 2 2</code></pre>
+<p>We can obtain the maximum-likelihood estimate for this model by optimising the value of <code>FOI_loglik()</code> using the built-in function <code>optim()</code>.</p>
+<p><infobutton id="displayTextunnamed-chunk-347" onclick="javascript:toggle('unnamed-chunk-347');">Show: The optim() function</infobutton></p>
+<div id="toggleTextunnamed-chunk-347" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p><code>optim()</code> is an in-build optimisation function in R. It is used when you want to optimise a function with respect to <em>multiple</em> parameters. If you want to optimise a function with respect to a <em>single</em> parameter, then use <code>optimise()</code> (which we will use later on).</p>
+<p>Arguments for <code>optim()</code> can be found from the help file in the usual way e.g. <code>?optim</code>. The key ones here are:</p>
+<ul>
+<li><code>par</code>: a vector of initial values (for <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> here).</li>
+<li><code>fn</code>: a function to be minimised (or maximised), with first argument the vector of parameters over which optimisation is to take place. It should return a scalar result. Here we pass it the <code>FOI_loglik()</code> function we defined above.</li>
+<li><code>...</code>: additional arguments required for <code>FOI_loglik()</code> can be passed to <code>optim()</code>; here we pass <code>foi_key</code> and <code>sero_data</code> arguments.</li>
+<li><code>control</code>: a list of control parameters. Here we set <code>fnscale = -1</code> to ensure <strong>maximisation</strong> (else it defaults to minimisation).</li>
+</ul>
+Please see the help file for more details.
+</div>
+</div>
+</div>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="estimating-r_0-using-catalytic-models.html#cb351-1" tabindex="-1"></a><span class="do">## calculate MLE</span></span>
+<span id="cb351-2"><a href="estimating-r_0-using-catalytic-models.html#cb351-2" tabindex="-1"></a>twogroup_mle <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb351-3"><a href="estimating-r_0-using-catalytic-models.html#cb351-3" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.07</span>, <span class="fl">0.07</span>),                <span class="do">## set initial values for lambda1 and lambda2</span></span>
+<span id="cb351-4"><a href="estimating-r_0-using-catalytic-models.html#cb351-4" tabindex="-1"></a>    FOI_loglik,                   <span class="do">## log-likelihood function</span></span>
+<span id="cb351-5"><a href="estimating-r_0-using-catalytic-models.html#cb351-5" tabindex="-1"></a>    <span class="at">foi_key =</span> two_groups,         <span class="do">## foi_key </span></span>
+<span id="cb351-6"><a href="estimating-r_0-using-catalytic-models.html#cb351-6" tabindex="-1"></a>    <span class="at">sero_data =</span> rubella,          <span class="do">## data</span></span>
+<span id="cb351-7"><a href="estimating-r_0-using-catalytic-models.html#cb351-7" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>)  <span class="do">## maximise (rather than minimise) function</span></span>
+<span id="cb351-8"><a href="estimating-r_0-using-catalytic-models.html#cb351-8" tabindex="-1"></a>)</span>
+<span id="cb351-9"><a href="estimating-r_0-using-catalytic-models.html#cb351-9" tabindex="-1"></a>twogroup_mle</span></code></pre></div>
+<pre><code>## $par
+## [1] 0.12423142 0.05500056
+## 
+## $value
+## [1] -110.846
+## 
+## $counts
+## function gradient 
+##       83       NA 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## NULL</code></pre>
+<p>The <code>convergence = 0</code> part suggests that the optimisation has converged (in practice one might want to run <code>optim()</code> multiple times from different initial conditions to check that it’s not converged to a local mode). We can check the fit of the model by plotting the predicted values against the data:</p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="estimating-r_0-using-catalytic-models.html#cb353-1" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">44</span>, <span class="at">by =</span> <span class="fl">0.1</span>) </span>
+<span id="cb353-2"><a href="estimating-r_0-using-catalytic-models.html#cb353-2" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb353-3"><a href="estimating-r_0-using-catalytic-models.html#cb353-3" tabindex="-1"></a>    ages, </span>
+<span id="cb353-4"><a href="estimating-r_0-using-catalytic-models.html#cb353-4" tabindex="-1"></a>    <span class="fu">piecewise_s</span>(ages, twogroup_mle<span class="sc">$</span>par[two_groups]), </span>
+<span id="cb353-5"><a href="estimating-r_0-using-catalytic-models.html#cb353-5" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;l&#39;</span>,</span>
+<span id="cb353-6"><a href="estimating-r_0-using-catalytic-models.html#cb353-6" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&quot;Age&quot;</span>,</span>
+<span id="cb353-7"><a href="estimating-r_0-using-catalytic-models.html#cb353-7" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;Proportion susceptible&quot;</span></span>
+<span id="cb353-8"><a href="estimating-r_0-using-catalytic-models.html#cb353-8" tabindex="-1"></a>)</span>
+<span id="cb353-9"><a href="estimating-r_0-using-catalytic-models.html#cb353-9" tabindex="-1"></a><span class="fu">points</span>(rubella<span class="sc">$</span>Age, rubella<span class="sc">$</span>p_s, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> size<span class="sc">^</span><span class="fl">0.75</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:propsus"></span>
+<img src="_main_files/figure-html/propsus-1.png" alt="Predicted susceptible profile of two-group FOI model against data" width="480" />
+<p class="caption">
+Figure 9.3: Predicted susceptible profile of two-group FOI model against data
+</p>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Can you suggest, and estimate, a model to improve the fit to the data? How can you compare the fit of the two models?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-350" onclick="javascript:toggle(&#39;unnamed-chunk-350&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-350" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>There is a suggestion from Figure <a href="estimating-r_0-using-catalytic-models.html#fig:propsus">9.3</a> that infants, as well as adults, have a lower rate of infection than school age children. Such a “core-group” model will provide a closer fit to the serological age-profile.</p>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="estimating-r_0-using-catalytic-models.html#cb354-1" tabindex="-1"></a><span class="do">## set up FOI mappings</span></span>
+<span id="cb354-2"><a href="estimating-r_0-using-catalytic-models.html#cb354-2" tabindex="-1"></a>three_groups <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">max</span>(rubella<span class="sc">$</span>Age))</span>
+<span id="cb354-3"><a href="estimating-r_0-using-catalytic-models.html#cb354-3" tabindex="-1"></a>three_groups[<span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(rubella<span class="sc">$</span>Age) <span class="sc">&lt;</span> <span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb354-4"><a href="estimating-r_0-using-catalytic-models.html#cb354-4" tabindex="-1"></a>three_groups[<span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(rubella<span class="sc">$</span>Age) <span class="sc">&gt;=</span> <span class="dv">5</span> <span class="sc">&amp;</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(rubella<span class="sc">$</span>Age) <span class="sc">&lt;</span> <span class="dv">15</span>] <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb354-5"><a href="estimating-r_0-using-catalytic-models.html#cb354-5" tabindex="-1"></a>three_groups[<span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(rubella<span class="sc">$</span>Age) <span class="sc">&gt;=</span> <span class="dv">15</span>] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb354-6"><a href="estimating-r_0-using-catalytic-models.html#cb354-6" tabindex="-1"></a></span>
+<span id="cb354-7"><a href="estimating-r_0-using-catalytic-models.html#cb354-7" tabindex="-1"></a><span class="do">## fit model</span></span>
+<span id="cb354-8"><a href="estimating-r_0-using-catalytic-models.html#cb354-8" tabindex="-1"></a>threegroup_mle <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb354-9"><a href="estimating-r_0-using-catalytic-models.html#cb354-9" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.07</span>, <span class="fl">0.07</span>, <span class="fl">0.07</span>),</span>
+<span id="cb354-10"><a href="estimating-r_0-using-catalytic-models.html#cb354-10" tabindex="-1"></a>    FOI_loglik,</span>
+<span id="cb354-11"><a href="estimating-r_0-using-catalytic-models.html#cb354-11" tabindex="-1"></a>    <span class="at">foi_key =</span> three_groups,</span>
+<span id="cb354-12"><a href="estimating-r_0-using-catalytic-models.html#cb354-12" tabindex="-1"></a>    <span class="at">sero_data =</span> rubella,</span>
+<span id="cb354-13"><a href="estimating-r_0-using-catalytic-models.html#cb354-13" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb354-14"><a href="estimating-r_0-using-catalytic-models.html#cb354-14" tabindex="-1"></a>)</span>
+<span id="cb354-15"><a href="estimating-r_0-using-catalytic-models.html#cb354-15" tabindex="-1"></a>threegroup_mle</span></code></pre></div>
+<pre><code>## $par
+## [1] 0.10299635 0.14664689 0.04503626
+## 
+## $value
+## [1] -105.7169
+## 
+## $counts
+## function gradient 
+##       88       NA 
+## 
+## $convergence
+## [1] 0
+## 
+## $message
+## NULL</code></pre>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="estimating-r_0-using-catalytic-models.html#cb356-1" tabindex="-1"></a><span class="do">## plot model fits</span></span>
+<span id="cb356-2"><a href="estimating-r_0-using-catalytic-models.html#cb356-2" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb356-3"><a href="estimating-r_0-using-catalytic-models.html#cb356-3" tabindex="-1"></a>    ages, </span>
+<span id="cb356-4"><a href="estimating-r_0-using-catalytic-models.html#cb356-4" tabindex="-1"></a>    <span class="fu">piecewise_s</span>(ages, threegroup_mle<span class="sc">$</span>par[three_groups]),</span>
+<span id="cb356-5"><a href="estimating-r_0-using-catalytic-models.html#cb356-5" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;l&#39;</span>,</span>
+<span id="cb356-6"><a href="estimating-r_0-using-catalytic-models.html#cb356-6" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&quot;Age&quot;</span>,</span>
+<span id="cb356-7"><a href="estimating-r_0-using-catalytic-models.html#cb356-7" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;Proportion susceptible&quot;</span></span>
+<span id="cb356-8"><a href="estimating-r_0-using-catalytic-models.html#cb356-8" tabindex="-1"></a>)</span>
+<span id="cb356-9"><a href="estimating-r_0-using-catalytic-models.html#cb356-9" tabindex="-1"></a><span class="fu">points</span>(rubella<span class="sc">$</span>Age, rubella<span class="sc">$</span>p_s, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> size<span class="sc">^</span><span class="fl">0.75</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1212-1.png" width="480" style="display: block; margin: auto;" /></p>
+The log-likelihood of -106 compared to -111 for the two group model, provides evidence that the three-group model better explains the data even allowing for any penalties we might chose to impose due to the additional parameter (e.g. AIC).
+</div>
+</div>
+</div>
+<div id="bayesian-estimation" class="section level3 hasAnchor" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> Bayesian estimation<a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can also estimate the posterior distributions for the two force-of-infections within a Bayesian framework using MCMC. Here we introduce and use one of the standard MCMC libraries in R (<code>MCMCpack</code>) that implements a generic MCMC method.</p>
+<p><infobutton id="displayTextunnamed-chunk-351" onclick="javascript:toggle('unnamed-chunk-351');">Show: A note on priors</infobutton></p>
+<div id="toggleTextunnamed-chunk-351" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>The function <code>MCMCmetrop1R()</code> provided in the <code>MCMCpack</code> library takes a function that returns the un-normalised log-posterior density, that is:
+<span class="math display" id="eq:unnormll">\[\begin{equation}
+    \log\left[f\left(\mathbf{y} \mid \boldsymbol{\theta}\right)\right] + \log\left[f\left(\boldsymbol{\theta}\right)\right].
+    \tag{9.3}
+\end{equation}\]</span>
+We implement this using the <code>FOI_loglik()</code> function defined earlier. If we only export the log-likelihood from this function, then this is equivalent to putting completely flat (so-called improper) priors on the parameters. A subtlety here is that <code>FOI_loglik()</code> actually returns <code>NA</code> if any of the parameters are <strong>negative</strong>, meaning that in fact we are putting flat priors on <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> that are constrained in the region <span class="math inline">\((0, \infty)\)</span>. This is important since we know that rates can’t be negative.</p>
+<p>If we want to use more structured prior distributions, then we would have to amend <code>FOI_loglik()</code> to return <a href="estimating-r_0-using-catalytic-models.html#eq:unnormll">(9.3)</a> with the correct prior densities built-in.</p>
+<strong>Important</strong>: you <em>must</em> know what priors you are using, since they are an integral part of a Bayesian analysis.
+</div>
+</div>
+</div>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="estimating-r_0-using-catalytic-models.html#cb357-1" tabindex="-1"></a><span class="do">## load library</span></span>
+<span id="cb357-2"><a href="estimating-r_0-using-catalytic-models.html#cb357-2" tabindex="-1"></a><span class="fu">library</span>(MCMCpack) </span>
+<span id="cb357-3"><a href="estimating-r_0-using-catalytic-models.html#cb357-3" tabindex="-1"></a></span>
+<span id="cb357-4"><a href="estimating-r_0-using-catalytic-models.html#cb357-4" tabindex="-1"></a><span class="do">## fit model</span></span>
+<span id="cb357-5"><a href="estimating-r_0-using-catalytic-models.html#cb357-5" tabindex="-1"></a>twogroup_post <span class="ot">&lt;-</span> <span class="fu">MCMCmetrop1R</span>(</span>
+<span id="cb357-6"><a href="estimating-r_0-using-catalytic-models.html#cb357-6" tabindex="-1"></a>    FOI_loglik,                     <span class="do">## log-likelihood </span></span>
+<span id="cb357-7"><a href="estimating-r_0-using-catalytic-models.html#cb357-7" tabindex="-1"></a>    <span class="at">theta.init =</span> twogroup_mle<span class="sc">$</span>par,  <span class="do">## initial values</span></span>
+<span id="cb357-8"><a href="estimating-r_0-using-catalytic-models.html#cb357-8" tabindex="-1"></a>    <span class="at">mcmc =</span> <span class="dv">10000</span>,                   <span class="do">## number of iterations</span></span>
+<span id="cb357-9"><a href="estimating-r_0-using-catalytic-models.html#cb357-9" tabindex="-1"></a>    <span class="at">burnin =</span> <span class="dv">500</span>,                   <span class="do">## burn-in</span></span>
+<span id="cb357-10"><a href="estimating-r_0-using-catalytic-models.html#cb357-10" tabindex="-1"></a>    <span class="at">tune =</span> <span class="dv">1</span>,                       <span class="do">## proposal parameter</span></span>
+<span id="cb357-11"><a href="estimating-r_0-using-catalytic-models.html#cb357-11" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="dv">500</span>,                  <span class="do">## print progress every 500 it</span></span>
+<span id="cb357-12"><a href="estimating-r_0-using-catalytic-models.html#cb357-12" tabindex="-1"></a>    <span class="at">logfun =</span> <span class="cn">TRUE</span>,                  <span class="do">## return log-density</span></span>
+<span id="cb357-13"><a href="estimating-r_0-using-catalytic-models.html#cb357-13" tabindex="-1"></a>    <span class="at">foi_key =</span> two_groups,           <span class="do">## foi key</span></span>
+<span id="cb357-14"><a href="estimating-r_0-using-catalytic-models.html#cb357-14" tabindex="-1"></a>    <span class="at">sero_data =</span> rubella             <span class="do">## data</span></span>
+<span id="cb357-15"><a href="estimating-r_0-using-catalytic-models.html#cb357-15" tabindex="-1"></a>)</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Check the convergence of the MCMC and comment on the weight of evidence that the force-of-infection for rubella is different in the two age groups.</p>
+<p><infobutton id="displayTextunnamed-chunk-1219" onclick="javascript:toggle('unnamed-chunk-1219');">Show: Hint</infobutton></p>
+<div id="toggleTextunnamed-chunk-1219" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+Plotting the fitted model object will give the trace plots, and summarising the model object gives useful summary measures.
+</div>
+</div>
+</div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-354" onclick="javascript:toggle(&#39;unnamed-chunk-354&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-354" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>To check the chains we can simply plot the <code>two_group_post</code> object:</p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="estimating-r_0-using-catalytic-models.html#cb358-1" tabindex="-1"></a><span class="fu">plot</span>(twogroup_post)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1224-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="estimating-r_0-using-catalytic-models.html#cb359-1" tabindex="-1"></a><span class="fu">summary</span>(twogroup_post)</span></code></pre></div>
+<pre><code>## 
+## Iterations = 501:10500
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 10000 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##         Mean       SD  Naive SE Time-series SE
+## [1,] 0.12432 0.003374 3.374e-05      0.0001069
+## [2,] 0.05539 0.007129 7.129e-05      0.0002193
+## 
+## 2. Quantiles for each variable:
+## 
+##         2.5%    25%     50%     75%   97.5%
+## var1 0.11765 0.1220 0.12432 0.12667 0.13112
+## var2 0.04191 0.0504 0.05521 0.06025 0.06946</code></pre>
+Here the chains look well mixed and the algorithm seems to have converged (ideally we would want to run multiple chains). The 95% credible intervals for the two force of infection parameters are non-overlapping with a risk of infection for school age-children almost twice that of adults.
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="ngm" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Next-generation matrix approaches<a href="estimating-r_0-using-catalytic-models.html#ngm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>If the force-of-infection was independent of age we could estimate <span class="math inline">\(R_0\)</span> straightforwardly as the ratio of the force-of-infection and life expectancy. However, when the force-of-infection varies with age we need to first use the force-of-infection to calculate the transmission parameters within and between each age-group. Here we work through through the traditional method for achieving this where social contact data is not available and assumptions must be made about Who Acquires Infection from Whom (WAIFW).</p>
+<p>We can derive an equation that links the force-of-infection and the elements of the next generation matrix <span class="math inline">\(k_{ij}\)</span>. (The details of the derivation are a little messy and will be omitted here, see <span class="citation">Anderson and May (<a href="#ref-anderson_may:1991">1991</a>)</span>; <span class="citation">Hens et al. (<a href="#ref-hensetal:2012">2012</a>)</span> for details.)</p>
+<p><span class="math display" id="eq:ngm">\[\begin{equation}
+    \begin{pmatrix} \beta_{11} &amp; \beta_{12}\\ \beta_{21} &amp; \beta_{22} \end{pmatrix} \begin{pmatrix} \psi_1 \\ \psi_2 \end{pmatrix} = \begin{pmatrix} \lambda_1 \\ \lambda_2 \end{pmatrix}
+    \tag{9.4}
+\end{equation}\]</span></p>
+<p><span class="math inline">\(\mathbf{\psi}\)</span> is a function derived from the force-of-infection that, loosely, corresponds to the average proportion of individuals infectious within each age group at any time. The function <code>Psi(lambda, age_widths, TI, u)</code> defined below returns the vector <span class="math inline">\(\mathbf{\psi}\)</span> for a specified force-of-infection <code>lambda</code>, for coarse age groups of widths <code>age_widths</code>, and infectious period of length <code>TI</code>, and the mortality rate for each age group <code>u</code>.</p>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="estimating-r_0-using-catalytic-models.html#cb361-1" tabindex="-1"></a>Psi <span class="ot">&lt;-</span> <span class="cf">function</span>(lambda, age_widths, u, TI) {</span>
+<span id="cb361-2"><a href="estimating-r_0-using-catalytic-models.html#cb361-2" tabindex="-1"></a>    </span>
+<span id="cb361-3"><a href="estimating-r_0-using-catalytic-models.html#cb361-3" tabindex="-1"></a>    <span class="do">## set up auxiliary vectors</span></span>
+<span id="cb361-4"><a href="estimating-r_0-using-catalytic-models.html#cb361-4" tabindex="-1"></a>    psi <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(lambda))</span>
+<span id="cb361-5"><a href="estimating-r_0-using-catalytic-models.html#cb361-5" tabindex="-1"></a>    Psi <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(lambda))</span>
+<span id="cb361-6"><a href="estimating-r_0-using-catalytic-models.html#cb361-6" tabindex="-1"></a>    </span>
+<span id="cb361-7"><a href="estimating-r_0-using-catalytic-models.html#cb361-7" tabindex="-1"></a>    <span class="do">## calculate elements of psi-vector</span></span>
+<span id="cb361-8"><a href="estimating-r_0-using-catalytic-models.html#cb361-8" tabindex="-1"></a>    psi <span class="ot">&lt;-</span> lambda <span class="sc">*</span> age_widths</span>
+<span id="cb361-9"><a href="estimating-r_0-using-catalytic-models.html#cb361-9" tabindex="-1"></a>    psi <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(psi)</span>
+<span id="cb361-10"><a href="estimating-r_0-using-catalytic-models.html#cb361-10" tabindex="-1"></a>    Psi[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span>psi[<span class="dv">1</span>])</span>
+<span id="cb361-11"><a href="estimating-r_0-using-catalytic-models.html#cb361-11" tabindex="-1"></a>    <span class="cf">for</span>(a <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(lambda)) {</span>
+<span id="cb361-12"><a href="estimating-r_0-using-catalytic-models.html#cb361-12" tabindex="-1"></a>        Psi[a] <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>psi[a <span class="sc">-</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span>psi[a])</span>
+<span id="cb361-13"><a href="estimating-r_0-using-catalytic-models.html#cb361-13" tabindex="-1"></a>    }</span>
+<span id="cb361-14"><a href="estimating-r_0-using-catalytic-models.html#cb361-14" tabindex="-1"></a>    </span>
+<span id="cb361-15"><a href="estimating-r_0-using-catalytic-models.html#cb361-15" tabindex="-1"></a>    <span class="do">## return psi-vector</span></span>
+<span id="cb361-16"><a href="estimating-r_0-using-catalytic-models.html#cb361-16" tabindex="-1"></a>    <span class="fu">return</span>((u <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">/</span> TI)) <span class="sc">*</span> Psi)</span>
+<span id="cb361-17"><a href="estimating-r_0-using-catalytic-models.html#cb361-17" tabindex="-1"></a>}</span></code></pre></div>
+<p>Equation <a href="estimating-r_0-using-catalytic-models.html#eq:ngm">(9.4)</a> defines two simultaneous equations for two known values: <span class="math inline">\(\left(\lambda_1, \lambda_2\right)\)</span>.</p>
+<p>We can only proceed to solve these equations by restricting the values of <span class="math inline">\(k_{ij}\)</span> to the number of estimated forces-of-infection. Different assumptions about the structure of this matrix correspond to very different estimates of <span class="math inline">\(R_0\)</span>. <span class="citation">Greenhalgh and Dietz (<a href="#ref-greenhalgh_dietz:1994">1994</a>)</span> demonstrated that the feasible <strong>lower bound</strong> on <span class="math inline">\(R_0\)</span> for these data corresponds to the situation where infants are responsible for all transmission within the population:
+<span class="math display">\[\begin{equation}
+    \mbox{infant} = \begin{pmatrix} k_1 &amp; 0\\ k_2 &amp; 0 \end{pmatrix}.
+\end{equation}\]</span>
+The <strong>upper bound</strong> corresponds to the diagonal matrix where mixing occurs purely within your own age group:
+<span class="math display">\[\begin{equation}
+    \mbox{diagonal} = \begin{pmatrix} k_1 &amp; 0\\ 0 &amp; k_2 \end{pmatrix}.
+\end{equation}\]</span></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+By substituting these matrices into equation <a href="estimating-r_0-using-catalytic-models.html#eq:ngm">(9.4)</a> and carrying out the matrix multiplication, find expressions for <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> in terms of <span class="math inline">\(\left(\lambda_1, \lambda_2, \psi_1, \psi_2\right)\)</span>.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-357" onclick="javascript:toggle(&#39;unnamed-chunk-357&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-357" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+For the ‘infant’ matrix:
+<span class="math display">\[
+    k_1 = \frac{\lambda_1}{\psi_1} \qquad \mbox{and} \qquad k_2 = \frac{\lambda_2}{\psi_1}.
+\]</span>
+For the ‘diagonal’ matrix:
+<span class="math display">\[
+    k_1 = \frac{\lambda_1}{\psi_1} \qquad \mbox{and} \qquad k_2 = \frac{\lambda_2}{\psi_2}.
+\]</span>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Use your new expressions to calculate the values of <span class="math inline">\(k\)</span> for the infant mixing and assortative mixing assumptions, and the corresponding lower and upper bounds for <span class="math inline">\(R_0\)</span>. Use the maximum likelihood estimates of <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span>. Assume that the mortality rate <span class="math inline">\(u = 20 / 1000\)</span> and that <span class="math inline">\(T_I = 5 / 365\)</span>. Assume the total population size is <span class="math inline">\(n = 1\)</span>.</p>
+<p><infobutton id="displayTextunnamed-chunk-1233" onclick="javascript:toggle('unnamed-chunk-1233');">Show: Hint</infobutton></p>
+<div id="toggleTextunnamed-chunk-1233" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+You will need to use the <code>max()</code>, <code>eigen()</code> and <code>matrix()</code> functions. Remember that here the NGM is <span class="math inline">\(T_I \boldsymbol{\beta}\mathbf{n}\)</span>, where <span class="math inline">\(\mathbf{n}\)</span> is the proportion of the population in each age-class, and <span class="math inline">\(T_I\)</span> is the average length of the infectious period.
+</div>
+</div>
+</div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-359" onclick="javascript:toggle(&#39;unnamed-chunk-359&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-359" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb362-1"><a href="estimating-r_0-using-catalytic-models.html#cb362-1" tabindex="-1"></a><span class="do">## set up mortality rate and infectious period</span></span>
+<span id="cb362-2"><a href="estimating-r_0-using-catalytic-models.html#cb362-2" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="sc">/</span> <span class="dv">1000</span></span>
+<span id="cb362-3"><a href="estimating-r_0-using-catalytic-models.html#cb362-3" tabindex="-1"></a>TI <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">/</span> <span class="dv">365</span></span>
+<span id="cb362-4"><a href="estimating-r_0-using-catalytic-models.html#cb362-4" tabindex="-1"></a></span>
+<span id="cb362-5"><a href="estimating-r_0-using-catalytic-models.html#cb362-5" tabindex="-1"></a><span class="do">## calculate psi</span></span>
+<span id="cb362-6"><a href="estimating-r_0-using-catalytic-models.html#cb362-6" tabindex="-1"></a>psi <span class="ot">&lt;-</span> <span class="fu">Psi</span>(twogroup_mle<span class="sc">$</span>par, <span class="at">age_widths =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">30</span>), u, TI)</span>
+<span id="cb362-7"><a href="estimating-r_0-using-catalytic-models.html#cb362-7" tabindex="-1"></a></span>
+<span id="cb362-8"><a href="estimating-r_0-using-catalytic-models.html#cb362-8" tabindex="-1"></a><span class="do">## proportion of population in the two age groups (exponential </span></span>
+<span id="cb362-9"><a href="estimating-r_0-using-catalytic-models.html#cb362-9" tabindex="-1"></a><span class="do">## age-distribution)</span></span>
+<span id="cb362-10"><a href="estimating-r_0-using-catalytic-models.html#cb362-10" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">c</span>((<span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">15</span> <span class="sc">*</span> u)), <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">15</span> <span class="sc">*</span> u))</span>
+<span id="cb362-11"><a href="estimating-r_0-using-catalytic-models.html#cb362-11" tabindex="-1"></a></span>
+<span id="cb362-12"><a href="estimating-r_0-using-catalytic-models.html#cb362-12" tabindex="-1"></a><span class="do">## infant mixing MLE</span></span>
+<span id="cb362-13"><a href="estimating-r_0-using-catalytic-models.html#cb362-13" tabindex="-1"></a>k1 <span class="ot">&lt;-</span> twogroup_mle<span class="sc">$</span>par[<span class="dv">1</span>] <span class="sc">/</span> psi[<span class="dv">1</span>]</span>
+<span id="cb362-14"><a href="estimating-r_0-using-catalytic-models.html#cb362-14" tabindex="-1"></a>k2 <span class="ot">&lt;-</span> twogroup_mle<span class="sc">$</span>par[<span class="dv">2</span>] <span class="sc">/</span> psi[<span class="dv">1</span>]</span>
+<span id="cb362-15"><a href="estimating-r_0-using-catalytic-models.html#cb362-15" tabindex="-1"></a><span class="fu">max</span>(TI <span class="sc">*</span> <span class="fu">eigen</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(k1, k2, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">2</span>, <span class="dv">2</span>) <span class="sc">*</span> n)<span class="sc">$</span>values)</span></code></pre></div>
+<pre><code>## [1] 1.905538</code></pre>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="estimating-r_0-using-catalytic-models.html#cb364-1" tabindex="-1"></a><span class="do">## diagonal mixing MLE</span></span>
+<span id="cb364-2"><a href="estimating-r_0-using-catalytic-models.html#cb364-2" tabindex="-1"></a>k1 <span class="ot">&lt;-</span> twogroup_mle<span class="sc">$</span>par[<span class="dv">1</span>] <span class="sc">/</span> psi[<span class="dv">1</span>]</span>
+<span id="cb364-3"><a href="estimating-r_0-using-catalytic-models.html#cb364-3" tabindex="-1"></a>k2 <span class="ot">&lt;-</span> twogroup_mle<span class="sc">$</span>par[<span class="dv">2</span>] <span class="sc">/</span> psi[<span class="dv">2</span>]</span>
+<span id="cb364-4"><a href="estimating-r_0-using-catalytic-models.html#cb364-4" tabindex="-1"></a><span class="fu">max</span>(TI <span class="sc">*</span> <span class="fu">eigen</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(k1, <span class="dv">0</span>, <span class="dv">0</span>, k2), <span class="dv">2</span>, <span class="dv">2</span>) <span class="sc">*</span> n)<span class="sc">$</span>values)</span></code></pre></div>
+<pre><code>## [1] 16.25391</code></pre>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Calculate the posterior distributions for <span class="math inline">\(R_0\)</span> for the two-group model under the same conditions as the previous task. Plot the posterior densities.</p>
+<p><infobutton id="displayTextunnamed-chunk-1241" onclick="javascript:toggle('unnamed-chunk-1241');">Show: Hint</infobutton></p>
+<div id="toggleTextunnamed-chunk-1241" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+Convert the <code>twogroups_post</code> into a matrix using <code>as.matrix()</code>, and then either loop over the samples, or use <code>apply()</code> to generate posterior samples for <span class="math inline">\(\psi_1\)</span> and <span class="math inline">\(\psi_2\)</span>. These can then be converted into posterior samples for <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> and correspondingly into posterior samples for <span class="math inline">\(R_0\)</span>. <code>as.mcmc()</code> can be used to turn <code>matrix</code> objects into <code>mcmc</code> objects for ease of plotting and summarisation (or just work with the matrix objects directly).
+</div>
+</div>
+</div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-361" onclick="javascript:toggle(&#39;unnamed-chunk-361&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-361" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="estimating-r_0-using-catalytic-models.html#cb366-1" tabindex="-1"></a><span class="do">## calculate psi for each posterior sample</span></span>
+<span id="cb366-2"><a href="estimating-r_0-using-catalytic-models.html#cb366-2" tabindex="-1"></a>psi <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(<span class="fu">as.matrix</span>(twogroup_post), <span class="dv">1</span>, <span class="cf">function</span>(x, u, TI) {</span>
+<span id="cb366-3"><a href="estimating-r_0-using-catalytic-models.html#cb366-3" tabindex="-1"></a>        <span class="fu">Psi</span>(x, <span class="at">age_widths =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">30</span>), u, TI)</span>
+<span id="cb366-4"><a href="estimating-r_0-using-catalytic-models.html#cb366-4" tabindex="-1"></a>    }, <span class="at">u =</span> u, <span class="at">TI =</span> TI))</span>
+<span id="cb366-5"><a href="estimating-r_0-using-catalytic-models.html#cb366-5" tabindex="-1"></a></span>
+<span id="cb366-6"><a href="estimating-r_0-using-catalytic-models.html#cb366-6" tabindex="-1"></a><span class="do">## infant mixing posterior samples</span></span>
+<span id="cb366-7"><a href="estimating-r_0-using-catalytic-models.html#cb366-7" tabindex="-1"></a>k1 <span class="ot">&lt;-</span> twogroup_post[, <span class="dv">1</span>] <span class="sc">/</span> psi[, <span class="dv">1</span>]</span>
+<span id="cb366-8"><a href="estimating-r_0-using-catalytic-models.html#cb366-8" tabindex="-1"></a>k2 <span class="ot">&lt;-</span> twogroup_post[, <span class="dv">2</span>] <span class="sc">/</span> psi[, <span class="dv">1</span>]</span>
+<span id="cb366-9"><a href="estimating-r_0-using-catalytic-models.html#cb366-9" tabindex="-1"></a>R0_infant <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">cbind</span>(k1, k2), <span class="dv">1</span>, <span class="cf">function</span>(k, n, TI) {</span>
+<span id="cb366-10"><a href="estimating-r_0-using-catalytic-models.html#cb366-10" tabindex="-1"></a>        <span class="fu">max</span>(TI <span class="sc">*</span> <span class="fu">eigen</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(k[<span class="dv">1</span>], k[<span class="dv">2</span>], <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">2</span>, <span class="dv">2</span>) <span class="sc">*</span> n)<span class="sc">$</span>values)</span>
+<span id="cb366-11"><a href="estimating-r_0-using-catalytic-models.html#cb366-11" tabindex="-1"></a>    }, <span class="at">n =</span> n, <span class="at">TI =</span> TI)</span>
+<span id="cb366-12"><a href="estimating-r_0-using-catalytic-models.html#cb366-12" tabindex="-1"></a></span>
+<span id="cb366-13"><a href="estimating-r_0-using-catalytic-models.html#cb366-13" tabindex="-1"></a><span class="do">## diagonal mixing MLE</span></span>
+<span id="cb366-14"><a href="estimating-r_0-using-catalytic-models.html#cb366-14" tabindex="-1"></a>k1 <span class="ot">&lt;-</span> twogroup_post[, <span class="dv">1</span>] <span class="sc">/</span> psi[, <span class="dv">1</span>]</span>
+<span id="cb366-15"><a href="estimating-r_0-using-catalytic-models.html#cb366-15" tabindex="-1"></a>k2 <span class="ot">&lt;-</span> twogroup_post[, <span class="dv">2</span>] <span class="sc">/</span> psi[, <span class="dv">2</span>]</span>
+<span id="cb366-16"><a href="estimating-r_0-using-catalytic-models.html#cb366-16" tabindex="-1"></a>R0_diagonal <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">cbind</span>(k1, k2), <span class="dv">1</span>, <span class="cf">function</span>(k, n, TI) {</span>
+<span id="cb366-17"><a href="estimating-r_0-using-catalytic-models.html#cb366-17" tabindex="-1"></a>        <span class="fu">max</span>(TI <span class="sc">*</span> <span class="fu">eigen</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(k[<span class="dv">1</span>], <span class="dv">0</span>, <span class="dv">0</span>, k[<span class="dv">2</span>]), <span class="dv">2</span>, <span class="dv">2</span>) <span class="sc">*</span> n)<span class="sc">$</span>values)</span>
+<span id="cb366-18"><a href="estimating-r_0-using-catalytic-models.html#cb366-18" tabindex="-1"></a>    }, <span class="at">n =</span> n, <span class="at">TI =</span> TI)</span>
+<span id="cb366-19"><a href="estimating-r_0-using-catalytic-models.html#cb366-19" tabindex="-1"></a></span>
+<span id="cb366-20"><a href="estimating-r_0-using-catalytic-models.html#cb366-20" tabindex="-1"></a><span class="do">## plot and summarise</span></span>
+<span id="cb366-21"><a href="estimating-r_0-using-catalytic-models.html#cb366-21" tabindex="-1"></a>R0 <span class="ot">&lt;-</span> <span class="fu">as.mcmc</span>(<span class="fu">cbind</span>(R0_infant, R0_diagonal))</span>
+<span id="cb366-22"><a href="estimating-r_0-using-catalytic-models.html#cb366-22" tabindex="-1"></a><span class="fu">plot</span>(R0)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1246-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="estimating-r_0-using-catalytic-models.html#cb367-1" tabindex="-1"></a><span class="fu">summary</span>(R0)</span></code></pre></div>
+<pre><code>## 
+## Iterations = 1:10000
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 10000 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##               Mean      SD  Naive SE Time-series SE
+## R0_infant    1.907 0.03405 0.0003405       0.001079
+## R0_diagonal 16.360 1.16207 0.0116207       0.035975
+## 
+## 2. Quantiles for each variable:
+## 
+##              2.5%    25%    50%   75%  97.5%
+## R0_infant    1.84  1.883  1.906  1.93  1.976
+## R0_diagonal 14.18 15.577 16.311 17.11 18.735</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="estimating-the-next-generation-matrix-from-rubella-serology" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Estimating the next generation matrix from rubella serology<a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For human infectious diseases at least, the POLYMOD social contact data has revolutionised how we interpret serological data. In this section we estimate the next generation matrix for rubella using the POLYMOD mixing data. We also introduce a more modern, and convenient, method where we directly estimate the next generation matrix from age-stratified serological data.</p>
+<p>For a given next generation matrix K we can calculate the resulting force-of-infection using:
+<span class="math display" id="eq:lami">\[\begin{equation}
+    \lambda_i = \sum_{j} k_{ij}\left[P_s\left(a_{i + 1}\right) - P_s\left(a_i\right)\right]
+    \tag{9.5}
+\end{equation}\]</span>
+Although we cannot write down a closed form solution for <span class="math inline">\(K_{ij}\)</span>, for any given next generation matrix <span class="math inline">\(\mathbf{K}\)</span>, we can iteratively solve equations <a href="estimating-r_0-using-catalytic-models.html#eq:p2">(9.2)</a> and <a href="estimating-r_0-using-catalytic-models.html#eq:lami">(9.5)</a> to obtain the susceptibility curve <span class="math inline">\(P_s(a)\)</span> and force-of-infection <span class="math inline">\(\lambda_i\)</span> that correspond to particular values of <span class="math inline">\(\mathbf{K}\)</span>. By exploring different values (and forms) of <span class="math inline">\(\mathbf{K}\)</span> we can then estimate what next generation matrix is most consistent with a given susceptibility curve.</p>
+<p>This procedure is straightforward, but a bit fiddly, so once again we have provided you with helper functions below to do this, adapted from the book by <span class="citation">Hens et al. (<a href="#ref-hensetal:2012">2012</a>)</span>.</p>
+<p><code>NextGen_foi(K)</code> returns the age-stratified force-of-infection corresponding to a specified next generation matrix <code>K</code> (Equation <a href="estimating-r_0-using-catalytic-models.html#eq:lami">(9.5)</a> above). The number of age groups is taken from the dimensions (number of rows/columns) of <code>K</code>.</p>
+<p><code>NextGen_loglik(x, matrixfunction, sero_data)</code> is analogous to <code>FOI_loglik()</code> and returns the likelihood of observing a given number of positive/negative samples for each age-group and a specified next generation matrix with parameters <code>x</code> and structure defined by a user specified function <code>matrixfunction()</code>.</p>
+<p>Note that instead of estimating the scaling parameter <span class="math inline">\(y = e^x\)</span> directly, we estimate <span class="math inline">\(x = e^y\)</span>. This parameter transformation doesn’t change our basic assumption that transmission is directly proportional to the reported POLYMOD contacts, but improves the numerical accuracy of our estimation. Such tricks often improve the convergence of numerical procedures, especially MCMC methods, but the appropriate choice can be somewhat of a black art.</p>
+<p>By writing <code>NextGen_loglik()</code> to depend on a function as well as a set of parameters we can easily fit alternative models that assume different patterns of mixing in the population. For example we can specify a homogeneous mixing model by the following function:</p>
+<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="estimating-r_0-using-catalytic-models.html#cb369-1" tabindex="-1"></a><span class="do">## function that returns a homogeneous mixing next </span></span>
+<span id="cb369-2"><a href="estimating-r_0-using-catalytic-models.html#cb369-2" tabindex="-1"></a><span class="do">## generation matrix with all elements equal to x</span></span>
+<span id="cb369-3"><a href="estimating-r_0-using-catalytic-models.html#cb369-3" tabindex="-1"></a>HomogeneousMatrix <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { </span>
+<span id="cb369-4"><a href="estimating-r_0-using-catalytic-models.html#cb369-4" tabindex="-1"></a>    mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(x, <span class="dv">86</span>, <span class="dv">86</span>) </span>
+<span id="cb369-5"><a href="estimating-r_0-using-catalytic-models.html#cb369-5" tabindex="-1"></a>    <span class="fu">return</span>(mat)</span>
+<span id="cb369-6"><a href="estimating-r_0-using-catalytic-models.html#cb369-6" tabindex="-1"></a>}</span></code></pre></div>
+<p>where we assume there are 86 age cohorts in the population (for consistency with POLYMOD matrix).</p>
+<p>The helper functions are defined below:</p>
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="estimating-r_0-using-catalytic-models.html#cb370-1" tabindex="-1"></a><span class="do">## calculate force of infection for a given next generation matrix K</span></span>
+<span id="cb370-2"><a href="estimating-r_0-using-catalytic-models.html#cb370-2" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb370-3"><a href="estimating-r_0-using-catalytic-models.html#cb370-3" tabindex="-1"></a><span class="do">## annual age cohorts are assumed with maximum assumed age given by</span></span>
+<span id="cb370-4"><a href="estimating-r_0-using-catalytic-models.html#cb370-4" tabindex="-1"></a><span class="do">## dimensions of K</span></span>
+<span id="cb370-5"><a href="estimating-r_0-using-catalytic-models.html#cb370-5" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb370-6"><a href="estimating-r_0-using-catalytic-models.html#cb370-6" tabindex="-1"></a><span class="do">## Arguments:</span></span>
+<span id="cb370-7"><a href="estimating-r_0-using-catalytic-models.html#cb370-7" tabindex="-1"></a><span class="do">## K - Next Generation Matrix</span></span>
+<span id="cb370-8"><a href="estimating-r_0-using-catalytic-models.html#cb370-8" tabindex="-1"></a>NextGen_foi <span class="ot">&lt;-</span> <span class="cf">function</span>(K) {</span>
+<span id="cb370-9"><a href="estimating-r_0-using-catalytic-models.html#cb370-9" tabindex="-1"></a>    <span class="do">## set up age-class widths</span></span>
+<span id="cb370-10"><a href="estimating-r_0-using-catalytic-models.html#cb370-10" tabindex="-1"></a>    widths <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(K))</span>
+<span id="cb370-11"><a href="estimating-r_0-using-catalytic-models.html#cb370-11" tabindex="-1"></a>    <span class="do">## number of age classes</span></span>
+<span id="cb370-12"><a href="estimating-r_0-using-catalytic-models.html#cb370-12" tabindex="-1"></a>    num_class <span class="ot">&lt;-</span> <span class="fu">nrow</span>(K)</span>
+<span id="cb370-13"><a href="estimating-r_0-using-catalytic-models.html#cb370-13" tabindex="-1"></a>    <span class="do">## piecewise FOI by age-class</span></span>
+<span id="cb370-14"><a href="estimating-r_0-using-catalytic-models.html#cb370-14" tabindex="-1"></a>    lambda <span class="ot">&lt;-</span> <span class="fu">numeric</span>(num_class)</span>
+<span id="cb370-15"><a href="estimating-r_0-using-catalytic-models.html#cb370-15" tabindex="-1"></a>    <span class="do">## susceptible fraction at </span><span class="re">END</span><span class="do"> of age class</span></span>
+<span id="cb370-16"><a href="estimating-r_0-using-catalytic-models.html#cb370-16" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">rev</span>(<span class="fu">sort</span>(<span class="fu">runif</span>(num_class)))</span>
+<span id="cb370-17"><a href="estimating-r_0-using-catalytic-models.html#cb370-17" tabindex="-1"></a>    oldlambda <span class="ot">&lt;-</span> lambda</span>
+<span id="cb370-18"><a href="estimating-r_0-using-catalytic-models.html#cb370-18" tabindex="-1"></a>    tolerance <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb370-19"><a href="estimating-r_0-using-catalytic-models.html#cb370-19" tabindex="-1"></a>    iterations <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb370-20"><a href="estimating-r_0-using-catalytic-models.html#cb370-20" tabindex="-1"></a>    <span class="cf">while</span> ((tolerance <span class="sc">&gt;</span> <span class="fl">1e-10</span>) <span class="sc">&amp;</span> (iterations <span class="sc">&lt;</span> <span class="dv">2000</span>)) {</span>
+<span id="cb370-21"><a href="estimating-r_0-using-catalytic-models.html#cb370-21" tabindex="-1"></a>        oldlambda <span class="ot">&lt;-</span> lambda</span>
+<span id="cb370-22"><a href="estimating-r_0-using-catalytic-models.html#cb370-22" tabindex="-1"></a>        <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>num_class) {</span>
+<span id="cb370-23"><a href="estimating-r_0-using-catalytic-models.html#cb370-23" tabindex="-1"></a>            lambda[i] <span class="ot">&lt;-</span> (K[i, <span class="dv">1</span>] <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> s[<span class="dv">1</span>]) <span class="sc">+</span> </span>
+<span id="cb370-24"><a href="estimating-r_0-using-catalytic-models.html#cb370-24" tabindex="-1"></a>                <span class="fu">sum</span>(K[i, <span class="dv">2</span><span class="sc">:</span>num_class] <span class="sc">*</span> </span>
+<span id="cb370-25"><a href="estimating-r_0-using-catalytic-models.html#cb370-25" tabindex="-1"></a>                (s[<span class="dv">1</span><span class="sc">:</span>(num_class <span class="sc">-</span> <span class="dv">1</span>)] <span class="sc">-</span> s[<span class="dv">2</span><span class="sc">:</span>num_class])))</span>
+<span id="cb370-26"><a href="estimating-r_0-using-catalytic-models.html#cb370-26" tabindex="-1"></a>        }</span>
+<span id="cb370-27"><a href="estimating-r_0-using-catalytic-models.html#cb370-27" tabindex="-1"></a>        s[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>lambda[<span class="dv">1</span>] <span class="sc">*</span> widths[<span class="dv">1</span>])</span>
+<span id="cb370-28"><a href="estimating-r_0-using-catalytic-models.html#cb370-28" tabindex="-1"></a>        <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>(num_class)) {</span>
+<span id="cb370-29"><a href="estimating-r_0-using-catalytic-models.html#cb370-29" tabindex="-1"></a>            s[i] <span class="ot">&lt;-</span> s[i <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>lambda[i] <span class="sc">*</span> widths[i])</span>
+<span id="cb370-30"><a href="estimating-r_0-using-catalytic-models.html#cb370-30" tabindex="-1"></a>        }</span>
+<span id="cb370-31"><a href="estimating-r_0-using-catalytic-models.html#cb370-31" tabindex="-1"></a>        tolerance <span class="ot">&lt;-</span> <span class="fu">sum</span>((lambda <span class="sc">-</span> oldlambda)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb370-32"><a href="estimating-r_0-using-catalytic-models.html#cb370-32" tabindex="-1"></a>        iterations <span class="ot">&lt;-</span> iterations <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb370-33"><a href="estimating-r_0-using-catalytic-models.html#cb370-33" tabindex="-1"></a>    }</span>
+<span id="cb370-34"><a href="estimating-r_0-using-catalytic-models.html#cb370-34" tabindex="-1"></a>    <span class="fu">return</span>(lambda)</span>
+<span id="cb370-35"><a href="estimating-r_0-using-catalytic-models.html#cb370-35" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="estimating-r_0-using-catalytic-models.html#cb371-1" tabindex="-1"></a><span class="do">## calculate (Binomial) likelihood of observing given number of</span></span>
+<span id="cb371-2"><a href="estimating-r_0-using-catalytic-models.html#cb371-2" tabindex="-1"></a><span class="do">## positive/negative samples </span></span>
+<span id="cb371-3"><a href="estimating-r_0-using-catalytic-models.html#cb371-3" tabindex="-1"></a><span class="do">## (provided in table sero_data) for each age group and specified </span></span>
+<span id="cb371-4"><a href="estimating-r_0-using-catalytic-models.html#cb371-4" tabindex="-1"></a><span class="do">## next generation matrix K = matrixfunction(x) </span></span>
+<span id="cb371-5"><a href="estimating-r_0-using-catalytic-models.html#cb371-5" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb371-6"><a href="estimating-r_0-using-catalytic-models.html#cb371-6" tabindex="-1"></a><span class="do">## Arguments:</span></span>
+<span id="cb371-7"><a href="estimating-r_0-using-catalytic-models.html#cb371-7" tabindex="-1"></a><span class="do">## x: vector of unique force of infection values</span></span>
+<span id="cb371-8"><a href="estimating-r_0-using-catalytic-models.html#cb371-8" tabindex="-1"></a><span class="do">## foi_key: pattern vector of length equal to the maximum assumed age</span></span>
+<span id="cb371-9"><a href="estimating-r_0-using-catalytic-models.html#cb371-9" tabindex="-1"></a><span class="do">##    in population (or data set) that specifies which unique value of </span></span>
+<span id="cb371-10"><a href="estimating-r_0-using-catalytic-models.html#cb371-10" tabindex="-1"></a><span class="do">##    x corresponds to each annual cohort in population.</span></span>
+<span id="cb371-11"><a href="estimating-r_0-using-catalytic-models.html#cb371-11" tabindex="-1"></a><span class="do">## sero_data: data frame with columns</span></span>
+<span id="cb371-12"><a href="estimating-r_0-using-catalytic-models.html#cb371-12" tabindex="-1"></a><span class="do">## sero_data$Pos: positive samples</span></span>
+<span id="cb371-13"><a href="estimating-r_0-using-catalytic-models.html#cb371-13" tabindex="-1"></a><span class="do">## sero_data$Neg: negative samples</span></span>
+<span id="cb371-14"><a href="estimating-r_0-using-catalytic-models.html#cb371-14" tabindex="-1"></a>NextGen_loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(x, matrixfunction, sero_data) {</span>
+<span id="cb371-15"><a href="estimating-r_0-using-catalytic-models.html#cb371-15" tabindex="-1"></a>    </span>
+<span id="cb371-16"><a href="estimating-r_0-using-catalytic-models.html#cb371-16" tabindex="-1"></a>    <span class="do">## set up auxiiary vectors</span></span>
+<span id="cb371-17"><a href="estimating-r_0-using-catalytic-models.html#cb371-17" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">exp</span>(x)</span>
+<span id="cb371-18"><a href="estimating-r_0-using-catalytic-models.html#cb371-18" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">matrixfunction</span>(x)</span>
+<span id="cb371-19"><a href="estimating-r_0-using-catalytic-models.html#cb371-19" tabindex="-1"></a>    breaks <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">nrow</span>(K)</span>
+<span id="cb371-20"><a href="estimating-r_0-using-catalytic-models.html#cb371-20" tabindex="-1"></a>    widths <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(K))</span>
+<span id="cb371-21"><a href="estimating-r_0-using-catalytic-models.html#cb371-21" tabindex="-1"></a>    </span>
+<span id="cb371-22"><a href="estimating-r_0-using-catalytic-models.html#cb371-22" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">any</span>(x <span class="sc">&lt;=</span> <span class="dv">0</span>)) {</span>
+<span id="cb371-23"><a href="estimating-r_0-using-catalytic-models.html#cb371-23" tabindex="-1"></a>        <span class="do">## if any rates &lt; 0 then </span></span>
+<span id="cb371-24"><a href="estimating-r_0-using-catalytic-models.html#cb371-24" tabindex="-1"></a>        <span class="do">## return log-likelihood = -Inf</span></span>
+<span id="cb371-25"><a href="estimating-r_0-using-catalytic-models.html#cb371-25" tabindex="-1"></a>        <span class="fu">return</span>(<span class="sc">-</span><span class="cn">Inf</span>)</span>
+<span id="cb371-26"><a href="estimating-r_0-using-catalytic-models.html#cb371-26" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb371-27"><a href="estimating-r_0-using-catalytic-models.html#cb371-27" tabindex="-1"></a>        <span class="do">## calculate fois</span></span>
+<span id="cb371-28"><a href="estimating-r_0-using-catalytic-models.html#cb371-28" tabindex="-1"></a>        lambda <span class="ot">&lt;-</span> <span class="fu">NextGen_foi</span>(K)</span>
+<span id="cb371-29"><a href="estimating-r_0-using-catalytic-models.html#cb371-29" tabindex="-1"></a>        </span>
+<span id="cb371-30"><a href="estimating-r_0-using-catalytic-models.html#cb371-30" tabindex="-1"></a>        <span class="do">## calculate log-likelihoods</span></span>
+<span id="cb371-31"><a href="estimating-r_0-using-catalytic-models.html#cb371-31" tabindex="-1"></a>        loglik <span class="ot">&lt;-</span> <span class="fl">0.0</span></span>
+<span id="cb371-32"><a href="estimating-r_0-using-catalytic-models.html#cb371-32" tabindex="-1"></a>        <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(sero_data)) {</span>
+<span id="cb371-33"><a href="estimating-r_0-using-catalytic-models.html#cb371-33" tabindex="-1"></a>            <span class="do">## which age class does observation lie in </span></span>
+<span id="cb371-34"><a href="estimating-r_0-using-catalytic-models.html#cb371-34" tabindex="-1"></a>            age_class <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">which</span>(sero_data<span class="sc">$</span>Age[i] <span class="sc">&gt;</span> breaks))</span>
+<span id="cb371-35"><a href="estimating-r_0-using-catalytic-models.html#cb371-35" tabindex="-1"></a>            <span class="do">## proportion of susceptibles at beginning of age class</span></span>
+<span id="cb371-36"><a href="estimating-r_0-using-catalytic-models.html#cb371-36" tabindex="-1"></a>            sg <span class="ot">&lt;-</span> <span class="fu">piecewise_s</span>(breaks[age_class], lambda)</span>
+<span id="cb371-37"><a href="estimating-r_0-using-catalytic-models.html#cb371-37" tabindex="-1"></a>            loglik <span class="ot">&lt;-</span> loglik <span class="sc">+</span> <span class="fu">dbinom</span>(</span>
+<span id="cb371-38"><a href="estimating-r_0-using-catalytic-models.html#cb371-38" tabindex="-1"></a>                sero_data<span class="sc">$</span>Pos[i],</span>
+<span id="cb371-39"><a href="estimating-r_0-using-catalytic-models.html#cb371-39" tabindex="-1"></a>                sero_data<span class="sc">$</span>Pos[i] <span class="sc">+</span> sero_data<span class="sc">$</span>Neg[i],</span>
+<span id="cb371-40"><a href="estimating-r_0-using-catalytic-models.html#cb371-40" tabindex="-1"></a>                <span class="at">prob =</span> <span class="dv">1</span> <span class="sc">-</span> sg <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>lambda[age_class] <span class="sc">*</span> </span>
+<span id="cb371-41"><a href="estimating-r_0-using-catalytic-models.html#cb371-41" tabindex="-1"></a>                    (sero_data<span class="sc">$</span>Age[i] <span class="sc">-</span> breaks[age_class])),</span>
+<span id="cb371-42"><a href="estimating-r_0-using-catalytic-models.html#cb371-42" tabindex="-1"></a>                <span class="at">log =</span> <span class="cn">TRUE</span></span>
+<span id="cb371-43"><a href="estimating-r_0-using-catalytic-models.html#cb371-43" tabindex="-1"></a>            )</span>
+<span id="cb371-44"><a href="estimating-r_0-using-catalytic-models.html#cb371-44" tabindex="-1"></a>        }</span>
+<span id="cb371-45"><a href="estimating-r_0-using-catalytic-models.html#cb371-45" tabindex="-1"></a>        <span class="do">## return log-likelihood</span></span>
+<span id="cb371-46"><a href="estimating-r_0-using-catalytic-models.html#cb371-46" tabindex="-1"></a>        <span class="fu">return</span>(loglik)</span>
+<span id="cb371-47"><a href="estimating-r_0-using-catalytic-models.html#cb371-47" tabindex="-1"></a>    }</span>
+<span id="cb371-48"><a href="estimating-r_0-using-catalytic-models.html#cb371-48" tabindex="-1"></a>}</span></code></pre></div>
+<p><infobutton id="displayTextunnamed-chunk-365" onclick="javascript:toggle('unnamed-chunk-365');">Show: The optimise() function</infobutton></p>
+<div id="toggleTextunnamed-chunk-365" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>We used <code>optim()</code> earlier to optimise a function with respect to <em>multiple</em> parameters. If you want to optimise a function with respect to a <em>single</em> parameter, then we use <code>optimise()</code> instead. This works in a similar way, but has slightly different arguments. Most notably, rather than giving initial values for the parameter, we instead define an upper and lower bound over which to search for a maximum or minimum.</p>
+<p>Arguments for <code>optimise()</code> can be found from the help file in the usual way e.g. <code>?optimise</code>. The key ones here are:</p>
+<ul>
+<li><code>f</code>: a function to be minimised (or maximised), with first argument the vector of parameters over which optimisation is to take place. It should return a scalar result. Here we pass it the <code>NextGen_loglik()</code> function we defined above.</li>
+<li><code>interval</code>: a vector containing the end-points of the interval to be searched for the minimum (or maximum).</li>
+<li><code>...</code>: additional arguments required for <code>NextGen_loglik()</code> can be passed to <code>optimise()</code>; here we pass <code>matrixfunction</code> and <code>sero_data</code> arguments.</li>
+<li><code>maximum</code>: a logical defining whether we <strong>maximise</strong> (<code>TRUE</code>) or <strong>minimise</strong> (<code>FALSE</code>).</li>
+</ul>
+Please see the help file for more details.
+</div>
+</div>
+</div>
+<p>We can now obtain the maximum-likelihood estimate for the homogeneous mixing matrix by optimising the value of <code>NextGen_loglik()</code>:</p>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="estimating-r_0-using-catalytic-models.html#cb372-1" tabindex="-1"></a>homogeneous_mle <span class="ot">&lt;-</span> <span class="fu">optimise</span>(</span>
+<span id="cb372-2"><a href="estimating-r_0-using-catalytic-models.html#cb372-2" tabindex="-1"></a>    NextGen_loglik,                       <span class="do">## function to optimise</span></span>
+<span id="cb372-3"><a href="estimating-r_0-using-catalytic-models.html#cb372-3" tabindex="-1"></a>    <span class="fu">log</span>(<span class="fu">c</span>(<span class="fl">0.01</span>, <span class="dv">1</span>)),                      <span class="do">## upper and lower bound</span></span>
+<span id="cb372-4"><a href="estimating-r_0-using-catalytic-models.html#cb372-4" tabindex="-1"></a>    <span class="at">matrixfunction =</span> HomogeneousMatrix,   <span class="do">## pass matrixfunction to NextGen_loglik</span></span>
+<span id="cb372-5"><a href="estimating-r_0-using-catalytic-models.html#cb372-5" tabindex="-1"></a>    <span class="at">sero_data =</span> rubella,                  <span class="do">## pass sero_data to NextGen_loglik</span></span>
+<span id="cb372-6"><a href="estimating-r_0-using-catalytic-models.html#cb372-6" tabindex="-1"></a>    <span class="at">maximum =</span> <span class="cn">TRUE</span>                        <span class="do">## maximise the function</span></span>
+<span id="cb372-7"><a href="estimating-r_0-using-catalytic-models.html#cb372-7" tabindex="-1"></a>)</span>
+<span id="cb372-8"><a href="estimating-r_0-using-catalytic-models.html#cb372-8" tabindex="-1"></a>homogeneous_mle</span></code></pre></div>
+<pre><code>## $maximum
+## [1] -2.209086
+## 
+## $objective
+## [1] -135.6114</code></pre>
+<p>Then to calculate the force-of-infection corresponding to our maximum likelihood fit:</p>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="estimating-r_0-using-catalytic-models.html#cb374-1" tabindex="-1"></a>homogeneous_foi <span class="ot">&lt;-</span> <span class="fu">NextGen_foi</span>(</span>
+<span id="cb374-2"><a href="estimating-r_0-using-catalytic-models.html#cb374-2" tabindex="-1"></a>    <span class="fu">HomogeneousMatrix</span>(<span class="fu">exp</span>(homogeneous_mle<span class="sc">$</span>maximum))</span>
+<span id="cb374-3"><a href="estimating-r_0-using-catalytic-models.html#cb374-3" tabindex="-1"></a>)</span></code></pre></div>
+<p>You can check the fit of the model by using the <code>piecewise_s()</code> function to predict the proportion positive for each age group and plot against the original data:</p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="estimating-r_0-using-catalytic-models.html#cb375-1" tabindex="-1"></a><span class="fu">plot</span>(rubella<span class="sc">$</span>Age, rubella<span class="sc">$</span>p_s, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> size<span class="sc">^</span><span class="fl">0.75</span>)</span>
+<span id="cb375-2"><a href="estimating-r_0-using-catalytic-models.html#cb375-2" tabindex="-1"></a><span class="fu">lines</span>(</span>
+<span id="cb375-3"><a href="estimating-r_0-using-catalytic-models.html#cb375-3" tabindex="-1"></a>    <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">75</span>, <span class="dv">1</span>), </span>
+<span id="cb375-4"><a href="estimating-r_0-using-catalytic-models.html#cb375-4" tabindex="-1"></a>    <span class="fu">piecewise_s</span>(</span>
+<span id="cb375-5"><a href="estimating-r_0-using-catalytic-models.html#cb375-5" tabindex="-1"></a>        <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">75</span>, <span class="dv">1</span>), </span>
+<span id="cb375-6"><a href="estimating-r_0-using-catalytic-models.html#cb375-6" tabindex="-1"></a>        homogeneous_foi</span>
+<span id="cb375-7"><a href="estimating-r_0-using-catalytic-models.html#cb375-7" tabindex="-1"></a>    ),</span>
+<span id="cb375-8"><a href="estimating-r_0-using-catalytic-models.html#cb375-8" tabindex="-1"></a>    <span class="at">lwd =</span> <span class="dv">2</span></span>
+<span id="cb375-9"><a href="estimating-r_0-using-catalytic-models.html#cb375-9" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-368-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>The overall fit is actually pretty good. However if we look closely the model does systematically overestimate the proportion infected in 10–20 year olds and underestimates in the 20–44 age groups, as we would expect from our analysis in the earlier section.</p>
+<p>We could generalise our mixing matrix to include additional parameters to describe this heterogeneity as before. Or we can test whether social contact patterns provide a better description of the observed force-of-infection. Here we assume that infectious contacts are distributed proportionally to a POLYMOD mixing matrix.</p>
+<p>Download the <a href="https://vaccineimpact.github.io/vimc_course/Materials/Statistics/data/POLYMOD.csv"><code>POLYMOD.csv</code></a> file to your working directory and load into R:</p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="estimating-r_0-using-catalytic-models.html#cb376-1" tabindex="-1"></a><span class="do">## load (smoothed symmetrical) POLYMOD matrix </span></span>
+<span id="cb376-2"><a href="estimating-r_0-using-catalytic-models.html#cb376-2" tabindex="-1"></a>POLYMOD <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">read.csv</span>(<span class="st">&quot;POLYMOD.csv&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
+<p>Now we write a function called <code>POLYMODMatrix()</code> that takes a single parameter <code>x</code> and returns a scaled version of the POLYMOD matrix (<span class="math inline">\(M_{ij}\)</span>):</p>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="estimating-r_0-using-catalytic-models.html#cb377-1" tabindex="-1"></a><span class="do">## generates a scaled POLYMODMatrix with transmission </span></span>
+<span id="cb377-2"><a href="estimating-r_0-using-catalytic-models.html#cb377-2" tabindex="-1"></a><span class="do">## parameter defined by x </span></span>
+<span id="cb377-3"><a href="estimating-r_0-using-catalytic-models.html#cb377-3" tabindex="-1"></a>POLYMODMatrix <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { </span>
+<span id="cb377-4"><a href="estimating-r_0-using-catalytic-models.html#cb377-4" tabindex="-1"></a>    <span class="fu">return</span>(x <span class="sc">*</span> POLYMOD)</span>
+<span id="cb377-5"><a href="estimating-r_0-using-catalytic-models.html#cb377-5" tabindex="-1"></a>}</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Follow the same steps as before to find the maximum likelihood estimate of the next generation matrix for the POLYMOD assumption and create a plot comparing the estimated force-of-infection and model fit for both models.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-373" onclick="javascript:toggle(&#39;unnamed-chunk-373&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-373" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="estimating-r_0-using-catalytic-models.html#cb378-1" tabindex="-1"></a>POLYMOD_mle <span class="ot">&lt;-</span> <span class="fu">optimise</span>(</span>
+<span id="cb378-2"><a href="estimating-r_0-using-catalytic-models.html#cb378-2" tabindex="-1"></a>    NextGen_loglik,</span>
+<span id="cb378-3"><a href="estimating-r_0-using-catalytic-models.html#cb378-3" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">15</span>),</span>
+<span id="cb378-4"><a href="estimating-r_0-using-catalytic-models.html#cb378-4" tabindex="-1"></a>    <span class="at">matrixfunction =</span> POLYMODMatrix,</span>
+<span id="cb378-5"><a href="estimating-r_0-using-catalytic-models.html#cb378-5" tabindex="-1"></a>    <span class="at">sero_data =</span> rubella,</span>
+<span id="cb378-6"><a href="estimating-r_0-using-catalytic-models.html#cb378-6" tabindex="-1"></a>    <span class="at">maximum =</span> <span class="cn">TRUE</span> </span>
+<span id="cb378-7"><a href="estimating-r_0-using-catalytic-models.html#cb378-7" tabindex="-1"></a>)</span>
+<span id="cb378-8"><a href="estimating-r_0-using-catalytic-models.html#cb378-8" tabindex="-1"></a>POLYMOD_foi <span class="ot">=</span> <span class="fu">NextGen_foi</span>(<span class="fu">POLYMODMatrix</span>(<span class="fu">exp</span>(POLYMOD_mle<span class="sc">$</span>maximum)))</span>
+<span id="cb378-9"><a href="estimating-r_0-using-catalytic-models.html#cb378-9" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb378-10"><a href="estimating-r_0-using-catalytic-models.html#cb378-10" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb378-11"><a href="estimating-r_0-using-catalytic-models.html#cb378-11" tabindex="-1"></a>    <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">86</span>, <span class="dv">1</span>), </span>
+<span id="cb378-12"><a href="estimating-r_0-using-catalytic-models.html#cb378-12" tabindex="-1"></a>    POLYMOD_foi, </span>
+<span id="cb378-13"><a href="estimating-r_0-using-catalytic-models.html#cb378-13" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;b&#39;</span>, </span>
+<span id="cb378-14"><a href="estimating-r_0-using-catalytic-models.html#cb378-14" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&#39;Age&#39;</span>, </span>
+<span id="cb378-15"><a href="estimating-r_0-using-catalytic-models.html#cb378-15" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&#39;FOI&#39;</span>, </span>
+<span id="cb378-16"><a href="estimating-r_0-using-catalytic-models.html#cb378-16" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">&#39;red&#39;</span></span>
+<span id="cb378-17"><a href="estimating-r_0-using-catalytic-models.html#cb378-17" tabindex="-1"></a>)</span>
+<span id="cb378-18"><a href="estimating-r_0-using-catalytic-models.html#cb378-18" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">86</span>, <span class="dv">1</span>), homogeneous_foi, <span class="at">type =</span> <span class="st">&#39;b&#39;</span>, <span class="at">col =</span> <span class="st">&#39;blue&#39;</span>)</span>
+<span id="cb378-19"><a href="estimating-r_0-using-catalytic-models.html#cb378-19" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb378-20"><a href="estimating-r_0-using-catalytic-models.html#cb378-20" tabindex="-1"></a>    rubella<span class="sc">$</span>Age,</span>
+<span id="cb378-21"><a href="estimating-r_0-using-catalytic-models.html#cb378-21" tabindex="-1"></a>    rubella<span class="sc">$</span>p_s,</span>
+<span id="cb378-22"><a href="estimating-r_0-using-catalytic-models.html#cb378-22" tabindex="-1"></a>    <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb378-23"><a href="estimating-r_0-using-catalytic-models.html#cb378-23" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&#39;Age&#39;</span>,</span>
+<span id="cb378-24"><a href="estimating-r_0-using-catalytic-models.html#cb378-24" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&#39;Probability Positive&#39;</span></span>
+<span id="cb378-25"><a href="estimating-r_0-using-catalytic-models.html#cb378-25" tabindex="-1"></a>)</span>
+<span id="cb378-26"><a href="estimating-r_0-using-catalytic-models.html#cb378-26" tabindex="-1"></a><span class="fu">lines</span>(</span>
+<span id="cb378-27"><a href="estimating-r_0-using-catalytic-models.html#cb378-27" tabindex="-1"></a>    <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">86</span>, <span class="dv">1</span>), </span>
+<span id="cb378-28"><a href="estimating-r_0-using-catalytic-models.html#cb378-28" tabindex="-1"></a>    <span class="fu">piecewise_s</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">86</span>, <span class="dv">1</span>), homogeneous_foi), </span>
+<span id="cb378-29"><a href="estimating-r_0-using-catalytic-models.html#cb378-29" tabindex="-1"></a>    <span class="at">lwd =</span> <span class="dv">2</span>, </span>
+<span id="cb378-30"><a href="estimating-r_0-using-catalytic-models.html#cb378-30" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">&#39;blue&#39;</span></span>
+<span id="cb378-31"><a href="estimating-r_0-using-catalytic-models.html#cb378-31" tabindex="-1"></a>)</span>
+<span id="cb378-32"><a href="estimating-r_0-using-catalytic-models.html#cb378-32" tabindex="-1"></a><span class="fu">lines</span>(</span>
+<span id="cb378-33"><a href="estimating-r_0-using-catalytic-models.html#cb378-33" tabindex="-1"></a>    <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">86</span>, <span class="dv">1</span>),</span>
+<span id="cb378-34"><a href="estimating-r_0-using-catalytic-models.html#cb378-34" tabindex="-1"></a>    <span class="fu">piecewise_s</span>(<span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">86</span>, <span class="dv">1</span>), POLYMOD_foi),</span>
+<span id="cb378-35"><a href="estimating-r_0-using-catalytic-models.html#cb378-35" tabindex="-1"></a>    <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb378-36"><a href="estimating-r_0-using-catalytic-models.html#cb378-36" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">&#39;red&#39;</span></span>
+<span id="cb378-37"><a href="estimating-r_0-using-catalytic-models.html#cb378-37" tabindex="-1"></a>)</span>
+<span id="cb378-38"><a href="estimating-r_0-using-catalytic-models.html#cb378-38" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-1263-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<p>Finally, calculate the value of <span class="math inline">\(R_0\)</span> for the two mixing assumptions:</p>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="estimating-r_0-using-catalytic-models.html#cb379-1" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">Re</span>(<span class="fu">eigen</span>(<span class="fu">HomogeneousMatrix</span>(<span class="fu">exp</span>(homogeneous_mle<span class="sc">$</span>maximum)))<span class="sc">$</span>values))   </span></code></pre></div>
+<pre><code>## [1] 9.442879</code></pre>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="estimating-r_0-using-catalytic-models.html#cb381-1" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">Re</span>(<span class="fu">eigen</span>(<span class="fu">POLYMODMatrix</span>(<span class="fu">exp</span>(POLYMOD_mle<span class="sc">$</span>maximum)))<span class="sc">$</span>values)) </span></code></pre></div>
+<pre><code>## [1] 7.777768</code></pre>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+Does the POLYMOD mixing provide a better fit to the rubella serological data?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-376" onclick="javascript:toggle(&#39;unnamed-chunk-376&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-376" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+The homogeneous mixing model has a maximum (log) likelihood value of -136, compared to -117 for the POLYMOD model. On this basis, and from visual inspection of the fit, the POLYMOD mixing model is better supported by the data, although we might want to produce measures such as AIC that penalise for model complexity before drawing firm conclusions.
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+How do the predictions of the POLYMOD mixing model differ from homogeneous mixing?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-378" onclick="javascript:toggle(&#39;unnamed-chunk-378&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-378" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+<p>The POLYMOD mixing assumption estimates a lower basic reproductive ratio than homogeneous mixing, implying that a lower level of vaccination coverage would be necessary to eliminate disease than might be expected under homogeneous mixing.</p>
+However, more importantly the POLYMOD model predicts a very different pattern of transmission within the population. The POLYMOD mixing matrix generates two equal peaks in the force of infection that are both higher than the homogeneous mixing estimate. The second peak in young adults is of particular concern for rubella where the disease itself is of less concern than so-called congenital rubella syndrome (CRS)—where infection of pregnant women leads to severe problems for unborn children. Pre-vaccination, with a mean age of infection of ~10 years this second group was relatively unimportant as few susceptible individuals ‘survived’ to that age. But it may become more important after the introduction of vaccination which is likely to increase the mean age of infection into this second core-group. This is the motivation for supplemental vaccination campaigns in teenage girls—i.e. not to reduce the rate of transmission in the community but to directly protect against CRS. The magnitude of this, so-called perverse effect of vaccination, would be greatly underestimated by a (incorrect) assumption of homogeneous mixing.
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-anderson_may:1991" class="csl-entry">
+Anderson, R. M., and R. M. May. 1991. <em>Infectious Diseases of Humans</em>. Oxford University Press.
+</div>
+<div id="ref-greenhalgh_dietz:1994" class="csl-entry">
+Greenhalgh, David, and Klaus Dietz. 1994. <span>“Some Bounds on Estimates for Reproductive Ratios Derived from the Age-Specific Force of Infection.”</span> <em>Mathematical Biosciences</em> 124 (1): 9–57. <a href="https://doi.org/10.1016/0025-5564(94)90023-X">https://doi.org/10.1016/0025-5564(94)90023-X</a>.
+</div>
+<div id="ref-hensetal:2012" class="csl-entry">
+Hens, Niel, Ziv Shkedy, Marc Aerts, Christel Faes, Pierre Van Damme, and Philippe Beutels. 2012. <em>Modeling Infectious Disease Parameters Based on Serological and Social Contact Data</em>. Springer. <a href="https://doi.org/10.1007/978-1-4614-4072-7">https://doi.org/10.1007/978-1-4614-4072-7</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="epi3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="particle-mcmc.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Programming—Practical 1 | Inference in infectious disease systems practicals</title>
+  <meta name="description" content="3 Programming—Practical 1 | Inference in infectious disease systems practicals" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Programming—Practical 1 | Inference in infectious disease systems practicals" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="3 Programming—Practical 1 | Inference in infectious disease systems practicals" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Programming—Practical 1 | Inference in infectious disease systems practicals" />
+  
+  <meta name="twitter:description" content="3 Programming—Practical 1 | Inference in infectious disease systems practicals" />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="fundamentals-of-r.html"/>
+<link rel="next" href="programmingpractical-2.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script language="javascript"> 
+    function toggle(id) {
+        var ele = document.getElementById("toggleText" + id);
+        var text = document.getElementById("displayText" + id);
+        var buttonText = text.innerHTML.replace("Show: ", "");
+        buttonText = buttonText.replace("Hide: ", "");
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "Show: " + buttonText;
+        } else {
+            ele.style.display = "block";
+            text.innerHTML = "Hide: " + buttonText;
+        }
+    } 
+</script>
+
+<script language="javascript">
+    function openCode(evt, codeName, id) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent" + id);
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks" + id);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(codeName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script language="javascript">
+    function hide(id){
+        document.getElementById(id).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<a href="https://www.vaccineimpact.org/"><img src="VIMC landscape logo CMYK.svg" width="280" style="padding: 10px 5px 10px 15px;"></a>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html"><i class="fa fa-check"></i>Structure of this workshop</a>
+<ul>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#tasks"><i class="fa fa-check"></i>Tasks</a></li>
+<li class="chapter" data-level="" data-path="structure-of-this-workshop.html"><a href="structure-of-this-workshop.html#lecture-notes"><i class="fa fa-check"></i>Lecture Notes</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="gettingstarted.html"><a href="gettingstarted.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-r-and-rstudio"><i class="fa fa-check"></i><b>1.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="1.2" data-path="gettingstarted.html"><a href="gettingstarted.html#what-is-r"><i class="fa fa-check"></i><b>1.2</b> What is R?</a></li>
+<li class="chapter" data-level="1.3" data-path="gettingstarted.html"><a href="gettingstarted.html#rstudio"><i class="fa fa-check"></i><b>1.3</b> RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="gettingstarted.html"><a href="gettingstarted.html#setup"><i class="fa fa-check"></i><b>1.4</b> Setting up an R session</a></li>
+<li class="chapter" data-level="1.5" data-path="gettingstarted.html"><a href="gettingstarted.html#console-pane"><i class="fa fa-check"></i><b>1.5</b> Console Pane</a></li>
+<li class="chapter" data-level="1.6" data-path="gettingstarted.html"><a href="gettingstarted.html#script"><i class="fa fa-check"></i><b>1.6</b> Script pane and R scripts</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="gettingstarted.html"><a href="gettingstarted.html#legible"><i class="fa fa-check"></i><b>1.6.1</b> Notes on legibility</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="gettingstarted.html"><a href="gettingstarted.html#packages"><i class="fa fa-check"></i><b>1.7</b> R packages</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>1.7.1</b> Installing packages from CRAN</a></li>
+<li class="chapter" data-level="1.7.2" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-from-a-local-file"><i class="fa fa-check"></i><b>1.7.2</b> Installing from a local file</a></li>
+<li class="chapter" data-level="1.7.3" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-archived-versions-of-a-package"><i class="fa fa-check"></i><b>1.7.3</b> Installing archived versions of a package</a></li>
+<li class="chapter" data-level="1.7.4" data-path="gettingstarted.html"><a href="gettingstarted.html#installing-development-packages"><i class="fa fa-check"></i><b>1.7.4</b> Installing development packages</a></li>
+<li class="chapter" data-level="1.7.5" data-path="gettingstarted.html"><a href="gettingstarted.html#packagesneeded"><i class="fa fa-check"></i><b>1.7.5</b> Packages to install for this module</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html"><i class="fa fa-check"></i><b>2</b> Fundamentals of R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#variables-in-r"><i class="fa fa-check"></i><b>2.1</b> Variables in R</a></li>
+<li class="chapter" data-level="2.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#functions-in-r"><i class="fa fa-check"></i><b>2.2</b> Functions in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#nested"><i class="fa fa-check"></i><b>2.2.1</b> Nesting functions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#help"><i class="fa fa-check"></i><b>2.3</b> Help files</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#objects-in-r"><i class="fa fa-check"></i><b>2.4</b> Objects in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#vectors"><i class="fa fa-check"></i><b>2.4.1</b> Vectors</a></li>
+<li class="chapter" data-level="2.4.2" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#convert"><i class="fa fa-check"></i><b>2.4.2</b> Conversions between object types</a></li>
+<li class="chapter" data-level="2.4.3" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#matrix"><i class="fa fa-check"></i><b>2.4.3</b> Matrices</a></li>
+<li class="chapter" data-level="2.4.4" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#lists"><i class="fa fa-check"></i><b>2.4.4</b> Lists</a></li>
+<li class="chapter" data-level="2.4.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#dataframes"><i class="fa fa-check"></i><b>2.4.5</b> Data frames</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#reading-in-data"><i class="fa fa-check"></i><b>2.5</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#fruitflies"><i class="fa fa-check"></i><b>2.5.1</b> Example: sexual reproduction in fruitflies</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="fundamentals-of-r.html"><a href="fundamentals-of-r.html#save"><i class="fa fa-check"></i><b>2.6</b> Saving outputs</a></li>
+</ul></li>
+<li class="part"><span><b>II Programming</b></span></li>
+<li class="chapter" data-level="3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html"><i class="fa fa-check"></i><b>3</b> Programming—Practical 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#getting-started"><i class="fa fa-check"></i><b>3.1</b> Getting started</a></li>
+<li class="chapter" data-level="3.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops"><i class="fa fa-check"></i><b>3.2</b> Predicting the behaviour of for loops</a></li>
+<li class="chapter" data-level="3.3" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-for-loop"><i class="fa fa-check"></i><b>3.3</b> Writing a <code>for</code> loop</a></li>
+<li class="chapter" data-level="3.4" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-a-while-loop"><i class="fa fa-check"></i><b>3.4</b> Writing a <code>while</code> loop</a></li>
+<li class="chapter" data-level="3.5" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations"><i class="fa fa-check"></i><b>3.5</b> Using loops to do more complex calculations</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance"><i class="fa fa-check"></i><b>3.5.1</b> A loop for which the number of iterations is known in advance</a></li>
+<li class="chapter" data-level="3.5.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance"><i class="fa fa-check"></i><b>3.5.2</b> A loop for which the number of iterations is not known in advance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#writing-simple-functions"><i class="fa fa-check"></i><b>3.6</b> Writing simple functions</a></li>
+<li class="chapter" data-level="3.7" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function"><i class="fa fa-check"></i><b>3.7</b> Predicting the behaviour of a function</a></li>
+<li class="chapter" data-level="3.8" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#return-values-from-functions"><i class="fa fa-check"></i><b>3.8</b> Return values from functions</a></li>
+<li class="chapter" data-level="3.9" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience"><i class="fa fa-check"></i><b>3.9</b> Additional tasks for those with programming experience</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation"><i class="fa fa-check"></i><b>3.9.1</b> Extended example one: Monte Carlo simulation</a></li>
+<li class="chapter" data-level="3.9.2" data-path="programmingpractical-1.html"><a href="programmingpractical-1.html#extended-example-two-the-logistic-map"><i class="fa fa-check"></i><b>3.9.2</b> Extended example two: the logistic map</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html"><i class="fa fa-check"></i><b>4</b> Programming—Practical 2</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#random-variables"><i class="fa fa-check"></i><b>4.1</b> Random variables</a></li>
+<li class="chapter" data-level="4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#probability-distributions"><i class="fa fa-check"></i><b>4.2</b> Probability distributions</a></li>
+<li class="chapter" data-level="4.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#using-probability-distributions-in-rtypes"><i class="fa fa-check"></i><b>4.3</b> Using probability distributions in R—types</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#ddist"><i class="fa fa-check"></i><b>4.3.1</b> <code>ddist()</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#pdist"><i class="fa fa-check"></i><b>4.3.2</b> <code>pdist()</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#rdist"><i class="fa fa-check"></i><b>4.3.3</b> <code>rdist()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-probabilities-for-simulation"><i class="fa fa-check"></i><b>4.4</b> Example—using probabilities for simulation</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#binomial-distribution"><i class="fa fa-check"></i><b>4.4.1</b> Binomial distribution</a></li>
+<li class="chapter" data-level="4.4.2" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#uniform-distribution"><i class="fa fa-check"></i><b>4.4.2</b> Uniform distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#examplemultiple-choices"><i class="fa fa-check"></i><b>4.5</b> Example—multiple choices</a></li>
+<li class="chapter" data-level="4.6" data-path="programmingpractical-2.html"><a href="programmingpractical-2.html#exampleusing-r-to-model-a-death-process-stochastically"><i class="fa fa-check"></i><b>4.6</b> Example—using R to model a death process stochastically</a></li>
+</ul></li>
+<li class="part"><span><b>III Dynamic models</b></span></li>
+<li class="chapter" data-level="5" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html"><i class="fa fa-check"></i><b>5</b> Dynamic models—Practical</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-bit-of-theory"><i class="fa fa-check"></i><b>5.1</b> A bit of theory</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#rationale"><i class="fa fa-check"></i><b>5.1.1</b> Rationale:</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#a-few-notes-on-eulers-method"><i class="fa fa-check"></i><b>5.1.2</b> A few notes on Euler’s method</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-return-of-the-logistic-model"><i class="fa fa-check"></i><b>5.2</b> The return of the logistic model</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#load-the-desolve-package"><i class="fa fa-check"></i><b>5.2.1</b> Load the <code>deSolve</code> package</a></li>
+<li class="chapter" data-level="5.2.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#define-the-model"><i class="fa fa-check"></i><b>5.2.2</b> Define the model</a></li>
+<li class="chapter" data-level="5.2.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#namedpars"><i class="fa fa-check"></i><b>5.2.3</b> Version with named parameters</a></li>
+<li class="chapter" data-level="5.2.4" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-the-dynamics"><i class="fa fa-check"></i><b>5.2.4</b> Plot the dynamics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#the-revenge-of-the-amoeba"><i class="fa fa-check"></i><b>5.3</b> The revenge of the amoeba</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#code-the-model"><i class="fa fa-check"></i><b>5.3.1</b> Code the model</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#plot-some-graphs"><i class="fa fa-check"></i><b>5.3.2</b> Plot some graphs</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dynamic-modelspractical.html"><a href="dynamic-modelspractical.html#discussion-and-further-investigations"><i class="fa fa-check"></i><b>5.3.3</b> Discussion and further investigations</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>IV Epidemic models</b></span></li>
+<li class="chapter" data-level="6" data-path="epi1.html"><a href="epi1.html"><i class="fa fa-check"></i><b>6</b> Epidemic models—Practical 1</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="epi1.html"><a href="epi1.html#the-basic-sir-model"><i class="fa fa-check"></i><b>6.1</b> The basic <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="6.2" data-path="epi1.html"><a href="epi1.html#coding-the-model"><i class="fa fa-check"></i><b>6.2</b> Coding the model</a></li>
+<li class="chapter" data-level="6.3" data-path="epi1.html"><a href="epi1.html#some-properties-of-the-model"><i class="fa fa-check"></i><b>6.3</b> Some properties of the model</a></li>
+<li class="chapter" data-level="6.4" data-path="epi1.html"><a href="epi1.html#calculating-the-infectious-period"><i class="fa fa-check"></i><b>6.4</b> Calculating the infectious period</a></li>
+<li class="chapter" data-level="6.5" data-path="epi1.html"><a href="epi1.html#optional-sectionextending-sir-to-other-compartments"><i class="fa fa-check"></i><b>6.5</b> Optional section—extending <span class="math inline">\(SIR\)</span> to other compartments</a></li>
+<li class="chapter" data-level="6.6" data-path="epi1.html"><a href="epi1.html#appepi"><i class="fa fa-check"></i><b>6.6</b> Appendix—Epidemic peak and final epidemic size</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="epi2.html"><a href="epi2.html"><i class="fa fa-check"></i><b>7</b> Epidemic models—Practical 2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="epi2.html"><a href="epi2.html#outline"><i class="fa fa-check"></i><b>7.1</b> Outline</a></li>
+<li class="chapter" data-level="7.2" data-path="epi2.html"><a href="epi2.html#vaccination-at-birth"><i class="fa fa-check"></i><b>7.2</b> Vaccination at birth</a></li>
+<li class="chapter" data-level="7.3" data-path="epi2.html"><a href="epi2.html#targeted-vaccination"><i class="fa fa-check"></i><b>7.3</b> Targeted Vaccination</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="epi3.html"><a href="epi3.html"><i class="fa fa-check"></i><b>8</b> Epidemic models—Practical 3</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="epi3.html"><a href="epi3.html#stochastic-models"><i class="fa fa-check"></i><b>8.1</b> Stochastic models</a></li>
+<li class="chapter" data-level="8.2" data-path="epi3.html"><a href="epi3.html#coding-a-simple-si-model"><i class="fa fa-check"></i><b>8.2</b> Coding a simple <span class="math inline">\(SI\)</span> model</a></li>
+<li class="chapter" data-level="8.3" data-path="epi3.html"><a href="epi3.html#dissecting-the-stochastic-si-code"><i class="fa fa-check"></i><b>8.3</b> Dissecting the stochastic <span class="math inline">\(SI\)</span> code</a></li>
+<li class="chapter" data-level="8.4" data-path="epi3.html"><a href="epi3.html#performing-multiple-simulations"><i class="fa fa-check"></i><b>8.4</b> Performing multiple simulations</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="epi3.html"><a href="epi3.html#adding-the-deterministic-solution-curve"><i class="fa fa-check"></i><b>8.4.1</b> Adding the deterministic solution curve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="epi3.html"><a href="epi3.html#exploring-the-effects-of-stochasticity"><i class="fa fa-check"></i><b>8.5</b> Exploring the effects of stochasticity</a></li>
+<li class="chapter" data-level="8.6" data-path="epi3.html"><a href="epi3.html#the-delay-time"><i class="fa fa-check"></i><b>8.6</b> The delay time</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="epi3.html"><a href="epi3.html#the-deterministic-half-time"><i class="fa fa-check"></i><b>8.6.1</b> The deterministic half-time</a></li>
+<li class="chapter" data-level="8.6.2" data-path="epi3.html"><a href="epi3.html#the-stochastic-half-time"><i class="fa fa-check"></i><b>8.6.2</b> The stochastic half-time</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="epi3.html"><a href="epi3.html#coding-a-simple-sir-model"><i class="fa fa-check"></i><b>8.7</b> Coding a simple <span class="math inline">\(SIR\)</span> model</a></li>
+<li class="chapter" data-level="8.8" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-recovery-from-infection"><i class="fa fa-check"></i><b>8.8</b> <span class="math inline">\(SIS\)</span> Extension: Adding Recovery from Infection</a></li>
+<li class="chapter" data-level="8.9" data-path="epi3.html"><a href="epi3.html#sis-extension-adding-host-demography"><i class="fa fa-check"></i><b>8.9</b> <span class="math inline">\(SIS\)</span> Extension: Adding host demography</a></li>
+<li class="chapter" data-level="8.10" data-path="epi3.html"><a href="epi3.html#sir-extension-the-final-epidemic-size"><i class="fa fa-check"></i><b>8.10</b> <span class="math inline">\(SIR\)</span> Extension: The final epidemic size</a></li>
+<li class="chapter" data-level="8.11" data-path="epi3.html"><a href="epi3.html#sir-extension-stochastic-extinction"><i class="fa fa-check"></i><b>8.11</b> <span class="math inline">\(SIR\)</span> Extension: Stochastic extinction</a></li>
+</ul></li>
+<li class="part"><span><b>V Statistical modelling</b></span></li>
+<li class="chapter" data-level="9" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html"><i class="fa fa-check"></i><b>9</b> Estimating <span class="math inline">\(R_0\)</span> using catalytic models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#foi"><i class="fa fa-check"></i><b>9.1</b> Estimating the force-of-infection and <span class="math inline">\(R_0\)</span> of rubella</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#bayesian-estimation"><i class="fa fa-check"></i><b>9.1.1</b> Bayesian estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#ngm"><i class="fa fa-check"></i><b>9.2</b> Next-generation matrix approaches</a></li>
+<li class="chapter" data-level="9.3" data-path="estimating-r_0-using-catalytic-models.html"><a href="estimating-r_0-using-catalytic-models.html#estimating-the-next-generation-matrix-from-rubella-serology"><i class="fa fa-check"></i><b>9.3</b> Estimating the next generation matrix from rubella serology</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="particle-mcmc.html"><a href="particle-mcmc.html"><i class="fa fa-check"></i><b>10</b> Particle MCMC</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#case-study"><i class="fa fa-check"></i><b>10.1</b> Case Study</a></li>
+<li class="chapter" data-level="10.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#arguments-for-pmcmc-function"><i class="fa fa-check"></i><b>10.2</b> Arguments for <code>PMCMC()</code> function</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="particle-mcmc.html"><a href="particle-mcmc.html#data"><i class="fa fa-check"></i><b>10.2.1</b> Data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="particle-mcmc.html"><a href="particle-mcmc.html#obsprocess"><i class="fa fa-check"></i><b>10.2.2</b> Observation process</a></li>
+<li class="chapter" data-level="10.2.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#sec:model"><i class="fa fa-check"></i><b>10.2.3</b> Setting up the model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="particle-mcmc.html"><a href="particle-mcmc.html#running-the-pmcmc-algorithm"><i class="fa fa-check"></i><b>10.3</b> Running the PMCMC algorithm</a></li>
+<li class="chapter" data-level="10.4" data-path="particle-mcmc.html"><a href="particle-mcmc.html#optimising-the-number-of-particles"><i class="fa fa-check"></i><b>10.4</b> Optimising the number of particles</a></li>
+<li class="chapter" data-level="10.5" data-path="particle-mcmc.html"><a href="particle-mcmc.html#visualising-and-summarising-the-posterior-distributions"><i class="fa fa-check"></i><b>10.5</b> Visualising and summarising the posterior distributions</a></li>
+<li class="chapter" data-level="10.6" data-path="particle-mcmc.html"><a href="particle-mcmc.html#predictive-posterior-distributions"><i class="fa fa-check"></i><b>10.6</b> Predictive posterior distributions</a></li>
+</ul></li>
+<li class="part"><span><b>VI Additional Materials</b></span></li>
+<li class="chapter" data-level="11" data-path="estimating-r_0.html"><a href="estimating-r_0.html"><i class="fa fa-check"></i><b>11</b> Estimating <span class="math inline">\(R_{0}\)</span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="estimating-r_0.html"><a href="estimating-r_0.html#introduction-models-and-data-sets"><i class="fa fa-check"></i><b>11.1</b> Introduction: models and data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="estimating-r_0.html"><a href="estimating-r_0.html#final-size-method"><i class="fa fa-check"></i><b>11.2</b> Final size method</a></li>
+<li class="chapter" data-level="11.3" data-path="estimating-r_0.html"><a href="estimating-r_0.html#regression-method"><i class="fa fa-check"></i><b>11.3</b> Regression method</a></li>
+<li class="chapter" data-level="11.4" data-path="estimating-r_0.html"><a href="estimating-r_0.html#recon-earlyr-method"><i class="fa fa-check"></i><b>11.4</b> RECON <code>earlyR</code> method</a></li>
+<li class="chapter" data-level="11.5" data-path="estimating-r_0.html"><a href="estimating-r_0.html#appendix"><i class="fa fa-check"></i><b>11.5</b> Appendix</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html"><i class="fa fa-check"></i><b>12</b> Seasonality and Measles Epidemics</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="seasonality-and-measles-epidemics.html"><a href="seasonality-and-measles-epidemics.html#measles-data-and-challenge"><i class="fa fa-check"></i><b>12.1</b> Measles data and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html"><i class="fa fa-check"></i><b>13</b> Outbreak of influenza in a boarding school</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="outbreak-of-influenza-in-a-boarding-school.html"><a href="outbreak-of-influenza-in-a-boarding-school.html#data-summary-and-challenge"><i class="fa fa-check"></i><b>13.1</b> Data summary and challenge</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Inference in infectious disease systems practicals</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="programmingpractical-1" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Programming—Practical 1<a href="programmingpractical-1.html#programmingpractical-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="nik-cunniffe-njc1001cam.ac.uk" class="section level2 unlisted unnumbered hasAnchor">
+<h2>Nik Cunniffe (<a href="mailto:njc1001@cam.ac.uk">njc1001@cam.ac.uk</a>)<a href="programmingpractical-1.html#nik-cunniffe-njc1001cam.ac.uk" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="getting-started" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Getting started<a href="programmingpractical-1.html#getting-started" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Start a new RStudio session, set your current working directory, open a new R Script and save this (blank) script to a file with an appropriate name.</p>
+<p>Use this script file to edit and keep copies of the code you write in this practical: you may find it useful be able to look back later.</p>
+</div>
+<div id="predicting-the-behaviour-of-for-loops" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Predicting the behaviour of for loops<a href="programmingpractical-1.html#predicting-the-behaviour-of-for-loops" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will use R to generate some data in the form of vectors and use these data to form some looping constructs. Predicting what code will do and testing your predictions by running the code should help cement your understanding of for loops.</p>
+<p>Type the following code into your script. Remember that code after <code>#</code> is a comment and will be ignored by the R interpreter (you do not have to type these comments in for yourself, but you might want to if you think you will need to refer to them later).</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="programmingpractical-1.html#cb180-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>           <span class="co"># Assign the integers 1 to 10 in order to the vector a</span></span>
+<span id="cb180-2"><a href="programmingpractical-1.html#cb180-2" tabindex="-1"></a><span class="fu">print</span>(a)            <span class="co"># Print a to the screen</span></span>
+<span id="cb180-3"><a href="programmingpractical-1.html#cb180-3" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">sample</span>(a)      <span class="co"># Set b to be a with elements shuffled into random order</span></span>
+<span id="cb180-4"><a href="programmingpractical-1.html#cb180-4" tabindex="-1"></a><span class="fu">print</span>(b)            <span class="co"># Print b to the screen</span></span></code></pre></div>
+<p>Run the code a few times either by sourcing it or by highlighting it in the script then pressing the run button in RStudio.</p>
+<p>You should note that:</p>
+<ul>
+<li>The first line creates a new vector <code>a</code> with the elements 1 to 10 in order.</li>
+<li>The second line prints the vector <code>a</code> to the screen.</li>
+<li>The third line uses a built-in R function to sample (all of) the elements of the vector <code>a</code> without replacement (i.e. to permute the elements into a random order), and assigns the result to the vector <code>b</code>.</li>
+<li>The fourth line prints the vector <code>b</code>.</li>
+</ul>
+<p>You should also note that the code gives a different result each time you run it, since repeating the <code>sample</code> command leads to <code>b</code> being set to a new permutation of <code>a</code>.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="programmingpractical-1.html#cb181-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb181-2"><a href="programmingpractical-1.html#cb181-2" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(i, a[i]))</span>
+<span id="cb181-3"><a href="programmingpractical-1.html#cb181-3" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-120" onclick="javascript:toggle(&#39;unnamed-chunk-120&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-120" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>Prints numbers in order.</p>
+<pre><code>## [1] &quot;1 1&quot;
+## [1] &quot;2 2&quot;
+## [1] &quot;3 3&quot;
+## [1] &quot;4 4&quot;
+## [1] &quot;5 5&quot;
+## [1] &quot;6 6&quot;
+## [1] &quot;7 7&quot;
+## [1] &quot;8 8&quot;
+## [1] &quot;9 9&quot;
+## [1] &quot;10 10&quot;</code></pre>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="programmingpractical-1.html#cb183-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">1</span>) {</span>
+<span id="cb183-2"><a href="programmingpractical-1.html#cb183-2" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(i, b[i]))</span>
+<span id="cb183-3"><a href="programmingpractical-1.html#cb183-3" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-122" onclick="javascript:toggle(&#39;unnamed-chunk-122&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-122" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>Prints numbers in reverse order according to whatever is in sample <code>b</code>.</p>
+<pre><code>## [1] &quot;10 5&quot;
+## [1] &quot;9 9&quot;
+## [1] &quot;8 10&quot;
+## [1] &quot;7 2&quot;
+## [1] &quot;6 7&quot;
+## [1] &quot;5 1&quot;
+## [1] &quot;4 3&quot;
+## [1] &quot;3 4&quot;
+## [1] &quot;2 6&quot;
+## [1] &quot;1 8&quot;</code></pre>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="programmingpractical-1.html#cb185-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> a) {</span>
+<span id="cb185-2"><a href="programmingpractical-1.html#cb185-2" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(i, b[i]))</span>
+<span id="cb185-3"><a href="programmingpractical-1.html#cb185-3" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-124" onclick="javascript:toggle(&#39;unnamed-chunk-124&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-124" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>Prints numbers in forward order according to whatever is in vector <code>b</code>.</p>
+<pre><code>## [1] &quot;1 8&quot;
+## [1] &quot;2 6&quot;
+## [1] &quot;3 4&quot;
+## [1] &quot;4 3&quot;
+## [1] &quot;5 1&quot;
+## [1] &quot;6 7&quot;
+## [1] &quot;7 2&quot;
+## [1] &quot;8 10&quot;
+## [1] &quot;9 9&quot;
+## [1] &quot;10 5&quot;</code></pre>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Write down what you expect the output of the following code to be before verifying your answer by entering the code into your script and running it.</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="programmingpractical-1.html#cb187-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">sample</span>(a)) {</span>
+<span id="cb187-2"><a href="programmingpractical-1.html#cb187-2" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(i, b[i]))</span>
+<span id="cb187-3"><a href="programmingpractical-1.html#cb187-3" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-126" onclick="javascript:toggle(&#39;unnamed-chunk-126&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-126" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<p>Prints numbers in a random order from whatever is in vector <code>b</code>.</p>
+<pre><code>## [1] &quot;9 9&quot;
+## [1] &quot;6 7&quot;
+## [1] &quot;10 5&quot;
+## [1] &quot;2 6&quot;
+## [1] &quot;8 10&quot;
+## [1] &quot;1 8&quot;
+## [1] &quot;7 2&quot;
+## [1] &quot;3 4&quot;
+## [1] &quot;4 3&quot;
+## [1] &quot;5 1&quot;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="writing-a-for-loop" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Writing a <code>for</code> loop<a href="programmingpractical-1.html#writing-a-for-loop" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Adapt the code from the lecture to use a <code>for</code> loop to do the following:</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Print the 12 times table using a <code>for</code> loop, i.e. produce output of the form</p>
+<ul>
+<li>1 times 12 is 12</li>
+<li>2 times 12 is 24</li>
+<li><span class="math inline">\(\dots\)</span></li>
+<li>12 times 12 is 144
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-128" onclick="javascript:toggle(&#39;unnamed-chunk-128&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-128" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="programmingpractical-1.html#cb189-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) {</span>
+<span id="cb189-2"><a href="programmingpractical-1.html#cb189-2" tabindex="-1"></a>    result <span class="ot">&lt;-</span> i <span class="sc">*</span> <span class="dv">12</span></span>
+<span id="cb189-3"><a href="programmingpractical-1.html#cb189-3" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(i, <span class="st">&quot;times 12 is&quot;</span>, result))</span>
+<span id="cb189-4"><a href="programmingpractical-1.html#cb189-4" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;1 times 12 is 12&quot;
+## [1] &quot;2 times 12 is 24&quot;
+## [1] &quot;3 times 12 is 36&quot;
+## [1] &quot;4 times 12 is 48&quot;
+## [1] &quot;5 times 12 is 60&quot;
+## [1] &quot;6 times 12 is 72&quot;
+## [1] &quot;7 times 12 is 84&quot;
+## [1] &quot;8 times 12 is 96&quot;
+## [1] &quot;9 times 12 is 108&quot;
+## [1] &quot;10 times 12 is 120&quot;
+## [1] &quot;11 times 12 is 132&quot;
+## [1] &quot;12 times 12 is 144&quot;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="writing-a-while-loop" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Writing a <code>while</code> loop<a href="programmingpractical-1.html#writing-a-while-loop" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Repeat the previous task using a <code>while</code> loop.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Print the 12 times table using a <code>while</code> loop, i.e. produce output of the form</p>
+<ul>
+<li>1 times 12 is 12</li>
+<li>2 times 12 is 24</li>
+<li><span class="math inline">\(\dots\)</span></li>
+<li>12 times 12 is 144
+</div>
+</div></li>
+</ul>
+<button id="displayTextunnamed-chunk-130" onclick="javascript:toggle(&#39;unnamed-chunk-130&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-130" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="programmingpractical-1.html#cb191-1" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb191-2"><a href="programmingpractical-1.html#cb191-2" tabindex="-1"></a><span class="cf">while</span>(i <span class="sc">&lt;=</span> <span class="dv">12</span>) {</span>
+<span id="cb191-3"><a href="programmingpractical-1.html#cb191-3" tabindex="-1"></a>  result <span class="ot">&lt;-</span> i <span class="sc">*</span> <span class="dv">12</span></span>
+<span id="cb191-4"><a href="programmingpractical-1.html#cb191-4" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(i, <span class="st">&quot;times 12 is&quot;</span>, result))</span>
+<span id="cb191-5"><a href="programmingpractical-1.html#cb191-5" tabindex="-1"></a>  i <span class="ot">&lt;-</span> i <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb191-6"><a href="programmingpractical-1.html#cb191-6" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;1 times 12 is 12&quot;
+## [1] &quot;2 times 12 is 24&quot;
+## [1] &quot;3 times 12 is 36&quot;
+## [1] &quot;4 times 12 is 48&quot;
+## [1] &quot;5 times 12 is 60&quot;
+## [1] &quot;6 times 12 is 72&quot;
+## [1] &quot;7 times 12 is 84&quot;
+## [1] &quot;8 times 12 is 96&quot;
+## [1] &quot;9 times 12 is 108&quot;
+## [1] &quot;10 times 12 is 120&quot;
+## [1] &quot;11 times 12 is 132&quot;
+## [1] &quot;12 times 12 is 144&quot;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="using-loops-to-do-more-complex-calculations" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Using loops to do more complex calculations<a href="programmingpractical-1.html#using-loops-to-do-more-complex-calculations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="a-loop-for-which-the-number-of-iterations-is-known-in-advance" class="section level3 hasAnchor" number="3.5.1">
+<h3><span class="header-section-number">3.5.1</span> A loop for which the number of iterations is known in advance<a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-known-in-advance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Enter the following code to your script and check you understand the output.</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="programmingpractical-1.html#cb193-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb193-2"><a href="programmingpractical-1.html#cb193-2" tabindex="-1"></a><span class="fu">print</span>(<span class="dv">2</span><span class="sc">^</span>p)</span>
+<span id="cb193-3"><a href="programmingpractical-1.html#cb193-3" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb193-4"><a href="programmingpractical-1.html#cb193-4" tabindex="-1"></a><span class="fu">print</span>(p<span class="sc">^</span><span class="dv">3</span>)</span></code></pre></div>
+<p>Now write code to answer the following question.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+What is the sum of the first 15 powers of 2 (i.e. <span class="math inline">\(2^1 + 2^2 + \dots 2^{15}\)</span>)?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-133" onclick="javascript:toggle(&#39;unnamed-chunk-133&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-133" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="programmingpractical-1.html#cb194-1" tabindex="-1"></a>runningSum <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb194-2"><a href="programmingpractical-1.html#cb194-2" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>) {</span>
+<span id="cb194-3"><a href="programmingpractical-1.html#cb194-3" tabindex="-1"></a>  runningSum <span class="ot">&lt;-</span> runningSum <span class="sc">+</span> <span class="dv">2</span><span class="sc">^</span>i</span>
+<span id="cb194-4"><a href="programmingpractical-1.html#cb194-4" tabindex="-1"></a>}</span>
+<span id="cb194-5"><a href="programmingpractical-1.html#cb194-5" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Sum is&quot;</span>, runningSum))</span></code></pre></div>
+<pre><code>## [1] &quot;Sum is 65534&quot;</code></pre>
+Note you can do the above more efficiently using vectorised operators, e.g. <code>sum(2^(1:15))</code>.
+</div>
+</div>
+</div>
+</div>
+<div id="a-loop-for-which-the-number-of-iterations-is-not-known-in-advance" class="section level3 hasAnchor" number="3.5.2">
+<h3><span class="header-section-number">3.5.2</span> A loop for which the number of iterations is not known in advance<a href="programmingpractical-1.html#a-loop-for-which-the-number-of-iterations-is-not-known-in-advance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Write code to answer the following question.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+What is the smallest power of 2 that is greater than 1,000,000?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-135" onclick="javascript:toggle(&#39;unnamed-chunk-135&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-135" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="programmingpractical-1.html#cb196-1" tabindex="-1"></a>thisIDX <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb196-2"><a href="programmingpractical-1.html#cb196-2" tabindex="-1"></a>thisPower <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">^</span>thisIDX</span>
+<span id="cb196-3"><a href="programmingpractical-1.html#cb196-3" tabindex="-1"></a><span class="cf">while</span>(thisPower<span class="sc">&lt;</span><span class="dv">1000000</span>) {</span>
+<span id="cb196-4"><a href="programmingpractical-1.html#cb196-4" tabindex="-1"></a>  thisIDX <span class="ot">&lt;-</span> thisIDX <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb196-5"><a href="programmingpractical-1.html#cb196-5" tabindex="-1"></a>  thisPower <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">^</span>thisIDX</span>
+<span id="cb196-6"><a href="programmingpractical-1.html#cb196-6" tabindex="-1"></a>}</span>
+<span id="cb196-7"><a href="programmingpractical-1.html#cb196-7" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;2^&quot;</span>,thisIDX,<span class="st">&quot;=&quot;</span>,thisPower,<span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;2^20=1048576&quot;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="writing-simple-functions" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Writing simple functions<a href="programmingpractical-1.html#writing-simple-functions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Type the following code into your script and run it. Before you run it, think about whether you expect any output.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="programmingpractical-1.html#cb198-1" tabindex="-1"></a>sayHello <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb198-2"><a href="programmingpractical-1.html#cb198-2" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Hello&quot;</span>)</span>
+<span id="cb198-3"><a href="programmingpractical-1.html#cb198-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>Type the following at the command prompt, but before you do so, predict what will happen.</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="programmingpractical-1.html#cb199-1" tabindex="-1"></a><span class="fu">sayHello</span>()</span></code></pre></div>
+<p>Now type the following code into your script.</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="programmingpractical-1.html#cb200-1" tabindex="-1"></a>sayHelloWithArg <span class="ot">&lt;-</span> <span class="cf">function</span>(whoTo) {</span>
+<span id="cb200-2"><a href="programmingpractical-1.html#cb200-2" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Hello&quot;</span>, whoTo))</span>
+<span id="cb200-3"><a href="programmingpractical-1.html#cb200-3" tabindex="-1"></a>}</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Now type each of the following instructions into the command prompt. Before typing each line, predict what will happen.</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="programmingpractical-1.html#cb201-1" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>()</span>
+<span id="cb201-2"><a href="programmingpractical-1.html#cb201-2" tabindex="-1"></a>sayHelloWithArg </span>
+<span id="cb201-3"><a href="programmingpractical-1.html#cb201-3" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>(<span class="st">&quot;nik&quot;</span>)</span>
+<span id="cb201-4"><a href="programmingpractical-1.html#cb201-4" tabindex="-1"></a><span class="fu">sayHello</span>(<span class="st">&quot;nik&quot;</span>)</span>
+<span id="cb201-5"><a href="programmingpractical-1.html#cb201-5" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>(nik) </span>
+<span id="cb201-6"><a href="programmingpractical-1.html#cb201-6" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>(<span class="at">whoto=</span><span class="st">&quot;nik&quot;</span>) </span>
+<span id="cb201-7"><a href="programmingpractical-1.html#cb201-7" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>(<span class="at">whoTo=</span><span class="st">&quot;nik&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-140" onclick="javascript:toggle(&#39;unnamed-chunk-140&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-140" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="programmingpractical-1.html#cb202-1" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>()       <span class="co"># error, since not passed argument</span></span></code></pre></div>
+<pre><code>## Error in sayHelloWithArg(): argument &quot;whoTo&quot; is missing, with no default</code></pre>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="programmingpractical-1.html#cb204-1" tabindex="-1"></a><span class="co"># echos function&#39;s code to screen (happens in general if </span></span>
+<span id="cb204-2"><a href="programmingpractical-1.html#cb204-2" tabindex="-1"></a><span class="co"># type function&#39;s name without brackets)</span></span>
+<span id="cb204-3"><a href="programmingpractical-1.html#cb204-3" tabindex="-1"></a>sayHelloWithArg</span></code></pre></div>
+<pre><code>## function(whoTo) {
+##     print(paste(&quot;Hello&quot;, whoTo))
+## }</code></pre>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="programmingpractical-1.html#cb206-1" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>(<span class="st">&quot;nik&quot;</span>)  <span class="co"># works as expected</span></span></code></pre></div>
+<pre><code>## [1] &quot;Hello nik&quot;</code></pre>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="programmingpractical-1.html#cb208-1" tabindex="-1"></a><span class="fu">sayHello</span>(<span class="st">&quot;nik&quot;</span>)         <span class="co"># error, since too many arguments for the simpler function</span></span></code></pre></div>
+<pre><code>## Error in sayHello(&quot;nik&quot;): unused argument (&quot;nik&quot;)</code></pre>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="programmingpractical-1.html#cb210-1" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>(nik)    <span class="co"># error, since variable nik is not defined</span></span></code></pre></div>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;nik&#39; not found</code></pre>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="programmingpractical-1.html#cb212-1" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>(<span class="at">whoto=</span><span class="st">&quot;nik&quot;</span>) <span class="co"># error, since argument names are case sensitive</span></span></code></pre></div>
+<pre><code>## Error in sayHelloWithArg(whoto = &quot;nik&quot;): unused argument (whoto = &quot;nik&quot;)</code></pre>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="programmingpractical-1.html#cb214-1" tabindex="-1"></a><span class="fu">sayHelloWithArg</span>(<span class="at">whoTo=</span><span class="st">&quot;nik&quot;</span>) <span class="co"># works as expected</span></span></code></pre></div>
+<pre><code>## [1] &quot;Hello nik&quot;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="predicting-the-behaviour-of-a-function" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Predicting the behaviour of a function<a href="programmingpractical-1.html#predicting-the-behaviour-of-a-function" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For now, do not type in the following code, but instead just read it.</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="programmingpractical-1.html#cb216-1" tabindex="-1"></a>cat <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb216-2"><a href="programmingpractical-1.html#cb216-2" tabindex="-1"></a>canary <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb216-3"><a href="programmingpractical-1.html#cb216-3" tabindex="-1"></a>buster <span class="ot">&lt;-</span> <span class="cf">function</span>(cat, canary) { </span>
+<span id="cb216-4"><a href="programmingpractical-1.html#cb216-4" tabindex="-1"></a>  cat <span class="ot">&lt;-</span> cat<span class="sc">*</span><span class="dv">2</span> </span>
+<span id="cb216-5"><a href="programmingpractical-1.html#cb216-5" tabindex="-1"></a>  canary <span class="ot">&lt;-</span> canary<span class="sc">*</span><span class="dv">3</span></span>
+<span id="cb216-6"><a href="programmingpractical-1.html#cb216-6" tabindex="-1"></a>  <span class="fu">return</span>(cat <span class="sc">+</span> canary) </span>
+<span id="cb216-7"><a href="programmingpractical-1.html#cb216-7" tabindex="-1"></a>}</span>
+<span id="cb216-8"><a href="programmingpractical-1.html#cb216-8" tabindex="-1"></a>ghost <span class="ot">&lt;-</span> <span class="fu">buster</span>(canary, <span class="sc">-</span>cat)</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Think carefully about what you expect the values of <code>cat</code>, <code>canary</code> and <code>ghost</code> to be after this code is executed and write down your answer. Now execute the code and test your prediction.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-143" onclick="javascript:toggle(&#39;unnamed-chunk-143&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-143" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+The line <code>ghost &lt;- buster(canary, -cat)</code> sets <code>ghost</code> to be 2, but leaves <code>cat</code> and <code>canary</code> unchanged.
+</div>
+</div>
+</div>
+</div>
+<div id="return-values-from-functions" class="section level2 hasAnchor" number="3.8">
+<h2><span class="header-section-number">3.8</span> Return values from functions<a href="programmingpractical-1.html#return-values-from-functions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The code in the box below does the following.</p>
+<ul>
+<li>Defines a function <code>mySum</code> that returns the sum of a vector.</li>
+<li>Creates a vector <code>x</code> containing 100 uniform random numbers between 0 and 1.</li>
+<li>Finds their sum using <code>mySum</code>.</li>
+<li>Finds their sum using the built-in R function <code>sum</code>.</li>
+<li>Prints out a comparison of the two values.</li>
+</ul>
+<p>Type the code into your script and make sure you are happy with how it works.</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="programmingpractical-1.html#cb217-1" tabindex="-1"></a>mySum <span class="ot">&lt;-</span> <span class="cf">function</span>(toSum) { <span class="co"># my function to sum elements of a vector</span></span>
+<span id="cb217-2"><a href="programmingpractical-1.html#cb217-2" tabindex="-1"></a>  retVal <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb217-3"><a href="programmingpractical-1.html#cb217-3" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(toSum)) { </span>
+<span id="cb217-4"><a href="programmingpractical-1.html#cb217-4" tabindex="-1"></a>    retVal <span class="ot">&lt;-</span> retVal <span class="sc">+</span> toSum[i]  </span>
+<span id="cb217-5"><a href="programmingpractical-1.html#cb217-5" tabindex="-1"></a>  } </span>
+<span id="cb217-6"><a href="programmingpractical-1.html#cb217-6" tabindex="-1"></a>  <span class="fu">return</span>(retVal)</span>
+<span id="cb217-7"><a href="programmingpractical-1.html#cb217-7" tabindex="-1"></a>} </span>
+<span id="cb217-8"><a href="programmingpractical-1.html#cb217-8" tabindex="-1"></a></span>
+<span id="cb217-9"><a href="programmingpractical-1.html#cb217-9" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)     <span class="co"># generate 100 uniform random numbers </span></span>
+<span id="cb217-10"><a href="programmingpractical-1.html#cb217-10" tabindex="-1"></a>myWay <span class="ot">&lt;-</span> <span class="fu">mySum</span>(a)   <span class="co"># calculate sum using our mySum() function</span></span>
+<span id="cb217-11"><a href="programmingpractical-1.html#cb217-11" tabindex="-1"></a>rWay <span class="ot">&lt;-</span> <span class="fu">sum</span>(a)      <span class="co"># calculate sum using built-in sum() function </span></span>
+<span id="cb217-12"><a href="programmingpractical-1.html#cb217-12" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;My answer&quot;</span>, myWay, <span class="st">&quot;... R answer&quot;</span>, rWay))</span></code></pre></div>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Use the function <code>mySum</code> as a base to write a new function <code>mySumAndMean</code>.</p>
+The new function should calculate the sum and the mean of whatever vector it receives as an input. It should return a vector: the first element of the output vector should be the sum, the second the mean. You might find the built-in function <code>mean</code> helpful to test your code.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-146" onclick="javascript:toggle(&#39;unnamed-chunk-146&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-146" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="programmingpractical-1.html#cb218-1" tabindex="-1"></a><span class="co"># my function to sum elements of a vector and return that and the mean</span></span>
+<span id="cb218-2"><a href="programmingpractical-1.html#cb218-2" tabindex="-1"></a>mySumAndMean <span class="ot">&lt;-</span> <span class="cf">function</span>(toSum) { </span>
+<span id="cb218-3"><a href="programmingpractical-1.html#cb218-3" tabindex="-1"></a>  retVal <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb218-4"><a href="programmingpractical-1.html#cb218-4" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(toSum)) { </span>
+<span id="cb218-5"><a href="programmingpractical-1.html#cb218-5" tabindex="-1"></a>    retVal <span class="ot">&lt;-</span> retVal <span class="sc">+</span> toSum[i]  </span>
+<span id="cb218-6"><a href="programmingpractical-1.html#cb218-6" tabindex="-1"></a>  } </span>
+<span id="cb218-7"><a href="programmingpractical-1.html#cb218-7" tabindex="-1"></a>  meanVal <span class="ot">&lt;-</span> retVal<span class="sc">/</span><span class="fu">length</span>(toSum) <span class="co"># find the mean, too</span></span>
+<span id="cb218-8"><a href="programmingpractical-1.html#cb218-8" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">c</span>(retVal,meanVal))       <span class="co"># return two values by wrapping up into vector</span></span>
+<span id="cb218-9"><a href="programmingpractical-1.html#cb218-9" tabindex="-1"></a>} </span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div id="additional-tasks-for-those-with-programming-experience" class="section level2 hasAnchor" number="3.9">
+<h2><span class="header-section-number">3.9</span> Additional tasks for those with programming experience<a href="programmingpractical-1.html#additional-tasks-for-those-with-programming-experience" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The following tasks are mainly aimed at those of you who already have experience in programming.</p>
+<div id="extended-example-one-monte-carlo-simulation" class="section level3 hasAnchor" number="3.9.1">
+<h3><span class="header-section-number">3.9.1</span> Extended example one: Monte Carlo simulation<a href="programmingpractical-1.html#extended-example-one-monte-carlo-simulation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong><em>[Note this task is optional, and you should do it only if you have time]</em></strong></p>
+<p>When I was younger, I sometimes collected Panini football stickers.</p>
+<p>The basic idea is very simple: you collect numbered stickers to stick into an album, continuing to buy stickers until you have the full set. The problem is that you don’t know which stickers you are going to get until you open a packet. Each packet contains a random sample of the available stickers, and packets are sealed at the time of purchase. This means that as you get closer and closer to completing the album, it becomes more and more unlikely that any new packet will contain any stickers you need for your album.</p>
+<p>At the time, it was a matter of significant regret for me that I never did complete the album for the Mexico ’86 World Cup. That album required a total of 427 stickers.</p>
+<p>Now, better trained in mathematics and computing, I wondered how many stickers I might have had to buy to be successful in my quest to complete the album?</p>
+<p>We are going to write a simple “Monte Carlo” simulation to understand this. Monte Carlo simulations rely on random sampling to obtain an estimate of a random variable. You will be writing Monte Carlo simulations of stochastic epidemic models later in the course, so this is good practice.</p>
+<p>We remove some of the complexity by considering a slightly simpler situation, in which stickers come in packets of one.</p>
+<p>Note the built-in R function <code>sample</code> that was introduced earlier can in fact be called in other ways. Type the following into the command line and run it a few times</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="programmingpractical-1.html#cb219-1" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,<span class="dv">3</span>)</span></code></pre></div>
+<p>You should see that—when it is called with two arguments—the built-in R function <code>sample</code> no longer merely shuffles the whole of the vector that is its first argument, but instead randomly samples the number of elements given by the second argument from that vector (again without replacement). The above corresponds to randomly choosing a three numbers from the list of integers between 1 and 200.</p>
+<p>Furthermore, note the behaviour of the built-in R function <code>rep</code> by typing the following in at the command line</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="programmingpractical-1.html#cb220-1" tabindex="-1"></a><span class="fu">rep</span>(<span class="cn">TRUE</span>,<span class="dv">4</span>)</span></code></pre></div>
+<p>You should see that this line of code creates a vector of length 4 where all four elements are the logical value <code>TRUE</code>.</p>
+<p>One way of writing a simulation of a single attempt to collect the entire album would be something like the code that follows. <strong>However, this code contains a deliberate mistake.</strong></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Enter the code into your script, find the mistake, fix it, and run the code.</p>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="programmingpractical-1.html#cb221-1" tabindex="-1"></a>totStickers <span class="ot">&lt;-</span> <span class="dv">427</span></span>
+<span id="cb221-2"><a href="programmingpractical-1.html#cb221-2" tabindex="-1"></a>gotSticker <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">FALSE</span>,totStickers)</span>
+<span id="cb221-3"><a href="programmingpractical-1.html#cb221-3" tabindex="-1"></a>numLeft <span class="ot">&lt;-</span> totStickers</span>
+<span id="cb221-4"><a href="programmingpractical-1.html#cb221-4" tabindex="-1"></a>numStickersBought <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb221-5"><a href="programmingpractical-1.html#cb221-5" tabindex="-1"></a><span class="cf">while</span>(numLeft <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb221-6"><a href="programmingpractical-1.html#cb221-6" tabindex="-1"></a>  numStickersBought <span class="ot">&lt;-</span> numStickersBought <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb221-7"><a href="programmingpractical-1.html#cb221-7" tabindex="-1"></a>  thisSticker <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>totStickers, <span class="dv">1</span>)</span>
+<span id="cb221-8"><a href="programmingpractical-1.html#cb221-8" tabindex="-1"></a>  <span class="cf">if</span>(gotSticker[thisSticker] <span class="sc">==</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb221-9"><a href="programmingpractical-1.html#cb221-9" tabindex="-1"></a>    gotSticker[thisSticker] <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb221-10"><a href="programmingpractical-1.html#cb221-10" tabindex="-1"></a>    numLeft <span class="ot">&lt;-</span> numLeft <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb221-11"><a href="programmingpractical-1.html#cb221-11" tabindex="-1"></a>    <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&#39;got&#39;</span>, thisSticker, <span class="st">&#39;still need&#39;</span>, numLeft))</span>
+<span id="cb221-12"><a href="programmingpractical-1.html#cb221-12" tabindex="-1"></a>  }</span>
+<span id="cb221-13"><a href="programmingpractical-1.html#cb221-13" tabindex="-1"></a>}</span>
+<span id="cb221-14"><a href="programmingpractical-1.html#cb221-14" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&#39;bought&#39;</span>, numStickersBought))</span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-150" onclick="javascript:toggle(&#39;unnamed-chunk-150&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-150" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+There is a mistake in the code on line 8. The condition in the <code>if</code> statement should be checking for <code>FALSE</code>, not <code>TRUE</code>.
+</div>
+</div>
+</div>
+<p>Each time you run the fixed version of the code should lead to a different result. You can get an estimate of the average number of stickers that is required to complete the album by running the code lots of times, and averaging the result.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+Add a for loop around the code above to run 100 simulations of collecting an entire album, storing the number of stickers required in each simulation in a vector. Apply the function built-in R function <code>mean</code> to the vector to estimate the average number of stickers that must be bought to complete the album.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-152" onclick="javascript:toggle(&#39;unnamed-chunk-152&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-152" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="programmingpractical-1.html#cb222-1" tabindex="-1"></a>myEstimates <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">0</span>)</span>
+<span id="cb222-2"><a href="programmingpractical-1.html#cb222-2" tabindex="-1"></a>numRuns <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb222-3"><a href="programmingpractical-1.html#cb222-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numRuns) {</span>
+<span id="cb222-4"><a href="programmingpractical-1.html#cb222-4" tabindex="-1"></a>  totStickers <span class="ot">&lt;-</span> <span class="dv">427</span></span>
+<span id="cb222-5"><a href="programmingpractical-1.html#cb222-5" tabindex="-1"></a>  gotSticker <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">FALSE</span>,totStickers)</span>
+<span id="cb222-6"><a href="programmingpractical-1.html#cb222-6" tabindex="-1"></a>  numLeft <span class="ot">&lt;-</span> totStickers</span>
+<span id="cb222-7"><a href="programmingpractical-1.html#cb222-7" tabindex="-1"></a>  numStickersBought <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb222-8"><a href="programmingpractical-1.html#cb222-8" tabindex="-1"></a>  <span class="cf">while</span>(numLeft <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb222-9"><a href="programmingpractical-1.html#cb222-9" tabindex="-1"></a>    numStickersBought <span class="ot">&lt;-</span> numStickersBought <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb222-10"><a href="programmingpractical-1.html#cb222-10" tabindex="-1"></a>    thisSticker <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>totStickers, <span class="dv">1</span>)</span>
+<span id="cb222-11"><a href="programmingpractical-1.html#cb222-11" tabindex="-1"></a>    <span class="cf">if</span>(gotSticker[thisSticker] <span class="sc">==</span> <span class="cn">FALSE</span>) {     <span class="co"># this is the line which had an error (fixed here)</span></span>
+<span id="cb222-12"><a href="programmingpractical-1.html#cb222-12" tabindex="-1"></a>      gotSticker[thisSticker] <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb222-13"><a href="programmingpractical-1.html#cb222-13" tabindex="-1"></a>      numLeft <span class="ot">&lt;-</span> numLeft <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb222-14"><a href="programmingpractical-1.html#cb222-14" tabindex="-1"></a>    }</span>
+<span id="cb222-15"><a href="programmingpractical-1.html#cb222-15" tabindex="-1"></a>  }</span>
+<span id="cb222-16"><a href="programmingpractical-1.html#cb222-16" tabindex="-1"></a>  myEstimates[i] <span class="ot">&lt;-</span> numStickersBought</span>
+<span id="cb222-17"><a href="programmingpractical-1.html#cb222-17" tabindex="-1"></a>}</span>
+<span id="cb222-18"><a href="programmingpractical-1.html#cb222-18" tabindex="-1"></a><span class="fu">hist</span>(myEstimates)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-743-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="programmingpractical-1.html#cb223-1" tabindex="-1"></a><span class="fu">mean</span>(myEstimates)</span></code></pre></div>
+<pre><code>## [1] 2829.27</code></pre>
+</div>
+</div>
+</div>
+<p>The expected value (i.e. mean) number of stickers that is required to complete an album of 427 stickers is in fact <span class="math inline">\(427 \times H_{427}\)</span>, where <span class="math inline">\(H_{427}\)</span> is the 427<span class="math inline">\(^{th}\)</span> Harmonic number (the mathematics of this is explained in the info box below if you are interested).</p>
+<p>It turns out that <span class="math inline">\(H_{427} \approx 6.635\)</span>, and so the estimated mean is about 2,800 or so. This is a lot of stickers! The requisite number would be reduced in practice, because you are able swap duplicate stickers with your friends, as well as send off to Panini on a special form for a maximum of 50 stickers towards the end, but nevertheless, this simulation has explained my disappointment as a 9-year-old child!</p>
+<p><infobutton id="displayTextunnamed-chunk-153" onclick="javascript:toggle('unnamed-chunk-153');">Show: Relating sticker collecting to the harmonic numbers</infobutton></p>
+<div id="toggleTextunnamed-chunk-153" style="display: none">
+<div class="panel panel-default">
+<div class="panel-body">
+<p>In the lecture I claimed that the example of collecting things is somehow related to the harmonic series. To see this does not require sophisticated mathematics.</p>
+<p>If there are a total of <span class="math inline">\(N\)</span> stickers, of which you have already collected <span class="math inline">\(M\)</span>, the probability of a new sticker being one you “need” is <span class="math inline">\(p_{M} = (N-M)/N\)</span>. Assuming that successive purchases are independent, the number of stickers that must be bought to get a sticker you need when you already have <span class="math inline">\(M\)</span> stickers in your album would follow a geometric probability distribution<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. The expected number of stickers needed to get the <span class="math inline">\(M^{th}\)</span> sticker is therefore <span class="math inline">\(\frac{1}{p_{M}}\)</span>.</p>
+<p>The number of stickers that you must buy to complete the entire album is then just the expected number of stickers to get the first sticker in your album (i.e. when you have already got 0), plus the expected number required for your second sticker (i.e. when you have already got 1), …, all the way up to the expected number to get the final sticker (i.e. when you have already got <span class="math inline">\(N – 1\)</span>).</p>
+<p>Therefore <span class="math display">\[\text{Average number of stickers required} = \frac{1}{p_{0}} + \frac{1}{p_{1}} + \dots +\frac{1}{p_{N-1}}.\]</span></p>
+<p>However (by the definition of <span class="math inline">\(p_{M}\)</span>) this reduces to <span class="math display">\[\begin{aligned} \text{Average number of stickers required} &amp;= \frac{N}{N} + \frac{N}{N-1} + \dots + \frac{N}{1} \\ &amp;=N\left(\frac{N}{N} + \frac{N}{N-1} + \dots + \frac{1}{1}\right) \\ &amp;=N\left(1 + \dots + \frac{1}{N-1} + \frac{1}{N}\right) \\ &amp;=N \times H_{N}\end{aligned} \]</span></p>
+where we reversed the order of the sum in going from line 2 to line 3, and have used the definition of the <span class="math inline">\(N^{th}\)</span> harmonic number (see lecture slides) on line 4.
+</div>
+</div>
+</div>
+</div>
+<div id="extended-example-two-the-logistic-map" class="section level3 hasAnchor" number="3.9.2">
+<h3><span class="header-section-number">3.9.2</span> Extended example two: the logistic map<a href="programmingpractical-1.html#extended-example-two-the-logistic-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong><em>[Note this task is optional, and you should do it only if you have time]</em></strong></p>
+<p>The logistic map is a simple population model in discrete-time, and relates the size of a population in generation <span class="math inline">\(n+1\)</span> to its size in generation <span class="math inline">\(n\)</span>. It is one of the simplest models that shows “chaotic” behaviour.</p>
+<p>One way of writing the logistic map is via the following recurrence <span class="math display">\[x_{n+1} = rx_{n}(1-x_{n})\]</span> where <span class="math inline">\(x_{n}\)</span> is the population size in year <span class="math inline">\(n\)</span>, measured as a fraction of the carrying capacity, and <span class="math inline">\(r\)</span> is the intrinsic rate of increase (a growth rate).</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>What do you think is the purpose of the following function?</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="programmingpractical-1.html#cb225-1" tabindex="-1"></a>logisticValues <span class="ot">&lt;-</span> <span class="cf">function</span>(r, N, x0) { </span>
+<span id="cb225-2"><a href="programmingpractical-1.html#cb225-2" tabindex="-1"></a>  retVal <span class="ot">&lt;-</span> <span class="fu">numeric</span>(N)</span>
+<span id="cb225-3"><a href="programmingpractical-1.html#cb225-3" tabindex="-1"></a>  thisX <span class="ot">&lt;-</span> x0</span>
+<span id="cb225-4"><a href="programmingpractical-1.html#cb225-4" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) { </span>
+<span id="cb225-5"><a href="programmingpractical-1.html#cb225-5" tabindex="-1"></a>    thisX <span class="ot">&lt;-</span> r <span class="sc">*</span> thisX <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> thisX)</span>
+<span id="cb225-6"><a href="programmingpractical-1.html#cb225-6" tabindex="-1"></a>    retVal[i] <span class="ot">&lt;-</span> thisX </span>
+<span id="cb225-7"><a href="programmingpractical-1.html#cb225-7" tabindex="-1"></a>  }</span>
+<span id="cb225-8"><a href="programmingpractical-1.html#cb225-8" tabindex="-1"></a>  <span class="fu">return</span>(retVal) </span>
+<span id="cb225-9"><a href="programmingpractical-1.html#cb225-9" tabindex="-1"></a>} </span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-155" onclick="javascript:toggle(&#39;unnamed-chunk-155&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-155" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+The given function returns <span class="math inline">\(N\)</span> iterates of the logistic map starting at <span class="math inline">\(x_0\)</span> (note, it does not store the initial value).
+</div>
+</div>
+</div>
+<p>Copy the function <code>logisticValues</code> into your script file. Also include the following code that uses the function to plot a graph.</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="programmingpractical-1.html#cb226-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fl">1.5</span>        <span class="co"># growth rate</span></span>
+<span id="cb226-2"><a href="programmingpractical-1.html#cb226-2" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">100</span>        <span class="co"># max generation</span></span>
+<span id="cb226-3"><a href="programmingpractical-1.html#cb226-3" tabindex="-1"></a>x0 <span class="ot">&lt;-</span> <span class="fl">0.01</span>      <span class="co"># initial value</span></span>
+<span id="cb226-4"><a href="programmingpractical-1.html#cb226-4" tabindex="-1"></a>xn <span class="ot">&lt;-</span> <span class="fu">logisticValues</span>(r, N, x0)  <span class="co"># next N starting at x0 </span></span>
+<span id="cb226-5"><a href="programmingpractical-1.html#cb226-5" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">0</span><span class="sc">:</span>N, <span class="fu">c</span>(x0, xn), <span class="at">type =</span> <span class="st">&#39;o&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;n&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;x_n&#39;</span>)  <span class="co"># plot</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-156-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>This code shows the behaviour of the logistic map with <span class="math inline">\(r = 1.5\)</span> for 100 generations. Note the slightly clunky way of making sure the initial point is returned.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>Try running the code for different values of <span class="math inline">\(r\)</span>. What does the graph show you?</p>
+Good values of <span class="math inline">\(r\)</span> to try would be <span class="math inline">\(r = 0.5\)</span>, <span class="math inline">\(r = 1.5\)</span>, <span class="math inline">\(r = 2.5\)</span>, <span class="math inline">\(r = 3.1\)</span>, <span class="math inline">\(r = 3.5\)</span>, <span class="math inline">\(r = 3.7\)</span>. You should also test the behaviour for different initial conditions: suitable values would be <span class="math inline">\(x_{0} = 0.01\)</span> and <span class="math inline">\(x_{0} = 0.1\)</span>.
+</div>
+</div>
+<button id="displayTextunnamed-chunk-158" onclick="javascript:toggle(&#39;unnamed-chunk-158&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-158" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+As you change the value of <span class="math inline">\(r\)</span> in the above code the system goes from having a single equilibrium in the long term, to oscillating between a pair of values, to oscillating between four values. By <span class="math inline">\(r = 3.7\)</span>, the trajectory depends very sensitively to the initial value <span class="math inline">\(x_0\)</span> (as is demonstrated by the below code). This is called deterministic chaos.
+</div>
+</div>
+</div>
+<p>You should note that in the case <span class="math inline">\(r = 3.7\)</span>, the pattern of successive population sizes appears to be fairly random. It also depends on the initial value of <span class="math inline">\(x_0\)</span>. The following code confirms this (note the first five lines are almost exactly as they were before): include this code in your script to check this.</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="programmingpractical-1.html#cb227-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fl">3.7</span>            <span class="co"># growth rate</span></span>
+<span id="cb227-2"><a href="programmingpractical-1.html#cb227-2" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">100</span>            <span class="co"># max generation</span></span>
+<span id="cb227-3"><a href="programmingpractical-1.html#cb227-3" tabindex="-1"></a>x0 <span class="ot">&lt;-</span> <span class="fl">0.01</span>          <span class="co"># initial value</span></span>
+<span id="cb227-4"><a href="programmingpractical-1.html#cb227-4" tabindex="-1"></a>xn <span class="ot">&lt;-</span> <span class="fu">logisticValues</span>(r, N, x0)    <span class="co"># next N starting at x0</span></span>
+<span id="cb227-5"><a href="programmingpractical-1.html#cb227-5" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">0</span><span class="sc">:</span>N, <span class="fu">c</span>(x0, xn), <span class="at">type =</span> <span class="st">&#39;o&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;n&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;x_n&#39;</span>) <span class="co"># plot </span></span>
+<span id="cb227-6"><a href="programmingpractical-1.html#cb227-6" tabindex="-1"></a>x0 <span class="ot">&lt;-</span> <span class="fl">0.01001</span>       <span class="co"># different initial value</span></span>
+<span id="cb227-7"><a href="programmingpractical-1.html#cb227-7" tabindex="-1"></a>xn <span class="ot">&lt;-</span> <span class="fu">logisticValues</span>(r, N, x0)    <span class="co"># next N starting there</span></span>
+<span id="cb227-8"><a href="programmingpractical-1.html#cb227-8" tabindex="-1"></a><span class="fu">lines</span>(<span class="dv">0</span><span class="sc">:</span>N, <span class="fu">c</span>(x0, xn), <span class="at">type =</span> <span class="st">&#39;o&#39;</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>) <span class="co"># overlay on plot</span></span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-159-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Notice that, despite starting very close together, the trajectories diverge over time. “Sensitive dependence on initial conditions” is characteristic of deterministic chaos.</p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Task
+</div>
+<div class="panel-body">
+<p>What do you think the following code does?</p>
+<p>Test your understanding by typing the function in and running it by issuing an appropriate call to the function at the command prompt.</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="programmingpractical-1.html#cb228-1" tabindex="-1"></a>logisticValuesAfterBurnIn <span class="ot">&lt;-</span> <span class="cf">function</span>(r, N, M, x0) { </span>
+<span id="cb228-2"><a href="programmingpractical-1.html#cb228-2" tabindex="-1"></a>  retVal <span class="ot">&lt;-</span> <span class="fu">numeric</span>(M)</span>
+<span id="cb228-3"><a href="programmingpractical-1.html#cb228-3" tabindex="-1"></a>  thisX <span class="ot">&lt;-</span> x0</span>
+<span id="cb228-4"><a href="programmingpractical-1.html#cb228-4" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) { </span>
+<span id="cb228-5"><a href="programmingpractical-1.html#cb228-5" tabindex="-1"></a>    thisX <span class="ot">&lt;-</span> r <span class="sc">*</span> thisX <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> thisX)</span>
+<span id="cb228-6"><a href="programmingpractical-1.html#cb228-6" tabindex="-1"></a>  }</span>
+<span id="cb228-7"><a href="programmingpractical-1.html#cb228-7" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>M) { </span>
+<span id="cb228-8"><a href="programmingpractical-1.html#cb228-8" tabindex="-1"></a>    thisX <span class="ot">&lt;-</span> r <span class="sc">*</span> thisX <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> thisX)</span>
+<span id="cb228-9"><a href="programmingpractical-1.html#cb228-9" tabindex="-1"></a>    retVal[i] <span class="ot">&lt;-</span> thisX </span>
+<span id="cb228-10"><a href="programmingpractical-1.html#cb228-10" tabindex="-1"></a>  }</span>
+<span id="cb228-11"><a href="programmingpractical-1.html#cb228-11" tabindex="-1"></a>  <span class="fu">return</span>(retVal) </span>
+<span id="cb228-12"><a href="programmingpractical-1.html#cb228-12" tabindex="-1"></a>} </span></code></pre></div>
+</div>
+</div>
+<button id="displayTextunnamed-chunk-161" onclick="javascript:toggle(&#39;unnamed-chunk-161&#39;);">
+Show: Solution
+</button>
+<div id="toggleTextunnamed-chunk-161" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Solution
+</div>
+<div class="panel-body">
+The given code performs <span class="math inline">\(N\)</span> iterations of the logistic map starting from <span class="math inline">\(x_0\)</span> but does not store them. It then calculates, stores and returns the following <span class="math inline">\(M\)</span> iterations of the logistic map.
+</div>
+</div>
+</div>
+<p>Enter the following code and run it.</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="programmingpractical-1.html#cb229-1" tabindex="-1"></a>rVals <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">2.5</span>, <span class="dv">4</span>, <span class="at">by =</span> <span class="fl">0.005</span>)</span>
+<span id="cb229-2"><a href="programmingpractical-1.html#cb229-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">c</span>(<span class="fl">2.5</span>, <span class="dv">4</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">type =</span> <span class="st">&#39;n&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;r&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;orbit&#39;</span>)</span>
+<span id="cb229-3"><a href="programmingpractical-1.html#cb229-3" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> rVals) { </span>
+<span id="cb229-4"><a href="programmingpractical-1.html#cb229-4" tabindex="-1"></a>  N <span class="ot">&lt;-</span> <span class="dv">1000</span>     </span>
+<span id="cb229-5"><a href="programmingpractical-1.html#cb229-5" tabindex="-1"></a>  M <span class="ot">&lt;-</span> <span class="dv">100</span> </span>
+<span id="cb229-6"><a href="programmingpractical-1.html#cb229-6" tabindex="-1"></a>  xn <span class="ot">&lt;-</span> <span class="fu">logisticValuesAfterBurnIn</span>(r, N, M, <span class="fl">0.01</span>)</span>
+<span id="cb229-7"><a href="programmingpractical-1.html#cb229-7" tabindex="-1"></a>  <span class="fu">points</span>(<span class="fu">rep</span>(r, M), xn, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">0.01</span>)</span>
+<span id="cb229-8"><a href="programmingpractical-1.html#cb229-8" tabindex="-1"></a>} </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-162-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="panel panel-default">
+<div class="panel-heading">
+Question
+</div>
+<div class="panel-body">
+Do you understand what the plot—a so-called “bifurcation diagram”—is showing?
+</div>
+</div>
+<button id="displayTextunnamed-chunk-164" onclick="javascript:toggle(&#39;unnamed-chunk-164&#39;);">
+Show: Answer
+</button>
+<div id="toggleTextunnamed-chunk-164" style="display: none">
+<div class="panel panel-default">
+<div class="panel-heading panel-heading1">
+Answer
+</div>
+<div class="panel-body">
+<p>The key idea is that, for each value of <span class="math inline">\(r\)</span>, it calculates <span class="math inline">\(N=1000\)</span> iterations of the map, but totally ignores them. It then plots the values of the next 100 iterations (as the <span class="math inline">\(y\)</span>-value on a graph which has the value of <span class="math inline">\(r\)</span> as the <span class="math inline">\(x\)</span>-ordinate). The idea behind all this is to let the system equilibriate—if it is ever going to do so. So from the bifurcation diagram you can see from this picture that there is/are:</p>
+<ul>
+<li>a single equilibrium for <span class="math inline">\(2.5 &lt; r &lt; 3.0\)</span></li>
+<li>two equilibria for <span class="math inline">\(3.0 &lt; r &lt; 3.45\)</span> (-ish)</li>
+<li>four equilibria for <span class="math inline">\(3.45\)</span>(-ish) <span class="math inline">\(&lt; r &lt; 3.54\)</span> (-ish)</li>
+<li>by <span class="math inline">\(r \sim 3.57\)</span>, we have chaos (as seen in plots for different starting conditions above) which here corresponds to a more or less random—although lying within certain bounds—set of 100 points plotted for each <span class="math inline">\(r\)</span>.</li>
+</ul>
+This is explained well on the relevant <a href="https://en.wikipedia.org/wiki/Logistic_map#Behavior_dependent_on_r">Wikipedia page</a>
+</div>
+</div>
+</div>
+<p>A very readable introduction to deterministic chaos in biology is given by <a href="https://www.nature.com/articles/261459a0">May (1976)</a>. That article is widely available online and comes highly recommended.</p>
+
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="5">
+<li id="fn5"><p>You will be reminded of basic facts about probability distributions in a forthcoming lecture. Note the expected number is quite intuitive: as a simple example, consider rolling a dice until you get a six. The probability of getting a six is <span class="math inline">\(\frac{1}{6}\)</span>: hopefully it seems reasonable that you should have to roll the dice an average of 6 times to get one. That’s all that is happening here, just written in symbols.<a href="programmingpractical-1.html#fnref5" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="fundamentals-of-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="programmingpractical-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
